@@ -1,8 +1,11 @@
 {
   "expo": {
-    "name": "OEUVRE-client",
-    "slug": "OEUVRE-client",
+    "name": "OEUVRE",
+    "slug": "oeuvre",
     "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "nativeVersion"
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,16 +21,23 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.curator.oeuvre"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.curator.oeuvre"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5b84c736-ded1-4a99-a739-4a12cae53e1e"
+      }
     }
   }
 }
