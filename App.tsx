@@ -1,8 +1,10 @@
 /* eslint-disable global-require */
-import { useFonts } from 'expo-font';
+import { loadAsync } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import StorybookUIRoot from './storybook';
+import useSplash from '@/hooks/useSplash';
 
 const isStorybookEnabled = Boolean(process.env.STORYBOOK_ENABLED);
 
@@ -17,19 +19,30 @@ const styles = StyleSheet.create({
   },
 });
 
-const App = () => {
-  const [loaded] = useFonts({
+const loadFonts = async () => {
+  await loadAsync({
     bold: require('./assets/fonts/Pretendard-Bold.otf'),
     medium: require('./assets/fonts/Pretendard-Medium.otf'),
     regular: require('./assets/fonts/Pretendard-Regular.otf'),
   });
+};
 
-  if (!loaded) {
+const App = () => {
+  const { isReady, setIsReady, onLayout } = useSplash();
+  useEffect(() => {
+    const initialFetch = async () => {
+      await loadFonts();
+      setIsReady(true);
+    };
+    initialFetch();
+  }, [setIsReady]);
+
+  if (!isReady) {
     return null;
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayout}>
       <Text>Open up App.tsx to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
