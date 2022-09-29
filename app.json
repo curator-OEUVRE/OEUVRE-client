@@ -2,6 +2,7 @@
   "expo": {
     "name": "OEUVRE",
     "slug": "oeuvre",
+    "owner": "cmc-curator",
     "version": "1.0.0",
     "runtimeVersion": {
       "policy": "nativeVersion"
@@ -36,7 +37,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "5b84c736-ded1-4a99-a739-4a12cae53e1e"
+        "projectId": "bc755e58-fef2-4c34-8869-6f92386964d6"
       }
     }
   }
