@@ -12,7 +12,11 @@ storiesOf('FormInput', module)
       message={text('message', '테스트')}
       status={select(
         'status',
-        [FormInputStatus.Initial, FormInputStatus.Error, FormInputStatus.Valid],
+        {
+          initial: FormInputStatus.Initial,
+          error: FormInputStatus.Error,
+          valid: FormInputStatus.Valid,
+        },
         FormInputStatus.Initial,
       )}
       onChangeText={action('onChangeText')}

@@ -101,7 +101,7 @@ export const FormInput = forwardRef<TextInput, Props>(
         {status !== FormInputStatus.Initial && STATUS_ICON[status]}
       </View>
 
-      {message && (
+      {status === FormInputStatus.Error && message && (
         <Text style={[TEXT_STYLE.body14R, styles.message]}>{message}</Text>
       )}
     </View>
