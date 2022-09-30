@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { withKnobs, text, select, boolean } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react-native';
-import FormInput, { FormInputStatus } from './FormInput';
+import { FormInput, FormInputStatus } from '.';
 
 storiesOf('FormInput', module)
   .addDecorator(withKnobs)

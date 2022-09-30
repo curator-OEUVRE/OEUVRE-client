@@ -74,7 +74,7 @@ const STATUS_ICON = {
   ),
 };
 
-const FormInput = forwardRef<TextInput, Props>(
+export const FormInput = forwardRef<TextInput, Props>(
   (
     {
       status = FormInputStatus.Initial,
@@ -107,5 +107,3 @@ const FormInput = forwardRef<TextInput, Props>(
     </View>
   ),
 );
-
-export default FormInput;
