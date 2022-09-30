@@ -12,10 +12,8 @@ const white = '#fff';
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     backgroundColor: white,
     flex: 1,
-    justifyContent: 'center',
   },
 });
 
@@ -26,6 +24,14 @@ const loadFonts = async () => {
     regular: require('./assets/fonts/Pretendard-Regular.otf'),
   });
 };
+
+const SampleApp = () => (
+  <View style={styles.container}>
+    <Text>Open up App.tsx to start working on your app!</Text>
+  </View>
+);
+
+const EntryApp = isStorybookEnabled ? StorybookUIRoot : SampleApp;
 
 const App = () => {
   const { isReady, setIsReady, onLayout } = useSplash();
@@ -41,13 +47,9 @@ const App = () => {
     return null;
   }
 
-  if (isStorybookEnabled) {
-    return <StorybookUIRoot />;
-  }
-
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <EntryApp />
       <StatusBar style="auto" />
     </View>
   );
