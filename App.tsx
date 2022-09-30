@@ -41,6 +41,10 @@ const App = () => {
     return null;
   }
 
+  if (isStorybookEnabled) {
+    return <StorybookUIRoot />;
+  }
+
   return (
     <View style={styles.container} onLayout={onLayout}>
       <Text>Open up App.tsx to start working on your app!</Text>
@@ -49,4 +53,4 @@ const App = () => {
   );
 };
 
-export default isStorybookEnabled ? StorybookUIRoot : App;
+export default App;
