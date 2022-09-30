@@ -3,6 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./src/types/@types"],
     "paths": {
       "@/apis/*": ["./src/apis/*"],
       "@/assets/*": ["./assets/*"],
