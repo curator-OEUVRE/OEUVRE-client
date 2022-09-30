@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     right: 18,
   },
   text: {
+    fontFamily: 'bold',
     fontSize: 18,
     lineHeight: 27,
   },
