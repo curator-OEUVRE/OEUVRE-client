@@ -3,8 +3,8 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface HeaderProps {
-  title?: string;
-  headerRight?: React.ReactNode;
+  headerTitle?: string | (() => React.ReactNode);
+  headerRight?: () => React.ReactNode;
 }
 
 const styles = StyleSheet.create({
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header = ({ title, headerRight }: HeaderProps) => {
+const Header = ({ headerTitle, headerRight }: HeaderProps) => {
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.container, { marginTop: insets.top }]}>
@@ -56,8 +56,12 @@ const Header = ({ title, headerRight }: HeaderProps) => {
           style={styles.icon}
         />
       </Pressable>
-      <Text style={styles.text}>{title}</Text>
-      <View style={styles.right}>{headerRight}</View>
+      {typeof headerTitle === 'string' ? (
+        <Text style={styles.text}>{headerTitle}</Text>
+      ) : (
+        headerTitle && headerTitle()
+      )}
+      <View style={styles.right}>{headerRight && headerRight()}</View>
     </View>
   );
 };
