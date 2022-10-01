@@ -3,9 +3,15 @@
 //
 // https://github.com/elderfo/react-native-storybook-loader.git
 
-function loadStories() {}
+function loadStories() {
+  require('../src/components/Checkbox/Checkbox.stories');
+  require('../src/components/FormInput/FormInput.stories');
+}
 
-const stories = [];
+const stories = [
+  '../src/components/Checkbox/Checkbox.stories',
+  '../src/components/FormInput/FormInput.stories',
+];
 
 module.exports = {
   loadStories,
