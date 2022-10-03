@@ -3,6 +3,7 @@ import { loadAsync } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StorybookUIRoot from './storybook';
 import useSplash from '@/hooks/useSplash';
 
@@ -48,10 +49,12 @@ const App = () => {
   }
 
   return (
-    <View style={styles.container} onLayout={onLayout}>
-      <EntryApp />
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <View style={styles.container} onLayout={onLayout}>
+        <EntryApp />
+        <StatusBar style="auto" />
+      </View>
+    </SafeAreaProvider>
   );
 };
 
