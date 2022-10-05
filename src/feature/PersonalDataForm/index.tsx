@@ -32,7 +32,6 @@ const PersonalDataForm = () => {
   return (
     <UserInputLayout
       infoMessage="개인정보를 입력해 주세요"
-      title="회원가입"
       button={button}
       gap={54}
     >

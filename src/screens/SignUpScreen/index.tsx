@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Header } from '@/components/Header';
 import PersonalDataForm from '@/feature/PersonalDataForm';
 import UserProfileForm from '@/feature/UserProfileForm';
 
@@ -13,7 +14,8 @@ const styles = StyleSheet.create({
 
 const SignUpScreen = () => (
   <SafeAreaView style={styles.container}>
-    <UserProfileForm />
+    <Header headerTitle="회원 가입" />
+    <PersonalDataForm />
   </SafeAreaView>
 );
 

@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
 interface UserInputLayoutProps {
   children: React.ReactNode;
   infoMessage: string;
-  title: string;
   gap?: number;
   button?: React.ReactNode;
 }
@@ -36,7 +35,6 @@ interface UserInputLayoutProps {
 const UserInputLayout = ({
   children,
   infoMessage,
-  title,
   gap = 0,
   button,
 }: UserInputLayoutProps) => {
@@ -46,7 +44,6 @@ const UserInputLayout = ({
     ));
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Header headerTitle={title} />
       <Text style={[styles.text, TEXT_STYLE.title20M]}>{infoMessage}</Text>
       <View style={styles.content}>{renderChildren()}</View>
       {button && <View style={styles.wrapButton}>{button}</View>}

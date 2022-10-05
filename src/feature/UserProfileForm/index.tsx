@@ -59,7 +59,6 @@ const UserProfileForm = () => {
   return (
     <UserInputLayout
       infoMessage="OEUVRE 프로필을 완성해주세요"
-      title="회원가입"
       button={button}
       gap={54}
     >
