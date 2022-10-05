@@ -7,7 +7,7 @@ import {
   GOOGLE_IOS_CLIENT_ID,
   GOOGLE_ANDROID_CLIENT_ID,
 } from 'react-native-dotenv';
-import { Button } from '@/components/Button';
+import { Button } from '@/components';
 
 WebBrowser.maybeCompleteAuthSession();
 
