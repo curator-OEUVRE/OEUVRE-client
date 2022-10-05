@@ -4,14 +4,17 @@ import {
   Pressable,
   StyleSheet,
   View,
+  PressableProps,
+  ViewStyle,
 } from 'react-native';
 
-interface ButtonProps {
+interface ButtonProps extends PressableProps {
   children: React.ReactNode;
   icon?: React.ReactNode;
   onPress?: (event: GestureResponderEvent) => void;
   backgroundColor?: string;
   disabled?: boolean;
+  style?: ViewStyle;
 }
 
 const defaultBackgroundColor = '#22292E';
@@ -41,8 +44,12 @@ const Button = ({
   onPress,
   backgroundColor,
   disabled = false,
+  style,
+  ...defaultProps
 }: ButtonProps) => (
   <Pressable
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...defaultProps}
     style={[
       styles.container,
       {
@@ -50,6 +57,7 @@ const Button = ({
           ? disabledBackgroundColor
           : backgroundColor ?? defaultBackgroundColor,
       },
+      style,
     ]}
     onPress={onPress}
   >
