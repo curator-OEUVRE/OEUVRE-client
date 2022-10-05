@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
-import { Header } from '..';
+import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
 
