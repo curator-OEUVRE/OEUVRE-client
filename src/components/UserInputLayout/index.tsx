@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
 import { Header } from '..';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
@@ -45,12 +45,12 @@ const UserInputLayout = ({
       <View style={{ marginBottom: gap }}>{child}</View>
     ));
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <Header headerTitle={title} />
       <Text style={[styles.text, TEXT_STYLE.title20M]}>{infoMessage}</Text>
       <View style={styles.content}>{renderChildren()}</View>
       {button && <View style={styles.wrapButton}>{button}</View>}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
