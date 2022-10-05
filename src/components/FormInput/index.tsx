@@ -1,10 +1,15 @@
-import { forwardRef } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { forwardRef, useState } from 'react';
+
 import {
-  View,
+  Platform,
+  Pressable,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
   TextInputProps,
+  View,
   ViewStyle,
 } from 'react-native';
 import CheckCircleIcon from '@/assets/icons/CheckCircle';
@@ -107,3 +112,56 @@ export const FormInput = forwardRef<TextInput, Props>(
     </View>
   ),
 );
+
+interface FormInputDateProps extends Omit<Props, 'onChange' | 'value'> {
+  onChange?: (date: Date) => void;
+  value?: Date;
+}
+
+export const FormInputDate = ({
+  onChange,
+  value = new Date(),
+  ...props
+}: FormInputDateProps) => {
+  const [show, setShow] = useState<boolean>(false);
+  return (
+    <View>
+      <Pressable
+        onPress={() => {
+          setShow(true);
+        }}
+      >
+        <FormInput
+          {...props}
+          pointerEvents="none"
+          editable={false}
+          value={value.toLocaleDateString()}
+        />
+      </Pressable>
+      {show && (
+        <>
+          <DateTimePicker
+            maximumDate={new Date()}
+            testID="dateTimePicker"
+            value={value}
+            mode="date"
+            display={Platform.OS === 'android' ? 'default' : 'spinner'}
+            is24Hour
+            onChange={(event, selectedDate) => {
+              if (!onChange) return;
+              if (Platform.OS === 'android') {
+                setShow(false);
+              }
+              onChange(selectedDate || new Date());
+            }}
+          />
+          {Platform.OS === 'ios' && (
+            <Pressable onPress={() => setShow(false)}>
+              <Text style={[TEXT_STYLE.body16R, styles.message]}>완료</Text>
+            </Pressable>
+          )}
+        </>
+      )}
+    </View>
+  );
+};
