@@ -8,6 +8,7 @@
       "@/apis/*": ["./src/apis/*"],
       "@/assets/*": ["./assets/*"],
       "@/components/*": ["./src/components/*"],
+      "@/components": ["./src/components/"],
       "@/constants/*": ["./src/constants/*"],
       "@/feature/*": ["./src/feature/*"],
       "@/hooks/*": ["./src/hooks/*"],
