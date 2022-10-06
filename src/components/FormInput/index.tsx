@@ -148,11 +148,10 @@ export const FormInputDate = ({
             display={Platform.OS === 'android' ? 'default' : 'spinner'}
             is24Hour
             onChange={(event, selectedDate) => {
-              if (!onChange) return;
               if (Platform.OS === 'android') {
                 setShow(false);
               }
-              onChange(selectedDate || new Date());
+              onChange?.(selectedDate || new Date());
             }}
           />
           {Platform.OS === 'ios' && (
