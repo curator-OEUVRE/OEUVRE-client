@@ -1,6 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { Text, StyleSheet, Pressable, View } from 'react-native';
+import { WelcomeScreenNavigationProps } from '../Routes/types';
 import AddProfileIcon from '@/assets/icons/AddProfile';
 import {
   Button,
@@ -36,7 +38,7 @@ const UserProfileForm = () => {
   } = useSignUpStore();
 
   const [image, setImage] = useState<string | undefined>(undefined);
-
+  const navigation = useNavigation<WelcomeScreenNavigationProps>();
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -51,7 +53,7 @@ const UserProfileForm = () => {
   };
 
   const button = (
-    <Button>
+    <Button onPress={() => navigation.push('Welcome')}>
       <Text style={styles.buttonText}>설정 완료하기</Text>
     </Button>
   );

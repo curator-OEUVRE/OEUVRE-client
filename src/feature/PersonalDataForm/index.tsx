@@ -1,4 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import { Text, StyleSheet } from 'react-native';
+import { SignUpStep, SignUpScreenNavigationProp } from '../Routes/types';
 import {
   Button,
   FormInput,
@@ -23,8 +25,16 @@ const PersonalDataForm = () => {
     (userId.isRequired && userId.status !== FormInputStatus.Valid) ||
     (name.isRequired && name.status !== FormInputStatus.Valid) ||
     (birthDay.isRequired && birthDay.status !== FormInputStatus.Valid);
+  const navigation = useNavigation<SignUpScreenNavigationProp>();
   const button = (
-    <Button disabled={disabled}>
+    <Button
+      disabled={disabled}
+      onPress={() =>
+        navigation.push('SignUp', {
+          process: SignUpStep.UserProfile,
+        })
+      }
+    >
       <Text style={styles.buttonText}>다음으로</Text>
     </Button>
   );
