@@ -2,9 +2,10 @@
 import { loadAsync } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StorybookUIRoot from './storybook';
+import { Routes } from '@/feature/Routes';
 import useSplash from '@/hooks/useSplash';
 
 const isStorybookEnabled = Boolean(process.env.STORYBOOK_ENABLED);
@@ -26,13 +27,7 @@ const loadFonts = async () => {
   });
 };
 
-const SampleApp = () => (
-  <View style={styles.container}>
-    <Text>Open up App.tsx to start working on your app!</Text>
-  </View>
-);
-
-const EntryApp = isStorybookEnabled ? StorybookUIRoot : SampleApp;
+const EntryApp = isStorybookEnabled ? StorybookUIRoot : Routes;
 
 const App = () => {
   const { isReady, setIsReady, onLayout } = useSplash();
