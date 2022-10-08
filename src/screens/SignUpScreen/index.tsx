@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SignUpScreenRouteProp, SignUpStep } from '../../feature/Routes/types';
 import { Header } from '@/components/Header';
 import PersonalDataForm from '@/feature/PersonalDataForm';
+import TermsForm from '@/feature/TermsForm';
 import UserProfileForm from '@/feature/UserProfileForm';
 
 const styles = StyleSheet.create({
@@ -14,6 +15,7 @@ const styles = StyleSheet.create({
 });
 
 const formComponentByStep = {
+  [SignUpStep.Terms]: <TermsForm />,
   [SignUpStep.PersonalData]: <PersonalDataForm />,
   [SignUpStep.UserProfile]: <UserProfileForm />,
 };

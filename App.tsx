@@ -8,7 +8,7 @@ import StorybookUIRoot from './storybook';
 import { Routes } from '@/feature/Routes';
 import useSplash from '@/hooks/useSplash';
 
-const isStorybookEnabled = Boolean(process.env.STORYBOOK_ENABLED);
+const isStorybookEnabled = process.env.STORYBOOK_ENABLED === 'true';
 
 const white = '#fff';
 

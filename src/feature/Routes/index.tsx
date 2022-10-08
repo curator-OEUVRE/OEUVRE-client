@@ -18,7 +18,7 @@ export const Routes = () => (
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
-        initialParams={{ process: SignUpStep.PersonalData }}
+        initialParams={{ process: SignUpStep.Terms }}
       />
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
     </Stack.Navigator>
