@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'bold',
     fontSize: 18,
-    lineHeight: 27,
   },
 });
 

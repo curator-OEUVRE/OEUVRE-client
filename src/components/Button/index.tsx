@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  GestureResponderEvent,
   Pressable,
+  PressableProps,
   StyleSheet,
   View,
+  ViewStyle,
 } from 'react-native';
 
-interface ButtonProps {
-  children: React.ReactNode;
+interface ButtonProps extends PressableProps {
   icon?: React.ReactNode;
-  onPress?: (event: GestureResponderEvent) => void;
   backgroundColor?: string;
   disabled?: boolean;
+  style?: ViewStyle;
 }
 
 const defaultBackgroundColor = '#22292E';
@@ -41,9 +41,14 @@ const Button = ({
   onPress,
   backgroundColor,
   disabled = false,
+  style,
+  ...defaultProps
 }: ButtonProps) => (
   <Pressable
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...defaultProps}
     style={[
+      style,
       styles.container,
       {
         backgroundColor: disabled
@@ -53,8 +58,10 @@ const Button = ({
     ]}
     onPress={onPress}
   >
-    {icon && <View style={styles.icon}>{icon}</View>}
-    {children}
+    <>
+      {icon && <View style={styles.icon}>{icon}</View>}
+      {children}
+    </>
   </Pressable>
 );
 
