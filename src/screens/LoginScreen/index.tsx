@@ -1,9 +1,16 @@
 /* eslint-disable react-native/no-raw-text */
 import React from 'react';
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+} from 'react-native';
 import Logo from '@/assets/icons/Logo';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
+import AppleLogin from '@/feature/AppleLogin';
 import GoogleLogin from '@/feature/GoogleLogin';
 import KakaoLogin from '@/feature/KakaoLogin';
 
@@ -53,6 +60,7 @@ const LoginScreen = () => (
         </Text>
       </View>
       <View style={styles.wrapButtons}>
+        {Platform.OS === 'ios' && <AppleLogin />}
         <GoogleLogin />
         <KakaoLogin />
       </View>
