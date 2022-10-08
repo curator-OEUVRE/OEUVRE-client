@@ -7,6 +7,8 @@ import { Header } from '@/components/Header';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
 
+export type WelcomeScreenParams = undefined;
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,

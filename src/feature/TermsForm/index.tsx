@@ -1,7 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
 import { useState, useMemo } from 'react';
 import { Text } from 'react-native';
-import { SignUpScreenNavigationProp, SignUpStep } from '../Routes/types';
 import TermItem from './TermItem';
 import Line from '@/assets/icons/Line';
 import { UserInputLayout, Button } from '@/components';
@@ -42,7 +40,6 @@ interface Props {
 
 const TermsForm = ({ onNextPress }: Props) => {
   const { setIsMarketingAgreed } = useSignUpStore();
-  const navigation = useNavigation<SignUpScreenNavigationProp>();
 
   const [checked, setChecked] = useState([false, false, false]);
 
@@ -84,9 +81,7 @@ const TermsForm = ({ onNextPress }: Props) => {
       backgroundColor={COLOR.mono.gray7}
       onPress={() => {
         setIsMarketingAgreed(checked[2]);
-        navigation.navigate('SignUp', {
-          process: SignUpStep.PersonalData,
-        });
+        onNextPress?.();
       }}
       disabled={!canGoNext}
     >
