@@ -1,52 +1,44 @@
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
-import { Image, StyleSheet, Text } from 'react-native';
 import {
-  GOOGLE_EXPO_CLIENT_ID,
-  GOOGLE_IOS_CLIENT_ID,
-  GOOGLE_ANDROID_CLIENT_ID,
-} from 'react-native-dotenv';
+  getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
+} from 'firebase/auth';
+import '@/services/firebase';
+import React from 'react';
+import { StyleSheet, Text } from 'react-native';
+import { GOOGLE_CLIENT_ID } from 'react-native-dotenv';
+import GoogleIcon from '@/assets/icons/GoogleIcon';
 import { Button } from '@/components';
+import { COLOR } from '@/constants/styles';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const styles = StyleSheet.create({
-  icon: {
-    height: 32,
-    width: 32,
-  },
-  // eslint-disable-next-line react-native/no-color-literals
   text: {
-    color: '#141718',
+    color: COLOR.mono.black,
   },
 });
 
 const GoogleLogin = () => {
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: GOOGLE_EXPO_CLIENT_ID,
-    iosClientId: GOOGLE_IOS_CLIENT_ID,
-    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: GOOGLE_CLIENT_ID,
   });
 
   React.useEffect(() => {
     if (response?.type === 'success') {
-      const { authentication } = response;
-      // eslint-disable-next-line no-console
-      console.log(authentication);
+      // eslint-disable-next-line camelcase
+      const { id_token } = response.params;
+      const auth = getAuth();
+      const credential = GoogleAuthProvider.credential(id_token);
+      signInWithCredential(auth, credential);
     }
   }, [response]);
 
-  const googleIcon = (
-    <Image
-      // eslint-disable-next-line global-require
-      source={require('@/assets/icons/google_icon.png')}
-      style={styles.icon}
-    />
-  );
   return (
     <Button
-      icon={googleIcon}
+      icon={<GoogleIcon />}
       disabled={!request}
       onPress={() => {
         promptAsync();

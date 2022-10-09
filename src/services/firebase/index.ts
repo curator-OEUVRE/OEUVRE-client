@@ -25,6 +25,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
-export { app, firebase };
+export { firebase };
