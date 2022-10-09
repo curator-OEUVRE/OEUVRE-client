@@ -1,26 +1,23 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { RootStackParamList, SignUpStep } from './types';
-import SignUpScreen from '@/screens/SignUpScreen';
-import WelcomeScreen from '@/screens/WelcomeScreen';
+import AuthStack, { AuthStackParamsList } from './AuthStack';
+import { Navigator } from '@/constants/screens';
 
-const Stack = createStackNavigator<RootStackParamList>();
+export type RootStackParamsList = {
+  [Navigator.AuthStack]: AuthStackParamsList;
+};
+
+const Stack = createStackNavigator<RootStackParamsList>();
 
 export const Routes = () => (
   <NavigationContainer>
     <Stack.Navigator
-      initialRouteName="SignUp"
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        initialParams={{ process: SignUpStep.PersonalData }}
-      />
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen name={Navigator.AuthStack} component={AuthStack} />
     </Stack.Navigator>
   </NavigationContainer>
 );
