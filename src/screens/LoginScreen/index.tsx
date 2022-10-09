@@ -80,6 +80,11 @@ const LoginScreen = () => {
           </Text>
         </View>
         <View style={styles.wrapButtons}>
+          {Platform.OS === 'ios' && (
+            <View style={styles.button}>
+              <AppleLogin />
+            </View>
+          )}
           <View style={styles.button}>
             <GoogleLogin />
           </View>
