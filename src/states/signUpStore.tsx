@@ -9,6 +9,7 @@ interface UserInput<T> {
 }
 
 export interface SignUpValues {
+  isMarketingAgreed: boolean;
   userId: UserInput<string>;
   name: UserInput<string>;
   birthDay: UserInput<Date>;
@@ -18,6 +19,7 @@ export interface SignUpValues {
 }
 
 interface SignUpState extends SignUpValues {
+  setIsMarketingAgreed: (data: boolean) => void;
   setUserId: (data: UserInput<string>) => void;
   setName: (data: UserInput<string>) => void;
   setBirthDay: (data: UserInput<Date>) => void;
@@ -34,6 +36,9 @@ const createInitialUserInput = <T,>(value: T, isRequired: boolean = true) => ({
 });
 
 export const useSignUpStore = create<SignUpState>()((set) => ({
+  isMarketingAgreed: false,
+  setIsMarketingAgreed: (isMarketingAgreed) =>
+    set((state) => ({ ...state, isMarketingAgreed })),
   userId: createInitialUserInput(''),
   setUserId: (data: UserInput<string>) =>
     set((state) => ({ ...state, userId: data })),

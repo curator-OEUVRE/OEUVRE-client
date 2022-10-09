@@ -1,6 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 
 export enum SignUpStep {
+  Terms = 'Terms',
   PersonalData = 'PersonalData',
   UserProfile = 'UserProfile',
 }

@@ -8,6 +8,7 @@ import {
   GOOGLE_ANDROID_CLIENT_ID,
 } from 'react-native-dotenv';
 import { Button } from '@/components';
+import { TEXT_STYLE } from '@/constants/styles';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -53,7 +54,7 @@ const GoogleLogin = () => {
       }}
       backgroundColor="#ffffff"
     >
-      <Text style={styles.text}>Google로 시작하기</Text>
+      <Text style={[TEXT_STYLE.button16M, styles.text]}>Google로 시작하기</Text>
     </Button>
   );
 };
