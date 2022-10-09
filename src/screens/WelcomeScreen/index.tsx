@@ -1,7 +1,9 @@
 /* eslint-disable react-native/no-raw-text */
 import React from 'react';
 import { View, StyleSheet, Text, ImageBackground } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
+import { Header } from '@/components/Header';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
 
@@ -33,13 +35,14 @@ const styles = StyleSheet.create({
 });
 
 const WelcomeScreen = () => (
-  <View style={styles.container}>
+  <SafeAreaView style={styles.container}>
     <ImageBackground
       // eslint-disable-next-line global-require
       source={require('@/assets/images/welcome.png')}
       resizeMode="cover"
       style={styles.background}
     >
+      <Header />
       <Text style={[styles.message, TEXT_STYLE.title24M]}>
         <Text style={TEXT_STYLE.title24B}>열심히 입력중인 모습입니다 </Text>
         님,{'\n'}OEUVRE에{'\n'}오신 것을 환영해요!
@@ -52,7 +55,7 @@ const WelcomeScreen = () => (
         </Button>
       </View>
     </ImageBackground>
-  </View>
+  </SafeAreaView>
 );
 
 export default WelcomeScreen;

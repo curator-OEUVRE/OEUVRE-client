@@ -5,6 +5,7 @@ import Logo from '@/assets/icons/Logo';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
 import GoogleLogin from '@/feature/GoogleLogin';
+import KakaoLogin from '@/feature/KakaoLogin';
 
 const styles = StyleSheet.create({
   background: {
@@ -53,6 +54,7 @@ const LoginScreen = () => (
       </View>
       <View style={styles.wrapButtons}>
         <GoogleLogin />
+        <KakaoLogin />
       </View>
     </ImageBackground>
   </View>

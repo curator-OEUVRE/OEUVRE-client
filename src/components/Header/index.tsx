@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 45,
     justifyContent: 'center',
+    marginTop: 24,
     paddingLeft: 13,
     paddingRight: 18,
     position: 'relative',
@@ -41,18 +43,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header = ({ headerTitle, headerRight }: HeaderProps) => (
-  <View style={styles.container}>
-    <Pressable style={styles.arrowLeft}>
-      <ArrowBackIcon color={COLOR.mono.black} />
-    </Pressable>
-    {typeof headerTitle === 'string' ? (
-      <Text style={styles.text}>{headerTitle}</Text>
-    ) : (
-      headerTitle && headerTitle()
-    )}
-    <View style={styles.right}>{headerRight && headerRight()}</View>
-  </View>
-);
+const Header = ({ headerTitle, headerRight }: HeaderProps) => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.container}>
+      <Pressable style={styles.arrowLeft} onPress={() => navigation.goBack()}>
+        <ArrowBackIcon color={COLOR.mono.black} />
+      </Pressable>
+      {typeof headerTitle === 'string' ? (
+        <Text style={styles.text}>{headerTitle}</Text>
+      ) : (
+        headerTitle && headerTitle()
+      )}
+      <View style={styles.right}>{headerRight && headerRight()}</View>
+    </View>
+  );
+};
 
 export { Header };
