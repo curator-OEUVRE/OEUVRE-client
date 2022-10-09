@@ -5,11 +5,18 @@ import {
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+} from 'react-native';
 import Logo from '@/assets/icons/Logo';
 import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
+import AppleLogin from '@/feature/AppleLogin';
 import GoogleLogin from '@/feature/GoogleLogin';
 import KakaoLogin from '@/feature/KakaoLogin';
 import { RootStackParamsList } from '@/feature/Routes';
@@ -73,6 +80,11 @@ const LoginScreen = () => {
           </Text>
         </View>
         <View style={styles.wrapButtons}>
+          {Platform.OS === 'ios' && (
+            <View style={styles.button}>
+              <AppleLogin />
+            </View>
+          )}
           <View style={styles.button}>
             <GoogleLogin />
           </View>

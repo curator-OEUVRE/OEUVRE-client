@@ -6,6 +6,7 @@
 function loadStories() {
   require('../src/components/Checkbox/Checkbox.stories');
   require('../src/components/FormInput/FormInput.stories');
+  require('../src/feature/AppleLogin/AppleLogin.stories');
   require('../src/feature/KakaoLogin/KakaoLogin.stories');
   require('../src/feature/TermsForm/TermsForm.stories');
 }
@@ -13,6 +14,7 @@ function loadStories() {
 const stories = [
   '../src/components/Checkbox/Checkbox.stories',
   '../src/components/FormInput/FormInput.stories',
+  '../src/feature/AppleLogin/AppleLogin.stories',
   '../src/feature/KakaoLogin/KakaoLogin.stories',
   '../src/feature/TermsForm/TermsForm.stories',
 ];
