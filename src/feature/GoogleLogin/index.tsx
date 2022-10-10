@@ -1,17 +1,14 @@
-import * as Google from 'expo-auth-session/providers/google';
+/* eslint-disable no-console */
+import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
 import * as WebBrowser from 'expo-web-browser';
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithCredential,
-} from 'firebase/auth';
-import '@/services/firebase';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { GOOGLE_CLIENT_ID } from 'react-native-dotenv';
 import GoogleIcon from '@/assets/icons/GoogleIcon';
 import { Button } from '@/components';
-import { COLOR } from '@/constants/styles';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import '@/services/firebase';
+
+GoogleSignin.configure();
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -22,30 +19,26 @@ const styles = StyleSheet.create({
 });
 
 const GoogleLogin = () => {
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: GOOGLE_CLIENT_ID,
-  });
+  const [user, setUser] = useState<User | undefined>(undefined);
 
-  React.useEffect(() => {
-    if (response?.type === 'success') {
-      // eslint-disable-next-line camelcase
-      const { id_token } = response.params;
-      const auth = getAuth();
-      const credential = GoogleAuthProvider.credential(id_token);
-      signInWithCredential(auth, credential);
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      setUser(user);
+    } catch (error: any) {
+      console.log(error.message);
     }
-  }, [response]);
-
+  };
   return (
     <Button
       icon={<GoogleIcon />}
-      disabled={!request}
-      onPress={() => {
-        promptAsync();
-      }}
+      // disabled={!request}
+      onPress={signIn}
       backgroundColor="#ffffff"
     >
-      <Text style={styles.text}>Google로 시작하기</Text>
+      <Text style={[TEXT_STYLE.button16M, styles.text]}>Google로 시작하기</Text>
     </Button>
   );
 };
