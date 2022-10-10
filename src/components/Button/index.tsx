@@ -47,6 +47,7 @@ const Button = ({
   <Pressable
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...defaultProps}
+    disabled={disabled}
     style={[
       style,
       styles.container,
