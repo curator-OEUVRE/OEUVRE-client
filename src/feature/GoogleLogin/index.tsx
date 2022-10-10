@@ -1,16 +1,14 @@
 /* eslint-disable no-console */
+import '@/services/firebase';
 import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
-import * as WebBrowser from 'expo-web-browser';
 import React, { useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
+import { GOOGLE_WEB_CLIENT_ID } from 'react-native-dotenv';
 import GoogleIcon from '@/assets/icons/GoogleIcon';
 import { Button } from '@/components';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
-import '@/services/firebase';
 
-GoogleSignin.configure();
-
-WebBrowser.maybeCompleteAuthSession();
+GoogleSignin.configure({ webClientId: GOOGLE_WEB_CLIENT_ID });
 
 const styles = StyleSheet.create({
   text: {
