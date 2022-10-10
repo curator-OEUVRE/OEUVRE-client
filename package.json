@@ -15,6 +15,7 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.17.10",
     "@react-native-community/datetimepicker": "6.2.0",
+    "@react-native-google-signin/google-signin": "^8.0.0",
     "@react-native-seoul/kakao-login": "5.2.2",
     "@react-navigation/bottom-tabs": "6.4.0",
     "@react-navigation/native": "6.0.13",
@@ -31,7 +32,8 @@
     "expo-random": "12.3.0",
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "1.4.0",
-    "expo-updates": "~0.14.5",
+    "expo-updates": "~0.14.6",
+    "firebase": "^9.11.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.6",

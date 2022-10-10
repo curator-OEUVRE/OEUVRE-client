@@ -1,57 +1,39 @@
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
-import { Image, StyleSheet, Text } from 'react-native';
-import {
-  GOOGLE_EXPO_CLIENT_ID,
-  GOOGLE_IOS_CLIENT_ID,
-  GOOGLE_ANDROID_CLIENT_ID,
-} from 'react-native-dotenv';
+/* eslint-disable no-console */
+import '@/services/firebase';
+import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
+import React, { useState } from 'react';
+import { StyleSheet, Text } from 'react-native';
+import { GOOGLE_WEB_CLIENT_ID } from 'react-native-dotenv';
+import GoogleIcon from '@/assets/icons/GoogleIcon';
 import { Button } from '@/components';
-import { TEXT_STYLE } from '@/constants/styles';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
-WebBrowser.maybeCompleteAuthSession();
+GoogleSignin.configure({ webClientId: GOOGLE_WEB_CLIENT_ID });
 
 const styles = StyleSheet.create({
-  icon: {
-    height: 32,
-    width: 32,
-  },
-  // eslint-disable-next-line react-native/no-color-literals
   text: {
-    color: '#141718',
+    color: COLOR.mono.black,
   },
 });
 
 const GoogleLogin = () => {
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: GOOGLE_EXPO_CLIENT_ID,
-    iosClientId: GOOGLE_IOS_CLIENT_ID,
-    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-  });
+  const [user, setUser] = useState<User | undefined>(undefined);
 
-  React.useEffect(() => {
-    if (response?.type === 'success') {
-      const { authentication } = response;
-      // eslint-disable-next-line no-console
-      console.log(authentication);
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      setUser(user);
+    } catch (error: any) {
+      console.log(error.message);
     }
-  }, [response]);
-
-  const googleIcon = (
-    <Image
-      // eslint-disable-next-line global-require
-      source={require('@/assets/icons/google_icon.png')}
-      style={styles.icon}
-    />
-  );
+  };
   return (
     <Button
-      icon={googleIcon}
-      disabled={!request}
-      onPress={() => {
-        promptAsync();
-      }}
+      icon={<GoogleIcon />}
+      // disabled={!request}
+      onPress={signIn}
       backgroundColor="#ffffff"
     >
       <Text style={[TEXT_STYLE.button16M, styles.text]}>Google로 시작하기</Text>
