@@ -28,15 +28,18 @@ module.exports = {
           kakaoAppKey: process.env.KAKAO_APP_KEY,
         },
       ],
+      '@react-native-google-signin/google-signin',
     ],
     ios: {
       supportsTablet: false,
       bundleIdentifier: 'com.curator.oeuvre',
+      googleServicesFile: './GoogleService-Info.plist',
     },
     android: {
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#FFFFFF',
+        googleServicesFile: './google-services.json',
       },
       package: 'com.curator.oeuvre',
     },
