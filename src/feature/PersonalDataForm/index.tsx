@@ -1,6 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
 import { Text, StyleSheet } from 'react-native';
-import { SignUpStep, SignUpScreenNavigationProp } from '../Routes/types';
 import {
   Button,
   FormInput,
@@ -18,22 +16,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const PersonalDataForm = () => {
+interface Props {
+  onNextPress?: () => void;
+}
+
+const PersonalDataForm = ({ onNextPress }: Props) => {
   const { userId, setUserId, name, setName, birthDay, setBirthDay } =
     useSignUpStore();
   const disabled =
     (userId.isRequired && userId.status !== FormInputStatus.Valid) ||
     (name.isRequired && name.status !== FormInputStatus.Valid) ||
     (birthDay.isRequired && birthDay.status !== FormInputStatus.Valid);
-  const navigation = useNavigation<SignUpScreenNavigationProp>();
+
   const button = (
     <Button
       disabled={disabled}
-      onPress={() =>
-        navigation.push('SignUp', {
-          process: SignUpStep.UserProfile,
-        })
-      }
+      onPress={() => {
+        onNextPress?.();
+      }}
     >
       <Text style={styles.buttonText}>다음으로</Text>
     </Button>

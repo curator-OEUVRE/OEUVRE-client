@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@/components/Header';
 
@@ -14,10 +14,12 @@ interface Props {
 }
 
 const SignUpTemplate = ({ children }: Props) => (
-  <SafeAreaView style={styles.container}>
-    <Header headerTitle="회원 가입" />
-    {children}
-  </SafeAreaView>
+  <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
+    <SafeAreaView style={styles.container}>
+      <Header headerTitle="회원 가입" />
+      {children}
+    </SafeAreaView>
+  </TouchableWithoutFeedback>
 );
 
 export default SignUpTemplate;
