@@ -9,6 +9,10 @@ interface UserInput<T> {
 }
 
 export interface SignUpValues {
+  loginInfo: {
+    email: string;
+    type: 'APPLE' | 'GOOGLE' | 'KAKAO';
+  };
   isMarketingAgreed: boolean;
   userId: UserInput<string>;
   name: UserInput<string>;
@@ -19,6 +23,7 @@ export interface SignUpValues {
 }
 
 interface SignUpState extends SignUpValues {
+  setLoginInfo: (email: string, type: 'APPLE' | 'GOOGLE' | 'KAKAO') => void;
   setIsMarketingAgreed: (data: boolean) => void;
   setUserId: (data: UserInput<string>) => void;
   setName: (data: UserInput<string>) => void;
@@ -36,6 +41,11 @@ const createInitialUserInput = <T,>(value: T, isRequired: boolean = true) => ({
 });
 
 export const useSignUpStore = create<SignUpState>()((set) => ({
+  loginInfo: {
+    email: '',
+    type: 'APPLE',
+  },
+  setLoginInfo: (email, type) => set((state) => ({ ...state, email, type })),
   isMarketingAgreed: false,
   setIsMarketingAgreed: (isMarketingAgreed) =>
     set((state) => ({ ...state, isMarketingAgreed })),

@@ -1,6 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { Text, StyleSheet, Pressable, View } from 'react-native';
+import { signUp } from '@/apis/user';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import AddProfileIcon from '@/assets/icons/AddProfile';
 import {
@@ -12,10 +13,12 @@ import {
 } from '@/components';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useUploadImage from '@/hooks/useUploadImage';
+import { formatDate } from '@/services/date/format';
 import {
   validateExhibitionName,
   validateIntroduceMessage,
 } from '@/services/validation/signUp';
+import { useAuthStore } from '@/states/authStore';
 import { useSignUpStore } from '@/states/signUpStore';
 
 const styles = StyleSheet.create({
@@ -51,9 +54,15 @@ const UserProfileForm = ({ onNextPress }: Props) => {
     introduceMessage,
     setIntroduceMessage,
     userId,
+    name,
+    birthDay,
+    isMarketingAgreed,
+    loginInfo,
   } = useSignUpStore();
   const [image, setImage] = useState<string | undefined>(undefined);
   const { uploading, uploadImage } = useUploadImage({ image });
+
+  const { setToken } = useAuthStore();
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -67,18 +76,38 @@ const UserProfileForm = ({ onNextPress }: Props) => {
     }
   };
 
-  const onCompleteUpload = (url: string) => {
+  const onCompleteUpload = async (url: string) => {
     setProfileImageUrl({
       ...profileImageUrl,
       value: url,
     });
+
+    const response = await signUp({
+      birthday: formatDate(birthDay.value),
+      email: loginInfo.email,
+      exhibitionName: exhibitionName.value,
+      id: userId.value,
+      introduceMessage: introduceMessage.value,
+      isAlarmOn: isMarketingAgreed,
+      name: name.value,
+      profileImageUrl: url,
+      type: loginInfo.type,
+    });
+
+    if (response.isSuccess) {
+      const { accessToken, refreshToken } = response.result.result;
+      setToken(accessToken, refreshToken);
+      console.log(response.result.result);
+      onNextPress?.();
+    } else {
+      console.log(response.result.info);
+    }
   };
 
   const button = (
     <Button
       onPress={async () => {
         await uploadImage('Profile', userId.value, onCompleteUpload);
-        onNextPress?.();
       }}
     >
       <Text style={styles.buttonText}>설정 완료하기</Text>

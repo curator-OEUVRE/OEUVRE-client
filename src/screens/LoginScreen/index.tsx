@@ -23,6 +23,7 @@ import KakaoLogin from '@/feature/KakaoLogin';
 import { RootStackParamsList } from '@/feature/Routes';
 import { AuthStackParamsList } from '@/feature/Routes/AuthStack';
 import { useAuthStore } from '@/states/authStore';
+import { useSignUpStore } from '@/states/signUpStore';
 
 export type LoginScreenParams = undefined;
 export type LoginScreenNP = CompositeNavigationProp<
@@ -67,16 +68,26 @@ const styles = StyleSheet.create({
 const LoginScreen = () => {
   const navigation = useNavigation<LoginScreenNP>();
   const { setToken } = useAuthStore();
+  const { setLoginInfo } = useSignUpStore();
 
   const onSuccess = async (
     token: string,
     type: 'apple' | 'google' | 'kakao',
   ) => {
     const response = await login(token, type);
+
     if (response.isSuccess) {
       const { accessToken, refreshToken } = response.result.result;
       setToken(accessToken, refreshToken);
     } else {
+      const TYPE = {
+        apple: 'APPLE',
+        google: 'GOOGLE',
+        kakao: 'KAKAO',
+      } as const;
+
+      console.log(response.result.info);
+      setLoginInfo(response.result.info.email, TYPE[type]);
       navigation.navigate(Screen.TermsFormScreen);
     }
   };
