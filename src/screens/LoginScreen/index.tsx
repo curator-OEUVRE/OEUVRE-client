@@ -87,7 +87,8 @@ const LoginScreen = () => {
       } as const;
 
       console.log(response.result.info);
-      setLoginInfo(response.result.info.email, TYPE[type]);
+      // TODO: 에러 시 타입 정의 좀 더 완벽하게
+      setLoginInfo(response.result.info.result.email, TYPE[type]);
       navigation.navigate(Screen.TermsFormScreen);
     }
   };

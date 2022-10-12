@@ -97,7 +97,6 @@ const UserProfileForm = ({ onNextPress }: Props) => {
     if (response.isSuccess) {
       const { accessToken, refreshToken } = response.result.result;
       setToken(accessToken, refreshToken);
-      console.log(response.result.result);
       onNextPress?.();
     } else {
       console.log(response.result.info);

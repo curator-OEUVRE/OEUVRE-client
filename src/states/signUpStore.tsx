@@ -45,7 +45,8 @@ export const useSignUpStore = create<SignUpState>()((set) => ({
     email: '',
     type: 'APPLE',
   },
-  setLoginInfo: (email, type) => set((state) => ({ ...state, email, type })),
+  setLoginInfo: (email, type) =>
+    set((state) => ({ ...state, loginInfo: { email, type } })),
   isMarketingAgreed: false,
   setIsMarketingAgreed: (isMarketingAgreed) =>
     set((state) => ({ ...state, isMarketingAgreed })),
