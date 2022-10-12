@@ -18,7 +18,7 @@ export const Routes = () => (
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={Navigator.FloorStack}
+      initialRouteName={Navigator.AuthStack}
     >
       <Stack.Screen name={Navigator.AuthStack} component={AuthStack} />
       <Stack.Screen name={Navigator.FloorStack} component={FloorStack} />
