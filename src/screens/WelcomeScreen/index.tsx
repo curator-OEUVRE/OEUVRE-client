@@ -6,7 +6,7 @@ import { View, StyleSheet, Text, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
 import { Header } from '@/components/Header';
-import { Screen } from '@/constants/screens';
+import { Navigator, Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
 import { RootStackParamsList } from '@/feature/Routes';
@@ -67,7 +67,13 @@ const WelcomeScreen = () => {
           님,{'\n'}OEUVRE에{'\n'}오신 것을 환영해요!
         </Text>
         <View style={styles.buttonWrapper}>
-          <Button>
+          <Button
+            onPress={() => {
+              navigation.navigate(Navigator.MainTab, {
+                screen: Screen.HomeScreen,
+              });
+            }}
+          >
             <Text style={[styles.buttonText, TEXT_STYLE.button16M]}>
               시작하기
             </Text>
