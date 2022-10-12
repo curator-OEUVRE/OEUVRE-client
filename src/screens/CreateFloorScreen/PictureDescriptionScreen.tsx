@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { WithKeyboardAvoidingView } from '@/components';
 import { Header } from '@/components/Header';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import PictureDescriptionList from '@/feature/PictureDescriptionList';
@@ -26,7 +27,9 @@ const PictureDescriptionScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header headerTitle="플로어 추가" headerRight={headerRight} />
-      <PictureDescriptionList />
+      <WithKeyboardAvoidingView>
+        <PictureDescriptionList />
+      </WithKeyboardAvoidingView>
     </SafeAreaView>
   );
 };
