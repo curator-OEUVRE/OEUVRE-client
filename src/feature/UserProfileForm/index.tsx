@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import AddCircleIcon from '@/assets/icons/AddCircle';
 import { Text, StyleSheet, Pressable, View } from 'react-native';
+import AddCircleIcon from '@/assets/icons/AddCircle';
 import AddProfileIcon from '@/assets/icons/AddProfile';
 import {
   Button,
@@ -75,7 +75,12 @@ const UserProfileForm = ({ onNextPress }: Props) => {
   };
 
   const button = (
-    <Button onPress={() => navigation.push('Welcome')}>
+    <Button
+      onPress={async () => {
+        await uploadImage('Profile', userId.value, onCompleteUpload);
+        onNextPress?.();
+      }}
+    >
       <Text style={styles.buttonText}>설정 완료하기</Text>
     </Button>
   );
