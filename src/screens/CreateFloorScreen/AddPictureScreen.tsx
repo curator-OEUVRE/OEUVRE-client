@@ -1,10 +1,10 @@
 import {
   CompositeNavigationProp,
+  useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as ImagePicker from 'expo-image-picker';
-import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Screen } from '@/constants/screens';
 import { RootStackParamsList } from '@/feature/Routes';
@@ -26,7 +26,7 @@ export type AddPictureScreenScreenNP = CompositeNavigationProp<
 const AddPictureScreen = () => {
   const navigation = useNavigation<AddPictureScreenScreenNP>();
   const { createPicturesByImageUris } = useCreateFloorStore();
-  useEffect(() => {
+  useFocusEffect(() => {
     const pickImage = async () => {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -38,10 +38,12 @@ const AddPictureScreen = () => {
         const imageUris = selected?.map((imageInfo) => imageInfo.uri);
         createPicturesByImageUris(imageUris);
         navigation.navigate(Screen.PictureDescriptionScreen);
+      } else {
+        navigation.goBack();
       }
     };
     pickImage();
-  }, [navigation, createPicturesByImageUris]);
+  });
   return <View style={styles.container} />;
 };
 
