@@ -1,7 +1,5 @@
 import { FlatList } from 'react-native';
-import PictureDescriptionItem, {
-  PictureDescriptionItemProps,
-} from './PictureDescriptionItem';
+import PictureDescriptionItem from './PictureDescriptionItem';
 import { useCreateFloorStore } from '@/states/createFloorStore';
 
 const PictureDescriptionList = () => {
@@ -9,6 +7,7 @@ const PictureDescriptionList = () => {
   return (
     <FlatList
       data={pictures}
+      keyExtractor={(_, index) => `picture_${index}`}
       renderItem={({ item: { description, imageUri }, index }) => (
         <PictureDescriptionItem
           {...{ description, imageUri }}
@@ -20,4 +19,3 @@ const PictureDescriptionList = () => {
 };
 
 export default PictureDescriptionList;
-export { PictureDescriptionItemProps };
