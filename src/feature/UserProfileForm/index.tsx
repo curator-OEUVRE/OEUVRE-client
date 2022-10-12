@@ -58,6 +58,7 @@ const UserProfileForm = ({ onNextPress }: Props) => {
     birthDay,
     isMarketingAgreed,
     loginInfo,
+    clearSignUpStore,
   } = useSignUpStore();
   const [image, setImage] = useState<string | undefined>(undefined);
   const { uploading, uploadImage } = useUploadImage({ image });
@@ -95,6 +96,7 @@ const UserProfileForm = ({ onNextPress }: Props) => {
     });
 
     if (response.isSuccess) {
+      clearSignUpStore();
       const { accessToken, refreshToken } = response.result.result;
       setToken(accessToken, refreshToken);
       onNextPress?.();

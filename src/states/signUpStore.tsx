@@ -31,6 +31,7 @@ interface SignUpState extends SignUpValues {
   setProfileImageUrl: (data: UserInput<string>) => void;
   setExhibitionName: (data: UserInput<string>) => void;
   setIntroduceMessage: (data: UserInput<string>) => void;
+  clearSignUpStore: () => void;
 }
 
 const createInitialUserInput = <T,>(value: T, isRequired: boolean = true) => ({
@@ -66,4 +67,5 @@ export const useSignUpStore = create<SignUpState>()((set) => ({
   introduceMessage: createInitialUserInput(''),
   setIntroduceMessage: (data) =>
     set((state) => ({ ...state, introduceMessage: data })),
+  clearSignUpStore: () => set({}),
 }));
