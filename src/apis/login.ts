@@ -8,7 +8,7 @@ interface LoginResponseDto {
   code: string;
   isSuccess: boolean;
   message: string;
-  result?: {
+  result: {
     accessToken: string;
     refreshToken: string;
   };

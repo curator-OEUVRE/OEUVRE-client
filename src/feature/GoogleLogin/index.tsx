@@ -16,7 +16,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const GoogleLogin = () => {
+interface Props {
+  onSuccess?: (token: string) => void;
+}
+
+const GoogleLogin = ({ onSuccess }: Props) => {
   const [user, setUser] = useState<User | undefined>(undefined);
 
   const signIn = async () => {
@@ -25,6 +29,7 @@ const GoogleLogin = () => {
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
       setUser(user);
+      if (userInfo.idToken) onSuccess?.(userInfo.idToken);
     } catch (error: any) {
       console.log(error.message);
     }
