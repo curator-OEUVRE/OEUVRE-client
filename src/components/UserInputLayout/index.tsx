@@ -1,19 +1,10 @@
 import React from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { WithKeyboardAvoidingView } from '../WithKeyboardAvoidingView';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
   content: {
     flex: 1,
     position: 'relative',
@@ -48,15 +39,11 @@ const UserInputLayout = ({
       <View style={{ marginBottom: gap }}>{child}</View>
     ));
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.select({ ios: 'padding' })}
-      keyboardVerticalOffset={20}
-    >
+    <WithKeyboardAvoidingView>
       <Text style={[styles.text, TEXT_STYLE.title20M]}>{infoMessage}</Text>
       <View style={styles.content}>{renderChildren()}</View>
       {button && <View style={styles.wrapButton}>{button}</View>}
-    </KeyboardAvoidingView>
+    </WithKeyboardAvoidingView>
   );
 };
 

@@ -4,3 +4,4 @@ export * from './UserInputLayout';
 export * from './Checkbox';
 export * from './FormInput';
 export * from './Profile';
+export * from './WithKeyboardAvoidingView';
