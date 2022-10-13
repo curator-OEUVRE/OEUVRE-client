@@ -1,4 +1,7 @@
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import AuthStack, { AuthStackParamsList } from './AuthStack';
@@ -6,8 +9,8 @@ import FloorStack, { FloorStackParamsList } from './FloorStack';
 import { Navigator } from '@/constants/screens';
 
 export type RootStackParamsList = {
-  [Navigator.AuthStack]: AuthStackParamsList;
-  [Navigator.FloorStack]: FloorStackParamsList;
+  [Navigator.AuthStack]: NavigatorScreenParams<AuthStackParamsList>;
+  [Navigator.FloorStack]: NavigatorScreenParams<FloorStackParamsList>;
 };
 
 const Stack = createStackNavigator<RootStackParamsList>();

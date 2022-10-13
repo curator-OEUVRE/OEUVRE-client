@@ -9,15 +9,17 @@ const styles = StyleSheet.create({
 
 interface WithKeyboardAvoidingViewProps {
   children: React.ReactNode;
+  keyboardVerticalOffset?: number;
 }
 
 const WithKeyboardAvoidingView = ({
   children,
+  keyboardVerticalOffset = 20,
 }: WithKeyboardAvoidingViewProps) => (
   <KeyboardAvoidingView
     style={styles.container}
     behavior={Platform.select({ ios: 'padding' })}
-    keyboardVerticalOffset={20}
+    keyboardVerticalOffset={keyboardVerticalOffset}
   >
     {children}
   </KeyboardAvoidingView>

@@ -1,3 +1,4 @@
+import { NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Screen } from '@/constants/screens';
 import {
@@ -8,8 +9,8 @@ import {
 } from '@/screens/CreateFloorScreen';
 
 export type FloorStackParamsList = {
-  [Screen.AddPictureScreen]: AddPictureScreenParams;
-  [Screen.PictureDescriptionScreen]: PictureDescriptionScreenParams;
+  [Screen.AddPictureScreen]: NavigatorScreenParams<AddPictureScreenParams>;
+  [Screen.PictureDescriptionScreen]: NavigatorScreenParams<PictureDescriptionScreenParams>;
 };
 
 const Stack = createStackNavigator<FloorStackParamsList>();
