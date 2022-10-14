@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import AddCircleIcon from '@/assets/icons/AddCircle';
 import { Text, StyleSheet, Pressable, View } from 'react-native';
 import { WelcomeScreenNavigationProps } from '../Routes/types';
+import AddCircleIcon from '@/assets/icons/AddCircle';
 import AddProfileIcon from '@/assets/icons/AddProfile';
 import {
   Button,
