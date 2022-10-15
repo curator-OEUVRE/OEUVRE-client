@@ -5,6 +5,7 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import AuthStack, { AuthStackParamsList } from './AuthStack';
+import FloorStack, { FloorStackParamsList } from './FloorStack';
 import MainTabNavigator, { MainTabParamsList } from './MainTabNavigator';
 import { Navigator, Screen } from '@/constants/screens';
 import WelcomeScreen, { WelcomeScreenParams } from '@/screens/WelcomeScreen';
@@ -12,6 +13,7 @@ import { useAuthStore } from '@/states/authStore';
 
 export type RootStackParamsList = {
   [Navigator.AuthStack]: NavigatorScreenParams<AuthStackParamsList>;
+  [Navigator.FloorStack]: NavigatorScreenParams<FloorStackParamsList>;
   [Screen.WelcomeScreen]: WelcomeScreenParams;
   [Navigator.MainTab]: NavigatorScreenParams<MainTabParamsList>;
 };
@@ -20,7 +22,7 @@ const Stack = createStackNavigator<RootStackParamsList>();
 
 export const Routes = () => {
   const { accessToken } = useAuthStore();
-
+      
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -34,6 +36,7 @@ export const Routes = () => {
           <Stack.Screen name={Navigator.AuthStack} component={AuthStack} />
         )}
         <Stack.Screen name={Screen.WelcomeScreen} component={WelcomeScreen} />
+        <Stack.Screen name={Navigator.FloorStack} component={FloorStack} />
       </Stack.Navigator>
     </NavigationContainer>
   );
