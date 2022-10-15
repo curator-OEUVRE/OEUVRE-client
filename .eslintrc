@@ -19,6 +19,9 @@
       }
     }
   },
+  "globals": {
+    "JSX": true
+  },
   "rules": {
     "react/jsx-filename-extension": [
       1,
@@ -51,6 +54,7 @@
           "order": "asc"
         }
       }
-    ]
+    ],
+    "react/jsx-props-no-spreading": 0
   }
 }

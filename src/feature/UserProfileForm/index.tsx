@@ -1,8 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { Text, StyleSheet, Pressable, View } from 'react-native';
-import { WelcomeScreenNavigationProps } from '../Routes/types';
+import { signUp } from '@/apis/user';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import AddProfileIcon from '@/assets/icons/AddProfile';
 import {
@@ -14,10 +13,12 @@ import {
 } from '@/components';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useUploadImage from '@/hooks/useUploadImage';
+import { formatDate } from '@/services/date/format';
 import {
   validateExhibitionName,
   validateIntroduceMessage,
 } from '@/services/validation/signUp';
+import { useAuthStore } from '@/states/authStore';
 import { useSignUpStore } from '@/states/signUpStore';
 
 const styles = StyleSheet.create({
@@ -40,7 +41,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const UserProfileForm = () => {
+interface Props {
+  onNextPress?: () => void;
+}
+
+const UserProfileForm = ({ onNextPress }: Props) => {
   const {
     exhibitionName,
     setExhibitionName,
@@ -49,10 +54,17 @@ const UserProfileForm = () => {
     introduceMessage,
     setIntroduceMessage,
     userId,
+    name,
+    birthDay,
+    isMarketingAgreed,
+    loginInfo,
+    clearSignUpStore,
   } = useSignUpStore();
   const [image, setImage] = useState<string | undefined>(undefined);
   const { uploading, uploadImage } = useUploadImage({ image });
-  const navigation = useNavigation<WelcomeScreenNavigationProps>();
+
+  const { setToken } = useAuthStore();
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -65,18 +77,38 @@ const UserProfileForm = () => {
     }
   };
 
-  const onCompleteUpload = (url: string) => {
+  const onCompleteUpload = async (url: string) => {
     setProfileImageUrl({
       ...profileImageUrl,
       value: url,
     });
+
+    const response = await signUp({
+      birthday: formatDate(birthDay.value),
+      email: loginInfo.email,
+      exhibitionName: exhibitionName.value,
+      id: userId.value,
+      introduceMessage: introduceMessage.value,
+      isAlarmOn: isMarketingAgreed,
+      name: name.value,
+      profileImageUrl: url,
+      type: loginInfo.type,
+    });
+
+    if (response.isSuccess) {
+      clearSignUpStore();
+      const { accessToken, refreshToken } = response.result.result;
+      setToken(accessToken, refreshToken);
+      onNextPress?.();
+    } else {
+      console.log(response.result.info);
+    }
   };
 
   const button = (
     <Button
       onPress={async () => {
         await uploadImage('Profile', userId.value, onCompleteUpload);
-        navigation.push('Welcome');
       }}
     >
       <Text style={styles.buttonText}>설정 완료하기</Text>

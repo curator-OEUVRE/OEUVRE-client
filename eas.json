@@ -5,14 +5,23 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "API_URL": "https://0euvre.click"
+      }
     },
     "preview": {
       "channel": "staging",
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "API_URL": "https://0euvre.click"
+      }
     },
     "production": {
-      "channel": "production"
+      "channel": "production",
+      "env": {
+        "API_URL": "https://0euvre.link"
+      }
     }
   },
   "submit": {

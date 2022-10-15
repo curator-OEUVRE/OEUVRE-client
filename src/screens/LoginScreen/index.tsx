@@ -12,6 +12,7 @@ import {
   View,
   Platform,
 } from 'react-native';
+import { login } from '@/apis/login';
 import Logo from '@/assets/icons/Logo';
 import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles/colors';
@@ -21,6 +22,8 @@ import GoogleLogin from '@/feature/GoogleLogin';
 import KakaoLogin from '@/feature/KakaoLogin';
 import { RootStackParamsList } from '@/feature/Routes';
 import { AuthStackParamsList } from '@/feature/Routes/AuthStack';
+import { useAuthStore } from '@/states/authStore';
+import { useSignUpStore } from '@/states/signUpStore';
 
 export type LoginScreenParams = undefined;
 export type LoginScreenNP = CompositeNavigationProp<
@@ -64,6 +67,31 @@ const styles = StyleSheet.create({
 
 const LoginScreen = () => {
   const navigation = useNavigation<LoginScreenNP>();
+  const { setToken } = useAuthStore();
+  const { setLoginInfo } = useSignUpStore();
+
+  const onSuccess = async (
+    token: string,
+    type: 'apple' | 'google' | 'kakao',
+  ) => {
+    const response = await login(token, type);
+
+    if (response.isSuccess) {
+      const { accessToken, refreshToken } = response.result.result;
+      setToken(accessToken, refreshToken);
+    } else {
+      const TYPE = {
+        apple: 'APPLE',
+        google: 'GOOGLE',
+        kakao: 'KAKAO',
+      } as const;
+
+      console.log(response.result.info);
+      // TODO: 에러 시 타입 정의 좀 더 완벽하게
+      setLoginInfo(response.result.info.result.email, TYPE[type]);
+      navigation.navigate(Screen.TermsFormScreen);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -82,15 +110,23 @@ const LoginScreen = () => {
         <View style={styles.wrapButtons}>
           {Platform.OS === 'ios' && (
             <View style={styles.button}>
-              <AppleLogin />
+              <AppleLogin
+                onSuccess={(token) => {
+                  onSuccess(token, 'apple');
+                }}
+              />
             </View>
           )}
           <View style={styles.button}>
-            <GoogleLogin />
+            <GoogleLogin
+              onSuccess={(token) => {
+                onSuccess(token, 'google');
+              }}
+            />
           </View>
           <KakaoLogin
-            onSuccess={() => {
-              navigation.navigate(Screen.TermsFormScreen);
+            onSuccess={(token) => {
+              onSuccess(token, 'kakao');
             }}
           />
         </View>

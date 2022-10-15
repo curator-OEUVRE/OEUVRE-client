@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "760182900541",
+    "project_id": "oeuvre-b2a8f",
+    "storage_bucket": "oeuvre-b2a8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760182900541:android:8f15db7260f99cca706754",
+        "android_client_info": {
+          "package_name": "com.curator.oeuvre"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760182900541-6o342mgljnls59pdh2v1utke37qbioi4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.curator.oeuvre",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "760182900541-fgphvrcfm3mgcqc9ag8u3kf6ij5bpvku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.curator.oeuvre",
+            "certificate_hash": "c4fdc4746251525cf14cb19e6d292d437bd0bd62"
+          }
+        },
+        {
+          "client_id": "760182900541-vtqm5r7hn878rigsq8vnpo4tu9ff7r2u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ1X9Kl-IRe3sJVrK64kAxTJ_WKeOof38"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760182900541-vtqm5r7hn878rigsq8vnpo4tu9ff7r2u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "760182900541-e64km4cpjn25oof0v9jk32567l5kvua0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.curator.oeuvre"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

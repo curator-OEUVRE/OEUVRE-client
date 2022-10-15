@@ -9,6 +9,10 @@ interface UserInput<T> {
 }
 
 export interface SignUpValues {
+  loginInfo: {
+    email: string;
+    type: 'APPLE' | 'GOOGLE' | 'KAKAO';
+  };
   isMarketingAgreed: boolean;
   userId: UserInput<string>;
   name: UserInput<string>;
@@ -19,6 +23,7 @@ export interface SignUpValues {
 }
 
 interface SignUpState extends SignUpValues {
+  setLoginInfo: (email: string, type: 'APPLE' | 'GOOGLE' | 'KAKAO') => void;
   setIsMarketingAgreed: (data: boolean) => void;
   setUserId: (data: UserInput<string>) => void;
   setName: (data: UserInput<string>) => void;
@@ -26,6 +31,7 @@ interface SignUpState extends SignUpValues {
   setProfileImageUrl: (data: UserInput<string>) => void;
   setExhibitionName: (data: UserInput<string>) => void;
   setIntroduceMessage: (data: UserInput<string>) => void;
+  clearSignUpStore: () => void;
 }
 
 const createInitialUserInput = <T,>(value: T, isRequired: boolean = true) => ({
@@ -36,6 +42,12 @@ const createInitialUserInput = <T,>(value: T, isRequired: boolean = true) => ({
 });
 
 export const useSignUpStore = create<SignUpState>()((set) => ({
+  loginInfo: {
+    email: '',
+    type: 'APPLE',
+  },
+  setLoginInfo: (email, type) =>
+    set((state) => ({ ...state, loginInfo: { email, type } })),
   isMarketingAgreed: false,
   setIsMarketingAgreed: (isMarketingAgreed) =>
     set((state) => ({ ...state, isMarketingAgreed })),
@@ -55,4 +67,5 @@ export const useSignUpStore = create<SignUpState>()((set) => ({
   introduceMessage: createInitialUserInput(''),
   setIntroduceMessage: (data) =>
     set((state) => ({ ...state, introduceMessage: data })),
+  clearSignUpStore: () => set({}),
 }));
