@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { forwardRef, useState } from 'react';
+import { forwardRef, ReactNode, useState } from 'react';
 
 import {
   Platform,
@@ -28,6 +28,8 @@ interface Props extends TextInputProps {
   containerStyle?: ViewStyle;
   status?: FormInputStatus;
   message?: string;
+  leftElement?: ReactNode;
+  rightElement?: ReactNode;
 }
 
 const styles = StyleSheet.create({
@@ -87,6 +89,8 @@ export const FormInput = forwardRef<TextInput, Props>(
       label,
       style,
       containerStyle,
+      leftElement,
+      rightElement,
       ...textInputProps
     }: Props,
     ref,
@@ -95,6 +99,7 @@ export const FormInput = forwardRef<TextInput, Props>(
       {label && <Text style={[TEXT_STYLE.body14B, styles.label]}>{label}</Text>}
 
       <View style={styles.inputContainer}>
+        {leftElement}
         <TextInput
           placeholderTextColor={COLOR.mono.gray4}
           // spreading이 문제가 될 상황이 아니라고 판단
@@ -104,6 +109,7 @@ export const FormInput = forwardRef<TextInput, Props>(
           style={[TEXT_STYLE.body16R, styles.input, style]}
         />
         {status !== FormInputStatus.Initial && STATUS_ICON[status]}
+        {rightElement}
       </View>
 
       {status === FormInputStatus.Error && message && (

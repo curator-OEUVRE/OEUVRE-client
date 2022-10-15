@@ -1,9 +1,10 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
 import CloseIcon from '@/assets/icons/Close';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 interface Props {
   text: string;
+  style?: ViewStyle;
   onDeletePress?: () => void;
 }
 
@@ -25,8 +26,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Tag = ({ text, onDeletePress }: Props) => (
-  <View style={styles.container}>
+export const Tag = ({ text, style, onDeletePress }: Props) => (
+  <View style={[styles.container, style]}>
     <Text style={[styles.text, TEXT_STYLE.body16R]}>
       {'  '}#{text}
     </Text>
