@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   TouchableWithoutFeedback,
   Text,
@@ -18,6 +19,7 @@ import {
   FormInputStatus,
   SettingItem,
 } from '@/components';
+import { CREATE_FLOOR_CONFIG } from '@/constants/common';
 import { IMAGE } from '@/constants/images';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { validateFloorName } from '@/services/validation/createFloor';
@@ -29,8 +31,14 @@ import {
 export type FloorInfoFormScreenParams = undefined;
 
 const styles = StyleSheet.create({
+  confirmText: {
+    color: COLOR.system.blue,
+  },
   floorIconWrap: {
     position: 'relative',
+  },
+  floorNameLengthText: {
+    color: COLOR.mono.gray5,
   },
   icon: {
     marginTop: 6,
@@ -104,18 +112,36 @@ const FloorInfoFormScreen = () => {
     setName,
     color,
     setColor,
-    texture,
-    setTexture,
+    // texture,
+    // setTexture,
     isPublic,
     setIsPublic,
     isCommentAvailable,
     setIsCommentAvailable,
   } = useCreateFloorStore();
 
+  const ConfirmButton = useCallback(
+    () => (
+      <Pressable>
+        <Text style={[TEXT_STYLE.button16M, styles.confirmText]}>다음</Text>
+      </Pressable>
+    ),
+    [],
+  );
+
+  const FloorNameLength = useCallback(
+    () => (
+      <Text style={[TEXT_STYLE.body14R, styles.floorNameLengthText]}>
+        {name.value.length}/{CREATE_FLOOR_CONFIG.floorName.limit[1]}
+      </Text>
+    ),
+    [name.value.length],
+  );
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.safeAreaView}>
-        <Header headerTitle="플로어 추가" />
+        <Header headerTitle="플로어 추가" headerRight={ConfirmButton} />
         <UserInputLayout
           infoMessage={`멋진 사진이네요!\n플로어를 소개해 주세요`}
           gap={28}
@@ -137,6 +163,9 @@ const FloorInfoFormScreen = () => {
                 setName({ status: FormInputStatus.Error, error });
               }
             }}
+            rightElement={
+              name.value.length > 0 ? <FloorNameLength /> : undefined
+            }
           />
           <View>
             <Text style={[styles.subtitle, TEXT_STYLE.body14B]}>
