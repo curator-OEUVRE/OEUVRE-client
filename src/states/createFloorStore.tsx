@@ -6,6 +6,8 @@ export interface PictureInfo {
   imageUri: string;
   description: string;
   hashtags: string[];
+  height: number;
+  location: number;
 }
 
 interface FormInfo<T> {
@@ -37,6 +39,8 @@ const createDefaultPictureInfo = (imageUri: string): PictureInfo => ({
   imageUri,
   description: '',
   hashtags: [],
+  height: 50,
+  location: 0,
 });
 
 export const FLOOR_BACKGROUND_COLORS = [
