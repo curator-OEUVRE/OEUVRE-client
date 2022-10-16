@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { WithKeyboardAvoidingView } from '../WithKeyboardAvoidingView';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
@@ -7,12 +7,14 @@ import { TEXT_STYLE } from '@/constants/styles/textStyles';
 const styles = StyleSheet.create({
   content: {
     flex: 1,
+    paddingHorizontal: 20,
     position: 'relative',
   },
   text: {
     color: COLOR.mono.black,
     marginBottom: 38,
     marginTop: 24,
+    paddingHorizontal: 20,
   },
   wrapButton: {
     alignItems: 'center',
@@ -41,7 +43,7 @@ const UserInputLayout = ({
   return (
     <WithKeyboardAvoidingView>
       <Text style={[styles.text, TEXT_STYLE.title20M]}>{infoMessage}</Text>
-      <View style={styles.content}>{renderChildren()}</View>
+      <ScrollView style={styles.content}>{renderChildren()}</ScrollView>
       {button && <View style={styles.wrapButton}>{button}</View>}
     </WithKeyboardAvoidingView>
   );

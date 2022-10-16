@@ -17,4 +17,5 @@ export enum Screen {
   GroupFeedScreen = 'GroupFeedScreen',
   NotificationScreen = 'NotificationScreen',
   ProfileScreen = 'ProfileScreen',
+  FloorInfoFormScreen = 'FloorInfoFormScreen',
 }

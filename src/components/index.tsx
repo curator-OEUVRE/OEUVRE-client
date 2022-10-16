@@ -5,3 +5,4 @@ export * from './Checkbox';
 export * from './FormInput';
 export * from './Profile';
 export * from './WithKeyboardAvoidingView';
+export * from './SettingItem';

@@ -13,6 +13,12 @@ export const SIGNUP_CONFIG = {
   },
 };
 
+export const CREATE_FLOOR_CONFIG = {
+  floorName: {
+    limit: [1, 10],
+  },
+};
+
 export const ERROR_MESSAGE = {
   DUPLICATED_ID: '이 사용자 아이디는 이미 다른 사람이 사용하고 있어요',
   EMPTY_ID: '아이디를 입력해주세요',
@@ -29,4 +35,7 @@ export const ERROR_MESSAGE = {
   EMPTY_INTRODUCE_MESSAGE: '자기소개를 입력해주세요',
   TOO_LONG_INTRODUCE_MESSAGE: `자기 소개는 ${SIGNUP_CONFIG.introduceMessage.limit[1]}자까지 작성이 가능해요`,
   COMMON_TYPE: '입력이 올바르지 않습니다.',
+  EMPTY_FLOOR_NAME: '플로어 이름을 입력해주세요',
+  TOO_SHORT_FLOOR_NAME: `플로어 이름은 ${CREATE_FLOOR_CONFIG.floorName.limit[0]}자 이상이어야 해요`,
+  TOO_LONG_FLOOR_NAME: `플로어 이름은 ${CREATE_FLOOR_CONFIG.floorName.limit[1]}자까지 작성이 가능해요`,
 };
