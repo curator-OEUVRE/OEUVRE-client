@@ -2,7 +2,8 @@
 import { loadAsync } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StorybookUIRoot from './storybook';
 import { Routes } from '@/feature/Routes';
@@ -45,10 +46,10 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <View style={styles.container} onLayout={onLayout}>
+      <GestureHandlerRootView style={styles.container} onLayout={onLayout}>
         <EntryApp />
         <StatusBar style="auto" />
-      </View>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 };

@@ -5,6 +5,7 @@ import { COLOR } from '@/constants/styles';
 export interface PictureInfo {
   imageUri: string;
   description: string;
+  hashtags: string[];
 }
 
 interface FormInfo<T> {
@@ -24,6 +25,7 @@ interface CreateFloorStore {
   texture: number;
   createPicturesByImageUris: (imageUrls: string[]) => void;
   onChangeDescriptionByIdx: (idx: number) => (description: string) => void;
+  setHashtag: (imageIndex: number, hashtags: string[]) => void;
   setName: (data: Partial<FormInfo<string>>) => void;
   setColor: (color: string) => void;
   setIsCommentAvailable: (isCommentAvailable: boolean) => void;
@@ -34,6 +36,7 @@ interface CreateFloorStore {
 const createDefaultPictureInfo = (imageUri: string): PictureInfo => ({
   imageUri,
   description: '',
+  hashtags: [],
 });
 
 export const FLOOR_BACKGROUND_COLORS = [
@@ -69,6 +72,17 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set) => ({
         { ...state.pictures[idx], description },
         ...state.pictures.slice(idx + 1),
       ],
+    }));
+  },
+  setHashtag: (imageIndex, hashtags) => {
+    set((state) => ({
+      ...state,
+      pictures: state.pictures.map((picture, index) => {
+        if (index === imageIndex) {
+          return { ...picture, hashtags };
+        }
+        return picture;
+      }),
     }));
   },
   setName: (data) =>

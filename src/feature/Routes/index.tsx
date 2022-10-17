@@ -22,7 +22,7 @@ const Stack = createStackNavigator<RootStackParamsList>();
 
 export const Routes = () => {
   const { accessToken } = useAuthStore();
-      
+
   return (
     <NavigationContainer>
       <Stack.Navigator

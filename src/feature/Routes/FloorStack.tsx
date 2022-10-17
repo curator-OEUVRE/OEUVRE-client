@@ -1,4 +1,3 @@
-import { NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Screen } from '@/constants/screens';
 import {
@@ -6,14 +5,17 @@ import {
   AddPictureScreenParams,
   PictureDescriptionScreen,
   PictureDescriptionScreenParams,
+  AddHashtagScreen,
+  AddHashtagScreenParams,
 } from '@/screens/CreateFloorScreen';
 import FloorInfoFormScreen, {
   FloorInfoFormScreenParams,
 } from '@/screens/CreateFloorScreen/FloorInfoFormScreen';
 
 export type FloorStackParamsList = {
-  [Screen.AddPictureScreen]: NavigatorScreenParams<AddPictureScreenParams>;
-  [Screen.PictureDescriptionScreen]: NavigatorScreenParams<PictureDescriptionScreenParams>;
+  [Screen.AddPictureScreen]: AddPictureScreenParams;
+  [Screen.PictureDescriptionScreen]: PictureDescriptionScreenParams;
+  [Screen.AddHashtagScreen]: AddHashtagScreenParams;
   [Screen.FloorInfoFormScreen]: FloorInfoFormScreenParams;
 };
 
@@ -31,6 +33,7 @@ const FloorStack = () => (
       name={Screen.PictureDescriptionScreen}
       component={PictureDescriptionScreen}
     />
+    <Stack.Screen name={Screen.AddHashtagScreen} component={AddHashtagScreen} />
     <Stack.Screen
       name={Screen.FloorInfoFormScreen}
       component={FloorInfoFormScreen}
