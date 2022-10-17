@@ -21,6 +21,10 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     width: '100%',
   },
+  contentContainer: {
+    flex: 1,
+    paddingLeft: 20,
+  },
   count: {
     color: COLOR.mono.gray4,
     marginTop: 37,
@@ -36,37 +40,58 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     width: 40,
   },
+  tag: {
+    color: COLOR.mono.gray5,
+    marginRight: 4,
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 8,
+  },
   textInput: {
     flex: 1,
     height: '100%',
     lineHeight: 24,
-    paddingLeft: 20,
     textAlignVertical: 'top',
   },
 });
 
 export interface PictureDescriptionItemProps extends PictureInfo {
   onChangeDescription?: (Description: string) => void;
+  onHashtagPress?: () => void;
 }
 
 const PictureDescriptionItem = ({
   imageUri,
   description,
+  hashtags,
   onChangeDescription,
+  onHashtagPress,
 }: PictureDescriptionItemProps) => (
   <View style={styles.container}>
-    <Image source={{ uri: imageUri }} style={styles.img} resizeMode="center" />
-    <TextInput
-      multiline
-      numberOfLines={4}
-      onChangeText={onChangeDescription}
-      style={[styles.textInput, TEXT_STYLE.body14R]}
-      placeholder={'작품의 설명을 입력해 주세요.\n(총 50자)'}
-      maxLength={50}
-      value={description}
-    />
+    <Image source={{ uri: imageUri }} style={styles.img} resizeMode="cover" />
+    <View style={styles.contentContainer}>
+      <TextInput
+        multiline
+        numberOfLines={4}
+        onChangeText={onChangeDescription}
+        style={[styles.textInput, TEXT_STYLE.body14R]}
+        placeholder={'작품의 설명을 입력해 주세요.\n(총 50자)'}
+        maxLength={50}
+        value={description}
+      />
+      <View style={styles.tagsContainer}>
+        {hashtags.map((tag) => (
+          <Text key={tag} style={[TEXT_STYLE.body14R, styles.tag]}>
+            #{tag}
+          </Text>
+        ))}
+      </View>
+    </View>
+
     <View style={styles.sideInfo}>
-      <Pressable>
+      <Pressable onPress={onHashtagPress}>
         <Hashtag />
       </Pressable>
       {description.length > 0 && (
