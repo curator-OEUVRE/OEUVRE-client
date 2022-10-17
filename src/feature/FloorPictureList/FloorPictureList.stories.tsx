@@ -9,8 +9,8 @@ const PICTURES: PictureInfo[] = [
     imageUri:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
     description: 'test',
-    width: 640 / 3 / 375,
-    height: 480 / 3 / 375,
+    width: 640 / 5 / 375,
+    height: 480 / 5 / 375,
     location: 0,
     hashtags: [],
   },
@@ -18,8 +18,8 @@ const PICTURES: PictureInfo[] = [
     imageUri:
       'https://cdn.searchenginejournal.com/wp-content/uploads/2022/06/image-search-1600-x-840-px-62c6dc4ff1eee-sej-1520x800.png',
     description: 'test',
-    width: 1600 / 5 / 375,
-    height: 840 / 5 / 375,
+    width: 1600 / 6 / 375,
+    height: 840 / 6 / 375,
     location: 20 / 375,
     hashtags: [],
   },

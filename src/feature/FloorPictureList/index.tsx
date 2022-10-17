@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Pressable, Image, Dimensions } from 'react-native';
+import { StyleSheet, Pressable, Dimensions } from 'react-native';
 import DraggableFlatList, {
   ScaleDecorator,
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -11,6 +12,8 @@ import Animated, {
   withSpring,
   FadeOut,
   useDerivedValue,
+  useSharedValue,
+  runOnJS,
 } from 'react-native-reanimated';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import { COLOR } from '@/constants/styles';
@@ -54,8 +57,14 @@ const FloorPicture = ({
   const [isLineActive, setIsLineActive] = useState(false);
   const imageWidth = useMemo(() => width * item.width, [item.width]);
   const imageHeight = useMemo(() => width * item.height, [item.height]);
+  const scale = useSharedValue(1);
 
   const index = getIndex();
+  const [, setFlag] = useState(false);
+
+  useDerivedValue(() => {
+    runOnJS(setFlag)(isDragging.value);
+  });
 
   const animStyle = useAnimatedStyle(() => ({
     width: withSpring(isDragging.value ? 0 : 1),
@@ -64,8 +73,17 @@ const FloorPicture = ({
 
   const containerAnimStyle = useAnimatedStyle(() => ({
     paddingHorizontal: withSpring(
-      isLineActive && !isDragging.value ? 28 + LINE_BUTTON_SIZE / 2 : 24,
+      isLineActive && !isDragging.value ? LINE_BUTTON_SIZE / 2 : 0,
     ),
+  }));
+
+  const pinchGeature = Gesture.Pinch().onUpdate((e) => {
+    if (editable) scale.value = e.scale;
+  });
+
+  const imageAnimStyle = useAnimatedStyle(() => ({
+    width: imageWidth * scale.value,
+    height: imageHeight * scale.value,
   }));
 
   const line = (
@@ -74,6 +92,7 @@ const FloorPicture = ({
         setIsLineActive((prev) => !prev);
       }}
       style={styles.item}
+      hitSlop={32}
     >
       <Animated.View style={[styles.lineContainer, containerAnimStyle]}>
         <Animated.View style={[styles.line, animStyle]}>
@@ -93,41 +112,37 @@ const FloorPicture = ({
   );
 
   return (
-    <ScaleDecorator>
-      {editable && index !== 0 && line}
-      <Pressable
-        style={[
-          /* eslint-disable-next-line react-native/no-inline-styles */
-          {
-            width: imageWidth,
-            height: imageHeight,
-            transform: [
-              {
-                translateY: item.location * width,
-              },
-            ],
-            marginHorizontal: editable ? undefined : 16,
-          },
-          styles.item,
-        ]}
-        onLongPress={editable ? drag : undefined}
-      >
-        <Image
-          source={{ uri: item.imageUri }}
-          style={{
-            width: imageWidth,
-            height: imageHeight,
-          }}
-        />
-      </Pressable>
-    </ScaleDecorator>
+    <GestureDetector gesture={pinchGeature}>
+      <ScaleDecorator>
+        {editable && index !== 0 && line}
+        <Pressable
+          style={[
+            /* eslint-disable-next-line react-native/no-inline-styles */
+            {
+              transform: [
+                {
+                  translateY: item.location * width,
+                },
+              ],
+              marginHorizontal: editable ? 24 : 16,
+            },
+            styles.item,
+          ]}
+          onLongPress={editable ? drag : undefined}
+        >
+          <Animated.Image
+            source={{ uri: item.imageUri }}
+            style={imageAnimStyle}
+          />
+        </Pressable>
+      </ScaleDecorator>
+    </GestureDetector>
   );
 };
 
 interface Props {
   pictures: PictureInfo[];
   editable?: boolean;
-  setPictures?: (pictures: PictureInfo[]) => void;
 }
 
 const keyExtractor = (item: PictureInfo) => item.imageUri;
@@ -148,12 +163,17 @@ const FloorPictureList = ({ pictures, editable }: Props) => {
     [isDragging, editable],
   );
 
+  const [data, setData] = useState(pictures);
+
   return (
     <DraggableFlatList
-      data={pictures}
+      data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       horizontal
+      onDragEnd={({ data: newData }) => {
+        setData(newData);
+      }}
       onAnimValInit={(animVals) => {
         x.current = animVals.x;
         y.current = animVals.y;
@@ -161,7 +181,7 @@ const FloorPictureList = ({ pictures, editable }: Props) => {
       }}
       style={styles.flatList}
       /* eslint-disable-next-line react-native/no-inline-styles */
-      contentContainerStyle={{ paddingHorizontal: editable ? 60 : 48 }}
+      contentContainerStyle={{ paddingHorizontal: editable ? 36 : 44 }}
     />
   );
 };
