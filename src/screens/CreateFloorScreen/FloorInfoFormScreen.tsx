@@ -92,7 +92,7 @@ const FloorIcon = ({
         },
       ]}
     />
-    {isSelected ? (
+    {isSelected && (
       <Image
         source={IMAGE.floorStyleShadow}
         style={[
@@ -102,7 +102,7 @@ const FloorIcon = ({
           },
         ]}
       />
-    ) : null}
+    )}
   </Pressable>
 );
 
