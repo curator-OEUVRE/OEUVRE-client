@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
   },
   container: {
-    // backgroundColor: COLOR.system.red,
     flex: 1,
     height: 27,
   },
