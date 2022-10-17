@@ -28,9 +28,8 @@ const loadFonts = async () => {
   });
 };
 
-const EntryApp = isStorybookEnabled ? StorybookUIRoot : Routes;
-
 const App = () => {
+  const EntryApp = isStorybookEnabled ? StorybookUIRoot : Routes;
   const { isReady, setIsReady, onLayout } = useSplash();
   useEffect(() => {
     const initialFetch = async () => {
