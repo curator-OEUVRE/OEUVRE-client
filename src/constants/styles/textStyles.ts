@@ -14,6 +14,7 @@ export const TEXT_STYLE = {
   title20M: {
     fontSize: 20,
     fontFamily: 'medium',
+    lineHeight: 20 * 1.5,
   },
   title18M: {
     fontSize: 18,

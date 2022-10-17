@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 
 export type PictureDescriptionScreenParams = undefined;
 export type PictureDescriptionScreenNP = CompositeNavigationProp<
-  StackNavigationProp<FloorStackParamsList, Screen.AddHashtagScreen>,
+  StackNavigationProp<FloorStackParamsList, Screen.PictureDescriptionScreen>,
   StackNavigationProp<RootStackParamsList>
 >;
 
@@ -35,7 +35,11 @@ const PictureDescriptionScreen = () => {
   const navigation = useNavigation<PictureDescriptionScreenNP>();
 
   const headerRight = () => (
-    <Pressable>
+    <Pressable
+      onPress={() => {
+        navigation.navigate(Screen.FloorInfoFormScreen);
+      }}
+    >
       <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>다음</Text>
     </Pressable>
   );
