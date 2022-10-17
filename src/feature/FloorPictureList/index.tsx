@@ -15,6 +15,9 @@ const styles = StyleSheet.create({
   flatList: {
     height: '100%',
   },
+  item: {
+    alignSelf: 'center',
+  },
 });
 
 interface FloorPictureProps extends RenderItemParams<PictureInfo> {}
@@ -32,15 +35,18 @@ const FloorPicture = ({ item, drag }: FloorPictureProps) => {
   return (
     <ScaleDecorator>
       <Pressable
-        style={{
-          width: imageWidth,
-          height: imageHeight,
-          transform: [
-            {
-              translateY: item.location * width,
-            },
-          ],
-        }}
+        style={[
+          {
+            width: imageWidth,
+            height: imageHeight,
+            transform: [
+              {
+                translateY: item.location * width,
+              },
+            ],
+          },
+          styles.item,
+        ]}
         onLongPress={drag}
       >
         <Image
