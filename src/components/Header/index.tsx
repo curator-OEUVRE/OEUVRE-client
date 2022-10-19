@@ -21,13 +21,13 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: 'center',
+    backgroundColor: COLOR.mono.white,
     flexDirection: 'row',
     height: 45,
     justifyContent: 'center',
-    paddingLeft: 13,
-    paddingRight: 18,
     position: 'relative',
     width: '100%',
+    zIndex: 100,
   },
   right: {
     alignItems: 'center',
