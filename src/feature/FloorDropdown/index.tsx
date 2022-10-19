@@ -1,14 +1,7 @@
 import { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  useWindowDimensions,
-} from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Shadow } from 'react-native-shadow-2';
-import ArrowDownIcon from '@/assets/icons/ArrowDown';
 import ArrowUpIcon from '@/assets/icons/ArrowUp';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
@@ -16,10 +9,17 @@ interface FloorDropDownProps {
   // 1층부터 시작하지만 여기서 데이터는 array로 들어올 거 같으므로 편의를 위해 0부터 시작하는 idx 사용
   currentIdx: number;
   floorNames: string[];
-  onChange: (idx: number) => void;
+  onPress: (idx: number) => void;
 }
 
 const styles = StyleSheet.create({
+  arrow: {
+    transform: [
+      {
+        rotate: '180deg',
+      },
+    ],
+  },
   borderBottom: {
     borderBottomWidth: 1,
     borderColor: COLOR.mono.gray1,
@@ -74,14 +74,14 @@ const styles = StyleSheet.create({
 const FloorDropDown = ({
   currentIdx,
   floorNames,
-  onChange,
+  onPress,
 }: FloorDropDownProps) => {
   const renderFloors = () =>
     floorNames
       .map((name, idx) => (
         <Pressable
           style={[styles.option, idx > 0 && styles.borderBottom]}
-          onPress={() => onChange(idx)}
+          onPress={() => onPress(idx)}
           key={`floor_${idx + 1}_${name}`}
         >
           <Text style={styles.floorNum}>{idx + 1}F</Text>
@@ -109,7 +109,7 @@ const FloorDropDown = ({
         <Text style={[styles.title, TEXT_STYLE.title18M]}>
           {floorNames[currentIdx]}
         </Text>
-        {open ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        <ArrowUpIcon style={!open && styles.arrow} />
       </Pressable>
       {open && (
         <Shadow
