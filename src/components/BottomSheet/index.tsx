@@ -81,10 +81,12 @@ const BottomSheetItemGroup = ({ children }: BottomSheetItemGroupProps) => {
 interface BottomSheetComponentProps
   extends Omit<BottomSheetProps, 'children' | 'snapPoints'> {
   children?: React.ReactNode;
+  onChange: (index: number) => void;
 }
 
 const BottomSheetComponent = ({
   children,
+  onChange,
   ...bottomSheetProps
 }: BottomSheetComponentProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -126,6 +128,7 @@ const BottomSheetComponent = ({
       handleIndicatorStyle={styles.handle}
       backdropComponent={renderBackdrop}
       style={styles.bottomSheet}
+      onChange={onChange}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...bottomSheetProps}
       snapPoints={snapPoints}
