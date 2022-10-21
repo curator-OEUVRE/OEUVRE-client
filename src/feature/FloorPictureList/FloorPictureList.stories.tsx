@@ -1,6 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react-native';
+import { useState } from 'react';
 import FloorPictureList from '.';
 import type { PictureInfo } from '@/states/createFloorStore';
 
@@ -43,12 +44,18 @@ const PICTURES: PictureInfo[] = [
   },
 ];
 
+const Component = () => {
+  const [data, setData] = useState(PICTURES);
+
+  return (
+    <FloorPictureList
+      pictures={data}
+      setPictures={setData}
+      editable={boolean('editable', false)}
+    />
+  );
+};
+
 storiesOf('feature/FloorPictureList', module)
   .addDecorator(withKnobs)
-  .add('default', () => (
-    <FloorPictureList
-      pictures={PICTURES}
-      editable={boolean('editable', false)}
-      setPictures={action('setPictures')}
-    />
-  ));
+  .add('default', () => <Component />);

@@ -62,6 +62,8 @@ const FloorPicture = ({
   const index = getIndex();
   const [, setFlag] = useState(false);
 
+  // 순서가 바뀌면 바뀐 컴포넌트만 리렌더링이 되므로,
+  // 구분선을 제대로 렌더링하기 위해 한번 강제로 리렌더링을 트리거해야 함
   useDerivedValue(() => {
     runOnJS(setFlag)(isDragging.value);
   });
@@ -143,13 +145,21 @@ const FloorPicture = ({
 interface Props {
   pictures: PictureInfo[];
   editable?: boolean;
+  setPictures?: (newData: PictureInfo[]) => void;
+  onDragEnd?: (absoluteX: number, absoluteY: number) => void;
 }
 
 const keyExtractor = (item: PictureInfo) => item.imageUri;
 
-const FloorPictureList = ({ pictures, editable }: Props) => {
-  const x = useRef<SharedValue<number>>();
-  const y = useRef<SharedValue<number>>();
+const FloorPictureList = ({
+  pictures,
+  editable,
+  setPictures,
+  onDragEnd,
+}: Props) => {
+  const absoluteX = useRef<SharedValue<number>>();
+  const absoluteY = useRef<SharedValue<number>>();
+  const translateY = useRef<SharedValue<number>>();
   const activeIndexAnim = useRef<SharedValue<number>>();
 
   const isDragging = useDerivedValue(
@@ -163,20 +173,34 @@ const FloorPictureList = ({ pictures, editable }: Props) => {
     [isDragging, editable],
   );
 
-  const [data, setData] = useState(pictures);
-
   return (
     <DraggableFlatList
-      data={data}
+      data={pictures}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       horizontal
-      onDragEnd={({ data: newData }) => {
-        setData(newData);
+      onDragEnd={({ data: newData, from, to }) => {
+        const newPictures = newData.map((picture, index) =>
+          // 순서를 바꾸지 않고 움직이기만 하면 y축 위치 변경
+          index === to && from === to && translateY.current?.value !== undefined
+            ? {
+                ...picture,
+                location: picture.location + translateY.current.value / width,
+              }
+            : // 순서가 바뀌면 y축 변화 무시
+              picture,
+        );
+
+        setPictures?.(newPictures);
+        onDragEnd?.(
+          absoluteX.current?.value ?? 0,
+          absoluteY.current?.value ?? 0,
+        );
       }}
       onAnimValInit={(animVals) => {
-        x.current = animVals.x;
-        y.current = animVals.y;
+        absoluteX.current = animVals.absoluteX;
+        absoluteY.current = animVals.absoluteY;
+        translateY.current = animVals.translateY;
         activeIndexAnim.current = animVals.activeIndexAnim;
       }}
       style={styles.flatList}
