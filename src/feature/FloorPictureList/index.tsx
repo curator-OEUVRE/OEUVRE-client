@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Pressable, Dimensions } from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
 import DraggableFlatList, {
   ScaleDecorator,
   RenderItemParams,
@@ -17,9 +17,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import { COLOR } from '@/constants/styles';
+import useDimensions from '@/hooks/useDimensions';
 import type { PictureInfo } from '@/states/createFloorStore';
-
-const { width } = Dimensions.get('screen');
 
 const LINE_BUTTON_SIZE = 40;
 
@@ -33,18 +32,19 @@ const styles = StyleSheet.create({
   line: {
     alignItems: 'center',
     backgroundColor: COLOR.mono.gray3,
-    height: width * 0.5,
     justifyContent: 'center',
   },
   lineContainer: {
     alignSelf: 'center',
-    height: width * 0.5,
   },
 });
 
 interface FloorPictureProps extends RenderItemParams<PictureInfo> {
   isDragging: SharedValue<boolean>;
   editable?: boolean;
+  activeLine: number;
+  activeIndexAnim?: SharedValue<number>;
+  setActiveLine: (line: number) => void;
 }
 
 const FloorPicture = ({
@@ -53,13 +53,22 @@ const FloorPicture = ({
   isDragging,
   getIndex,
   editable = false,
+  activeLine,
+  setActiveLine,
+  activeIndexAnim,
 }: FloorPictureProps) => {
-  const [isLineActive, setIsLineActive] = useState(false);
-  const imageWidth = useMemo(() => width * item.width, [item.width]);
-  const imageHeight = useMemo(() => width * item.height, [item.height]);
+  const { height } = useDimensions();
+
+  const imageWidth = useMemo(() => height * item.width, [item.width, height]);
+  const imageHeight = useMemo(
+    () => height * item.height,
+    [item.height, height],
+  );
   const scale = useSharedValue(1);
+  const tmpScale = useSharedValue(1);
 
   const index = getIndex();
+  const isLineActive = useMemo(() => activeLine === index, [activeLine, index]);
   const [, setFlag] = useState(false);
 
   // 순서가 바뀌면 바뀐 컴포넌트만 리렌더링이 되므로,
@@ -79,25 +88,45 @@ const FloorPicture = ({
     ),
   }));
 
-  const pinchGeature = Gesture.Pinch().onUpdate((e) => {
-    if (editable) scale.value = e.scale;
-  });
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      if (editable) {
+        tmpScale.value = e.scale;
+      }
+    })
+    .onEnd((e) => {
+      if (editable) {
+        scale.value *= e.scale;
+        tmpScale.value = 1;
+      }
+    });
 
   const imageAnimStyle = useAnimatedStyle(() => ({
-    width: imageWidth * scale.value,
-    height: imageHeight * scale.value,
+    width: imageWidth * scale.value * tmpScale.value,
+    height: imageHeight * scale.value * tmpScale.value,
+    opacity: isDragging.value && activeIndexAnim?.value === index ? 0.5 : 1,
   }));
 
   const line = (
     <Pressable
       onPress={() => {
-        setIsLineActive((prev) => !prev);
+        if (index !== undefined) {
+          setActiveLine(isLineActive ? 0 : index);
+        }
       }}
       style={styles.item}
       hitSlop={32}
     >
-      <Animated.View style={[styles.lineContainer, containerAnimStyle]}>
-        <Animated.View style={[styles.line, animStyle]}>
+      <Animated.View
+        style={[
+          styles.lineContainer,
+          containerAnimStyle,
+          { height: height * 0.5 },
+        ]}
+      >
+        <Animated.View
+          style={[styles.line, animStyle, { height: height * 0.5 }]}
+        >
           {isLineActive && (
             <Pressable>
               <Animated.View entering={FadeIn} exiting={FadeOut}>
@@ -114,19 +143,19 @@ const FloorPicture = ({
   );
 
   return (
-    <GestureDetector gesture={pinchGeature}>
+    <GestureDetector gesture={pinchGesture}>
       <ScaleDecorator>
         {editable && index !== 0 && line}
         <Pressable
           style={[
             /* eslint-disable-next-line react-native/no-inline-styles */
             {
+              marginHorizontal: editable ? 24 : 16,
               transform: [
                 {
-                  translateY: item.location * width,
+                  translateY: item.location * height,
                 },
               ],
-              marginHorizontal: editable ? 24 : 16,
             },
             styles.item,
           ]}
@@ -145,7 +174,9 @@ const FloorPicture = ({
 interface Props {
   pictures: PictureInfo[];
   editable?: boolean;
-  setPictures?: (newData: PictureInfo[]) => void;
+  setPictures?: (
+    newData: PictureInfo[] | ((prev: PictureInfo[]) => PictureInfo[]),
+  ) => void;
   onDragEnd?: (absoluteX: number, absoluteY: number) => void;
 }
 
@@ -157,6 +188,8 @@ const FloorPictureList = ({
   setPictures,
   onDragEnd,
 }: Props) => {
+  const { height } = useDimensions();
+
   const absoluteX = useRef<SharedValue<number>>();
   const absoluteY = useRef<SharedValue<number>>();
   const translateY = useRef<SharedValue<number>>();
@@ -166,11 +199,20 @@ const FloorPictureList = ({
     () => activeIndexAnim.current?.value !== -1,
   );
 
+  const [activeLine, setActiveLine] = useState(0);
+
   const renderItem = useCallback(
     (props: RenderItemParams<PictureInfo>) => (
-      <FloorPicture {...props} isDragging={isDragging} editable={editable} />
+      <FloorPicture
+        {...props}
+        isDragging={isDragging}
+        editable={editable}
+        activeLine={activeLine}
+        setActiveLine={setActiveLine}
+        activeIndexAnim={activeIndexAnim.current}
+      />
     ),
-    [isDragging, editable],
+    [isDragging, editable, activeLine, setActiveLine, activeIndexAnim],
   );
 
   return (
@@ -185,7 +227,7 @@ const FloorPictureList = ({
           index === to && from === to && translateY.current?.value !== undefined
             ? {
                 ...picture,
-                location: picture.location + translateY.current.value / width,
+                location: picture.location + translateY.current.value / height,
               }
             : // 순서가 바뀌면 y축 변화 무시
               picture,

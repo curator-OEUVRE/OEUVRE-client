@@ -1954,9 +1954,9 @@
   integrity sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==
 
 "@grpc/grpc-js@^1.3.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.7.2.tgz#9bc90a6fce4de001fbbb692ce3528330c03b430b"
-  integrity sha512-MqqbVynbe3VUSnApFW/dpkDaa9T1ASqRnMWeSPGFO/Ro98R7XUDLacfeBa7RaSI1iFu9GYk5gBKARf0zipFe4w==
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.7.3.tgz#f2ea79f65e31622d7f86d4b4c9ae38f13ccab99a"
+  integrity sha512-H9l79u4kJ2PVSxUNA08HMYAnUBLj9v6KjYQ7SQ71hOZcEXhShE/y5iQCesP8+6/Ik/7i2O0a10bPquIcYfufog==
   dependencies:
     "@grpc/proto-loader" "^0.7.0"
     "@types/node" ">=12.12.47"
@@ -3091,9 +3091,9 @@
   integrity sha512-ipixuVrh2OdNmauvtT51o3d8z12p6LtFW9in7U79der/kwejjdNchQC5UMn5u/KxNoM7VHHOs/l8KS8uHxhODQ==
 
 "@types/uglify-js@*":
-  version "3.17.0"
-  resolved "https://registry.yarnpkg.com/@types/uglify-js/-/uglify-js-3.17.0.tgz#95271e7abe0bf7094c60284f76ee43232aef43b9"
-  integrity sha512-3HO6rm0y+/cqvOyA8xcYLweF0TKXlAxmQASjbOi49Co51A1N4nR4bEwBgRoD9kNM+rqFGArjKr654SLp2CoGmQ==
+  version "3.17.1"
+  resolved "https://registry.yarnpkg.com/@types/uglify-js/-/uglify-js-3.17.1.tgz#e0ffcef756476410e5bce2cb01384ed878a195b5"
+  integrity sha512-GkewRA4i5oXacU/n4MA9+bLgt5/L3F1mKrYvFGm7r2ouLXhRKjuWwo9XHNnbx6WF3vlGW21S3fCvgqxvxXXc5g==
   dependencies:
     source-map "^0.6.1"
 
@@ -5036,7 +5036,7 @@ color@^4.2.3:
 
 colord@2.9.2:
   version "2.9.2"
-  resolved "https://registry.npmjs.org/colord/-/colord-2.9.2.tgz#25e2bacbbaa65991422c07ea209e2089428effb1"
+  resolved "https://registry.yarnpkg.com/colord/-/colord-2.9.2.tgz#25e2bacbbaa65991422c07ea209e2089428effb1"
   integrity sha512-Uqbg+J445nc1TKn4FoDPS6ZZqAvEDnwrH42yo8B40JSOgSLxMZ/gt3h4nmCtPLQeXhjJJkqBx7SCY35WnIixaQ==
 
 colorette@^1.0.7:
@@ -6634,6 +6634,13 @@ expo-random@12.3.0:
   dependencies:
     base64-js "^1.3.0"
 
+expo-screen-orientation@~4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-4.3.0.tgz#8504e10ae978c44c31fe891d1c0e058dadae4eba"
+  integrity sha512-jMLjkhft5aJSkdoKjb1HiLlf73gpsfI54L//uPvPuuwsPq3FMHwAnkDesY8XIZdZqw+exrK/SMbDAEryMJ45kg==
+  dependencies:
+    "@expo/config-plugins" "~5.0.0"
+
 expo-splash-screen@~0.16.2:
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.16.2.tgz#38ecba9fc9fc2234ee38bcb818d8c88cd83cff9e"
@@ -6682,7 +6689,7 @@ expo-web-browser@~11.0.0:
   dependencies:
     compare-urls "^2.0.0"
 
-expo@~46.0.13:
+expo@~46.0.16:
   version "46.0.16"
   resolved "https://registry.yarnpkg.com/expo/-/expo-46.0.16.tgz#8fe6d10207dabda34a684efac2c45c3c1c089f11"
   integrity sha512-lZETkf3t+gbZjKjSceIpU7I8Rmm5nZ0ZG1WPzNBBbm+k64/+kKV96s6RqS37W1TTDpIbd+AucT9kKpvtv0JB2A==
@@ -7105,9 +7112,9 @@ flatted@^3.1.0:
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
 
 flow-parser@0.*:
-  version "0.190.0"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.190.0.tgz#8e0706d58d156d9db0b3350b76636eb0a77e754e"
-  integrity sha512-9jxaqkeeARD//nhwDoN//j+EFcwzKJCGPtTQzUdKZdlZG3JmUdbV6XJFLD9sbWFPUmcCT1mblwILwdoq0mKWQw==
+  version "0.190.1"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.190.1.tgz#d576c9ca7a011405de34a68d8bb3c15b6db2fb4a"
+  integrity sha512-DLZIYLNQpJfGyiKPylFqm1zn5XXNHlP/91Z/TgHlYljUttbnDaKHfCfVJ6SVjCQym1dGNhD/73krh68ICO+p0w==
 
 flow-parser@^0.121.0:
   version "0.121.0"
@@ -11214,7 +11221,7 @@ react-native-screens@3.15.0:
 
 react-native-shadow-2@^7.0.6:
   version "7.0.6"
-  resolved "https://registry.npmjs.org/react-native-shadow-2/-/react-native-shadow-2-7.0.6.tgz#8fbdb975674b77f236c5fce6af3e0781af6a0ae1"
+  resolved "https://registry.yarnpkg.com/react-native-shadow-2/-/react-native-shadow-2-7.0.6.tgz#8fbdb975674b77f236c5fce6af3e0781af6a0ae1"
   integrity sha512-kH0fKttPE67gIzTsnvmdJS0HAyb2utYAnUZguznmn6iNDRxRDD8RY1COsfW8YN1YuzYZgVtu60G394Az9bmuTg==
   dependencies:
     colord "2.9.2"

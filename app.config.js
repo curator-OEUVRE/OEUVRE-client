@@ -9,7 +9,7 @@ module.exports = {
     runtimeVersion: {
       policy: 'nativeVersion',
     },
-    orientation: 'portrait',
+    orientation: 'default',
     icon: './assets/icon.png',
     userInterfaceStyle: 'light',
     splash: {
@@ -34,6 +34,7 @@ module.exports = {
       supportsTablet: false,
       bundleIdentifier: 'com.curator.oeuvre',
       googleServicesFile: './GoogleService-Info.plist',
+      requireFullScreen: true,
     },
     android: {
       adaptiveIcon: {
