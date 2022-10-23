@@ -1,10 +1,8 @@
-/* eslint-disable global-require */
-import { LinearGradient } from 'expo-linear-gradient';
-import { useCallback, useRef, useState } from 'react';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { lockAsync, OrientationLock } from 'expo-screen-orientation';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Dimensions,
   Image,
-  ImageBackground,
   Pressable,
   StyleSheet,
   Text,
@@ -17,7 +15,6 @@ import Animated, {
   useSharedValue,
   withDelay,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BookmarkIcon from '@/assets/icons/Bookmark';
@@ -30,142 +27,176 @@ import ShareIcon from '@/assets/icons/Share';
 import { Header } from '@/components/Header';
 import { BottomSheet } from '@/components/index';
 import { IMAGE } from '@/constants/images';
+import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import throttle from '@/services/common/throttle';
 
-export interface ImageDetailScreenParams {
-  imageUri: string;
+export enum OrientationType {
+  portrait,
+  landscape,
 }
 
-const { width: SIZE } = Dimensions.get('window');
-const AnimatedImage = Animated.createAnimatedComponent(Image);
+export interface ImageDetailScreenParams {
+  pictureNo: number;
+  orientation: OrientationType;
+}
 
+export type ImageDetailScreenRP = RouteProp<
+  FloorStackParamsList,
+  Screen.ImageDetailScreen
+>;
+
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR.mono.white,
     flex: 1,
   },
   image: {
-    height: SIZE,
+    alignSelf: 'center',
+    position: 'absolute',
     shadowOffset: { width: 0, height: 20 },
     shadowOpacity: 0.35,
     shadowRadius: 35,
-    width: SIZE,
+    top: '50%',
   },
   imageBackground: {
     flex: 1,
     justifyContent: 'center',
   },
-  pressable: {
-    flex: 1,
-    marginTop: 26,
-  },
   text: {
-    color: COLOR.mono.white,
+    color: COLOR.mono.gray7,
   },
   wrapFooter: {
-    height: 120,
     lineHeight: 21,
     paddingHorizontal: 20,
-    paddingTop: 31,
     width: '100%',
   },
-  wrapHeader: {
-    width: '100%',
+  wrapFooterLandscape: {
+    height: 55,
+    paddingTop: 11,
+  },
+  wrapFooterPortrait: {
+    height: 120,
+    paddingTop: 17,
+  },
+  wrapHeaderLandscape: {
+    marginTop: 10,
+  },
+  wrapHeaderPortrait: {
+    marginBottom: 26,
   },
   wrapHeaderRight: {
     flexDirection: 'row',
+  },
+  wrapImage: {
+    flex: 1,
   },
   wrapMore: {
     marginRight: 9,
   },
 });
 const imageUri =
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/IU_posing_for_Marie_Claire_Korea_March_2022_issue_03.jpg/500px-IU_posing_for_Marie_Claire_Korea_March_2022_issue_03.jpg';
+  'https://img.freepik.com/premium-vector/meadows-landscape-with-mountains-hill_104785-943.jpg?w=2000';
 
 const ImageDetailScreen = () => {
-  const { width: windowWidth } = useWindowDimensions();
-  const { top, bottom } = useSafeAreaInsets();
+  const { params } = useRoute<ImageDetailScreenRP>();
+  const { pictureNo, orientation } = params;
+  const { width, height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
+  const SIZE = orientation === OrientationType.landscape ? height : width;
+  useEffect(() => {
+    lockAsync(
+      orientation === OrientationType.landscape
+        ? OrientationLock.LANDSCAPE
+        : OrientationLock.PORTRAIT_UP,
+    );
+    return () => {
+      lockAsync(OrientationLock.DEFAULT);
+    };
+  }, [orientation]);
   const [isLike, setLike] = useState<boolean>(false);
   const [isEditMode, setEditMode] = useState<boolean>(false);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
-  const wrapHeaderStyle = [styles.wrapHeader, { paddingTop: top }];
-  const wrapFooterStyle = [styles.wrapFooter, { paddingBottom: bottom }];
-
-  const scale = useSharedValue(0);
-
+  const isBottomSheetOpen = bottomSheetIndex >= 0;
+  const scale = useSharedValue(0.0001);
   const onSingleTap = useCallback(() => {
     setEditMode((prev) => !prev);
   }, []);
 
-  const onDoubleTap = useCallback(() => {
+  const scaleImage = useCallback(() => {
     scale.value = withSpring(1, undefined, (isFinished) => {
       if (isFinished) {
-        scale.value = withDelay(500, withSpring(0));
+        scale.value = withDelay(500, withSpring(0.0001));
       }
     });
   }, [scale]);
+
+  const toggleLike = () => {
+    setLike((prev) => !prev);
+    if (isLike) return;
+    scaleImage();
+  };
+
+  const onScrap = () => {
+    scaleImage();
+  };
 
   const doubleTapRef = useRef();
   const imageStyle = useAnimatedStyle(() => ({
     transform: [{ scale: Math.max(scale.value, 0) }],
   }));
 
-  const toggleLike = () => {
-    setLike((prev) => !prev);
-  };
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
       {isLike ? (
-        <Pressable style={styles.wrapMore} onPress={toggleLike}>
-          <FavoriteIcon color={COLOR.mono.white} />
+        <Pressable style={styles.wrapMore} onPress={throttle(toggleLike, 1000)}>
+          <FavoriteIcon color={COLOR.mono.gray7} />
         </Pressable>
       ) : (
-        <Pressable
-          style={styles.wrapMore}
-          onPress={() => {
-            toggleLike();
-            onDoubleTap();
-          }}
-        >
-          <FavoriteOutlineIcon color={COLOR.mono.white} />
+        <Pressable style={styles.wrapMore} onPress={throttle(toggleLike, 1000)}>
+          <FavoriteOutlineIcon color={COLOR.mono.gray7} />
         </Pressable>
       )}
       <Pressable onPress={() => setBottomSheetIndex(1)}>
-        <MoreIcon color={COLOR.mono.white} />
+        <MoreIcon color={COLOR.mono.gray7} />
       </Pressable>
     </View>
   );
   const renderHeader = () =>
-    isEditMode ? (
-      <LinearGradient
-        style={wrapHeaderStyle}
-        colors={['rgba(20, 23, 24, 0.5)', 'rgba(20, 23, 24, 0)']}
-        locations={[0, 1]}
+    isEditMode && (
+      <View
+        style={[
+          orientation === OrientationType.landscape
+            ? styles.wrapHeaderLandscape
+            : styles.wrapHeaderPortrait,
+          { paddingTop: insets.top },
+        ]}
       >
         <Header
-          iconColor={COLOR.mono.white}
+          iconColor={COLOR.mono.gray7}
           backgroundColor="transparent"
           headerRight={headerRight}
         />
-      </LinearGradient>
-    ) : (
-      <View style={wrapHeaderStyle}>
-        <Header />
       </View>
     );
   const renderFooter = () =>
-    isEditMode ? (
-      <LinearGradient
-        style={wrapFooterStyle}
-        colors={['rgba(20, 23, 24, 0)', 'rgba(20, 23, 24, 0.5)']}
-        locations={[0, 1]}
+    isEditMode && (
+      <View
+        style={[
+          styles.wrapFooter,
+          orientation === OrientationType.landscape
+            ? styles.wrapFooterLandscape
+            : styles.wrapFooterPortrait,
+          { paddingBottom: insets.bottom },
+        ]}
       >
         <Text style={[styles.text, TEXT_STYLE.body14R]}>
           어떻게하면오십글자가될수있는지한번또쳐보겠습니다이렇게저렇게하다보면오십글자가또되겠죠좀적은거같기도
         </Text>
-      </LinearGradient>
-    ) : (
-      <View style={wrapFooterStyle} />
+      </View>
     );
   const renderBottomSheet = () => (
     <BottomSheet
@@ -173,7 +204,11 @@ const ImageDetailScreen = () => {
       onChange={(index) => setBottomSheetIndex(index)}
     >
       <BottomSheet.Group>
-        <BottomSheet.Item label="사진 스크랩하기" icon={<BookmarkIcon />} />
+        <BottomSheet.Item
+          label="사진 스크랩하기"
+          icon={<BookmarkIcon />}
+          onPress={onScrap}
+        />
         <BottomSheet.Item label="사진 공유하기" icon={<ShareIcon />} />
       </BottomSheet.Group>
       <BottomSheet.Group>
@@ -188,31 +223,43 @@ const ImageDetailScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { paddingLeft: insets.left, paddingRight: insets.right },
+      ]}
+    >
       {renderHeader()}
       <TapGestureHandler waitFor={doubleTapRef} onActivated={onSingleTap}>
         <TapGestureHandler
           maxDelayMs={250}
           ref={doubleTapRef}
           numberOfTaps={2}
-          onActivated={onDoubleTap}
+          onActivated={toggleLike}
         >
-          <Animated.View style={styles.pressable}>
-            <ImageBackground
+          <Animated.View style={styles.wrapImage}>
+            <Image
               source={{ uri: imageUri }}
               style={styles.imageBackground}
               resizeMode="contain"
-            >
-              <AnimatedImage
-                source={IMAGE.heart}
-                style={[styles.image, imageStyle]}
-              />
-            </ImageBackground>
+            />
           </Animated.View>
         </TapGestureHandler>
       </TapGestureHandler>
       {renderFooter()}
       {renderBottomSheet()}
+      <AnimatedImage
+        source={isBottomSheetOpen ? IMAGE.bookmark : IMAGE.heart}
+        style={[
+          styles.image,
+          imageStyle,
+          {
+            height: SIZE,
+            width: SIZE,
+            marginTop: (SIZE / 2) * -1,
+          },
+        ]}
+      />
     </View>
   );
 };
