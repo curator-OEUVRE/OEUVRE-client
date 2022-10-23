@@ -124,6 +124,7 @@ const ImageDetailScreen = () => {
             : OrientationLock.PORTRAIT_UP,
         );
       } else {
+        // eslint-disable-next-line no-console
         console.log(response.result.info);
       }
     };
@@ -162,11 +163,8 @@ const ImageDetailScreen = () => {
     transform: [{ scale: Math.max(scale.value, 0) }],
   }));
 
-  if (!pictureDetail)
-    return <Text>adsfdasfdasjflasdjflkasdjfklsadjflkasdfjalskdfjadslfj</Text>;
-  const { width, height } = pictureDetail;
-  const imageUrl =
-    'https://w.namu.la/s/4aad8742a150565290d15e6d0dd9042ebcc24719f738683f55d6325a40c7c866a7a1aded220e0d04876914dd39ce48530c6d92f539e53acb5fe707248d7a7621dd08519a85130cafa0efbd83eb680cc407cbb80141223362aa1848a4d4e29092e0b5cd31256eb766fbe73717006ee0b5';
+  if (!pictureDetail) return <Text>Loading</Text>;
+  const { width, height, description, imageUrl } = pictureDetail;
   const orientation =
     width > height ? OrientationType.landscape : OrientationType.portrait;
   const SIZE =
@@ -216,9 +214,7 @@ const ImageDetailScreen = () => {
           { paddingBottom: insets.bottom },
         ]}
       >
-        <Text style={[styles.text, TEXT_STYLE.body14R]}>
-          어떻게하면오십글자가될수있는지한번또쳐보겠습니다이렇게저렇게하다보면오십글자가또되겠죠좀적은거같기도
-        </Text>
+        <Text style={[styles.text, TEXT_STYLE.body14R]}>{description}</Text>
       </View>
     );
   const renderBottomSheet = () => (
