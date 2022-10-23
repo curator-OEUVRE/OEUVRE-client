@@ -17,6 +17,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getPictureDetail } from '@/apis/floor';
 import BookmarkIcon from '@/assets/icons/Bookmark';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
@@ -31,15 +32,15 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import throttle from '@/services/common/throttle';
+import { PictureDetail } from '@/types/floor';
 
-export enum OrientationType {
+enum OrientationType {
   portrait,
   landscape,
 }
 
 export interface ImageDetailScreenParams {
   pictureNo: number;
-  orientation: OrientationType;
 }
 
 export type ImageDetailScreenRP = RouteProp<
@@ -97,29 +98,41 @@ const styles = StyleSheet.create({
     marginRight: 9,
   },
 });
-const imageUri =
-  'https://img.freepik.com/premium-vector/meadows-landscape-with-mountains-hill_104785-943.jpg?w=2000';
 
 const ImageDetailScreen = () => {
-  const { params } = useRoute<ImageDetailScreenRP>();
-  const { pictureNo, orientation } = params;
-  const { width, height } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  const SIZE = orientation === OrientationType.landscape ? height : width;
-  useEffect(() => {
-    lockAsync(
-      orientation === OrientationType.landscape
-        ? OrientationLock.LANDSCAPE
-        : OrientationLock.PORTRAIT_UP,
-    );
-    return () => {
-      lockAsync(OrientationLock.DEFAULT);
-    };
-  }, [orientation]);
+  const { params } = useRoute<ImageDetailScreenRP>();
+  const { pictureNo } = params;
+
+  const [pictureDetail, setPictureDetail] = useState<PictureDetail>();
   const [isLike, setLike] = useState<boolean>(false);
   const [isEditMode, setEditMode] = useState<boolean>(false);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
+
+  useEffect(() => {
+    const fetchPictureDetail = async () => {
+      const response = await getPictureDetail({ pictureNo });
+      if (response.isSuccess) {
+        const { result } = response.result;
+        setPictureDetail(result);
+        const { width, height } = result;
+        lockAsync(
+          width > height
+            ? OrientationLock.LANDSCAPE
+            : OrientationLock.PORTRAIT_UP,
+        );
+      } else {
+        console.log(response.result.info);
+      }
+    };
+    fetchPictureDetail();
+    return () => {
+      lockAsync(OrientationLock.DEFAULT);
+    };
+  }, [pictureNo]);
+
   const isBottomSheetOpen = bottomSheetIndex >= 0;
   const scale = useSharedValue(0.0001);
   const onSingleTap = useCallback(() => {
@@ -148,6 +161,16 @@ const ImageDetailScreen = () => {
   const imageStyle = useAnimatedStyle(() => ({
     transform: [{ scale: Math.max(scale.value, 0) }],
   }));
+
+  if (!pictureDetail)
+    return <Text>adsfdasfdasjflasdjflkasdjfklsadjflkasdfjalskdfjadslfj</Text>;
+  const { width, height } = pictureDetail;
+  const imageUrl =
+    'https://w.namu.la/s/4aad8742a150565290d15e6d0dd9042ebcc24719f738683f55d6325a40c7c866a7a1aded220e0d04876914dd39ce48530c6d92f539e53acb5fe707248d7a7621dd08519a85130cafa0efbd83eb680cc407cbb80141223362aa1848a4d4e29092e0b5cd31256eb766fbe73717006ee0b5';
+  const orientation =
+    width > height ? OrientationType.landscape : OrientationType.portrait;
+  const SIZE =
+    orientation === OrientationType.landscape ? windowHeight : windowWidth;
 
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
@@ -239,7 +262,7 @@ const ImageDetailScreen = () => {
         >
           <Animated.View style={styles.wrapImage}>
             <Image
-              source={{ uri: imageUri }}
+              source={{ uri: imageUrl }}
               style={styles.imageBackground}
               resizeMode="contain"
             />
