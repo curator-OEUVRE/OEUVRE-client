@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 import { loadAsync } from 'expo-font';
+import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
@@ -34,6 +35,7 @@ const App = () => {
   useEffect(() => {
     const initialFetch = async () => {
       await loadFonts();
+      await lockAsync(OrientationLock.DEFAULT);
       setIsReady(true);
     };
     initialFetch();

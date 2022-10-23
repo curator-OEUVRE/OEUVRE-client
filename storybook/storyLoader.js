@@ -9,6 +9,7 @@ function loadStories() {
   require('../src/components/Tag/Tag.stories');
   require('../src/components/SettingItem/SettingItem.stories');
   require('../src/feature/AppleLogin/AppleLogin.stories');
+  require('../src/feature/FloorPictureList/FloorPictureList.stories');
   require('../src/feature/KakaoLogin/KakaoLogin.stories');
   require('../src/feature/TermsForm/TermsForm.stories');
   require('../src/feature/GuestBookInput/GuestBookInput.stories');
@@ -21,6 +22,7 @@ const stories = [
   '../src/components/Tag/Tag.stories',
   '../src/components/SettingItem/SettingItem.stories',
   '../src/feature/AppleLogin/AppleLogin.stories',
+  '../src/feature/FloorPictureList/FloorPictureList.stories',
   '../src/feature/KakaoLogin/KakaoLogin.stories',
   '../src/feature/TermsForm/TermsForm.stories',
   '../src/feature/GuestBookInput/GuestBookInput.stories',
