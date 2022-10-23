@@ -6,6 +6,9 @@ export interface PictureInfo {
   imageUri: string;
   description: string;
   hashtags: string[];
+  width: number;
+  height: number;
+  location: number;
 }
 
 interface FormInfo<T> {
@@ -23,7 +26,9 @@ interface CreateFloorStore {
   isPublic: boolean;
   // TODO: enum으로 대체
   texture: number;
-  createPicturesByImageUris: (imageUrls: string[]) => void;
+  createPictures: (
+    images: { url: string; width: number; height: number }[],
+  ) => void;
   onChangeDescriptionByIdx: (idx: number) => (description: string) => void;
   setHashtag: (imageIndex: number, hashtags: string[]) => void;
   setName: (data: Partial<FormInfo<string>>) => void;
@@ -33,10 +38,14 @@ interface CreateFloorStore {
   setTexture: (texture: number) => void;
 }
 
-const createDefaultPictureInfo = (imageUri: string): PictureInfo => ({
-  imageUri,
+const createDefaultPictureInfo = (info: Partial<PictureInfo>): PictureInfo => ({
+  imageUri: '',
   description: '',
   hashtags: [],
+  width: 0.5,
+  height: 0.5,
+  location: 0,
+  ...info,
 });
 
 export const FLOOR_BACKGROUND_COLORS = [
@@ -58,10 +67,10 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set) => ({
   isCommentAvailable: true,
   isPublic: true,
   texture: FLOOR_TEXTURES[0][0],
-  createPicturesByImageUris: (imageUrls: string[]) => {
+  createPictures: (images) => {
     set((state) => ({
       ...state,
-      pictures: imageUrls.map((uri) => createDefaultPictureInfo(uri)),
+      pictures: images.map((info) => createDefaultPictureInfo(info)),
     }));
   },
   onChangeDescriptionByIdx: (idx: number) => (description: string) => {

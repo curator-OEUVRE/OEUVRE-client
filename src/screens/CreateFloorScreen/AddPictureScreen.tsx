@@ -25,7 +25,7 @@ export type AddPictureScreenScreenNP = CompositeNavigationProp<
 
 const AddPictureScreen = () => {
   const navigation = useNavigation<AddPictureScreenScreenNP>();
-  const { createPicturesByImageUris } = useCreateFloorStore();
+  const { createPictures } = useCreateFloorStore();
   useFocusEffect(() => {
     const pickImage = async () => {
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -35,8 +35,12 @@ const AddPictureScreen = () => {
       });
       if (!result.cancelled) {
         const { selected } = result;
-        const imageUris = selected?.map((imageInfo) => imageInfo.uri);
-        createPicturesByImageUris(imageUris);
+        const imageUris = selected?.map((imageInfo) => ({
+          url: imageInfo.uri,
+          width: (imageInfo.width * 0.5) / imageInfo.height,
+          height: 0.5,
+        }));
+        createPictures(imageUris);
         navigation.navigate(Screen.PictureDescriptionScreen);
       } else {
         navigation.goBack();
