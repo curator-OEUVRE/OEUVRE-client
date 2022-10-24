@@ -27,7 +27,7 @@ const Stack = createStackNavigator<FloorStackParamsList>();
 
 const FloorStack = () => (
   <Stack.Navigator
-    initialRouteName={Screen.ImageDetailScreen}
+    initialRouteName={Screen.AddPictureScreen}
     screenOptions={{
       headerShown: false,
     }}
