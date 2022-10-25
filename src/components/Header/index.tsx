@@ -9,6 +9,7 @@ interface HeaderProps {
   headerRight?: () => React.ReactNode;
   backgroundColor?: string;
   iconColor?: string;
+  onBackPress?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -48,11 +49,15 @@ const Header = ({
   headerRight,
   backgroundColor = COLOR.mono.white,
   iconColor = COLOR.mono.black,
+  onBackPress,
 }: HeaderProps) => {
   const navigation = useNavigation();
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <Pressable style={styles.arrowLeft} onPress={() => navigation.goBack()}>
+      <Pressable
+        style={styles.arrowLeft}
+        onPress={onBackPress ?? (() => navigation.goBack())}
+      >
         <ArrowBackIcon color={iconColor} />
       </Pressable>
       {typeof headerTitle === 'string' ? (
