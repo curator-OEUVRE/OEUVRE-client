@@ -36,7 +36,7 @@ const AddPictureScreen = () => {
       if (!result.cancelled) {
         const { selected } = result;
         const imageUris = selected?.map((imageInfo) => ({
-          url: imageInfo.uri,
+          imageUri: imageInfo.uri,
           width: (imageInfo.width * 0.5) / imageInfo.height,
           height: 0.5,
         }));

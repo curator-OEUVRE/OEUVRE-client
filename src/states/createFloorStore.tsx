@@ -27,7 +27,7 @@ interface CreateFloorStore {
   // TODO: enum으로 대체
   texture: number;
   createPictures: (
-    images: { url: string; width: number; height: number }[],
+    images: { imageUri: string; width: number; height: number }[],
   ) => void;
   onChangeDescriptionByIdx: (idx: number) => (description: string) => void;
   setHashtag: (imageIndex: number, hashtags: string[]) => void;
