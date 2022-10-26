@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+/* eslint-disable no-param-reassign */
+import {
+  MutableRefObject,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 import DraggableFlatList, {
   ScaleDecorator,
@@ -174,24 +181,24 @@ const FloorPicture = ({
 interface Props {
   pictures: PictureInfo[];
   editable?: boolean;
-  setPictures?: (
-    newData: PictureInfo[] | ((prev: PictureInfo[]) => PictureInfo[]),
-  ) => void;
+  setPictures?: (newData: PictureInfo[]) => void;
   onDragEnd?: (absoluteX: number, absoluteY: number) => void;
+  absoluteX: MutableRefObject<SharedValue<number> | undefined>;
+  absoluteY: MutableRefObject<SharedValue<number> | undefined>;
 }
 
-const keyExtractor = (item: PictureInfo) => item.imageUri;
+const keyExtractor = (item: PictureInfo): string => item.imageUri;
 
 const FloorPictureList = ({
   pictures,
   editable,
   setPictures,
   onDragEnd,
+  absoluteX,
+  absoluteY,
 }: Props) => {
   const { height } = useDimensions();
 
-  const absoluteX = useRef<SharedValue<number>>();
-  const absoluteY = useRef<SharedValue<number>>();
   const translateY = useRef<SharedValue<number>>();
   const activeIndexAnim = useRef<SharedValue<number>>();
 
