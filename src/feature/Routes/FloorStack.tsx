@@ -11,12 +11,14 @@ import {
 import FloorInfoFormScreen, {
   FloorInfoFormScreenParams,
 } from '@/screens/CreateFloorScreen/FloorInfoFormScreen';
+import FloorScreen, { FloorScreenParams } from '@/screens/FloorScreen';
 
 export type FloorStackParamsList = {
   [Screen.AddPictureScreen]: AddPictureScreenParams;
   [Screen.PictureDescriptionScreen]: PictureDescriptionScreenParams;
   [Screen.AddHashtagScreen]: AddHashtagScreenParams;
   [Screen.FloorInfoFormScreen]: FloorInfoFormScreenParams;
+  [Screen.FloorScreen]: FloorScreenParams;
 };
 
 const Stack = createStackNavigator<FloorStackParamsList>();
@@ -38,6 +40,7 @@ const FloorStack = () => (
       name={Screen.FloorInfoFormScreen}
       component={FloorInfoFormScreen}
     />
+    <Stack.Screen name={Screen.FloorScreen} component={FloorScreen} />
   </Stack.Navigator>
 );
 
