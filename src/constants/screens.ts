@@ -21,4 +21,5 @@ export enum Screen {
   FloorInfoFormScreen = 'FloorInfoFormScreen',
   FloorScreen = 'FloorScreen',
   CreateFloorScreen = 'CreateFloorScreen',
+  ImageDetailScreen = 'ImageDetailScreen',
 }
