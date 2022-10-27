@@ -1,14 +1,7 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -31,6 +24,7 @@ import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import useDimensions from '@/hooks/useDimensions';
 import throttle from '@/services/common/throttle';
 import { PictureDetail } from '@/types/floor';
 
@@ -100,7 +94,7 @@ const styles = StyleSheet.create({
 });
 
 const ImageDetailScreen = () => {
-  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useDimensions();
   const insets = useSafeAreaInsets();
 
   const { params } = useRoute<ImageDetailScreenRP>();
@@ -149,9 +143,10 @@ const ImageDetailScreen = () => {
   }, [scale]);
 
   const toggleLike = () => {
-    setLike((prev) => !prev);
-    if (isLike) return;
-    scaleImage();
+    setLike((prev) => {
+      if (!prev) scaleImage();
+      return !prev;
+    });
   };
 
   const onScrap = () => {
@@ -169,18 +164,12 @@ const ImageDetailScreen = () => {
     width > height ? OrientationType.landscape : OrientationType.portrait;
   const SIZE =
     orientation === OrientationType.landscape ? windowHeight : windowWidth;
-
+  const Favorite = isLike ? FavoriteIcon : FavoriteOutlineIcon;
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
-      {isLike ? (
-        <Pressable style={styles.wrapMore} onPress={throttle(toggleLike, 1000)}>
-          <FavoriteIcon color={COLOR.mono.gray7} />
-        </Pressable>
-      ) : (
-        <Pressable style={styles.wrapMore} onPress={throttle(toggleLike, 1000)}>
-          <FavoriteOutlineIcon color={COLOR.mono.gray7} />
-        </Pressable>
-      )}
+      <Pressable style={styles.wrapMore} onPress={throttle(toggleLike)}>
+        <Favorite color={COLOR.mono.gray7} />
+      </Pressable>
       <Pressable onPress={() => setBottomSheetIndex(1)}>
         <MoreIcon color={COLOR.mono.gray7} />
       </Pressable>
