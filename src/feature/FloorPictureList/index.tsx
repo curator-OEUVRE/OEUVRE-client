@@ -185,6 +185,8 @@ interface Props {
   onDragEnd?: (absoluteX: number, absoluteY: number) => void;
   absoluteX: MutableRefObject<SharedValue<number> | undefined>;
   absoluteY: MutableRefObject<SharedValue<number> | undefined>;
+  activeIndexAnim: MutableRefObject<SharedValue<number> | undefined>;
+  isDragging: Readonly<SharedValue<boolean>>;
 }
 
 const keyExtractor = (item: PictureInfo): string => item.imageUri;
@@ -196,16 +198,12 @@ const FloorPictureList = ({
   onDragEnd,
   absoluteX,
   absoluteY,
+  activeIndexAnim,
+  isDragging,
 }: Props) => {
   const { height } = useDimensions();
 
   const translateY = useRef<SharedValue<number>>();
-  const activeIndexAnim = useRef<SharedValue<number>>();
-
-  const isDragging = useDerivedValue(
-    () => activeIndexAnim.current?.value !== -1,
-  );
-
   const [activeLine, setActiveLine] = useState(0);
 
   const renderItem = useCallback(

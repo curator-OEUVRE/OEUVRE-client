@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   SharedValue,
   useAnimatedStyle,
+  useDerivedValue,
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Shadow } from 'react-native-shadow-2';
@@ -96,8 +97,24 @@ const FloorScreen = () => {
   const [data, setData] = useState(PICTURES);
   const absoluteX = useRef<SharedValue<number>>();
   const absoluteY = useRef<SharedValue<number>>();
+  const activeIndexAnim = useRef<SharedValue<number>>();
   const layoutRef = useRef<Layout>();
   const pressableRef = useRef<View>(null);
+  const isDragging = useDerivedValue(
+    () => activeIndexAnim.current?.value !== -1,
+  );
+
+  const onEnter = useDerivedValue(() => {
+    const cx = absoluteX.current?.value;
+    const cy = absoluteY.current?.value;
+    if (!cx || !cy || !layoutRef.current || !isDragging) return {};
+    const { pageX, pageY, width, height } = layoutRef.current;
+
+    return (
+      pageX <= cx && cx <= pageX + width && pageY <= cy && cy <= pageY + height
+    );
+  });
+
   const ConfirmButton = useCallback(
     () => (
       <Pressable>
@@ -107,40 +124,37 @@ const FloorScreen = () => {
     [],
   );
 
-  const animatedPopupStyles = useAnimatedStyle(() => {
-    const cx = absoluteX.current?.value;
-    const cy = absoluteY.current?.value;
-    if (!cx || !cy || !layoutRef.current) return {};
-    const { pageX, pageY, width, height } = layoutRef.current;
+  const animatedPressableStyles = useAnimatedStyle(() => ({
+    transform: [{ scale: onEnter.value ? 1.5 : 1 }],
+  }));
 
-    const onEnter =
-      pageX <= cx && cx <= pageX + width && pageY <= cy && cy <= pageY + height;
-    return {
-      transform: [{ scale: onEnter ? 1.5 : 1 }],
-    };
-  });
+  const setPictures = (newData: PictureInfo[]) => {
+    setData(() => {
+      if (onEnter.value && activeIndexAnim.current) {
+        newData.splice(activeIndexAnim.current.value, 1);
+      }
+      return newData;
+    });
+  };
+
+  const measureLayout = () => {
+    if (pressableRef.current) {
+      pressableRef.current.measure((x, y, width, height, pageX, pageY) => {
+        layoutRef.current = { pageX, pageY, width, height };
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Header headerTitle="플로어 추가" headerRight={ConfirmButton} />
       <View style={styles.bottom}>
         <AnimatedPressable
-          style={animatedPopupStyles}
-          onLayout={() => {
-            if (pressableRef.current) {
-              pressableRef.current.measure(
-                (x, y, width, height, pageX, pageY) => {
-                  layoutRef.current = { pageX, pageY, width, height };
-                },
-              );
-            }
-          }}
+          style={animatedPressableStyles}
+          onLayout={measureLayout}
           ref={pressableRef}
         >
-          <Shadow
-            startColor="#A7A9AB05"
-            style={[styles.pressable, animatedPopupStyles]}
-          >
+          <Shadow startColor="#A7A9AB05" style={styles.pressable}>
             <TrashIcon />
           </Shadow>
         </AnimatedPressable>
@@ -148,10 +162,12 @@ const FloorScreen = () => {
       <View style={styles.wrapList}>
         <FloorPictureList
           pictures={data}
-          setPictures={setData}
+          setPictures={setPictures}
           editable
           absoluteX={absoluteX}
           absoluteY={absoluteY}
+          activeIndexAnim={activeIndexAnim}
+          isDragging={isDragging}
         />
       </View>
     </SafeAreaView>
