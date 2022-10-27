@@ -7,6 +7,8 @@ import { COLOR } from '@/constants/styles/colors';
 interface HeaderProps {
   headerTitle?: string | (() => React.ReactNode);
   headerRight?: () => React.ReactNode;
+  backgroundColor?: string;
+  iconColor?: string;
 }
 
 const styles = StyleSheet.create({
@@ -21,7 +23,6 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: 'center',
-    backgroundColor: COLOR.mono.white,
     flexDirection: 'row',
     height: 45,
     justifyContent: 'center',
@@ -42,12 +43,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header = ({ headerTitle, headerRight }: HeaderProps) => {
+const Header = ({
+  headerTitle,
+  headerRight,
+  backgroundColor = COLOR.mono.white,
+  iconColor = COLOR.mono.black,
+}: HeaderProps) => {
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor }]}>
       <Pressable style={styles.arrowLeft} onPress={() => navigation.goBack()}>
-        <ArrowBackIcon color={COLOR.mono.black} />
+        <ArrowBackIcon color={iconColor} />
       </Pressable>
       {typeof headerTitle === 'string' ? (
         <Text style={styles.text}>{headerTitle}</Text>
