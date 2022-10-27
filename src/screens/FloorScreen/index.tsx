@@ -107,7 +107,7 @@ const FloorScreen = () => {
   const onEnter = useDerivedValue(() => {
     const cx = absoluteX.current?.value;
     const cy = absoluteY.current?.value;
-    if (!cx || !cy || !layoutRef.current || !isDragging) return {};
+    if (!cx || !cy || !layoutRef.current || !isDragging.value) return false;
     const { pageX, pageY, width, height } = layoutRef.current;
 
     return (
