@@ -54,12 +54,15 @@ const FloorPicture = ({
   setActiveLine,
   activeIndexAnim,
 }: FloorPictureProps) => {
-  const { height } = useDimensions();
-
-  const imageWidth = useMemo(() => height * item.width, [item.width, height]);
+  const { height, width } = useDimensions();
+  const BASE_SIZE = height > width ? width : height;
+  const imageWidth = useMemo(
+    () => BASE_SIZE * item.width,
+    [item.width, BASE_SIZE],
+  );
   const imageHeight = useMemo(
-    () => height * item.height,
-    [item.height, height],
+    () => BASE_SIZE * item.height,
+    [item.height, BASE_SIZE],
   );
   const scale = useSharedValue(1);
   const tmpScale = useSharedValue(1);
