@@ -6,23 +6,12 @@ import Animated, {
   useDerivedValue,
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Shadow } from 'react-native-shadow-2';
-import TrashIcon from '@/assets/icons/Trash';
 import { Header } from '@/components/Header';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { PictureInfo } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
-  bottom: {
-    alignItems: 'center',
-    bottom: 10,
-    height: 60,
-    justifyContent: 'center',
-    left: 0,
-    position: 'absolute',
-    right: 0,
-  },
   confirmText: {
     color: COLOR.system.blue,
   },
@@ -30,26 +19,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.mono.white,
     flex: 1,
   },
-  pressable: {
-    alignItems: 'center',
-    backgroundColor: COLOR.mono.gray1,
-    borderRadius: 20,
-    height: 40,
-    justifyContent: 'center',
-    width: 40,
-  },
   wrapList: {
     flex: 1,
   },
 });
 
 export type FloorScreenParams = undefined;
-interface Layout {
-  width: number;
-  height: number;
-  pageX: number;
-  pageY: number;
-}
 
 // for test
 const PICTURES: PictureInfo[] = [
@@ -91,30 +66,8 @@ const PICTURES: PictureInfo[] = [
   },
 ];
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
 const FloorScreen = () => {
   const [data, setData] = useState(PICTURES);
-  const absoluteX = useRef<SharedValue<number>>();
-  const absoluteY = useRef<SharedValue<number>>();
-  const activeIndexAnim = useRef<SharedValue<number>>();
-  const layoutRef = useRef<Layout>();
-  const pressableRef = useRef<View>(null);
-  const isDragging = useDerivedValue(
-    () => activeIndexAnim.current?.value !== -1,
-  );
-
-  const onEnter = useDerivedValue(() => {
-    const cx = absoluteX.current?.value;
-    const cy = absoluteY.current?.value;
-    if (!cx || !cy || !layoutRef.current || !isDragging.value) return false;
-    const { pageX, pageY, width, height } = layoutRef.current;
-
-    return (
-      pageX <= cx && cx <= pageX + width && pageY <= cy && cy <= pageY + height
-    );
-  });
-
   const ConfirmButton = useCallback(
     () => (
       <Pressable>
@@ -124,51 +77,11 @@ const FloorScreen = () => {
     [],
   );
 
-  const animatedPressableStyles = useAnimatedStyle(() => ({
-    transform: [{ scale: onEnter.value ? 1.5 : 1 }],
-  }));
-
-  const setPictures = (newData: PictureInfo[]) => {
-    setData(() => {
-      if (onEnter.value && activeIndexAnim.current) {
-        newData.splice(activeIndexAnim.current.value, 1);
-      }
-      return newData;
-    });
-  };
-
-  const measureLayout = () => {
-    if (pressableRef.current) {
-      pressableRef.current.measure((x, y, width, height, pageX, pageY) => {
-        layoutRef.current = { pageX, pageY, width, height };
-      });
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Header headerTitle="플로어 추가" headerRight={ConfirmButton} />
-      <View style={styles.bottom}>
-        <AnimatedPressable
-          style={animatedPressableStyles}
-          onLayout={measureLayout}
-          ref={pressableRef}
-        >
-          <Shadow startColor="#A7A9AB05" style={styles.pressable}>
-            <TrashIcon />
-          </Shadow>
-        </AnimatedPressable>
-      </View>
       <View style={styles.wrapList}>
-        <FloorPictureList
-          pictures={data}
-          setPictures={setPictures}
-          editable
-          absoluteX={absoluteX}
-          absoluteY={absoluteY}
-          activeIndexAnim={activeIndexAnim}
-          isDragging={isDragging}
-        />
+        <FloorPictureList pictures={data} editable setPictures={setData} />
       </View>
     </SafeAreaView>
   );
