@@ -1,3 +1,8 @@
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback } from 'react';
 import {
   Image,
@@ -21,7 +26,10 @@ import {
 } from '@/components';
 import { CREATE_FLOOR_CONFIG } from '@/constants/common';
 import { IMAGE } from '@/constants/images';
+import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import { RootStackParamsList } from '@/feature/Routes';
+import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { validateFloorName } from '@/services/validation/createFloor';
 import {
   FLOOR_BACKGROUND_COLORS,
@@ -29,6 +37,10 @@ import {
 } from '@/states/createFloorStore';
 
 export type FloorInfoFormScreenParams = undefined;
+export type FloorInfoFormScreenNP = CompositeNavigationProp<
+  StackNavigationProp<FloorStackParamsList, Screen.FloorInfoFormScreen>,
+  StackNavigationProp<RootStackParamsList>
+>;
 
 const styles = StyleSheet.create({
   confirmText: {
@@ -119,11 +131,16 @@ const FloorInfoFormScreen = () => {
     isCommentAvailable,
     setIsCommentAvailable,
   } = useCreateFloorStore();
-
+  const navigation = useNavigation<FloorInfoFormScreenNP>();
   const ConfirmButton = useCallback(
     () => (
       <Pressable>
-        <Text style={[TEXT_STYLE.button16M, styles.confirmText]}>다음</Text>
+        <Text
+          style={[TEXT_STYLE.button16M, styles.confirmText]}
+          onPress={() => navigation.navigate(Screen.CreateFloorScreen)}
+        >
+          다음
+        </Text>
       </Pressable>
     ),
     [],
