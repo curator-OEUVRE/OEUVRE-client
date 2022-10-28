@@ -29,6 +29,7 @@ interface CreateFloorStore {
   createPictures: (
     images: { imageUri: string; width: number; height: number }[],
   ) => void;
+  setPictures: (pictures: PictureInfo[]) => void;
   onChangeDescriptionByIdx: (idx: number) => (description: string) => void;
   setHashtag: (imageIndex: number, hashtags: string[]) => void;
   setName: (data: Partial<FormInfo<string>>) => void;
@@ -73,6 +74,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set) => ({
       pictures: images.map((info) => createDefaultPictureInfo(info)),
     }));
   },
+  setPictures: (pictures) => set((state) => ({ ...state, pictures })),
   onChangeDescriptionByIdx: (idx: number) => (description: string) => {
     set((state) => ({
       ...state,
