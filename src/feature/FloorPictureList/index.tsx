@@ -44,9 +44,7 @@ const styles = StyleSheet.create({
 interface Props {
   pictures: PictureInfo[];
   editable?: boolean;
-  setPictures?: (
-    newData: PictureInfo[] | ((prev: PictureInfo[]) => PictureInfo[]),
-  ) => void;
+  setPictures?: (newData: PictureInfo[]) => void;
 }
 
 interface Layout {
@@ -103,12 +101,10 @@ const FloorPictureList = ({ pictures, editable, setPictures }: Props) => {
   }));
 
   const onDragEnd = (newData: PictureInfo[]) => {
-    setPictures?.(() => {
-      if (onEnter.value && activeIndexAnim.current) {
-        newData.splice(activeIndexAnim.current.value, 1);
-      }
-      return newData;
-    });
+    if (onEnter.value && activeIndexAnim.current) {
+      newData.splice(activeIndexAnim.current.value, 1);
+    }
+    setPictures?.(newData);
   };
 
   const measureLayout = () => {
