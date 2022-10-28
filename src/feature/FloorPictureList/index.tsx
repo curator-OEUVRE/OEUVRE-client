@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { MutableRefObject, useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { Pressable, StyleSheet, View } from 'react-native';
 import DraggableFlatList, {
