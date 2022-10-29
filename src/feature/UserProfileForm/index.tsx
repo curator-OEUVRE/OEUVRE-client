@@ -61,7 +61,7 @@ const UserProfileForm = ({ onNextPress }: Props) => {
     clearSignUpStore,
   } = useSignUpStore();
   const [image, setImage] = useState<string | undefined>(undefined);
-  const { uploading, uploadImage } = useUploadImage({ image });
+  const { uploading, uploadImage } = useUploadImage();
 
   const { setToken } = useAuthStore();
 
@@ -108,7 +108,10 @@ const UserProfileForm = ({ onNextPress }: Props) => {
   const button = (
     <Button
       onPress={async () => {
-        await uploadImage('Profile', userId.value, onCompleteUpload);
+        if (image) {
+          const url = await uploadImage(image, 'Profile', userId.value);
+          onCompleteUpload(url);
+        }
       }}
     >
       <Text style={styles.buttonText}>설정 완료하기</Text>
