@@ -1,18 +1,14 @@
-import { getAsync } from './common';
-import { PictureDetail } from '@/types/floor';
+import { getAsync, postAsync } from './common';
+import { useAuthStore } from '@/states/authStore';
+import {
+  CreateFloorResponseDto,
+  FloorInfo,
+  GetPictureDetailResponseDto,
+} from '@/types/floor';
 
 interface GetPictureDetailParams {
   pictureNo: number;
 }
-
-interface GetPictureDetailResponseDto {
-  code: number;
-  isSuccess: boolean;
-  message: string;
-  result: PictureDetail;
-  timestamp: string;
-}
-
 export const getPictureDetail = async ({
   pictureNo,
 }: GetPictureDetailParams) => {
@@ -20,11 +16,23 @@ export const getPictureDetail = async ({
     `/pictures/${pictureNo}`,
     {
       headers: {
-        'X-AUTH-TOKEN':
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvZXV2cmUiLCJpYXQiOjE2NjY1MjUxOTIsInN1YiI6IjMiLCJleHAiOjE2ODIwNzcxOTIsIm5vIjozLCJyb2xlcyI6IlVTRVIifQ.0EPOtDHNEVw--Ob3SaCrf8VVfyTaV3ogy-PAfBfHxTA',
+        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
       },
     },
   );
 
+  return response;
+};
+
+export const createFloor = async (floor: FloorInfo) => {
+  const response = await postAsync<CreateFloorResponseDto, FloorInfo>(
+    `/floors`,
+    floor,
+    {
+      headers: {
+        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
+      },
+    },
+  );
   return response;
 };
