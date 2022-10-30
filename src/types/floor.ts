@@ -35,5 +35,12 @@ export interface CreateFloorResponse {
   floorNo: number;
 }
 
+export interface GetFloorResponse extends FloorInfo {
+  floorNo: number;
+  isMine: boolean;
+  userNo: number;
+}
+
 export type CreateFloorResponseDto = ResponseDto<CreateFloorResponse>;
 export type GetPictureDetailResponseDto = ResponseDto<PictureDetail>;
+export type GetFloorResponseDto = ResponseDto<GetFloorResponse>;
