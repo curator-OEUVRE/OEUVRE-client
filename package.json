@@ -26,6 +26,7 @@
     "expo-apple-authentication": "4.3.0",
     "expo-application": "4.2.2",
     "expo-auth-session": "3.7.1",
+    "expo-blur": "~11.2.0",
     "expo-constants": "13.2.4",
     "expo-dev-client": "~1.2.1",
     "expo-font": "~10.2.0",
