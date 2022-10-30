@@ -99,4 +99,17 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
     set((state) => ({ ...state, isCommentAvailable })),
   setIsPublic: (isPublic) => set((state) => ({ ...state, isPublic })),
   setTexture: (texture) => set((state) => ({ ...state, texture })),
+  createFloor: async () => {
+    const { color, isCommentAvailable, isPublic, name, pictures, texture } =
+      get();
+    const result = await createFloor({
+      color,
+      isCommentAvailable,
+      isPublic,
+      name: name.value,
+      pictures,
+      texture,
+    });
+    return result;
+  },
 }));

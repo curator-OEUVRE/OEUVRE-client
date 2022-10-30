@@ -14,6 +14,7 @@ import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import useUploadImage from '@/hooks/useUploadImage';
 import { useCreateFloorStore } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
@@ -39,14 +40,30 @@ const CreateFloorScreen = () => {
     };
   }, []);
   const navigation = useNavigation<CreateFloorScreenNP>();
-  const { pictures, setPictures, color } = useCreateFloorStore();
+  const { uploadImages } = useUploadImage();
+  const { pictures, setPictures, color, name, createFloor } =
+    useCreateFloorStore();
+
+  const onConfirm = useCallback(async () => {
+    const images = pictures.map((picture) => picture.imageUrl);
+    const urls = await uploadImages(images, name.value);
+    const newPictures = pictures.map((picture, i) => ({
+      ...picture,
+      imageUri: urls[i],
+      queue: i + 1,
+    }));
+    setPictures(newPictures);
+    const result = await createFloor();
+    console.log(result.result);
+  }, [name.value, pictures, uploadImages, setPictures, createFloor]);
+
   const ConfirmButton = useCallback(
     () => (
-      <Pressable>
-        <CheckIcon />
+      <Pressable onPress={onConfirm}>
+        <CheckIcon color={COLOR.mono.gray3} />
       </Pressable>
     ),
-    [],
+    [onConfirm],
   );
 
   return (

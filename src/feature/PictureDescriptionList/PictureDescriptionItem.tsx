@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Hashtag from '@/assets/icons/Hashtag';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
-import { PictureInfo } from '@/states/createFloorStore';
+import { PictureInfo } from '@/types/floor';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,14 +63,14 @@ export interface PictureDescriptionItemProps extends PictureInfo {
 }
 
 const PictureDescriptionItem = ({
-  imageUri,
+  imageUrl,
   description,
   hashtags,
   onChangeDescription,
   onHashtagPress,
 }: PictureDescriptionItemProps) => (
   <View style={styles.container}>
-    <Image source={{ uri: imageUri }} style={styles.img} resizeMode="cover" />
+    <Image source={{ uri: imageUrl }} style={styles.img} resizeMode="cover" />
     <View style={styles.contentContainer}>
       <TextInput
         multiline

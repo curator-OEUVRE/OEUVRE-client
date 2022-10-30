@@ -29,6 +29,7 @@ export const Routes = () => {
         screenOptions={{
           headerShown: false,
         }}
+        initialRouteName={Navigator.AuthStack}
       >
         <Stack.Screen name={Navigator.FloorStack} component={FloorStack} />
         {accessToken ? (

@@ -35,12 +35,12 @@ const AddPictureScreen = () => {
       });
       if (!result.cancelled) {
         const { selected } = result;
-        const imageUris = selected?.map((imageInfo) => ({
-          imageUri: imageInfo.uri,
+        const imageUrls = selected?.map((imageInfo) => ({
+          imageUrl: imageInfo.uri,
           width: (imageInfo.width * 0.5) / imageInfo.height,
           height: 0.5,
         }));
-        createPictures(imageUris);
+        createPictures(imageUrls);
         navigation.navigate(Screen.PictureDescriptionScreen);
       } else {
         navigation.goBack();

@@ -18,7 +18,7 @@ import Animated, {
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import { COLOR } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import type { PictureInfo } from '@/states/createFloorStore';
+import type { PictureInfo } from '@/types/floor';
 
 const LINE_BUTTON_SIZE = 40;
 
@@ -121,11 +121,11 @@ const FloorPicture = ({
         style={[
           styles.lineContainer,
           containerAnimStyle,
-          { height: height * 0.5 },
+          { height: BASE_SIZE * 0.5 },
         ]}
       >
         <Animated.View
-          style={[styles.line, animStyle, { height: height * 0.5 }]}
+          style={[styles.line, animStyle, { height: BASE_SIZE * 0.5 }]}
         >
           {isLineActive && (
             <Pressable>
@@ -153,7 +153,7 @@ const FloorPicture = ({
               marginHorizontal: editable ? 24 : 16,
               transform: [
                 {
-                  translateY: item.location * height,
+                  translateY: item.location * BASE_SIZE,
                 },
               ],
             },
@@ -162,7 +162,7 @@ const FloorPicture = ({
           onLongPress={editable ? drag : undefined}
         >
           <Animated.Image
-            source={{ uri: item.imageUri }}
+            source={{ uri: item.imageUrl }}
             style={imageAnimStyle}
           />
         </Pressable>

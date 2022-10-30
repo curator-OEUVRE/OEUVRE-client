@@ -16,7 +16,7 @@ import FloorPicture from './FloorPicture';
 import TrashIcon from '@/assets/icons/Trash';
 import { COLOR } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import type { PictureInfo } from '@/states/createFloorStore';
+import type { PictureInfo } from '@/types/floor';
 
 const styles = StyleSheet.create({
   bottom: {
@@ -54,7 +54,7 @@ interface Layout {
   pageY: number;
 }
 
-const keyExtractor = (item: PictureInfo): string => item.imageUri;
+const keyExtractor = (item: PictureInfo): string => item.imageUrl;
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const FloorPictureList = ({ pictures, editable, setPictures }: Props) => {
