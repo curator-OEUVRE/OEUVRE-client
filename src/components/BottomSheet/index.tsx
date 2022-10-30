@@ -81,12 +81,14 @@ const BottomSheetItemGroup = ({ children }: BottomSheetItemGroupProps) => {
 interface BottomSheetComponentProps
   extends Omit<BottomSheetProps, 'children' | 'snapPoints'> {
   children?: React.ReactNode;
+  isPortrait?: boolean;
   onChange: (index: number) => void;
 }
 
 const BottomSheetComponent = ({
   children,
   onChange,
+  isPortrait = false,
   ...bottomSheetProps
 }: BottomSheetComponentProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -105,10 +107,10 @@ const BottomSheetComponent = ({
   const snapPoints = useMemo(() => {
     const points = [];
     for (let i = 0; i <= lastIdx; i += 1) {
-      points.push(`${(i + 1) * 15}%`);
+      points.push(`${(i + 1) * (isPortrait ? 15 : 25)}%`);
     }
     return points;
-  }, [lastIdx]);
+  }, [lastIdx, isPortrait]);
   const renderChildren = () =>
     React.Children.map(children, (child, index) =>
       index < lastIdx ? (
@@ -133,7 +135,10 @@ const BottomSheetComponent = ({
       {...bottomSheetProps}
       snapPoints={snapPoints}
     >
-      <BottomSheetView style={styles.container}>
+      <BottomSheetView
+        // eslint-disable-next-line react-native/no-inline-styles
+        style={styles.container}
+      >
         {renderChildren()}
       </BottomSheetView>
     </BottomSheet>
