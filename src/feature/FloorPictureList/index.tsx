@@ -117,17 +117,19 @@ const FloorPictureList = ({ pictures, editable, setPictures }: Props) => {
 
   return (
     <View>
-      <View style={styles.bottom}>
-        <AnimatedPressable
-          style={animatedPressableStyles}
-          onLayout={measureLayout}
-          ref={pressableRef}
-        >
-          <Shadow startColor="#A7A9AB05" style={styles.pressable}>
-            <TrashIcon />
-          </Shadow>
-        </AnimatedPressable>
-      </View>
+      {editable && (
+        <View style={styles.bottom}>
+          <AnimatedPressable
+            style={animatedPressableStyles}
+            onLayout={measureLayout}
+            ref={pressableRef}
+          >
+            <Shadow startColor="#A7A9AB05" style={styles.pressable}>
+              <TrashIcon />
+            </Shadow>
+          </AnimatedPressable>
+        </View>
+      )}
       <DraggableFlatList
         data={pictures}
         renderItem={renderItem}

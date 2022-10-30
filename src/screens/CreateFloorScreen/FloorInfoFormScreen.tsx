@@ -137,7 +137,7 @@ const FloorInfoFormScreen = () => {
       <Pressable>
         <Text
           style={[TEXT_STYLE.button16M, styles.confirmText]}
-          onPress={() => navigation.navigate(Screen.CreateFloorScreen)}
+          onPress={() => navigation.navigate(Screen.EditFloorScreen)}
         >
           다음
         </Text>

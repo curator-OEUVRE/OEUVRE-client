@@ -7,13 +7,16 @@ import {
   PictureDescriptionScreenParams,
   AddHashtagScreen,
   AddHashtagScreenParams,
-  CreateFloorScreen,
-  CreateFloorScreenParams,
 } from '@/screens/CreateFloorScreen';
 import FloorInfoFormScreen, {
   FloorInfoFormScreenParams,
 } from '@/screens/CreateFloorScreen/FloorInfoFormScreen';
-import FloorScreen, { FloorScreenParams } from '@/screens/FloorScreen';
+import {
+  EditFloorScreen,
+  EditFloorScreenParams,
+  FloorViewerScreen,
+  FloorViewerScreenParams,
+} from '@/screens/FloorScreen';
 import ImageDetailScreen, {
   ImageDetailScreenParams,
 } from '@/screens/ImageDetailScreen';
@@ -23,16 +26,16 @@ export type FloorStackParamsList = {
   [Screen.PictureDescriptionScreen]: PictureDescriptionScreenParams;
   [Screen.AddHashtagScreen]: AddHashtagScreenParams;
   [Screen.FloorInfoFormScreen]: FloorInfoFormScreenParams;
-  [Screen.FloorScreen]: FloorScreenParams;
-  [Screen.CreateFloorScreen]: CreateFloorScreenParams;
+  [Screen.FloorViewerScreen]: FloorViewerScreenParams;
   [Screen.ImageDetailScreen]: ImageDetailScreenParams;
+  [Screen.EditFloorScreen]: EditFloorScreenParams;
 };
 
 const Stack = createStackNavigator<FloorStackParamsList>();
 
 const FloorStack = () => (
   <Stack.Navigator
-    initialRouteName={Screen.AddPictureScreen}
+    initialRouteName={Screen.FloorViewerScreen}
     screenOptions={{
       headerShown: false,
     }}
@@ -47,15 +50,16 @@ const FloorStack = () => (
       name={Screen.FloorInfoFormScreen}
       component={FloorInfoFormScreen}
     />
-    <Stack.Screen name={Screen.FloorScreen} component={FloorScreen} />
     <Stack.Screen
-      name={Screen.CreateFloorScreen}
-      component={CreateFloorScreen}
+      name={Screen.FloorViewerScreen}
+      component={FloorViewerScreen}
+      initialParams={{ floorNo: 11 }}
     />
     <Stack.Screen
       name={Screen.ImageDetailScreen}
       component={ImageDetailScreen}
     />
+    <Stack.Screen name={Screen.EditFloorScreen} component={EditFloorScreen} />
   </Stack.Navigator>
 );
 

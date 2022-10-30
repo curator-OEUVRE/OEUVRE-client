@@ -3,7 +3,7 @@ import { ApiResult } from '@/apis/common';
 import { createFloor } from '@/apis/floor';
 import { FormInputStatus } from '@/components';
 import { COLOR } from '@/constants/styles';
-import { PictureInfo, CreateFloorResponseDto } from '@/types/floor';
+import { PictureInfo, CreateFloorResponseDto, FloorInfo } from '@/types/floor';
 
 interface FormInfo<T> {
   status: FormInputStatus;
@@ -13,6 +13,7 @@ interface FormInfo<T> {
 }
 
 interface CreateFloorStore {
+  isEditMode: boolean;
   pictures: PictureInfo[];
   name: FormInfo<string>;
   color: string;
@@ -20,6 +21,7 @@ interface CreateFloorStore {
   isPublic: boolean;
   // TODO: enum으로 대체
   texture: number;
+  setIsEditMode: (isEditMode: boolean) => void;
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],
   ) => void;
@@ -32,6 +34,7 @@ interface CreateFloorStore {
   setIsPublic: (isPublic: boolean) => void;
   setTexture: (texture: number) => void;
   createFloor: () => ApiResult<CreateFloorResponseDto>;
+  setFloor: (floor: FloorInfo) => void;
 }
 
 const createDefaultPictureInfo = (info: Partial<PictureInfo>): PictureInfo => ({
@@ -53,6 +56,7 @@ export const FLOOR_BACKGROUND_COLORS = [
 export const FLOOR_TEXTURES = [[0]];
 
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
+  isEditMode: false,
   pictures: [],
   name: {
     status: FormInputStatus.Initial,
@@ -64,6 +68,9 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   isCommentAvailable: true,
   isPublic: true,
   texture: FLOOR_TEXTURES[0][0],
+  setIsEditMode: (isEditMode) => {
+    set((state) => ({ ...state, isEditMode }));
+  },
   createPictures: (images) => {
     set((state) => ({
       ...state,
@@ -111,5 +118,16 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       texture,
     });
     return result;
+  },
+  setFloor: (floor) => {
+    set((state) => ({
+      ...state,
+      ...floor,
+      name: {
+        ...state.name,
+        status: FormInputStatus.Valid,
+        value: floor.name,
+      },
+    }));
   },
 }));

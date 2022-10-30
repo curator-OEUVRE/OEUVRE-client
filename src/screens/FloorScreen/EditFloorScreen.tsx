@@ -9,7 +9,7 @@ import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useLayoutEffect, useState } from 'react';
 import { Pressable, StyleSheet, View, Modal, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CheckIcon from '@/assets/icons/Check';
+import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
 import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
@@ -25,6 +25,9 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
   },
+  confirmText: {
+    color: COLOR.system.blue,
+  },
   container: {
     backgroundColor: COLOR.mono.white,
     flex: 1,
@@ -36,6 +39,10 @@ const styles = StyleSheet.create({
     color: COLOR.mono.black,
     textAlign: 'center',
   },
+  title: {
+    color: COLOR.mono.black,
+    marginRight: 17,
+  },
   wrapList: {
     flex: 1,
   },
@@ -44,11 +51,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  wrapTitle: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
 });
 
-export type CreateFloorScreenParams = undefined;
-export type CreateFloorScreenNP = CompositeNavigationProp<
-  StackNavigationProp<FloorStackParamsList, Screen.CreateFloorScreen>,
+export type EditFloorScreenParams = undefined;
+export type EditFloorScreenNP = CompositeNavigationProp<
+  StackNavigationProp<FloorStackParamsList, Screen.EditFloorScreen>,
   StackNavigationProp<RootStackParamsList>
 >;
 
@@ -71,7 +82,7 @@ const SuccessModal = ({ onPress }: SuccessModalProps) => (
   </Modal>
 );
 
-const CreateFloorScreen = () => {
+const EditFloorScreen = () => {
   useLayoutEffect(() => {
     lockAsync(OrientationLock.LANDSCAPE);
     return () => {
@@ -80,37 +91,49 @@ const CreateFloorScreen = () => {
   }, []);
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-
-  const navigation = useNavigation<CreateFloorScreenNP>();
+  const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
-  const { pictures, setPictures, color, name, createFloor } =
+  const { pictures, setPictures, color, name, createFloor, isEditMode } =
     useCreateFloorStore();
+  console.log(isEditMode);
 
   const onConfirm = useCallback(async () => {
     const images = pictures.map((picture) => picture.imageUrl);
     const urls = await uploadImages(images, name.value);
     const newPictures = pictures.map((picture, i) => ({
       ...picture,
-      imageUri: urls[i],
+      imageUrl: urls[i],
       queue: i + 1,
     }));
     setPictures(newPictures);
     const result = await createFloor();
+    console.log(result.result);
     setModalVisible(true);
   }, [createFloor, name.value, pictures, setPictures, uploadImages]);
 
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onConfirm}>
-        <CheckIcon color={COLOR.mono.gray3} />
+        <Text style={[styles.confirmText, TEXT_STYLE.body16M]}>완료</Text>
       </Pressable>
     ),
     [onConfirm],
   );
-
+  const headerTitle = isEditMode
+    ? () => (
+        <Pressable style={styles.wrapTitle}>
+          <Text style={[styles.title, TEXT_STYLE.body16M]}>{name.value}</Text>
+          <PencilIcon color={COLOR.mono.black} />
+        </Pressable>
+      )
+    : '플로어 추가';
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
-      <Header headerTitle="플로어 추가" headerRight={ConfirmButton} />
+      <Header
+        headerTitle={headerTitle}
+        headerRight={ConfirmButton}
+        backgroundColor="transparent"
+      />
       <View style={styles.wrapList}>
         <FloorPictureList
           pictures={pictures}
@@ -123,4 +146,4 @@ const CreateFloorScreen = () => {
   );
 };
 
-export default CreateFloorScreen;
+export default EditFloorScreen;
