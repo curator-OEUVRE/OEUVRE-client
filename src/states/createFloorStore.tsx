@@ -1,15 +1,9 @@
 import create from 'zustand';
+import { ApiResult } from '@/apis/common';
+import { createFloor } from '@/apis/floor';
 import { FormInputStatus } from '@/components';
 import { COLOR } from '@/constants/styles';
-
-export interface PictureInfo {
-  imageUri: string;
-  description: string;
-  hashtags: string[];
-  width: number;
-  height: number;
-  location: number;
-}
+import { PictureInfo, CreateFloorResponseDto } from '@/types/floor';
 
 interface FormInfo<T> {
   status: FormInputStatus;
@@ -27,7 +21,7 @@ interface CreateFloorStore {
   // TODO: enum으로 대체
   texture: number;
   createPictures: (
-    images: { imageUri: string; width: number; height: number }[],
+    images: { imageUrl: string; width: number; height: number }[],
   ) => void;
   setPictures: (pictures: PictureInfo[]) => void;
   onChangeDescriptionByIdx: (idx: number) => (description: string) => void;
@@ -37,15 +31,17 @@ interface CreateFloorStore {
   setIsCommentAvailable: (isCommentAvailable: boolean) => void;
   setIsPublic: (isPublic: boolean) => void;
   setTexture: (texture: number) => void;
+  createFloor: () => ApiResult<CreateFloorResponseDto>;
 }
 
 const createDefaultPictureInfo = (info: Partial<PictureInfo>): PictureInfo => ({
-  imageUri: '',
+  imageUrl: '',
   description: '',
   hashtags: [],
   width: 0.5,
   height: 0.5,
   location: 0,
+  queue: 1,
   ...info,
 });
 
@@ -56,7 +52,7 @@ export const FLOOR_BACKGROUND_COLORS = [
 
 export const FLOOR_TEXTURES = [[0]];
 
-export const useCreateFloorStore = create<CreateFloorStore>()((set) => ({
+export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   pictures: [],
   name: {
     status: FormInputStatus.Initial,

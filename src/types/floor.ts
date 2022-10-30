@@ -1,3 +1,5 @@
+import { ResponseDto } from './common';
+
 export type PictureDetail = {
   description: string;
   floorNo: number;
@@ -9,3 +11,29 @@ export type PictureDetail = {
   pictureNo: number;
   width: number;
 };
+
+export interface PictureInfo {
+  imageUrl: string;
+  description: string;
+  hashtags: string[];
+  width: number;
+  height: number;
+  location: number;
+  queue: number;
+}
+
+export interface FloorInfo {
+  color: string;
+  isCommentAvailable: boolean;
+  isPublic: boolean;
+  name: string;
+  pictures: PictureInfo[];
+  texture: number;
+}
+
+export interface CreateFloorResponse {
+  floorNo: number;
+}
+
+export type CreateFloorResponseDto = ResponseDto<CreateFloorResponse>;
+export type GetPictureDetailResponseDto = ResponseDto<PictureDetail>;
