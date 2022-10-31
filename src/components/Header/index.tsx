@@ -5,10 +5,12 @@ import ArrowBackIcon from '@/assets/icons/ArrowBack';
 import { COLOR } from '@/constants/styles/colors';
 
 interface HeaderProps {
+  headerLeft?: () => React.ReactNode;
   headerTitle?: string | (() => React.ReactNode);
   headerRight?: () => React.ReactNode;
   backgroundColor?: string;
   iconColor?: string;
+  onGoBack?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -44,17 +46,29 @@ const styles = StyleSheet.create({
 });
 
 const Header = ({
+  headerLeft,
   headerTitle,
   headerRight,
+  onGoBack,
   backgroundColor = COLOR.mono.white,
   iconColor = COLOR.mono.black,
 }: HeaderProps) => {
   const navigation = useNavigation();
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <Pressable style={styles.arrowLeft} onPress={() => navigation.goBack()}>
-        <ArrowBackIcon color={iconColor} />
-      </Pressable>
+      {headerLeft ? (
+        headerLeft()
+      ) : (
+        <Pressable
+          style={styles.arrowLeft}
+          onPress={() => {
+            onGoBack?.();
+            navigation.goBack();
+          }}
+        >
+          <ArrowBackIcon color={iconColor} />
+        </Pressable>
+      )}
       {typeof headerTitle === 'string' ? (
         <Text style={styles.text}>{headerTitle}</Text>
       ) : (
