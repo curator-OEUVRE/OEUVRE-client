@@ -29,6 +29,7 @@ export type FloorStackParamsList = {
   [Screen.FloorViewerScreen]: FloorViewerScreenParams;
   [Screen.ImageDetailScreen]: ImageDetailScreenParams;
   [Screen.EditFloorScreen]: EditFloorScreenParams;
+  [Screen.ImageDetailScreen]: ImageDetailScreenParams;
 };
 
 const Stack = createStackNavigator<FloorStackParamsList>();
