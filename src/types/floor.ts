@@ -20,6 +20,7 @@ export interface PictureInfo {
   height: number;
   location: number;
   queue: number;
+  pictureNo: number;
 }
 
 export interface FloorInfo {
@@ -44,3 +45,4 @@ export interface GetFloorResponse extends FloorInfo {
 export type CreateFloorResponseDto = ResponseDto<CreateFloorResponse>;
 export type GetPictureDetailResponseDto = ResponseDto<PictureDetail>;
 export type GetFloorResponseDto = ResponseDto<GetFloorResponse>;
+export type EditFloorResponseDto = ResponseDto<string>;

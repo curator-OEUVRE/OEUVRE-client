@@ -42,10 +42,10 @@ const PictureDescriptionScreen = () => {
         if (isEditMode) {
           setPictures([...pictures, ...tempPictures]);
           clearTempPictures();
+          navigation.pop(2);
+        } else {
+          navigation.navigate(Screen.FloorInfoFormScreen);
         }
-        navigation.navigate(
-          isEditMode ? Screen.EditFloorScreen : Screen.FloorInfoFormScreen,
-        );
       }}
     >
       <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>

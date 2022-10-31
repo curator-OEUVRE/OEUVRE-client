@@ -14,6 +14,7 @@ const PICTURES: PictureInfo[] = [
     location: 0,
     hashtags: [],
     queue: 1,
+    pictureNo: 0,
   },
   {
     imageUrl:
@@ -24,6 +25,7 @@ const PICTURES: PictureInfo[] = [
     location: 20 / 375,
     hashtags: [],
     queue: 2,
+    pictureNo: 0,
   },
   {
     imageUrl:
@@ -34,6 +36,7 @@ const PICTURES: PictureInfo[] = [
     location: 30 / 375,
     hashtags: [],
     queue: 3,
+    pictureNo: 0,
   },
   {
     imageUrl:
@@ -44,6 +47,7 @@ const PICTURES: PictureInfo[] = [
     location: -50 / 375,
     hashtags: [],
     queue: 4,
+    pictureNo: 0,
   },
 ];
 

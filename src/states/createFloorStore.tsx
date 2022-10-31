@@ -1,9 +1,14 @@
 import create from 'zustand';
 import { ApiResult } from '@/apis/common';
-import { createFloor } from '@/apis/floor';
+import { createFloor, editFloor } from '@/apis/floor';
 import { FormInputStatus } from '@/components';
 import { COLOR } from '@/constants/styles';
-import { PictureInfo, CreateFloorResponseDto, FloorInfo } from '@/types/floor';
+import {
+  PictureInfo,
+  CreateFloorResponseDto,
+  FloorInfo,
+  EditFloorResponseDto,
+} from '@/types/floor';
 
 interface FormInfo<T> {
   status: FormInputStatus;
@@ -36,6 +41,7 @@ interface CreateFloorStore {
   setIsPublic: (isPublic: boolean) => void;
   setTexture: (texture: number) => void;
   createFloor: () => ApiResult<CreateFloorResponseDto>;
+  editFloor: (floorNo: number) => ApiResult<EditFloorResponseDto>;
   setFloor: (floor: FloorInfo) => void;
 }
 
@@ -47,6 +53,7 @@ const createDefaultPictureInfo = (info: Partial<PictureInfo>): PictureInfo => ({
   height: 0.5,
   location: 0,
   queue: 1,
+  pictureNo: 0,
   ...info,
 });
 
@@ -106,7 +113,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
     const key = isEditMode ? 'tempPictures' : 'pictures';
     set((state) => ({
       ...state,
-      pictures: state[key].map((picture, index) => {
+      [key]: state[key].map((picture, index) => {
         if (index === imageIndex) {
           return { ...picture, hashtags };
         }
@@ -131,6 +138,22 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       name: name.value,
       pictures,
       texture,
+    });
+    return result;
+  },
+  editFloor: async (floorNo: number) => {
+    const { color, isCommentAvailable, isPublic, name, pictures, texture } =
+      get();
+    const result = await editFloor({
+      floor: {
+        color,
+        isCommentAvailable,
+        isPublic,
+        name: name.value,
+        pictures,
+        texture,
+      },
+      floorNo,
     });
     return result;
   },

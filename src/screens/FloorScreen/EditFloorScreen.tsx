@@ -1,7 +1,9 @@
 /* eslint-disable react-native/no-raw-text */
 import {
   CompositeNavigationProp,
+  RouteProp,
   useNavigation,
+  useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
@@ -67,6 +69,11 @@ export type EditFloorScreenNP = CompositeNavigationProp<
   StackNavigationProp<RootStackParamsList>
 >;
 
+export type EditFloorScreenRP = RouteProp<
+  FloorStackParamsList,
+  Screen.EditFloorScreen
+>;
+
 interface SuccessModalProps {
   onPress: () => void;
 }
@@ -93,25 +100,65 @@ const EditFloorScreen = () => {
       lockAsync(OrientationLock.DEFAULT);
     };
   }, []);
-
+  const { params } = useRoute<EditFloorScreenRP>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
-  const { pictures, setPictures, color, name, createFloor, isEditMode } =
-    useCreateFloorStore();
+  const {
+    pictures,
+    setPictures,
+    color,
+    name,
+    createFloor,
+    isEditMode,
+    editFloor,
+    setIsEditMode,
+  } = useCreateFloorStore();
 
   const onConfirm = useCallback(async () => {
-    const images = pictures.map((picture) => picture.imageUrl);
+    const newImages = pictures.filter((picture) => picture.pictureNo === 0);
+    const images = newImages.map((picture) => picture.imageUrl);
     const urls = await uploadImages(images, name.value);
-    const newPictures = pictures.map((picture, i) => ({
-      ...picture,
-      imageUrl: urls[i],
-      queue: i + 1,
-    }));
+    let idx = 0;
+    const newPictures = pictures.map((picture, i) => {
+      if (picture.pictureNo > 0)
+        return {
+          ...picture,
+          queue: i + 1,
+        };
+      return {
+        ...picture,
+        // eslint-disable-next-line no-plusplus
+        imageUrl: urls[idx++],
+        queue: i + 1,
+      };
+    });
     setPictures(newPictures);
-    const result = await createFloor();
-    setModalVisible(true);
-  }, [createFloor, name.value, pictures, setPictures, uploadImages]);
+    if (isEditMode) {
+      if (!params?.floorNo) return;
+      const result = editFloor(params.floorNo);
+      console.log(result);
+      setIsEditMode(false);
+      navigation.navigate(Screen.FloorViewerScreen, {
+        floorNo: params.floorNo,
+      });
+    } else {
+      const result = await createFloor();
+      console.log(result);
+      setModalVisible(true);
+    }
+  }, [
+    createFloor,
+    name.value,
+    pictures,
+    setPictures,
+    uploadImages,
+    setIsEditMode,
+    editFloor,
+    isEditMode,
+    params?.floorNo,
+    navigation,
+  ]);
 
   const ConfirmButton = useCallback(
     () => (

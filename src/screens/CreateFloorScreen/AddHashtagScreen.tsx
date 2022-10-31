@@ -64,13 +64,13 @@ const AddHashtagScreen = () => {
 
   const [inputText, setInputText] = useState('');
 
-  const { hashtags, setHashtag } = useCreateFloorStore(
-    (state) => ({
-      hashtags: state.pictures[route.params.id].hashtags,
+  const { hashtags, setHashtag } = useCreateFloorStore((state) => {
+    const key = state.isEditMode ? 'tempPictures' : 'pictures';
+    return {
+      hashtags: state[key][route.params.id].hashtags,
       setHashtag: state.setHashtag,
-    }),
-    shallow,
-  );
+    };
+  }, shallow);
 
   const addHashtag = useCallback(
     (newTag: string) => {
