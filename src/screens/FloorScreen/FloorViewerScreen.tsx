@@ -1,20 +1,14 @@
 /* eslint-disable react-native/no-raw-text */
 import {
-  RouteProp,
-  useRoute,
-  useNavigation,
   CompositeNavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { Pressable, StyleSheet, View, Text } from 'react-native';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFloor } from '@/apis/floor';
 import AlertIcon from '@/assets/icons/Alert';

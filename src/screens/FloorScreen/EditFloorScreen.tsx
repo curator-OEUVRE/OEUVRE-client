@@ -137,6 +137,7 @@ const EditFloorScreen = () => {
     if (isEditMode) {
       if (!params?.floorNo) return;
       const result = editFloor(params.floorNo);
+      // eslint-disable-next-line no-console
       console.log(result);
       setIsEditMode(false);
       navigation.navigate(Screen.FloorViewerScreen, {
@@ -144,6 +145,7 @@ const EditFloorScreen = () => {
       });
     } else {
       const result = await createFloor();
+      // eslint-disable-next-line no-console
       console.log(result);
       setModalVisible(true);
     }
@@ -197,7 +199,7 @@ const EditFloorScreen = () => {
           addPictures={addPictures}
         />
       </View>
-      {modalVisible && <SuccessModal onPress={() => console.log('press!!')} />}
+      {modalVisible && <SuccessModal onPress={() => {}} />}
     </SafeAreaView>
   );
 };

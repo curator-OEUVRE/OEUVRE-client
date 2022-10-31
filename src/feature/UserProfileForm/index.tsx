@@ -101,6 +101,7 @@ const UserProfileForm = ({ onNextPress }: Props) => {
       setToken(accessToken, refreshToken);
       onNextPress?.();
     } else {
+      // eslint-disable-next-line no-console
       console.log(response.result.info);
     }
   };

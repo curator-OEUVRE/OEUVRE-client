@@ -71,6 +71,5 @@ export const editFloor = async ({ floor, floorNo }: EditFloorParams) => {
       },
     },
   );
-  console.log(response);
   return response;
 };
