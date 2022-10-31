@@ -29,15 +29,14 @@ export const Routes = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={Navigator.AuthStack}
       >
-        <Stack.Screen name={Navigator.FloorStack} component={FloorStack} />
         {accessToken ? (
           <Stack.Screen name={Navigator.MainTab} component={MainTabNavigator} />
         ) : (
           <Stack.Screen name={Navigator.AuthStack} component={AuthStack} />
         )}
         <Stack.Screen name={Screen.WelcomeScreen} component={WelcomeScreen} />
+        <Stack.Screen name={Navigator.FloorStack} component={FloorStack} />
       </Stack.Navigator>
     </NavigationContainer>
   );
