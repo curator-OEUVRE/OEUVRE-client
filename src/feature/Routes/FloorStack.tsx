@@ -36,7 +36,7 @@ const Stack = createStackNavigator<FloorStackParamsList>();
 
 const FloorStack = () => (
   <Stack.Navigator
-    initialRouteName={Screen.FloorViewerScreen}
+    initialRouteName={Screen.AddPictureScreen}
     screenOptions={{
       headerShown: false,
     }}
@@ -54,7 +54,6 @@ const FloorStack = () => (
     <Stack.Screen
       name={Screen.FloorViewerScreen}
       component={FloorViewerScreen}
-      initialParams={{ floorNo: 11 }}
     />
     <Stack.Screen
       name={Screen.ImageDetailScreen}
