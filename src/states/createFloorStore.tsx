@@ -15,6 +15,7 @@ interface FormInfo<T> {
 interface CreateFloorStore {
   isEditMode: boolean;
   pictures: PictureInfo[];
+  tempPictures: PictureInfo[];
   name: FormInfo<string>;
   color: string;
   isCommentAvailable: boolean;
@@ -26,6 +27,7 @@ interface CreateFloorStore {
     images: { imageUrl: string; width: number; height: number }[],
   ) => void;
   setPictures: (pictures: PictureInfo[]) => void;
+  clearTempPictures: () => void;
   onChangeDescriptionByIdx: (idx: number) => (description: string) => void;
   setHashtag: (imageIndex: number, hashtags: string[]) => void;
   setName: (data: Partial<FormInfo<string>>) => void;
@@ -58,6 +60,7 @@ export const FLOOR_TEXTURES = [[0]];
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   isEditMode: false,
   pictures: [],
+  tempPictures: [],
   name: {
     status: FormInputStatus.Initial,
     value: '',
@@ -72,26 +75,38 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
     set((state) => ({ ...state, isEditMode }));
   },
   createPictures: (images) => {
+    const { isEditMode } = get();
+    const key = isEditMode ? 'tempPictures' : 'pictures';
     set((state) => ({
       ...state,
-      pictures: images.map((info) => createDefaultPictureInfo(info)),
+      [key]: images.map((info) => createDefaultPictureInfo(info)),
+    }));
+  },
+  clearTempPictures: () => {
+    set((state) => ({
+      ...state,
+      tempPictures: [],
     }));
   },
   setPictures: (pictures) => set((state) => ({ ...state, pictures })),
   onChangeDescriptionByIdx: (idx: number) => (description: string) => {
+    const { isEditMode } = get();
+    const key = isEditMode ? 'tempPictures' : 'pictures';
     set((state) => ({
       ...state,
-      pictures: [
-        ...state.pictures.slice(0, idx),
-        { ...state.pictures[idx], description },
-        ...state.pictures.slice(idx + 1),
+      [key]: [
+        ...state[key].slice(0, idx),
+        { ...state[key][idx], description },
+        ...state[key].slice(idx + 1),
       ],
     }));
   },
   setHashtag: (imageIndex, hashtags) => {
+    const { isEditMode } = get();
+    const key = isEditMode ? 'tempPictures' : 'pictures';
     set((state) => ({
       ...state,
-      pictures: state.pictures.map((picture, index) => {
+      pictures: state[key].map((picture, index) => {
         if (index === imageIndex) {
           return { ...picture, hashtags };
         }

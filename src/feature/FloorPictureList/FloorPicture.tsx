@@ -42,6 +42,7 @@ interface FloorPictureProps extends RenderItemParams<PictureInfo> {
   activeLine: number;
   activeIndexAnim?: SharedValue<number>;
   setActiveLine: (line: number) => void;
+  addPictures?: () => void;
 }
 
 const FloorPicture = ({
@@ -53,6 +54,7 @@ const FloorPicture = ({
   activeLine,
   setActiveLine,
   activeIndexAnim,
+  addPictures,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
   const BASE_SIZE = height > width ? width : height;
@@ -128,7 +130,7 @@ const FloorPicture = ({
           style={[styles.line, animStyle, { height: BASE_SIZE * 0.5 }]}
         >
           {isLineActive && (
-            <Pressable>
+            <Pressable onPress={() => addPictures?.()}>
               <Animated.View entering={FadeIn} exiting={FadeOut}>
                 <AddCircleIcon
                   width={LINE_BUTTON_SIZE}

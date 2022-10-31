@@ -3,7 +3,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import {
   Image,
   Keyboard,
@@ -130,20 +130,42 @@ const FloorInfoFormScreen = () => {
     setIsPublic,
     isCommentAvailable,
     setIsCommentAvailable,
+    isEditMode,
   } = useCreateFloorStore();
+  const snapshot = useRef({
+    name,
+    color,
+    isPublic,
+    isCommentAvailable,
+    setIsCommentAvailable,
+  });
+
+  // for edit mode
+  const onGoBack = () => {
+    if (!isEditMode) return;
+    setName(snapshot.current.name);
+    setColor(snapshot.current.color);
+    setIsPublic(snapshot.current.isPublic);
+    setIsCommentAvailable(snapshot.current.isCommentAvailable);
+    setIsCommentAvailable(snapshot.current.isCommentAvailable);
+  };
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   const ConfirmButton = useCallback(
     () => (
       <Pressable>
         <Text
           style={[TEXT_STYLE.button16M, styles.confirmText]}
-          onPress={() => navigation.navigate(Screen.EditFloorScreen)}
+          onPress={() =>
+            isEditMode
+              ? navigation.navigate(Screen.EditFloorScreen)
+              : navigation.goBack()
+          }
         >
-          다음
+          {isEditMode ? '완료' : '다음'}
         </Text>
       </Pressable>
     ),
-    [],
+    [navigation, isEditMode],
   );
 
   const FloorNameLength = useCallback(
@@ -158,7 +180,11 @@ const FloorInfoFormScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.safeAreaView}>
-        <Header headerTitle="플로어 추가" headerRight={ConfirmButton} />
+        <Header
+          headerTitle="플로어 추가"
+          headerRight={ConfirmButton}
+          onGoBack={onGoBack}
+        />
         <UserInputLayout
           infoMessage={`멋진 사진이네요!\n플로어를 소개해 주세요`}
           gap={28}

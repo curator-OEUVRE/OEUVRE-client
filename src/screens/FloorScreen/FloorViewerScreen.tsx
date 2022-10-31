@@ -102,7 +102,7 @@ const FloorViewerScreen = () => {
     if (!floorInfo) return;
     setIsEditMode(true);
     setFloor(floorInfo);
-    navigation.navigate(Screen.EditFloorScreen);
+    navigation.navigate(Screen.EditFloorScreen, { floorNo });
   };
 
   const bottomSheetForEditor = [

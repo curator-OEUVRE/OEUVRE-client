@@ -57,7 +57,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export type EditFloorScreenParams = undefined;
+export type EditFloorScreenParams =
+  | {
+      floorNo: number;
+    }
+  | undefined;
 export type EditFloorScreenNP = CompositeNavigationProp<
   StackNavigationProp<FloorStackParamsList, Screen.EditFloorScreen>,
   StackNavigationProp<RootStackParamsList>
@@ -95,7 +99,6 @@ const EditFloorScreen = () => {
   const { uploadImages } = useUploadImage();
   const { pictures, setPictures, color, name, createFloor, isEditMode } =
     useCreateFloorStore();
-  console.log(isEditMode);
 
   const onConfirm = useCallback(async () => {
     const images = pictures.map((picture) => picture.imageUrl);
@@ -107,7 +110,6 @@ const EditFloorScreen = () => {
     }));
     setPictures(newPictures);
     const result = await createFloor();
-    console.log(result.result);
     setModalVisible(true);
   }, [createFloor, name.value, pictures, setPictures, uploadImages]);
 
@@ -121,12 +123,18 @@ const EditFloorScreen = () => {
   );
   const headerTitle = isEditMode
     ? () => (
-        <Pressable style={styles.wrapTitle}>
+        <Pressable
+          style={styles.wrapTitle}
+          onPress={() => navigation.navigate(Screen.FloorInfoFormScreen)}
+        >
           <Text style={[styles.title, TEXT_STYLE.body16M]}>{name.value}</Text>
           <PencilIcon color={COLOR.mono.black} />
         </Pressable>
       )
     : '플로어 추가';
+  const addPictures = useCallback(() => {
+    navigation.navigate(Screen.AddPictureScreen);
+  }, [navigation]);
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
@@ -139,6 +147,7 @@ const EditFloorScreen = () => {
           pictures={pictures}
           editable
           setPictures={setPictures}
+          addPictures={addPictures}
         />
       </View>
       {modalVisible && <SuccessModal onPress={() => console.log('press!!')} />}

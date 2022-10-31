@@ -13,6 +13,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import PictureDescriptionList from '@/feature/PictureDescriptionList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { useCreateFloorStore } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -33,14 +34,23 @@ export type PictureDescriptionScreenNP = CompositeNavigationProp<
 
 const PictureDescriptionScreen = () => {
   const navigation = useNavigation<PictureDescriptionScreenNP>();
-
+  const { isEditMode, pictures, tempPictures, setPictures, clearTempPictures } =
+    useCreateFloorStore();
   const headerRight = () => (
     <Pressable
       onPress={() => {
-        navigation.navigate(Screen.FloorInfoFormScreen);
+        if (isEditMode) {
+          setPictures([...pictures, ...tempPictures]);
+          clearTempPictures();
+        }
+        navigation.navigate(
+          isEditMode ? Screen.EditFloorScreen : Screen.FloorInfoFormScreen,
+        );
       }}
     >
-      <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>다음</Text>
+      <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>
+        {isEditMode ? '완료' : '다음'}
+      </Text>
     </Pressable>
   );
   return (

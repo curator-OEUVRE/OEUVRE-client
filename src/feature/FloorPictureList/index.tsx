@@ -45,6 +45,7 @@ interface Props {
   pictures: PictureInfo[];
   editable?: boolean;
   setPictures?: (newData: PictureInfo[]) => void;
+  addPictures?: () => void;
 }
 
 interface Layout {
@@ -57,9 +58,13 @@ interface Layout {
 const keyExtractor = (item: PictureInfo): string => item.imageUrl;
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const FloorPictureList = ({ pictures, editable, setPictures }: Props) => {
+const FloorPictureList = ({
+  pictures,
+  editable,
+  setPictures,
+  addPictures,
+}: Props) => {
   const { height: windowHeight } = useDimensions();
-
   const translateY = useRef<SharedValue<number>>();
   const absoluteX = useRef<SharedValue<number>>();
   const absoluteY = useRef<SharedValue<number>>();
@@ -81,11 +86,11 @@ const FloorPictureList = ({ pictures, editable, setPictures }: Props) => {
       pageX <= cx && cx <= pageX + width && pageY <= cy && cy <= pageY + height
     );
   });
-
   const renderItem = useCallback(
     (props: RenderItemParams<PictureInfo>) => (
       <FloorPicture
         {...props}
+        addPictures={addPictures}
         isDragging={isDragging}
         editable={editable}
         activeLine={activeLine}
@@ -93,7 +98,14 @@ const FloorPictureList = ({ pictures, editable, setPictures }: Props) => {
         activeIndexAnim={activeIndexAnim.current}
       />
     ),
-    [isDragging, editable, activeLine, setActiveLine, activeIndexAnim],
+    [
+      isDragging,
+      editable,
+      activeLine,
+      setActiveLine,
+      activeIndexAnim,
+      addPictures,
+    ],
   );
 
   const animatedPressableStyles = useAnimatedStyle(() => ({
