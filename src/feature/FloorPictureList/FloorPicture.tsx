@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import {
   RenderItemParams,
   ScaleDecorator,
@@ -16,7 +16,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import AddCircleIcon from '@/assets/icons/AddCircle';
-import { COLOR } from '@/constants/styles';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
 import type { PictureInfo } from '@/types/floor';
 
@@ -33,6 +33,10 @@ const styles = StyleSheet.create({
   },
   lineContainer: {
     alignSelf: 'center',
+  },
+  text: {
+    color: COLOR.mono.gray7,
+    marginTop: 5,
   },
 });
 
@@ -143,7 +147,10 @@ const FloorPicture = ({
       </Animated.View>
     </Pressable>
   );
-
+  const description =
+    item.description.length > 10
+      ? `${item.description.substring(0, 10)}...`
+      : item.description;
   return (
     <GestureDetector gesture={pinchGesture}>
       <ScaleDecorator>
@@ -167,6 +174,7 @@ const FloorPicture = ({
             source={{ uri: item.imageUrl }}
             style={imageAnimStyle}
           />
+          <Text style={[styles.text, TEXT_STYLE.body12R]}>{description}</Text>
         </Pressable>
       </ScaleDecorator>
     </GestureDetector>
