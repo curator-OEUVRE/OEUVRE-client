@@ -4,6 +4,7 @@ import {
   RouteProp,
   useNavigation,
   useRoute,
+  useIsFocused,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
@@ -54,6 +55,7 @@ export type FloorViewerScreenNP = CompositeNavigationProp<
 const FloorViewerScreen = () => {
   const { params } = useRoute<FloorViewerScreenRP>();
   const [floorInfo, setFloorInfo] = useState<GetFloorResponse>();
+  const isFocused = useIsFocused();
   const navigation = useNavigation<FloorViewerScreenNP>();
   const { setIsEditMode, setFloor } = useCreateFloorStore();
   const { floorNo } = params;
@@ -70,7 +72,7 @@ const FloorViewerScreen = () => {
       }
     };
     fetchFloor();
-  }, [floorNo]);
+  }, [floorNo, isFocused]);
 
   useLayoutEffect(() => {
     lockAsync(OrientationLock.LANDSCAPE);
