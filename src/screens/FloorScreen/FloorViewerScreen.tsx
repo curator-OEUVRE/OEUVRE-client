@@ -94,6 +94,14 @@ const FloorViewerScreen = () => {
     [onPressMore],
   );
 
+  const onPressPicture = useCallback(
+    (pictureNo: number) => {
+      console.log(pictureNo);
+      navigation.navigate(Screen.ImageDetailScreen, { pictureNo });
+    },
+    [navigation],
+  );
+
   const onEditFloor = () => {
     if (!floorInfo) return;
     setIsEditMode(true);
@@ -150,7 +158,11 @@ const FloorViewerScreen = () => {
         backgroundColor="transparent"
       />
       <View style={styles.wrapList}>
-        <FloorPictureList pictures={pictures} editable={false} />
+        <FloorPictureList
+          pictures={pictures}
+          editable={false}
+          onPressPicture={onPressPicture}
+        />
       </View>
       {renderBottomSheet()}
     </SafeAreaView>

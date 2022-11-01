@@ -47,6 +47,7 @@ interface FloorPictureProps extends RenderItemParams<PictureInfo> {
   activeIndexAnim?: SharedValue<number>;
   setActiveLine: (line: number) => void;
   addPictures?: () => void;
+  onPressPicture?: (pictureNo: number) => void;
 }
 
 const FloorPicture = ({
@@ -59,6 +60,7 @@ const FloorPicture = ({
   setActiveLine,
   activeIndexAnim,
   addPictures,
+  onPressPicture,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
   const BASE_SIZE = height > width ? width : height;
@@ -169,6 +171,7 @@ const FloorPicture = ({
             styles.item,
           ]}
           onLongPress={editable ? drag : undefined}
+          onPress={() => onPressPicture?.(item.pictureNo)}
         >
           <Animated.Image
             source={{ uri: item.imageUrl }}

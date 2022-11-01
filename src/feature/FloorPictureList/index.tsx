@@ -46,6 +46,7 @@ interface Props {
   editable?: boolean;
   setPictures?: (newData: PictureInfo[]) => void;
   addPictures?: () => void;
+  onPressPicture?: (pictureNo: number) => void;
 }
 
 interface Layout {
@@ -63,6 +64,7 @@ const FloorPictureList = ({
   editable,
   setPictures,
   addPictures,
+  onPressPicture,
 }: Props) => {
   const { height: windowHeight } = useDimensions();
   const translateY = useRef<SharedValue<number>>();
@@ -96,6 +98,7 @@ const FloorPictureList = ({
         activeLine={activeLine}
         setActiveLine={setActiveLine}
         activeIndexAnim={activeIndexAnim.current}
+        onPressPicture={onPressPicture}
       />
     ),
     [
@@ -105,6 +108,7 @@ const FloorPictureList = ({
       setActiveLine,
       activeIndexAnim,
       addPictures,
+      onPressPicture,
     ],
   );
 
