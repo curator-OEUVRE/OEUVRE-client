@@ -1,52 +1,48 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { firebase } from '@/services/firebase';
 
-interface useUploadImageProps {
-  image: string | undefined;
-}
+const makeBlob = (imageUri: string): Promise<Blob> =>
+  new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      resolve(xhr.response);
+    };
+    xhr.onerror = () => {
+      reject(new TypeError('Network request failed'));
+    };
+    xhr.responseType = 'blob';
+    xhr.open('GET', imageUri, true);
+    xhr.send(null);
+  });
 
-const useUploadImage = ({ image }: useUploadImageProps) => {
+const useUploadImage = () => {
   const [uploading, setUploading] = useState<boolean>(false);
 
-  const uploadImage = async (
-    path: string,
-    fileName: string,
-    onComplete?: (url: string) => void,
-  ) => {
-    if (!image) return;
-    const blob: Blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = () => {
-        resolve(xhr.response);
-      };
-      xhr.onerror = () => {
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', image, true);
-      xhr.send(null);
-    });
+  const upload = async (image: string, path: string, fileName: string) => {
     const ref = firebase.storage().ref().child(`${path}/${fileName}`);
-    const snapshot = ref.put(blob as Blob);
-    snapshot.on(
-      firebase.storage.TaskEvent.STATE_CHANGED,
-      () => {
-        setUploading(true);
-      },
-      (error) => {
-        setUploading(false);
-        console.log(error);
-      },
-      () => {
-        snapshot.snapshot.ref.getDownloadURL().then((url) => {
-          setUploading(false);
-          onComplete?.(url);
-          return url;
-        });
-      },
-    );
+    const blob = await makeBlob(image);
+    const snapshot = await ref.put(blob);
+    const downloadURL = await snapshot.ref.getDownloadURL();
+    return downloadURL;
   };
-  return { uploading, uploadImage };
+
+  const uploadImage = async (image: string, path: string, fileName: string) => {
+    setUploading(true);
+    const downloadURL = await upload(image, path, fileName);
+    setUploading(false);
+    return downloadURL;
+  };
+
+  const uploadImages = async (images: string[], path: string) => {
+    setUploading(true);
+    const downloadURL = await Promise.all(
+      images.map((image) => upload(image, path, uuidv4())),
+    );
+    setUploading(false);
+    return downloadURL;
+  };
+  return { uploading, uploadImage, uploadImages };
 };
 
 export default useUploadImage;

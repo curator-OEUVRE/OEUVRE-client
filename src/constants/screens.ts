@@ -20,4 +20,6 @@ export enum Screen {
   AddHashtagScreen = 'AddHashtagScreen',
   FloorInfoFormScreen = 'FloorInfoFormScreen',
   ImageDetailScreen = 'ImageDetailScreen',
+  FloorViewerScreen = 'FloorViewerScreen',
+  EditFloorScreen = 'EditFloorScreen',
 }

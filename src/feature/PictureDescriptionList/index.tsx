@@ -13,10 +13,12 @@ const styles = StyleSheet.create({
 });
 
 const PictureDescriptionList = ({ onHashtagPress }: Props) => {
-  const { pictures, onChangeDescriptionByIdx } = useCreateFloorStore();
+  const { pictures, onChangeDescriptionByIdx, tempPictures, isEditMode } =
+    useCreateFloorStore();
+  const data = isEditMode ? tempPictures : pictures;
   return (
     <FlatList
-      data={pictures}
+      data={data}
       keyExtractor={(_, index) => `picture_${index}`}
       renderItem={({ item, index }) => (
         <PictureDescriptionItem

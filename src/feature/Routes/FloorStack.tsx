@@ -11,6 +11,12 @@ import {
 import FloorInfoFormScreen, {
   FloorInfoFormScreenParams,
 } from '@/screens/CreateFloorScreen/FloorInfoFormScreen';
+import {
+  EditFloorScreen,
+  EditFloorScreenParams,
+  FloorViewerScreen,
+  FloorViewerScreenParams,
+} from '@/screens/FloorScreen';
 import ImageDetailScreen, {
   ImageDetailScreenParams,
 } from '@/screens/ImageDetailScreen';
@@ -20,6 +26,9 @@ export type FloorStackParamsList = {
   [Screen.PictureDescriptionScreen]: PictureDescriptionScreenParams;
   [Screen.AddHashtagScreen]: AddHashtagScreenParams;
   [Screen.FloorInfoFormScreen]: FloorInfoFormScreenParams;
+  [Screen.FloorViewerScreen]: FloorViewerScreenParams;
+  [Screen.ImageDetailScreen]: ImageDetailScreenParams;
+  [Screen.EditFloorScreen]: EditFloorScreenParams;
   [Screen.ImageDetailScreen]: ImageDetailScreenParams;
 };
 
@@ -43,9 +52,14 @@ const FloorStack = () => (
       component={FloorInfoFormScreen}
     />
     <Stack.Screen
+      name={Screen.FloorViewerScreen}
+      component={FloorViewerScreen}
+    />
+    <Stack.Screen
       name={Screen.ImageDetailScreen}
       component={ImageDetailScreen}
     />
+    <Stack.Screen name={Screen.EditFloorScreen} component={EditFloorScreen} />
   </Stack.Navigator>
 );
 
