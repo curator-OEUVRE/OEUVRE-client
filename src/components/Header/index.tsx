@@ -62,23 +62,24 @@ const Header = ({
   const navigation = useNavigation();
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      {headerLeft ? (
-        headerLeft()
-      ) : (
-        <Pressable
-          style={styles.arrowLeft}
-          onPress={() => {
-            onGoBack?.();
-            navigation.goBack();
-          }}
-        >
-          <ArrowBackIcon color={iconColor} />
-        </Pressable>
-      )}
+      {headerLeft
+        ? headerLeft()
+        : !hideBackButton && (
+            <Pressable
+              style={styles.arrowLeft}
+              onPress={() => {
+                onGoBack?.();
+                navigation.goBack();
+              }}
+            >
+              <ArrowBackIcon color={iconColor} />
+            </Pressable>
+          )}
+
       {typeof headerTitle === 'string' ? (
         <Text style={[styles.text, { color: iconColor }]}>{headerTitle}</Text>
       ) : (
-        headerTitle && headerTitle({ iconColor })
+        headerTitle && headerTitle()
       )}
       <View style={styles.right}>
         {headerRight && headerRight({ iconColor })}
