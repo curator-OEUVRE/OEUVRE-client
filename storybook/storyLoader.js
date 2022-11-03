@@ -15,7 +15,7 @@ function loadStories() {
   require('../src/feature/FloorPictureList/FloorPictureList.stories');
   require('../src/feature/GuestBookInput/GuestBookInput.stories');
   require('../src/feature/KakaoLogin/KakaoLogin.stories');
-  require('../src/feature/Profile/Profile.stories');
+  require('../src/feature/ProfileCard/ProfileCard.stories');
   require('../src/feature/TermsForm/TermsForm.stories');
   require('../src/feature/GuestBookInput/GuestBookInput.stories');
   require('../src/feature/FloorDropdown/FloorDropdown.stories');
@@ -35,7 +35,7 @@ const stories = [
   '../src/feature/FloorPictureList/FloorPictureList.stories',
   '../src/feature/GuestBookInput/GuestBookInput.stories',
   '../src/feature/KakaoLogin/KakaoLogin.stories',
-  '../src/feature/Profile/Profile.stories',
+  '../src/feature/ProfileCard/ProfileCard.stories',
   '../src/feature/TermsForm/TermsForm.stories',
   '../src/feature/GuestBookInput/GuestBookInput.stories',
   '../src/feature/FloorDropdown/FloorDropdown.stories',

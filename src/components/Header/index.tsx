@@ -7,10 +7,12 @@ import { COLOR } from '@/constants/styles/colors';
 interface HeaderProps {
   headerLeft?: () => React.ReactNode;
   headerTitle?: string | (() => React.ReactNode);
-  headerRight?: () => React.ReactNode;
+  headerRight?: ({ iconColor }: { iconColor?: string }) => React.ReactNode;
   backgroundColor?: string;
   iconColor?: string;
   onGoBack?: () => void;
+  titleColor?: string;
+  hideBackButton?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -54,6 +56,8 @@ const Header = ({
   onGoBack,
   backgroundColor = COLOR.mono.white,
   iconColor = COLOR.mono.black,
+  titleColor = COLOR.mono.black,
+  hideBackButton = false,
 }: HeaderProps) => {
   const navigation = useNavigation();
   return (
@@ -74,9 +78,11 @@ const Header = ({
       {typeof headerTitle === 'string' ? (
         <Text style={[styles.text, { color: iconColor }]}>{headerTitle}</Text>
       ) : (
-        headerTitle && headerTitle()
+        headerTitle && headerTitle({ iconColor })
       )}
-      <View style={styles.right}>{headerRight && headerRight()}</View>
+      <View style={styles.right}>
+        {headerRight && headerRight({ iconColor })}
+      </View>
     </View>
   );
 };

@@ -14,6 +14,8 @@ export interface MyProfile extends UserProfile {
   isGroupExhibitionAlarmOn: boolean;
   isLikeAlarmOn: boolean;
   isFollowAlarmOn: boolean;
+  isMessageAlarmOn: boolean;
+  userNo: number;
 }
 
 export interface OtherUserProfile extends UserProfile {

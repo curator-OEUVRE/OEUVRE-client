@@ -9,6 +9,7 @@ interface AuthStoreValues {
 
 interface AuthStore extends AuthStoreValues {
   setToken: (accessToken: string, refreshToken: string) => void;
+  clear: () => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -21,6 +22,12 @@ export const useAuthStore = create<AuthStore>()(
           ...state,
           accessToken,
           refreshToken,
+        })),
+      clear: () =>
+        set((state) => ({
+          ...state,
+          accessToken: undefined,
+          refreshToken: undefined,
         })),
     }),
     {

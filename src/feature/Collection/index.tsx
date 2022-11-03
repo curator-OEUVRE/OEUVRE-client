@@ -1,17 +1,31 @@
 import MasonryList from '@react-native-seoul/masonry-list';
 import { useCallback } from 'react';
-import { Image, StyleSheet, Pressable } from 'react-native';
+import { Image, StyleSheet, Pressable, View, Text } from 'react-native';
+import BookmarkFilledIcon from '@/assets/icons/BookmarkFilled';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
 import type { PictureMini } from '@/types/floor';
 
 interface Props {
   pictures: PictureMini[];
+  refreshing?: boolean;
   onPicturePress?: (pictureNo: number) => void;
+  onEndReached?: () => void;
+  onRefresh?: () => void;
 }
 
 const styles = StyleSheet.create({
+  emptyText: {
+    color: COLOR.mono.gray4,
+    paddingTop: 8,
+  },
   image: {
     alignSelf: 'flex-end',
+  },
+  listEmptyComponent: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingTop: 67,
   },
 });
 
@@ -41,7 +55,22 @@ const CollectionItem = ({ item, onPress, width }: CollectionItemProps) => (
   </Pressable>
 );
 
-const Collection = ({ pictures, onPicturePress }: Props) => {
+const ListEmptyComponent = () => (
+  <View style={styles.listEmptyComponent}>
+    <BookmarkFilledIcon color={COLOR.mono.gray3} width={72} height={72} />
+    <Text style={[TEXT_STYLE.body16M, styles.emptyText]}>
+      아직 컬렉션이 비어있어요
+    </Text>
+  </View>
+);
+
+const Collection = ({
+  pictures,
+  onPicturePress,
+  refreshing,
+  onEndReached,
+  onRefresh,
+}: Props) => {
   const { width } = useDimensions();
 
   const renderItem = useCallback(
@@ -60,6 +89,11 @@ const Collection = ({ pictures, onPicturePress }: Props) => {
       renderItem={renderItem}
       numColumns={2}
       contentContainerStyle={{ paddingRight: width * 0.1 * (1 / 3) }}
+      onEndReached={onEndReached}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      onEndReachedThreshold={0.5}
+      ListEmptyComponent={ListEmptyComponent}
     />
   );
 };

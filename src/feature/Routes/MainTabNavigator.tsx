@@ -4,16 +4,18 @@ import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import { RouteProp } from '@react-navigation/native';
+import { NavigatorScreenParams, RouteProp } from '@react-navigation/native';
 import { View, StyleSheet } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
+import ProfileStack, { type ProfileStackParamsList } from './ProfileStack';
 import GroupIcon from '@/assets/icons/Group';
 import HomeIcon from '@/assets/icons/Home';
 import NotificationIcon from '@/assets/icons/Notification';
 import PhotoIcon from '@/assets/icons/Photo';
 import SearchIcon from '@/assets/icons/Search';
-import { Screen } from '@/constants/screens';
+import { Navigator, Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
+import { BOTTOM_TAB_HEIGHT } from '@/constants/styles/sizes';
 import GroupFeedScreen, {
   GroupFeedScreenParams,
 } from '@/screens/GroupFeedScreen';
@@ -21,7 +23,6 @@ import HomeScreen, { HomeScreenParams } from '@/screens/HomeScreen';
 import NotificationScreen, {
   NotificationScreenParams,
 } from '@/screens/NotificationScreen';
-import ProfileScreen, { ProfileScreenParams } from '@/screens/ProfileScreen';
 import SearchScreen, { SearchScreenParams } from '@/screens/SearchScreen';
 
 interface TabIconProps {
@@ -33,7 +34,6 @@ const tabIconStyles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    height: 50,
     justifyContent: 'center',
   },
 });
@@ -63,7 +63,7 @@ export type MainTabParamsList = {
   [Screen.SearchScreen]: SearchScreenParams;
   [Screen.GroupFeedScreen]: GroupFeedScreenParams;
   [Screen.NotificationScreen]: NotificationScreenParams;
-  [Screen.ProfileScreen]: ProfileScreenParams;
+  [Navigator.ProfileStack]: NavigatorScreenParams<ProfileStackParamsList>;
 };
 
 const MainTab = createBottomTabNavigator<MainTabParamsList>();
@@ -87,7 +87,7 @@ const screenOptions: ScreenOptions = ({ route }) => ({
         return <TabIcon isFocused={props.focused} icon={GroupIcon} />;
       case Screen.NotificationScreen:
         return <TabIcon isFocused={props.focused} icon={NotificationIcon} />;
-      case Screen.ProfileScreen:
+      case Navigator.ProfileStack:
         return <TabIcon isFocused={props.focused} icon={PhotoIcon} />;
       default:
         return <TabIcon isFocused={props.focused} icon={HomeIcon} />;
@@ -97,6 +97,7 @@ const screenOptions: ScreenOptions = ({ route }) => ({
   tabBarShowLabel: false,
   tabBarStyle: {
     backgroundColor: COLOR.mono.white,
+    height: BOTTOM_TAB_HEIGHT,
   },
 });
 
@@ -113,7 +114,7 @@ const MainTabNavigator = () => (
       name={Screen.NotificationScreen}
       component={NotificationScreen}
     />
-    <MainTab.Screen name={Screen.ProfileScreen} component={ProfileScreen} />
+    <MainTab.Screen name={Navigator.ProfileStack} component={ProfileStack} />
   </MainTab.Navigator>
 );
 
