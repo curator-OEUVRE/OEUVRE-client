@@ -141,7 +141,7 @@ const FloorPictureList = ({
             ref={pressableRef}
           >
             <Shadow startColor="#A7A9AB05" style={styles.pressable}>
-              <TrashIcon />
+              <TrashIcon color={COLOR.mono.black} />
             </Shadow>
           </AnimatedPressable>
         </View>

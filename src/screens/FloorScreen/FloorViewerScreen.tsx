@@ -132,7 +132,7 @@ const FloorViewerScreen = () => {
       <BottomSheet.Item label="사진 공유하기" icon={<ShareIcon />} />
       <BottomSheet.Item
         label="플로어 신고하기"
-        icon={<AlertIcon />}
+        icon={<AlertIcon color={COLOR.system.red} />}
         color={COLOR.system.red}
       />
     </BottomSheet.Group>
