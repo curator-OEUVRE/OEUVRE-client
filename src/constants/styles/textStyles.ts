@@ -48,6 +48,10 @@ export const TEXT_STYLE = {
     fontSize: 12,
     fontFamily: 'regular',
   },
+  body12B: {
+    fontSize: 12,
+    fontFamily: 'bold',
+  },
   button16B: {
     fontSize: 16,
     fontFamily: 'bold',
