@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Image, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+  Keyboard,
+} from 'react-native';
 import CheckIcon from '@/assets/icons/Check';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
@@ -70,7 +77,14 @@ const GuestBookInput = ({ avatarUri, onSubmit }: GuestBookInputProps) => {
           value={comment}
           onChangeText={setComment}
         />
-        <Pressable style={styles.wrapIcon} onPress={() => onSubmit(comment)}>
+        <Pressable
+          style={styles.wrapIcon}
+          onPress={() => {
+            onSubmit(comment);
+            setComment('');
+            Keyboard.dismiss();
+          }}
+        >
           <CheckIcon
             color={comment.length > 0 ? COLOR.system.blue : COLOR.mono.gray3}
           />

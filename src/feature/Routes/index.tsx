@@ -8,6 +8,9 @@ import AuthStack, { AuthStackParamsList } from './AuthStack';
 import FloorStack, { FloorStackParamsList } from './FloorStack';
 import MainTabNavigator, { MainTabParamsList } from './MainTabNavigator';
 import { Navigator, Screen } from '@/constants/screens';
+import GuestBookScreen, {
+  GuestBookScreenParams,
+} from '@/screens/GuestBookScreen';
 import WelcomeScreen, { WelcomeScreenParams } from '@/screens/WelcomeScreen';
 import { useAuthStore } from '@/states/authStore';
 
