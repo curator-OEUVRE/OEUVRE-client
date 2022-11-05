@@ -4,11 +4,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Shadow } from 'react-native-shadow-2';
 import ArrowUpIcon from '@/assets/icons/ArrowUp';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import { OtherFloor } from '@/types/guestbook';
 
 interface FloorDropDownProps {
   // 1층부터 시작하지만 여기서 데이터는 array로 들어올 거 같으므로 편의를 위해 0부터 시작하는 idx 사용
   currentIdx: number;
-  floorNames: string[];
+  floors: OtherFloor[];
   onPress: (idx: number) => void;
 }
 
@@ -71,17 +72,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const FloorDropDown = ({
-  currentIdx,
-  floorNames,
-  onPress,
-}: FloorDropDownProps) => {
+const FloorDropDown = ({ currentIdx, floors, onPress }: FloorDropDownProps) => {
+  const [open, setOpen] = useState<boolean>(false);
   const renderFloors = () =>
-    floorNames
-      .map((name, idx) => (
+    floors
+      .map(({ name, floorNo }, idx) => (
         <Pressable
           style={[styles.option, idx > 0 && styles.borderBottom]}
-          onPress={() => onPress(idx)}
+          onPress={() => {
+            onPress(floorNo);
+            setOpen(false);
+          }}
           key={`floor_${idx + 1}_${name}`}
         >
           <Text style={styles.floorNum}>{idx + 1}F</Text>
@@ -99,7 +100,6 @@ const FloorDropDown = ({
         </Pressable>
       ))
       .reverse();
-  const [open, setOpen] = useState<boolean>(false);
   return (
     <View style={styles.container}>
       <Pressable
@@ -107,7 +107,9 @@ const FloorDropDown = ({
         onPress={() => setOpen((prev) => !prev)}
       >
         <Text style={[styles.title, TEXT_STYLE.title18M]}>
-          {floorNames[currentIdx]}
+          {currentIdx >= 0 && currentIdx < floors.length
+            ? floors[currentIdx].name
+            : '플로어'}
         </Text>
         <ArrowUpIcon style={!open && styles.arrow} />
       </Pressable>
