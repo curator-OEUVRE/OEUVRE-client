@@ -5,10 +5,11 @@ import {
   useNavigation,
   useRoute,
   useIsFocused,
+  useFocusEffect,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFloor } from '@/apis/floor';
@@ -80,12 +81,21 @@ const FloorViewerScreen = () => {
     fetchFloor();
   }, [floorNo, isFocused]);
 
-  useLayoutEffect(() => {
-    lockAsync(OrientationLock.LANDSCAPE);
-    return () => {
-      lockAsync(OrientationLock.DEFAULT);
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const lockOrientation = async () => {
+        await lockAsync(OrientationLock.LANDSCAPE);
+      };
+      lockOrientation();
+    }, []),
+  );
+
+  useEffect(
+    () => () => {
+      lockAsync(OrientationLock.PORTRAIT);
+    },
+    [],
+  );
 
   const onPressMore = useCallback(() => {
     setBottomSheetIndex(floorInfo?.isMine ? 1 : 0);
@@ -178,8 +188,8 @@ const FloorViewerScreen = () => {
           onPressPicture={onPressPicture}
         />
       </View>
-      {renderBottomSheet()}
       {guestBookButton}
+      {renderBottomSheet()}
     </SafeAreaView>
   );
 };

@@ -4,10 +4,15 @@ import {
   RouteProp,
   useNavigation,
   useRoute,
+  useFocusEffect,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
-import { lockAsync, OrientationLock } from 'expo-screen-orientation';
+import {
+  lockAsync,
+  OrientationLock,
+  getOrientationLockAsync,
+} from 'expo-screen-orientation';
 import { useCallback, useLayoutEffect, useState } from 'react';
 import { Pressable, StyleSheet, View, Modal, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -94,12 +99,15 @@ const SuccessModal = ({ onPress }: SuccessModalProps) => (
 );
 
 const EditFloorScreen = () => {
-  useLayoutEffect(() => {
-    lockAsync(OrientationLock.LANDSCAPE);
-    return () => {
-      lockAsync(OrientationLock.DEFAULT);
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const lockOrientation = async () => {
+        await lockAsync(OrientationLock.LANDSCAPE);
+      };
+      lockOrientation();
+    }, []),
+  );
+
   const { params } = useRoute<EditFloorScreenRP>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
@@ -174,7 +182,10 @@ const EditFloorScreen = () => {
     ? () => (
         <Pressable
           style={styles.wrapTitle}
-          onPress={() => navigation.navigate(Screen.FloorInfoFormScreen)}
+          onPress={() => {
+            lockAsync(OrientationLock.PORTRAIT);
+            navigation.navigate(Screen.FloorInfoFormScreen);
+          }}
         >
           <Text style={[styles.title, TEXT_STYLE.body16M]}>{name.value}</Text>
           <PencilIcon color={COLOR.mono.black} />
@@ -182,6 +193,7 @@ const EditFloorScreen = () => {
       )
     : '플로어 추가';
   const addPictures = useCallback(() => {
+    lockAsync(OrientationLock.PORTRAIT);
     navigation.navigate(Screen.AddPictureScreen);
   }, [navigation]);
   return (
