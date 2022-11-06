@@ -8,11 +8,7 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
-import {
-  lockAsync,
-  OrientationLock,
-  getOrientationLockAsync,
-} from 'expo-screen-orientation';
+import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useLayoutEffect, useState } from 'react';
 import { Pressable, StyleSheet, View, Modal, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -25,6 +21,7 @@ import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
+import { getColorByBackgroundColor } from '@/services/common/color';
 import { useCreateFloorStore } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
@@ -47,7 +44,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   title: {
-    color: COLOR.mono.black,
     marginRight: 17,
   },
   wrapList: {
@@ -169,7 +165,7 @@ const EditFloorScreen = () => {
     params?.floorNo,
     navigation,
   ]);
-
+  const colorByBackground = getColorByBackgroundColor(color);
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onConfirm}>
@@ -187,8 +183,16 @@ const EditFloorScreen = () => {
             navigation.navigate(Screen.FloorInfoFormScreen);
           }}
         >
-          <Text style={[styles.title, TEXT_STYLE.body16M]}>{name.value}</Text>
-          <PencilIcon color={COLOR.mono.black} />
+          <Text
+            style={[
+              styles.title,
+              TEXT_STYLE.body16M,
+              { color: colorByBackground },
+            ]}
+          >
+            {name.value}
+          </Text>
+          <PencilIcon color={colorByBackground} />
         </Pressable>
       )
     : '플로어 추가';
@@ -202,6 +206,7 @@ const EditFloorScreen = () => {
         headerTitle={headerTitle}
         headerRight={ConfirmButton}
         backgroundColor="transparent"
+        iconColor={colorByBackground}
       />
       <View style={styles.wrapList}>
         <FloorPictureList

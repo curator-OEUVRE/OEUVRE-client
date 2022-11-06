@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     width: 26,
+    zIndex: 10,
   },
   container: {
     alignItems: 'center',
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     right: 18,
+    zIndex: 10,
   },
   text: {
     fontFamily: 'bold',
@@ -70,7 +72,7 @@ const Header = ({
         </Pressable>
       )}
       {typeof headerTitle === 'string' ? (
-        <Text style={styles.text}>{headerTitle}</Text>
+        <Text style={[styles.text, { color: iconColor }]}>{headerTitle}</Text>
       ) : (
         headerTitle && headerTitle()
       )}

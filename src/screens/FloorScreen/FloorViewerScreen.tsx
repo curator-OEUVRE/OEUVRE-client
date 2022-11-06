@@ -2,15 +2,15 @@
 import {
   CompositeNavigationProp,
   RouteProp,
+  useFocusEffect,
+  useIsFocused,
   useNavigation,
   useRoute,
-  useIsFocused,
-  useFocusEffect,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFloor } from '@/apis/floor';
 import AlertIcon from '@/assets/icons/Alert';
@@ -27,6 +27,7 @@ import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { getColorByBackgroundColor } from '@/services/common/color';
 import { useCreateFloorStore } from '@/states/createFloorStore';
 import { GetFloorResponse } from '@/types/floor';
 
@@ -62,6 +63,9 @@ export type FloorViewerScreenNP = CompositeNavigationProp<
 const FloorViewerScreen = () => {
   const { params } = useRoute<FloorViewerScreenRP>();
   const [floorInfo, setFloorInfo] = useState<GetFloorResponse>();
+  const colorByBackground = floorInfo
+    ? getColorByBackgroundColor(floorInfo.color)
+    : COLOR.mono.black;
   const isFocused = useIsFocused();
   const navigation = useNavigation<FloorViewerScreenNP>();
   const { setIsEditMode, setFloor } = useCreateFloorStore();
@@ -104,10 +108,10 @@ const FloorViewerScreen = () => {
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onPressMore}>
-        <MoreIcon color={COLOR.mono.gray7} />
+        <MoreIcon color={colorByBackground} />
       </Pressable>
     ),
-    [onPressMore],
+    [onPressMore, colorByBackground],
   );
 
   const onPressPicture = useCallback(
@@ -171,9 +175,12 @@ const FloorViewerScreen = () => {
   const guestBookButton = (
     <Pressable
       style={styles.textBubble}
-      onPress={() => navigation.navigate(Screen.GuestBookScreen, { floorNo })}
+      onPress={() => {
+        lockAsync(OrientationLock.PORTRAIT);
+        navigation.navigate(Screen.GuestBookScreen, { floorNo });
+      }}
     >
-      <TextBubbleIcon color={COLOR.mono.black} />
+      <TextBubbleIcon color={colorByBackground} />
     </Pressable>
   );
 
@@ -183,6 +190,7 @@ const FloorViewerScreen = () => {
         headerTitle={name}
         headerRight={ConfirmButton}
         backgroundColor="transparent"
+        iconColor={colorByBackground}
       />
       <View style={styles.wrapList}>
         <FloorPictureList

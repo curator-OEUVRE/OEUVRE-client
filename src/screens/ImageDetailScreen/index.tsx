@@ -31,6 +31,7 @@ import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
 import { PictureDetail } from '@/types/floor';
 
@@ -106,6 +107,7 @@ const ImageDetailScreen = () => {
   const { params } = useRoute<ImageDetailScreenRP>();
   const { pictureNo, color } = params;
 
+  const colorByBackground = getColorByBackgroundColor(color);
   const [pictureDetail, setPictureDetail] = useState<PictureDetail>();
   const [isLike, setLike] = useState<boolean>(false);
   const [isEditMode, setEditMode] = useState<boolean>(false);
@@ -182,10 +184,10 @@ const ImageDetailScreen = () => {
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
       <Pressable style={styles.wrapMore} onPress={throttle(toggleLike)}>
-        <Favorite color={COLOR.mono.gray7} />
+        <Favorite color={colorByBackground} />
       </Pressable>
       <Pressable onPress={() => setBottomSheetIndex(1)}>
-        <MoreIcon color={COLOR.mono.gray7} />
+        <MoreIcon color={colorByBackground} />
       </Pressable>
     </View>
   );
@@ -200,7 +202,7 @@ const ImageDetailScreen = () => {
         ]}
       >
         <Header
-          iconColor={COLOR.mono.gray7}
+          iconColor={colorByBackground}
           backgroundColor="transparent"
           headerRight={headerRight}
         />
