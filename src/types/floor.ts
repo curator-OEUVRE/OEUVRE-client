@@ -1,27 +1,5 @@
 import { ResponseDto } from './common';
-
-export type PictureDetail = {
-  description: string;
-  floorNo: number;
-  height: number;
-  imageUrl: string;
-  isLiked: boolean;
-  isMine: boolean;
-  isScraped: boolean;
-  pictureNo: number;
-  width: number;
-};
-
-export interface PictureInfo {
-  imageUrl: string;
-  description: string;
-  hashtags: string[];
-  width: number;
-  height: number;
-  location: number;
-  queue: number;
-  pictureNo: number;
-}
+import { PictureInfo } from './picture';
 
 export interface FloorInfo {
   color: string;
@@ -43,6 +21,5 @@ export interface GetFloorResponse extends FloorInfo {
 }
 
 export type CreateFloorResponseDto = ResponseDto<CreateFloorResponse>;
-export type GetPictureDetailResponseDto = ResponseDto<PictureDetail>;
 export type GetFloorResponseDto = ResponseDto<GetFloorResponse>;
 export type EditFloorResponseDto = ResponseDto<string>;

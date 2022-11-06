@@ -17,7 +17,8 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getPictureDetail } from '@/apis/floor';
+import { getPictureDetail } from '@/apis/picture';
+import * as PictureAPI from '@/apis/picture';
 import BookmarkIcon from '@/assets/icons/Bookmark';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
@@ -33,7 +34,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
-import { PictureDetail } from '@/types/floor';
+import { PictureDetail } from '@/types/picture';
 
 enum OrientationType {
   portrait,
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: COLOR.mono.gray7,
+    textAlign: 'center',
   },
   wrapFooter: {
     lineHeight: 21,
@@ -109,7 +111,6 @@ const ImageDetailScreen = () => {
 
   const colorByBackground = getColorByBackgroundColor(color);
   const [pictureDetail, setPictureDetail] = useState<PictureDetail>();
-  const [isLike, setLike] = useState<boolean>(false);
   const [isEditMode, setEditMode] = useState<boolean>(false);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
 
@@ -156,18 +157,6 @@ const ImageDetailScreen = () => {
     });
   }, [scale, onAnimation]);
 
-  const toggleLike = () => {
-    if (!isEditMode) return;
-    setLike((prev) => {
-      if (!prev) scaleImage();
-      return !prev;
-    });
-  };
-
-  const onScrap = () => {
-    scaleImage();
-  };
-
   const doubleTapRef = useRef();
   const imageStyle = useAnimatedStyle(() => ({
     transform: [{ scale: Math.max(scale.value, 0) }],
@@ -175,12 +164,45 @@ const ImageDetailScreen = () => {
   }));
 
   if (!pictureDetail) return <Text>Loading</Text>;
-  const { width, height, description, imageUrl } = pictureDetail;
+  const { width, height, description, imageUrl, isLiked, isScraped } =
+    pictureDetail;
+
+  const toggleLike = async () => {
+    if (!isEditMode) return;
+    const API = pictureDetail.isLiked
+      ? PictureAPI.unlikePicture
+      : PictureAPI.likePicture;
+    await API({ pictureNo });
+    setPictureDetail((prev) => {
+      if (!prev) return prev;
+      if (!prev.isLiked) scaleImage();
+      return {
+        ...prev,
+        isLiked: !prev.isLiked,
+      };
+    });
+  };
+
+  const toggleScrap = async () => {
+    const API = pictureDetail.isScraped
+      ? PictureAPI.unscrapPicture
+      : PictureAPI.scrapPicture;
+    await API({ pictureNo });
+    setPictureDetail((prev) => {
+      if (!prev) return prev;
+      if (!prev.isScraped) scaleImage();
+      return {
+        ...prev,
+        isScraped: !prev.isScraped,
+      };
+    });
+  };
+
   const orientation =
     width > height ? OrientationType.landscape : OrientationType.portrait;
   const SIZE =
     orientation === OrientationType.landscape ? windowHeight : windowWidth;
-  const Favorite = isLike ? FavoriteIcon : FavoriteOutlineIcon;
+  const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
       <Pressable style={styles.wrapMore} onPress={throttle(toggleLike)}>
@@ -231,7 +253,7 @@ const ImageDetailScreen = () => {
         <BottomSheet.Item
           label="사진 스크랩하기"
           icon={<BookmarkIcon />}
-          onPress={onScrap}
+          onPress={toggleScrap}
         />
         <BottomSheet.Item label="사진 공유하기" icon={<ShareIcon />} />
       </BottomSheet.Group>

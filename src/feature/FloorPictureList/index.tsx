@@ -16,7 +16,7 @@ import FloorPicture from './FloorPicture';
 import TrashIcon from '@/assets/icons/Trash';
 import { COLOR } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import type { PictureInfo } from '@/types/floor';
+import type { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   bottom: {

@@ -18,7 +18,7 @@ import Animated, {
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import type { PictureInfo } from '@/types/floor';
+import type { PictureInfo } from '@/types/picture';
 
 const LINE_BUTTON_SIZE = 40;
 

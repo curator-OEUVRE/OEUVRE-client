@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Hashtag from '@/assets/icons/Hashtag';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
-import { PictureInfo } from '@/types/floor';
+import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   container: {
