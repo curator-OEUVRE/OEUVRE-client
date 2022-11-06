@@ -1,7 +1,14 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -24,7 +31,6 @@ import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import useDimensions from '@/hooks/useDimensions';
 import throttle from '@/services/common/throttle';
 import { PictureDetail } from '@/types/floor';
 
@@ -45,7 +51,6 @@ export type ImageDetailScreenRP = RouteProp<
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLOR.mono.white,
     flex: 1,
   },
   image: {
@@ -94,7 +99,7 @@ const styles = StyleSheet.create({
 });
 
 const ImageDetailScreen = () => {
-  const { width: windowWidth, height: windowHeight } = useDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
   const { params } = useRoute<ImageDetailScreenRP>();
@@ -123,24 +128,30 @@ const ImageDetailScreen = () => {
       }
     };
     fetchPictureDetail();
-    return () => {
-      lockAsync(OrientationLock.DEFAULT);
-    };
   }, [pictureNo]);
 
   const isBottomSheetOpen = bottomSheetIndex >= 0;
-  const scale = useSharedValue(0.0001);
+  const scale = useSharedValue(0);
+  const onAnimation = useSharedValue(false);
   const onSingleTap = useCallback(() => {
     setEditMode((prev) => !prev);
   }, []);
 
   const scaleImage = useCallback(() => {
+    onAnimation.value = true;
     scale.value = withSpring(1, undefined, (isFinished) => {
       if (isFinished) {
-        scale.value = withDelay(500, withSpring(0.0001));
+        scale.value = withDelay(
+          500,
+          withSpring(0, undefined, (done) => {
+            if (done) {
+              onAnimation.value = false;
+            }
+          }),
+        );
       }
     });
-  }, [scale]);
+  }, [scale, onAnimation]);
 
   const toggleLike = () => {
     setLike((prev) => {
@@ -156,6 +167,7 @@ const ImageDetailScreen = () => {
   const doubleTapRef = useRef();
   const imageStyle = useAnimatedStyle(() => ({
     transform: [{ scale: Math.max(scale.value, 0) }],
+    zIndex: onAnimation.value ? 1 : -1,
   }));
 
   if (!pictureDetail) return <Text>Loading</Text>;
