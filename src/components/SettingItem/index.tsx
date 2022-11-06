@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -39,9 +39,16 @@ interface ToggleProps {
   isSelected: boolean;
   style?: StyleProp<ViewStyle>;
   onToggle?: () => void;
+  disabled?: boolean;
 }
 
-const Toggle = ({ left, isSelected, style, onToggle }: ToggleProps) => (
+const Toggle = ({
+  left,
+  isSelected,
+  style,
+  onToggle,
+  disabled,
+}: ToggleProps) => (
   <Base
     left={left}
     right={
@@ -49,6 +56,7 @@ const Toggle = ({ left, isSelected, style, onToggle }: ToggleProps) => (
         trackColor={{ false: COLOR.mono.gray2, true: COLOR.system.blue }}
         value={isSelected}
         onValueChange={onToggle}
+        disabled={disabled}
       />
     }
     style={style}

@@ -126,7 +126,10 @@ const MyProfileScreen = () => {
       onEditPress={() => {
         navigation.navigate(Screen.EditProfileScreen);
       }}
-      // TODO: `onAddFloorPress`, `onSettingPress` 구현
+      onSettingPress={() => {
+        navigation.navigate(Screen.SettingScreen);
+      }}
+      // TODO: `onAddFloorPress` 구현
     />
   );
 };

@@ -40,6 +40,10 @@ export const TEXT_STYLE = {
     fontSize: 14,
     fontFamily: 'regular',
   },
+  body14M: {
+    fontSize: 14,
+    fontFamily: 'medium',
+  },
   body12M: {
     fontSize: 12,
     fontFamily: 'medium',

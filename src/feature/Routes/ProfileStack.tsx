@@ -6,10 +6,14 @@ import EditProfileScreen, {
 import MyProfileScreen, {
   type MyProfileScreenParams,
 } from '@/screens/ProfileScreen/MyProfileScreen';
+import SettingScreen, {
+  type SettingScreenParams,
+} from '@/screens/SettingScreen';
 
 export type ProfileStackParamsList = {
   [Screen.MyProfileScreen]: MyProfileScreenParams;
   [Screen.EditProfileScreen]: EditProfileScreenParams;
+  [Screen.SettingScreen]: SettingScreenParams;
 };
 
 const Stack = createStackNavigator<ProfileStackParamsList>();
@@ -26,6 +30,7 @@ const ProfileStack = () => (
       name={Screen.EditProfileScreen}
       component={EditProfileScreen}
     />
+    <Stack.Screen name={Screen.SettingScreen} component={SettingScreen} />
   </Stack.Navigator>
 );
 
