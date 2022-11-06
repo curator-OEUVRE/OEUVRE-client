@@ -1,4 +1,4 @@
-import { deleteAsync, getAsync, postAsync } from './common';
+import { deleteAsync, getAsync, patchAsync, postAsync } from './common';
 import type { PictureMini } from '@/types/floor';
 import type { MyProfile, OtherUserProfile } from '@/types/user';
 
@@ -78,7 +78,10 @@ interface GetCollectionResponseDto {
   code: string;
   isSuccess: boolean;
   message: string;
-  result: PictureMini[];
+  result: {
+    contents: PictureMini[];
+    isLastPage: boolean;
+  };
   timestamp: string;
 }
 
@@ -120,6 +123,34 @@ export async function unfollowUser(accessToken: string, userNo: number) {
     `/users/${userNo}/follow`,
     { headers: { 'X-AUTH-TOKEN': accessToken } },
   );
+
+  return response;
+}
+
+interface PatchMyProfileRequestDto {
+  backgroundImageUrl: string;
+  exhibitionName: string;
+  introduceMessage: string;
+  name: string;
+  profileImageUrl: string;
+}
+
+interface PatchMyProfileResponseDto {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: string;
+  timestamp: string;
+}
+
+export async function patchMyProfile(
+  accessToken: string,
+  data: PatchMyProfileRequestDto,
+) {
+  const response = await patchAsync<
+    PatchMyProfileResponseDto,
+    PatchMyProfileRequestDto
+  >('/users/my-profile', data, { headers: { 'X-AUTH-TOKEN': accessToken } });
 
   return response;
 }

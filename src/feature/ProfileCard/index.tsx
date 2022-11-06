@@ -70,6 +70,7 @@ interface Props {
   style?: StyleProp<ViewStyle>;
   onEditPress?: () => void;
   onFollowPress?: (isFollowing: boolean) => void;
+  onImagePress?: () => void;
   isFollowing?: boolean;
   isFollower?: boolean;
 }
@@ -82,6 +83,7 @@ const ProfileCard = ({
   style,
   onEditPress,
   onFollowPress,
+  onImagePress,
   isFollowing,
   isFollower,
 }: Props) => {
@@ -93,7 +95,10 @@ const ProfileCard = ({
 
   return (
     <View style={[styles.container, style]}>
-      <Image style={styles.profileImage} source={{ uri: profileImageUrl }} />
+      <Pressable onPress={onImagePress}>
+        <Image style={styles.profileImage} source={{ uri: profileImageUrl }} />
+      </Pressable>
+
       <View style={styles.profileContent}>
         <View style={styles.nameArea}>
           <Text style={[TEXT_STYLE.body14B, styles.nameText]}>{name}</Text>

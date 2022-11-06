@@ -87,6 +87,7 @@ interface Props {
   onAddFloorPress?: () => void;
   onSettingPress?: () => void;
   onFollowPress?: (isFollowing: boolean) => void;
+  onEditPress?: () => void;
 }
 
 const ProfileTemplate = ({
@@ -98,6 +99,7 @@ const ProfileTemplate = ({
   onAddFloorPress,
   onSettingPress,
   onFollowPress,
+  onEditPress,
 }: Props) => {
   const hasBackgroundImage = !!profile.backgroundImageUrl;
   const isMyProfile = !!renderCollection;
@@ -171,6 +173,7 @@ const ProfileTemplate = ({
             isFollower={isFollower}
             isFollowing={isFollowing}
             onFollowPress={onFollowPress}
+            onEditPress={onEditPress}
           />
           {isMyProfile ? (
             <Tab.Navigator screenOptions={screenOptions}>

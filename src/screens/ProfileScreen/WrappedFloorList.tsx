@@ -25,7 +25,7 @@ const WrappedFloorList = ({ floors, userNo, setFloors, onDragEnd }: Props) => {
         userNo,
       });
       if (response.isSuccess) {
-        setFloors(response.result.result);
+        setFloors(response.result.result.contents);
         setPage(1);
       }
     }
@@ -43,7 +43,7 @@ const WrappedFloorList = ({ floors, userNo, setFloors, onDragEnd }: Props) => {
       userNo,
     });
     if (response.isSuccess) {
-      setFloors([...floors, ...response.result.result]);
+      setFloors([...floors, ...response.result.result.contents]);
       setPage((prev) => prev + 1);
     } else {
       console.error(response.result);
@@ -60,7 +60,7 @@ const WrappedFloorList = ({ floors, userNo, setFloors, onDragEnd }: Props) => {
     });
     if (response.isSuccess) {
       setPage(1);
-      setFloors(response.result.result);
+      setFloors(response.result.result.contents);
     } else {
       console.error(response.result);
     }

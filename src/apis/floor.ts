@@ -6,7 +6,7 @@ import {
   FloorInfo,
   GetFloorResponseDto,
 } from '@/types/floor';
-import type { FloorMini, PictureDetail } from '@/types/floor';
+import type { FloorMini } from '@/types/floor';
 
 interface GetPictureDetailParams {
   pictureNo: number;
@@ -74,7 +74,10 @@ interface GetFloorsResponseDto {
   code: string;
   isSuccess: boolean;
   message: string;
-  result: FloorMini[];
+  result: {
+    contents: FloorMini[];
+    isLastPage: boolean;
+  };
   timestamp: string;
 }
 
