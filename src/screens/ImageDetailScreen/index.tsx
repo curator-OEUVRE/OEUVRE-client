@@ -41,6 +41,7 @@ enum OrientationType {
 
 export interface ImageDetailScreenParams {
   pictureNo: number;
+  color: string;
 }
 
 export type ImageDetailScreenRP = RouteProp<
@@ -103,7 +104,7 @@ const ImageDetailScreen = () => {
   const insets = useSafeAreaInsets();
 
   const { params } = useRoute<ImageDetailScreenRP>();
-  const { pictureNo } = params;
+  const { pictureNo, color } = params;
 
   const [pictureDetail, setPictureDetail] = useState<PictureDetail>();
   const [isLike, setLike] = useState<boolean>(false);
@@ -154,6 +155,7 @@ const ImageDetailScreen = () => {
   }, [scale, onAnimation]);
 
   const toggleLike = () => {
+    if (!isEditMode) return;
     setLike((prev) => {
       if (!prev) scaleImage();
       return !prev;
@@ -246,7 +248,11 @@ const ImageDetailScreen = () => {
     <View
       style={[
         styles.container,
-        { paddingLeft: insets.left, paddingRight: insets.right },
+        {
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          backgroundColor: color,
+        },
       ]}
     >
       {renderHeader()}

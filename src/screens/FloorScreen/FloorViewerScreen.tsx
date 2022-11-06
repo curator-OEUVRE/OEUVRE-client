@@ -20,7 +20,7 @@ import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
 import ShareIcon from '@/assets/icons/Share';
 import TextBubbleIcon from '@/assets/icons/TextBubble';
-import { BottomSheet } from '@/components';
+import { BottomSheet, Spinner } from '@/components';
 import { Header } from '@/components/Header';
 import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
@@ -112,9 +112,12 @@ const FloorViewerScreen = () => {
 
   const onPressPicture = useCallback(
     (pictureNo: number) => {
-      navigation.navigate(Screen.ImageDetailScreen, { pictureNo });
+      navigation.navigate(Screen.ImageDetailScreen, {
+        pictureNo,
+        color: floorInfo?.color || COLOR.mono.white,
+      });
     },
-    [navigation],
+    [navigation, floorInfo?.color],
   );
 
   const onEditFloor = () => {
@@ -153,7 +156,7 @@ const FloorViewerScreen = () => {
     </BottomSheet.Group>
   );
 
-  if (!floorInfo) return <Text>Loading</Text>;
+  if (!floorInfo) return <Spinner />;
   const { pictures, color, name, isMine } = floorInfo;
   const renderBottomSheet = () => (
     <BottomSheet
