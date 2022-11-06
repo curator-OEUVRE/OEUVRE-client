@@ -169,9 +169,7 @@ const ImageDetailScreen = () => {
 
   const toggleLike = async () => {
     if (!isEditMode) return;
-    const API = pictureDetail.isLiked
-      ? PictureAPI.unlikePicture
-      : PictureAPI.likePicture;
+    const API = isLiked ? PictureAPI.unlikePicture : PictureAPI.likePicture;
     await API({ pictureNo });
     setPictureDetail((prev) => {
       if (!prev) return prev;
@@ -184,9 +182,7 @@ const ImageDetailScreen = () => {
   };
 
   const toggleScrap = async () => {
-    const API = pictureDetail.isScraped
-      ? PictureAPI.unscrapPicture
-      : PictureAPI.scrapPicture;
+    const API = isScraped ? PictureAPI.unscrapPicture : PictureAPI.scrapPicture;
     await API({ pictureNo });
     setPictureDetail((prev) => {
       if (!prev) return prev;

@@ -179,7 +179,7 @@ const EditFloorScreen = () => {
         <Pressable
           style={styles.wrapTitle}
           onPress={() => {
-            lockAsync(OrientationLock.PORTRAIT);
+            lockAsync(OrientationLock.PORTRAIT_UP);
             navigation.navigate(Screen.FloorInfoFormScreen);
           }}
         >
@@ -197,7 +197,7 @@ const EditFloorScreen = () => {
       )
     : '플로어 추가';
   const addPictures = useCallback(() => {
-    lockAsync(OrientationLock.PORTRAIT);
+    lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.AddPictureScreen);
   }, [navigation]);
   return (

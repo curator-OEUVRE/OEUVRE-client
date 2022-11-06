@@ -96,7 +96,7 @@ const FloorViewerScreen = () => {
 
   useEffect(
     () => () => {
-      lockAsync(OrientationLock.PORTRAIT);
+      lockAsync(OrientationLock.PORTRAIT_UP);
     },
     [],
   );
@@ -176,7 +176,7 @@ const FloorViewerScreen = () => {
     <Pressable
       style={styles.textBubble}
       onPress={() => {
-        lockAsync(OrientationLock.PORTRAIT);
+        lockAsync(OrientationLock.PORTRAIT_UP);
         navigation.navigate(Screen.GuestBookScreen, { floorNo });
       }}
     >
