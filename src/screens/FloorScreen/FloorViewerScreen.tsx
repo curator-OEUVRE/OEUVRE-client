@@ -18,6 +18,7 @@ import EditIcon from '@/assets/icons/Edit';
 import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
 import ShareIcon from '@/assets/icons/Share';
+import TextBubbleIcon from '@/assets/icons/TextBubble';
 import { BottomSheet } from '@/components';
 import { Header } from '@/components/Header';
 import { Screen } from '@/constants/screens';
@@ -32,6 +33,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR.mono.white,
     flex: 1,
+  },
+  textBubble: {
+    bottom: '7%',
+    position: 'absolute',
+    right: '7%',
   },
   wrapList: {
     flex: 1,
@@ -96,7 +102,6 @@ const FloorViewerScreen = () => {
 
   const onPressPicture = useCallback(
     (pictureNo: number) => {
-      console.log(pictureNo);
       navigation.navigate(Screen.ImageDetailScreen, { pictureNo });
     },
     [navigation],
@@ -132,7 +137,7 @@ const FloorViewerScreen = () => {
       <BottomSheet.Item label="사진 공유하기" icon={<ShareIcon />} />
       <BottomSheet.Item
         label="플로어 신고하기"
-        icon={<AlertIcon />}
+        icon={<AlertIcon color={COLOR.system.red} />}
         color={COLOR.system.red}
       />
     </BottomSheet.Group>
@@ -150,6 +155,15 @@ const FloorViewerScreen = () => {
     </BottomSheet>
   );
 
+  const guestBookButton = (
+    <Pressable
+      style={styles.textBubble}
+      onPress={() => navigation.navigate(Screen.GuestBookScreen, { floorNo })}
+    >
+      <TextBubbleIcon color={COLOR.mono.black} />
+    </Pressable>
+  );
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
@@ -165,6 +179,7 @@ const FloorViewerScreen = () => {
         />
       </View>
       {renderBottomSheet()}
+      {guestBookButton}
     </SafeAreaView>
   );
 };

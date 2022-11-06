@@ -22,4 +22,5 @@ export enum Screen {
   ImageDetailScreen = 'ImageDetailScreen',
   FloorViewerScreen = 'FloorViewerScreen',
   EditFloorScreen = 'EditFloorScreen',
+  GuestBookScreen = 'GuestBookScreen',
 }
