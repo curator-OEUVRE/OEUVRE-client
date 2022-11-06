@@ -129,6 +129,11 @@ const MyProfileScreen = () => {
       onSettingPress={() => {
         navigation.navigate(Screen.SettingScreen);
       }}
+      onAddFloorPress={() => {
+        navigation.navigate(Navigator.FloorStack, {
+          screen: Screen.AddPictureScreen,
+        });
+      }}
       // TODO: `onAddFloorPress` 구현
     />
   );
