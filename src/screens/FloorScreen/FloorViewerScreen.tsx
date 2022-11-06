@@ -20,7 +20,12 @@ import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
 import ShareIcon from '@/assets/icons/Share';
 import TextBubbleIcon from '@/assets/icons/TextBubble';
-import { BottomSheet, Spinner } from '@/components';
+import {
+  BottomSheet,
+  Spinner,
+  BottomSheetItem,
+  BottomSheetItemGroup,
+} from '@/components';
 import { Header } from '@/components/Header';
 import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
@@ -132,32 +137,32 @@ const FloorViewerScreen = () => {
   };
 
   const bottomSheetForEditor = [
-    <BottomSheet.Group key="share">
-      <BottomSheet.Item label="플로어 공유하기" icon={<ShareIcon />} />
-    </BottomSheet.Group>,
-    <BottomSheet.Group key="edit">
-      <BottomSheet.Item
+    <BottomSheetItemGroup key="share">
+      <BottomSheetItem label="플로어 공유하기" icon={<ShareIcon />} />
+    </BottomSheetItemGroup>,
+    <BottomSheetItemGroup key="edit">
+      <BottomSheetItem
         label="플로어 수정하기"
         icon={<EditIcon />}
         onPress={onEditFloor}
       />
-      <BottomSheet.Item
+      <BottomSheetItem
         label="플로어 삭제하기"
         icon={<DeleteIcon />}
         color={COLOR.system.red}
       />
-    </BottomSheet.Group>,
+    </BottomSheetItemGroup>,
   ];
   const bottomSheetForVisiter = (
-    <BottomSheet.Group>
-      <BottomSheet.Item label="님 프로필 보기" icon={<PersonIcon />} />
-      <BottomSheet.Item label="사진 공유하기" icon={<ShareIcon />} />
-      <BottomSheet.Item
+    <BottomSheetItemGroup>
+      <BottomSheetItem label="님 프로필 보기" icon={<PersonIcon />} />
+      <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
+      <BottomSheetItem
         label="플로어 신고하기"
         icon={<AlertIcon color={COLOR.system.red} />}
         color={COLOR.system.red}
       />
-    </BottomSheet.Group>
+    </BottomSheetItemGroup>
   );
 
   if (!floorInfo) return <Spinner />;
@@ -166,7 +171,7 @@ const FloorViewerScreen = () => {
     <BottomSheet
       index={bottomSheetIndex}
       onChange={(index) => setBottomSheetIndex(index)}
-      isPortrait={false}
+      snapPoints={isMine ? [114, 204] : [192]}
     >
       {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
     </BottomSheet>
