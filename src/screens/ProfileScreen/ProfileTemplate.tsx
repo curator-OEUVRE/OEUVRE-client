@@ -4,7 +4,8 @@ import {
 } from '@react-navigation/material-top-tabs';
 import { ParamListBase, RouteProp } from '@react-navigation/native';
 import { useMemo, useState } from 'react';
-import { View, StyleSheet, Image, Pressable, Text } from 'react-native';
+import { View, StyleSheet, Pressable, Text } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AddFloorIcon from '@/assets/icons/AddFloor';
 import AlertIcon from '@/assets/icons/Alert';
@@ -148,7 +149,7 @@ const ProfileTemplate = ({
     <>
       <View style={styles.container}>
         {hasBackgroundImage && (
-          <Image
+          <FastImage
             style={styles.background}
             source={{ uri: profile.backgroundImageUrl }}
             resizeMode="cover"
@@ -164,9 +165,6 @@ const ProfileTemplate = ({
             hideBackButton={isMyProfile}
             headerRight={headerRight}
             iconColor={hasBackgroundImage ? COLOR.mono.white : COLOR.mono.black}
-            titleColor={
-              hasBackgroundImage ? COLOR.mono.white : COLOR.mono.black
-            }
           />
           <ProfileCard
             profileImageUrl={profile.profileImageUrl}

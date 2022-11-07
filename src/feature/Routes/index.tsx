@@ -10,9 +10,6 @@ import FloorStack, { FloorStackParamsList } from './FloorStack';
 import MainTabNavigator, { MainTabParamsList } from './MainTabNavigator';
 import { getMyProfile } from '@/apis/user';
 import { Navigator, Screen } from '@/constants/screens';
-import GuestBookScreen, {
-  GuestBookScreenParams,
-} from '@/screens/GuestBookScreen';
 import { COLOR } from '@/constants/styles';
 import useAuth from '@/hooks/useAuth';
 import WelcomeScreen, { WelcomeScreenParams } from '@/screens/WelcomeScreen';
@@ -49,8 +46,9 @@ export const Routes = () => {
         console.error(response.result);
       }
     }
-    refreshProfile();
-  }, [fetchWithToken, setUser]);
+
+    if (accessToken) refreshProfile();
+  }, [fetchWithToken, setUser, accessToken]);
 
   return (
     <NavigationContainer theme={theme}>

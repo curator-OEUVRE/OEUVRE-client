@@ -13,14 +13,13 @@ function loadStories() {
   require('../src/feature/FloorDropdown/FloorDropdown.stories');
   require('../src/feature/FloorList/FloorList.stories');
   require('../src/feature/FloorPictureList/FloorPictureList.stories');
+  require('../src/feature/FloorTicket/FloorTicket.stories');
   require('../src/feature/GuestBookInput/GuestBookInput.stories');
+  require('../src/feature/GuestBookList/GuestBookItem.stories');
+  require('../src/feature/GuestBookList/GuestBookList.stories');
   require('../src/feature/KakaoLogin/KakaoLogin.stories');
   require('../src/feature/ProfileCard/ProfileCard.stories');
   require('../src/feature/TermsForm/TermsForm.stories');
-  require('../src/feature/GuestBookInput/GuestBookInput.stories');
-  require('../src/feature/FloorDropdown/FloorDropdown.stories');
-  require('../src/feature/GuestBookList/GuestBookItem.stories');
-  require('../src/feature/GuestBookList/GuestBookList.stories');
 }
 
 const stories = [
@@ -33,14 +32,13 @@ const stories = [
   '../src/feature/FloorDropdown/FloorDropdown.stories',
   '../src/feature/FloorList/FloorList.stories',
   '../src/feature/FloorPictureList/FloorPictureList.stories',
+  '../src/feature/FloorTicket/FloorTicket.stories',
   '../src/feature/GuestBookInput/GuestBookInput.stories',
+  '../src/feature/GuestBookList/GuestBookItem.stories',
+  '../src/feature/GuestBookList/GuestBookList.stories',
   '../src/feature/KakaoLogin/KakaoLogin.stories',
   '../src/feature/ProfileCard/ProfileCard.stories',
   '../src/feature/TermsForm/TermsForm.stories',
-  '../src/feature/GuestBookInput/GuestBookInput.stories',
-  '../src/feature/FloorDropdown/FloorDropdown.stories',
-  '../src/feature/GuestBookList/GuestBookItem.stories',
-  '../src/feature/GuestBookList/GuestBookList.stories',
 ];
 
 module.exports = {

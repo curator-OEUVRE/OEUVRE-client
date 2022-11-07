@@ -3,13 +3,13 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Image,
   Pressable,
   StyleSheet,
   Text,
   useWindowDimensions,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -60,7 +60,8 @@ export type ImageDetailScreenRP = RouteProp<
   Screen.ImageDetailScreen
 >;
 
-const AnimatedImage = Animated.createAnimatedComponent(Image);
+// @ts-ignore
+const AnimatedImage = Animated.createAnimatedComponent(FastImage);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -368,7 +369,7 @@ const ImageDetailScreen = () => {
           onActivated={toggleLike}
         >
           <Animated.View style={styles.wrapImage}>
-            <Image
+            <FastImage
               source={{ uri: imageUrl }}
               style={styles.imageBackground}
               resizeMode="contain"
