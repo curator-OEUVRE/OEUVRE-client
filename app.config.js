@@ -40,9 +40,9 @@ module.exports = {
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#FFFFFF',
-        googleServicesFile: './google-services.json',
       },
       package: 'com.curator.oeuvre',
+      googleServicesFile: './google-services.json',
     },
     web: {
       favicon: './assets/favicon.png',
