@@ -14,7 +14,11 @@ import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
 import PersonOffIcon from '@/assets/icons/PersonOff';
 import SettingIcon from '@/assets/icons/Setting';
-import { BottomSheet } from '@/components';
+import {
+  BottomSheet,
+  BottomSheetItem,
+  BottomSheetItemGroup,
+} from '@/components';
 import { Header } from '@/components/Header';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import ProfileCard from '@/feature/ProfileCard';
@@ -200,15 +204,15 @@ const ProfileTemplate = ({
             <Text style={TEXT_STYLE.title20M}>{profile.followerCount}</Text>
           </View>
         </View>
-        <BottomSheet.Group>
-          <BottomSheet.Item
+        <BottomSheetItemGroup>
+          <BottomSheetItem
             label="팔로우하기"
             icon={
               <PersonIcon width={26} height={26} color={COLOR.mono.black} />
             }
             color={COLOR.mono.black}
           />
-          <BottomSheet.Item
+          <BottomSheetItem
             label="차단하기"
             icon={
               <PersonOffIcon width={26} height={26} color={COLOR.system.red} />
@@ -219,7 +223,7 @@ const ProfileTemplate = ({
               alert('차단되었습니다.');
             }}
           />
-          <BottomSheet.Item
+          <BottomSheetItem
             label="신고하기"
             icon={<AlertIcon width={26} height={26} color={COLOR.system.red} />}
             color={COLOR.system.red}
@@ -228,7 +232,7 @@ const ProfileTemplate = ({
               alert('신고되었습니다.');
             }}
           />
-        </BottomSheet.Group>
+        </BottomSheetItemGroup>
       </BottomSheet>
     </>
   );

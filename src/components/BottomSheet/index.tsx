@@ -90,7 +90,6 @@ const BottomSheetItemGroup = ({ children }: BottomSheetItemGroupProps) => {
 
 interface BottomSheetComponentProps
   extends Omit<BottomSheetProps, 'children' | 'snapPoints'> {
-  snapPoints?: (string | number)[] | SharedValue<(string | number)[]>;
   children?: React.ReactNode;
   onChange: (index: number) => void;
   snapPoints?: (number | string)[];
