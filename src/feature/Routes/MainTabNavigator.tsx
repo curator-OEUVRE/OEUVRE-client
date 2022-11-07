@@ -83,8 +83,8 @@ const screenOptions: ScreenOptions = ({ route }) => ({
         return <TabIcon isFocused={props.focused} icon={HomeIcon} />;
       case Screen.SearchScreen:
         return <TabIcon isFocused={props.focused} icon={SearchIcon} />;
-      case Screen.GroupFeedScreen:
-        return <TabIcon isFocused={props.focused} icon={GroupIcon} />;
+      // case Screen.GroupFeedScreen:
+      //   return <TabIcon isFocused={props.focused} icon={GroupIcon} />;
       case Screen.NotificationScreen:
         return <TabIcon isFocused={props.focused} icon={NotificationIcon} />;
       case Navigator.ProfileStack:
@@ -109,7 +109,7 @@ const MainTabNavigator = () => (
   >
     <MainTab.Screen name={Navigator.HomeStack} component={HomeStack} />
     <MainTab.Screen name={Screen.SearchScreen} component={SearchScreen} />
-    <MainTab.Screen name={Screen.GroupFeedScreen} component={GroupFeedScreen} />
+    {/* <MainTab.Screen name={Screen.GroupFeedScreen} component={GroupFeedScreen} /> */}
     <MainTab.Screen
       name={Screen.NotificationScreen}
       component={NotificationScreen}
