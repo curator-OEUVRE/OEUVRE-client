@@ -3,6 +3,7 @@ export enum Navigator {
   FloorStack = 'FloorStack',
   MainTab = 'MainTab',
   ProfileStack = 'ProfileStack',
+  HomeStack = 'HomeStack',
 }
 
 export enum Screen {

@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 interface ProfileProps {
   imageUrl: string;
@@ -6,7 +6,7 @@ interface ProfileProps {
 }
 
 const Profile = ({ imageUrl, size = 125 }: ProfileProps) => (
-  <Image
+  <FastImage
     // eslint-disable-next-line react/jsx-props-no-spreading
     style={{
       width: size,

@@ -3,7 +3,6 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  Image,
   type ListRenderItemInfo,
   Pressable,
 } from 'react-native';
@@ -11,6 +10,7 @@ import {
   ScaleDecorator,
   type RenderItemParams,
 } from 'react-native-draggable-flatlist';
+import FastImage from 'react-native-fast-image';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import type { FloorMini } from '@/types/floor';
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 const FloorImage = ({
   item,
 }: ListRenderItemInfo<FloorMini['thumbnails'][number]>) => (
-  <Image
+  <FastImage
     source={{ uri: item.imageUrl }}
     style={[styles.image, { width: (item.width / item.height) * 86 }]}
   />

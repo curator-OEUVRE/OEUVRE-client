@@ -11,7 +11,6 @@ interface HeaderProps {
   backgroundColor?: string;
   iconColor?: string;
   onGoBack?: () => void;
-  titleColor?: string;
   hideBackButton?: boolean;
 }
 
@@ -56,7 +55,6 @@ const Header = ({
   onGoBack,
   backgroundColor = COLOR.mono.white,
   iconColor = COLOR.mono.black,
-  titleColor = COLOR.mono.black,
   hideBackButton = false,
 }: HeaderProps) => {
   const navigation = useNavigation();

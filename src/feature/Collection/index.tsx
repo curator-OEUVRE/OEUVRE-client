@@ -1,6 +1,7 @@
 import MasonryList from '@react-native-seoul/masonry-list';
 import { useCallback } from 'react';
-import { Image, StyleSheet, Pressable, View, Text } from 'react-native';
+import { StyleSheet, Pressable, View, Text } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import BookmarkFilledIcon from '@/assets/icons/BookmarkFilled';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
@@ -41,7 +42,7 @@ const CollectionItem = ({ item, onPress, width }: CollectionItemProps) => (
       onPress?.(item.pictureNo);
     }}
   >
-    <Image
+    <FastImage
       style={[
         styles.image,
         {
