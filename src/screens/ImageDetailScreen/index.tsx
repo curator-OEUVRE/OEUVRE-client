@@ -1,7 +1,15 @@
+import Sheet from '@gorhom/bottom-sheet';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -10,23 +18,32 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getPictureDetail } from '@/apis/floor';
+import { getPictureDetail } from '@/apis/picture';
+import * as PictureAPI from '@/apis/picture';
+import AlertIcon from '@/assets/icons/Alert';
 import BookmarkIcon from '@/assets/icons/Bookmark';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
 import FavoriteIcon from '@/assets/icons/Favorite';
 import FavoriteOutlineIcon from '@/assets/icons/FavoriteOutline';
 import MoreIcon from '@/assets/icons/More';
+import PersonIcon from '@/assets/icons/Person';
+import PhotoIcon from '@/assets/icons/Photo';
 import ShareIcon from '@/assets/icons/Share';
 import { Header } from '@/components/Header';
-import { BottomSheet } from '@/components/index';
+import {
+  BottomSheet,
+  BottomSheetItem,
+  BottomSheetItemGroup,
+  Spinner,
+} from '@/components/index';
 import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import useDimensions from '@/hooks/useDimensions';
+import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
-import { PictureDetail } from '@/types/floor';
+import { PictureDetail } from '@/types/picture';
 
 enum OrientationType {
   portrait,
@@ -35,6 +52,7 @@ enum OrientationType {
 
 export interface ImageDetailScreenParams {
   pictureNo: number;
+  color: string;
 }
 
 export type ImageDetailScreenRP = RouteProp<
@@ -45,7 +63,6 @@ export type ImageDetailScreenRP = RouteProp<
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLOR.mono.white,
     flex: 1,
   },
   image: {
@@ -62,6 +79,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: COLOR.mono.gray7,
+    textAlign: 'center',
   },
   wrapFooter: {
     lineHeight: 21,
@@ -93,20 +111,37 @@ const styles = StyleSheet.create({
   },
 });
 
+const initialPicture = {
+  description: '...',
+  floorNo: 1,
+  height: 0.5,
+  imageUrl: '',
+  isLiked: false,
+  isMine: false,
+  isScraped: false,
+  pictureNo: 1,
+  width: 0.5,
+};
+
 const ImageDetailScreen = () => {
-  const { width: windowWidth, height: windowHeight } = useDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
   const { params } = useRoute<ImageDetailScreenRP>();
-  const { pictureNo } = params;
+  const { pictureNo, color } = params;
 
-  const [pictureDetail, setPictureDetail] = useState<PictureDetail>();
-  const [isLike, setLike] = useState<boolean>(false);
+  const colorByBackground = getColorByBackgroundColor(color);
+  const [pictureDetail, setPictureDetail] =
+    useState<PictureDetail>(initialPicture);
   const [isEditMode, setEditMode] = useState<boolean>(false);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const bottomSheetRef = useRef<Sheet>(null);
 
   useEffect(() => {
     const fetchPictureDetail = async () => {
+      setLoading(true);
       const response = await getPictureDetail({ pictureNo });
       if (response.isSuccess) {
         const { result } = response.result;
@@ -121,57 +156,88 @@ const ImageDetailScreen = () => {
         // eslint-disable-next-line no-console
         console.log(response.result.info);
       }
+      setLoading(false);
     };
     fetchPictureDetail();
-    return () => {
-      lockAsync(OrientationLock.DEFAULT);
-    };
   }, [pictureNo]);
 
+  const { width, height, description, imageUrl, isLiked, isScraped, isMine } =
+    pictureDetail;
+
   const isBottomSheetOpen = bottomSheetIndex >= 0;
-  const scale = useSharedValue(0.0001);
+  const scale = useSharedValue(0);
+  const isLikeAnimation = useSharedValue(true);
+  const onAnimation = useSharedValue(false);
   const onSingleTap = useCallback(() => {
     setEditMode((prev) => !prev);
   }, []);
 
   const scaleImage = useCallback(() => {
+    onAnimation.value = true;
     scale.value = withSpring(1, undefined, (isFinished) => {
       if (isFinished) {
-        scale.value = withDelay(500, withSpring(0.0001));
+        scale.value = withDelay(
+          500,
+          withSpring(0, undefined, (done) => {
+            if (done) {
+              onAnimation.value = false;
+            }
+          }),
+        );
       }
     });
-  }, [scale]);
-
-  const toggleLike = () => {
-    setLike((prev) => {
-      if (!prev) scaleImage();
-      return !prev;
-    });
-  };
-
-  const onScrap = () => {
-    scaleImage();
-  };
+  }, [scale, onAnimation]);
 
   const doubleTapRef = useRef();
   const imageStyle = useAnimatedStyle(() => ({
     transform: [{ scale: Math.max(scale.value, 0) }],
+    zIndex: onAnimation.value ? 1 : -1,
   }));
 
-  if (!pictureDetail) return <Text>Loading</Text>;
-  const { width, height, description, imageUrl } = pictureDetail;
+  const toggleLike = useCallback(async () => {
+    if (!isEditMode) return;
+    const API = isLiked ? PictureAPI.unlikePicture : PictureAPI.likePicture;
+    await API({ pictureNo });
+    setPictureDetail((prev) => {
+      if (!prev) return prev;
+      isLikeAnimation.value = true;
+      if (!prev.isLiked) scaleImage();
+      return {
+        ...prev,
+        isLiked: !prev.isLiked,
+      };
+    });
+  }, [isEditMode, isLikeAnimation, isLiked, pictureNo, scaleImage]);
+
+  const toggleScrap = useCallback(async () => {
+    const API = isScraped ? PictureAPI.unscrapPicture : PictureAPI.scrapPicture;
+    bottomSheetRef.current?.close();
+    await API({ pictureNo });
+    setPictureDetail((prev) => {
+      if (!prev) return prev;
+      if (!prev.isScraped) {
+        isLikeAnimation.value = false;
+        scaleImage();
+      }
+      return {
+        ...prev,
+        isScraped: !prev.isScraped,
+      };
+    });
+  }, [isScraped, scaleImage, pictureNo, isLikeAnimation]);
+
   const orientation =
     width > height ? OrientationType.landscape : OrientationType.portrait;
   const SIZE =
     orientation === OrientationType.landscape ? windowHeight : windowWidth;
-  const Favorite = isLike ? FavoriteIcon : FavoriteOutlineIcon;
+  const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
       <Pressable style={styles.wrapMore} onPress={throttle(toggleLike)}>
-        <Favorite color={COLOR.mono.gray7} />
+        <Favorite color={colorByBackground} />
       </Pressable>
-      <Pressable onPress={() => setBottomSheetIndex(1)}>
-        <MoreIcon color={COLOR.mono.gray7} />
+      <Pressable onPress={() => setBottomSheetIndex(isMine ? 1 : 0)}>
+        <MoreIcon color={colorByBackground} />
       </Pressable>
     </View>
   );
@@ -186,7 +252,7 @@ const ImageDetailScreen = () => {
         ]}
       >
         <Header
-          iconColor={COLOR.mono.gray7}
+          iconColor={colorByBackground}
           backgroundColor="transparent"
           headerRight={headerRight}
         />
@@ -206,35 +272,91 @@ const ImageDetailScreen = () => {
         <Text style={[styles.text, TEXT_STYLE.body14R]}>{description}</Text>
       </View>
     );
-  const renderBottomSheet = () => (
-    <BottomSheet
-      index={bottomSheetIndex}
-      onChange={(index) => setBottomSheetIndex(index)}
-    >
-      <BottomSheet.Group>
-        <BottomSheet.Item
-          label="사진 스크랩하기"
-          icon={<BookmarkIcon />}
-          onPress={onScrap}
-        />
-        <BottomSheet.Item label="사진 공유하기" icon={<ShareIcon />} />
-      </BottomSheet.Group>
-      <BottomSheet.Group>
-        <BottomSheet.Item label="설명 수정하기" icon={<EditIcon />} />
-        <BottomSheet.Item
-          label="사진 삭제하기"
-          icon={<DeleteIcon />}
-          color={COLOR.system.red}
-        />
-      </BottomSheet.Group>
-    </BottomSheet>
+
+  const bottomSheetForEditor = useMemo(
+    () => (
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={bottomSheetIndex}
+        onChange={(index) => setBottomSheetIndex(index)}
+        snapPoints={[114, 300]}
+      >
+        <BottomSheetItemGroup>
+          <BottomSheetItem
+            label="플로어 방문하기"
+            icon={<PhotoIcon color={COLOR.mono.black} />}
+            onPress={toggleScrap}
+          />
+          <BottomSheetItem
+            label="사진 스크랩하기"
+            icon={<BookmarkIcon />}
+            onPress={toggleScrap}
+          />
+          <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
+        </BottomSheetItemGroup>
+        <BottomSheetItemGroup>
+          <BottomSheetItem label="설명 수정하기" icon={<EditIcon />} />
+          <BottomSheetItem
+            label="사진 삭제하기"
+            icon={<DeleteIcon />}
+            color={COLOR.system.red}
+          />
+        </BottomSheetItemGroup>
+      </BottomSheet>
+    ),
+    [bottomSheetIndex, toggleScrap],
   );
+
+  const bottomSheetForVisiter = useMemo(
+    () => (
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={bottomSheetIndex}
+        onChange={(index) => setBottomSheetIndex(index)}
+        snapPoints={[286]}
+      >
+        <BottomSheetItemGroup>
+          <BottomSheetItem
+            label="프로필 보기"
+            icon={<PersonIcon color={COLOR.mono.black} />}
+            onPress={toggleScrap}
+          />
+          <BottomSheetItem
+            label="플로어 방문하기"
+            icon={<PhotoIcon color={COLOR.mono.black} />}
+            onPress={toggleScrap}
+          />
+          <BottomSheetItem
+            label="사진 스크랩하기"
+            icon={<BookmarkIcon />}
+            onPress={toggleScrap}
+          />
+          <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
+          <BottomSheetItem
+            label="사진 신고하기"
+            icon={<AlertIcon color={COLOR.system.red} />}
+            color={COLOR.system.red}
+          />
+        </BottomSheetItemGroup>
+      </BottomSheet>
+    ),
+    [bottomSheetIndex, toggleScrap],
+  );
+
+  const renderBottomSheet = () =>
+    isMine ? bottomSheetForEditor : bottomSheetForVisiter;
+
+  if (loading) return <Spinner />;
 
   return (
     <View
       style={[
         styles.container,
-        { paddingLeft: insets.left, paddingRight: insets.right },
+        {
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          backgroundColor: color,
+        },
       ]}
     >
       {renderHeader()}
@@ -257,7 +379,7 @@ const ImageDetailScreen = () => {
       {renderFooter()}
       {renderBottomSheet()}
       <AnimatedImage
-        source={isBottomSheetOpen ? IMAGE.bookmark : IMAGE.heart}
+        source={isLikeAnimation.value ? IMAGE.heart : IMAGE.bookmark}
         style={[
           styles.image,
           imageStyle,

@@ -1,17 +1,20 @@
 import BottomSheet, {
   BottomSheetBackdrop,
-  BottomSheetView,
   BottomSheetBackdropProps,
   BottomSheetProps,
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import React, { useCallback, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 const styles = StyleSheet.create({
-  bottomSheet: {
-    flex: 1,
-  },
   container: {
     flex: 1,
   },
@@ -33,6 +36,13 @@ const styles = StyleSheet.create({
   label: {
     flex: 1,
   },
+  landscape: {
+    flex: 1,
+    marginHorizontal: '18%',
+  },
+  portrait: {
+    flex: 1,
+  },
   wrapGroup: {
     marginHorizontal: 35,
   },
@@ -51,7 +61,7 @@ interface BottomSheetItemProps {
   color?: string;
 }
 
-export const BottomSheetItem = ({
+const BottomSheetItem = ({
   label,
   icon,
   onPress,
@@ -81,70 +91,75 @@ const BottomSheetItemGroup = ({ children }: BottomSheetItemGroupProps) => {
 interface BottomSheetComponentProps
   extends Omit<BottomSheetProps, 'children' | 'snapPoints'> {
   children?: React.ReactNode;
-  isPortrait?: boolean;
   onChange: (index: number) => void;
+  snapPoints?: (number | string)[];
 }
 
-const BottomSheetComponent = ({
-  children,
-  onChange,
-  isPortrait = false,
-  ...bottomSheetProps
-}: BottomSheetComponentProps) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) => (
-      <BottomSheetBackdrop
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-      />
-    ),
-    [],
-  );
-  const lastIdx = React.Children.toArray(children).length - 1;
-  const snapPoints = useMemo(() => {
-    const points = [];
-    for (let i = 0; i <= lastIdx; i += 1) {
-      points.push(`${(i + 1) * (isPortrait ? 15 : 25)}%`);
-    }
-    return points;
-  }, [lastIdx, isPortrait]);
-  const renderChildren = () =>
-    React.Children.map(children, (child, index) =>
-      index < lastIdx ? (
-        <>
-          {child}
-          <View style={styles.divider} />
-        </>
-      ) : (
-        child
+const BottomSheetComponent = React.forwardRef(
+  (
+    {
+      children,
+      onChange,
+      index,
+      snapPoints,
+      ...bottomSheetProps
+    }: BottomSheetComponentProps,
+    ref: React.ForwardedRef<BottomSheet>,
+  ) => {
+    const renderBackdrop = useCallback(
+      (props: BottomSheetBackdropProps) => (
+        <BottomSheetBackdrop
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...props}
+          disappearsOnIndex={-1}
+          appearsOnIndex={0}
+        />
       ),
+      [],
     );
-  return (
-    <BottomSheet
-      ref={bottomSheetRef}
-      index={1}
-      enablePanDownToClose
-      handleIndicatorStyle={styles.handle}
-      backdropComponent={renderBackdrop}
-      style={styles.bottomSheet}
-      onChange={onChange}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...bottomSheetProps}
-      snapPoints={snapPoints}
-    >
-      <BottomSheetView
-        // eslint-disable-next-line react-native/no-inline-styles
-        style={styles.container}
-      >
-        {renderChildren()}
-      </BottomSheetView>
-    </BottomSheet>
-  );
-};
+    const lastIdx = React.Children.toArray(children).length - 1;
+    const { width, height } = useWindowDimensions();
+    const defaultSnapPoints = useMemo(() => {
+      const points = [];
+      for (let i = 0; i <= lastIdx; i += 1) {
+        points.push(`${(i + 1) * (width < height ? 15 : 35)}%`);
+      }
+      return points;
+    }, [lastIdx, height, width]);
+    const renderChildren = () =>
+      React.Children.map(children, (child, idx) =>
+        idx < lastIdx ? (
+          <>
+            {child}
+            <View style={styles.divider} />
+          </>
+        ) : (
+          child
+        ),
+      );
 
-BottomSheetComponent.Item = BottomSheetItem;
-BottomSheetComponent.Group = BottomSheetItemGroup;
-export { BottomSheetComponent };
+    return (
+      <BottomSheet
+        ref={ref}
+        index={index}
+        enablePanDownToClose
+        handleIndicatorStyle={styles.handle}
+        backdropComponent={renderBackdrop}
+        style={width > height ? styles.landscape : styles.portrait}
+        onChange={onChange}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...bottomSheetProps}
+        snapPoints={snapPoints || defaultSnapPoints}
+      >
+        <BottomSheetView
+          // eslint-disable-next-line react-native/no-inline-styles
+          style={styles.container}
+        >
+          {renderChildren()}
+        </BottomSheetView>
+      </BottomSheet>
+    );
+  },
+);
+
+export { BottomSheetComponent, BottomSheetItem, BottomSheetItemGroup };

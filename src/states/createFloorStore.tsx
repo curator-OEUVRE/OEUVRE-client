@@ -1,14 +1,14 @@
 import create from 'zustand';
 import { ApiResult } from '@/apis/common';
-import { createFloor, editFloor } from '@/apis/floor';
+import * as FloorAPI from '@/apis/floor';
 import { FormInputStatus } from '@/components';
 import { COLOR } from '@/constants/styles';
 import {
-  PictureInfo,
   CreateFloorResponseDto,
   FloorInfo,
   EditFloorResponseDto,
 } from '@/types/floor';
+import { PictureInfo } from '@/types/picture';
 
 interface FormInfo<T> {
   status: FormInputStatus;
@@ -131,7 +131,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   createFloor: async () => {
     const { color, isCommentAvailable, isPublic, name, pictures, texture } =
       get();
-    const result = await createFloor({
+    const result = await FloorAPI.createFloor({
       color,
       isCommentAvailable,
       isPublic,
@@ -144,7 +144,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   editFloor: async (floorNo: number) => {
     const { color, isCommentAvailable, isPublic, name, pictures, texture } =
       get();
-    const result = await editFloor({
+    const result = await FloorAPI.editFloor({
       floor: {
         color,
         isCommentAvailable,

@@ -35,7 +35,7 @@ const App = () => {
   useEffect(() => {
     const initialFetch = async () => {
       await loadFonts();
-      await lockAsync(OrientationLock.DEFAULT);
+      await lockAsync(OrientationLock.PORTRAIT_UP);
       setIsReady(true);
     };
     initialFetch();

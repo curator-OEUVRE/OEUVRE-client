@@ -2,7 +2,7 @@ import { boolean, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react-native';
 import { useState } from 'react';
 import FloorPictureList from '.';
-import type { PictureInfo } from '@/types/floor';
+import type { PictureInfo } from '@/types/picture';
 
 const PICTURES: PictureInfo[] = [
   {

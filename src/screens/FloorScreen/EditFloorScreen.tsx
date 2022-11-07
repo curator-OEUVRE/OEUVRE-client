@@ -4,6 +4,7 @@ import {
   RouteProp,
   useNavigation,
   useRoute,
+  useFocusEffect,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
@@ -20,6 +21,7 @@ import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
+import { getColorByBackgroundColor } from '@/services/common/color';
 import { useCreateFloorStore } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
@@ -42,7 +44,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   title: {
-    color: COLOR.mono.black,
     marginRight: 17,
   },
   wrapList: {
@@ -94,12 +95,15 @@ const SuccessModal = ({ onPress }: SuccessModalProps) => (
 );
 
 const EditFloorScreen = () => {
-  useLayoutEffect(() => {
-    lockAsync(OrientationLock.LANDSCAPE);
-    return () => {
-      lockAsync(OrientationLock.DEFAULT);
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const lockOrientation = async () => {
+        await lockAsync(OrientationLock.LANDSCAPE);
+      };
+      lockOrientation();
+    }, []),
+  );
+
   const { params } = useRoute<EditFloorScreenRP>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
@@ -161,7 +165,7 @@ const EditFloorScreen = () => {
     params?.floorNo,
     navigation,
   ]);
-
+  const colorByBackground = getColorByBackgroundColor(color);
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onConfirm}>
@@ -174,14 +178,26 @@ const EditFloorScreen = () => {
     ? () => (
         <Pressable
           style={styles.wrapTitle}
-          onPress={() => navigation.navigate(Screen.FloorInfoFormScreen)}
+          onPress={() => {
+            lockAsync(OrientationLock.PORTRAIT_UP);
+            navigation.navigate(Screen.FloorInfoFormScreen);
+          }}
         >
-          <Text style={[styles.title, TEXT_STYLE.body16M]}>{name.value}</Text>
-          <PencilIcon color={COLOR.mono.black} />
+          <Text
+            style={[
+              styles.title,
+              TEXT_STYLE.body16M,
+              { color: colorByBackground },
+            ]}
+          >
+            {name.value}
+          </Text>
+          <PencilIcon color={colorByBackground} />
         </Pressable>
       )
     : '플로어 추가';
   const addPictures = useCallback(() => {
+    lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.AddPictureScreen);
   }, [navigation]);
   return (
@@ -190,6 +206,7 @@ const EditFloorScreen = () => {
         headerTitle={headerTitle}
         headerRight={ConfirmButton}
         backgroundColor="transparent"
+        iconColor={colorByBackground}
       />
       <View style={styles.wrapList}>
         <FloorPictureList

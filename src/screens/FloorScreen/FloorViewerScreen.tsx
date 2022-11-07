@@ -2,14 +2,15 @@
 import {
   CompositeNavigationProp,
   RouteProp,
+  useFocusEffect,
+  useIsFocused,
   useNavigation,
   useRoute,
-  useIsFocused,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFloor } from '@/apis/floor';
 import AlertIcon from '@/assets/icons/Alert';
@@ -19,13 +20,19 @@ import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
 import ShareIcon from '@/assets/icons/Share';
 import TextBubbleIcon from '@/assets/icons/TextBubble';
-import { BottomSheet } from '@/components';
+import {
+  BottomSheet,
+  Spinner,
+  BottomSheetItem,
+  BottomSheetItemGroup,
+} from '@/components';
 import { Header } from '@/components/Header';
 import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { getColorByBackgroundColor } from '@/services/common/color';
 import { useCreateFloorStore } from '@/states/createFloorStore';
 import { GetFloorResponse } from '@/types/floor';
 
@@ -61,6 +68,9 @@ export type FloorViewerScreenNP = CompositeNavigationProp<
 const FloorViewerScreen = () => {
   const { params } = useRoute<FloorViewerScreenRP>();
   const [floorInfo, setFloorInfo] = useState<GetFloorResponse>();
+  const colorByBackground = floorInfo
+    ? getColorByBackgroundColor(floorInfo.color)
+    : COLOR.mono.black;
   const isFocused = useIsFocused();
   const navigation = useNavigation<FloorViewerScreenNP>();
   const { setIsEditMode, setFloor } = useCreateFloorStore();
@@ -80,12 +90,21 @@ const FloorViewerScreen = () => {
     fetchFloor();
   }, [floorNo, isFocused]);
 
-  useLayoutEffect(() => {
-    lockAsync(OrientationLock.LANDSCAPE);
-    return () => {
-      lockAsync(OrientationLock.DEFAULT);
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const lockOrientation = async () => {
+        await lockAsync(OrientationLock.LANDSCAPE);
+      };
+      lockOrientation();
+    }, []),
+  );
+
+  useEffect(
+    () => () => {
+      lockAsync(OrientationLock.PORTRAIT_UP);
+    },
+    [],
+  );
 
   const onPressMore = useCallback(() => {
     setBottomSheetIndex(floorInfo?.isMine ? 1 : 0);
@@ -94,17 +113,20 @@ const FloorViewerScreen = () => {
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onPressMore}>
-        <MoreIcon color={COLOR.mono.gray7} />
+        <MoreIcon color={colorByBackground} />
       </Pressable>
     ),
-    [onPressMore],
+    [onPressMore, colorByBackground],
   );
 
   const onPressPicture = useCallback(
     (pictureNo: number) => {
-      navigation.navigate(Screen.ImageDetailScreen, { pictureNo });
+      navigation.navigate(Screen.ImageDetailScreen, {
+        pictureNo,
+        color: floorInfo?.color || COLOR.mono.white,
+      });
     },
-    [navigation],
+    [navigation, floorInfo?.color],
   );
 
   const onEditFloor = () => {
@@ -115,41 +137,41 @@ const FloorViewerScreen = () => {
   };
 
   const bottomSheetForEditor = [
-    <BottomSheet.Group key="share">
-      <BottomSheet.Item label="플로어 공유하기" icon={<ShareIcon />} />
-    </BottomSheet.Group>,
-    <BottomSheet.Group key="edit">
-      <BottomSheet.Item
+    <BottomSheetItemGroup key="share">
+      <BottomSheetItem label="플로어 공유하기" icon={<ShareIcon />} />
+    </BottomSheetItemGroup>,
+    <BottomSheetItemGroup key="edit">
+      <BottomSheetItem
         label="플로어 수정하기"
         icon={<EditIcon />}
         onPress={onEditFloor}
       />
-      <BottomSheet.Item
+      <BottomSheetItem
         label="플로어 삭제하기"
         icon={<DeleteIcon />}
         color={COLOR.system.red}
       />
-    </BottomSheet.Group>,
+    </BottomSheetItemGroup>,
   ];
   const bottomSheetForVisiter = (
-    <BottomSheet.Group>
-      <BottomSheet.Item label="님 프로필 보기" icon={<PersonIcon />} />
-      <BottomSheet.Item label="사진 공유하기" icon={<ShareIcon />} />
-      <BottomSheet.Item
+    <BottomSheetItemGroup>
+      <BottomSheetItem label="님 프로필 보기" icon={<PersonIcon />} />
+      <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
+      <BottomSheetItem
         label="플로어 신고하기"
         icon={<AlertIcon color={COLOR.system.red} />}
         color={COLOR.system.red}
       />
-    </BottomSheet.Group>
+    </BottomSheetItemGroup>
   );
 
-  if (!floorInfo) return <Text>Loading</Text>;
+  if (!floorInfo) return <Spinner />;
   const { pictures, color, name, isMine } = floorInfo;
   const renderBottomSheet = () => (
     <BottomSheet
       index={bottomSheetIndex}
       onChange={(index) => setBottomSheetIndex(index)}
-      isPortrait={false}
+      snapPoints={isMine ? [114, 204] : [192]}
     >
       {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
     </BottomSheet>
@@ -158,9 +180,12 @@ const FloorViewerScreen = () => {
   const guestBookButton = (
     <Pressable
       style={styles.textBubble}
-      onPress={() => navigation.navigate(Screen.GuestBookScreen, { floorNo })}
+      onPress={() => {
+        lockAsync(OrientationLock.PORTRAIT_UP);
+        navigation.navigate(Screen.GuestBookScreen, { floorNo });
+      }}
     >
-      <TextBubbleIcon color={COLOR.mono.black} />
+      <TextBubbleIcon color={colorByBackground} />
     </Pressable>
   );
 
@@ -170,6 +195,7 @@ const FloorViewerScreen = () => {
         headerTitle={name}
         headerRight={ConfirmButton}
         backgroundColor="transparent"
+        iconColor={colorByBackground}
       />
       <View style={styles.wrapList}>
         <FloorPictureList
@@ -178,8 +204,8 @@ const FloorViewerScreen = () => {
           onPressPicture={onPressPicture}
         />
       </View>
-      {renderBottomSheet()}
       {guestBookButton}
+      {renderBottomSheet()}
     </SafeAreaView>
   );
 };

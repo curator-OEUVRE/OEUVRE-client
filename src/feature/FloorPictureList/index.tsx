@@ -16,7 +16,7 @@ import FloorPicture from './FloorPicture';
 import TrashIcon from '@/assets/icons/Trash';
 import { COLOR } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import type { PictureInfo } from '@/types/floor';
+import type { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   bottom: {
@@ -133,19 +133,6 @@ const FloorPictureList = ({
 
   return (
     <View>
-      {editable && (
-        <View style={styles.bottom}>
-          <AnimatedPressable
-            style={animatedPressableStyles}
-            onLayout={measureLayout}
-            ref={pressableRef}
-          >
-            <Shadow startColor="#A7A9AB05" style={styles.pressable}>
-              <TrashIcon color={COLOR.mono.black} />
-            </Shadow>
-          </AnimatedPressable>
-        </View>
-      )}
       <DraggableFlatList
         data={pictures}
         renderItem={renderItem}
@@ -178,6 +165,19 @@ const FloorPictureList = ({
         /* eslint-disable-next-line react-native/no-inline-styles */
         contentContainerStyle={{ paddingHorizontal: editable ? 36 : 44 }}
       />
+      {editable && (
+        <View style={styles.bottom}>
+          <AnimatedPressable
+            style={animatedPressableStyles}
+            onLayout={measureLayout}
+            ref={pressableRef}
+          >
+            <Shadow startColor="#A7A9AB05" style={styles.pressable}>
+              <TrashIcon color={COLOR.mono.black} />
+            </Shadow>
+          </AnimatedPressable>
+        </View>
+      )}
     </View>
   );
 };

@@ -2,10 +2,9 @@ import { getAsync, patchAsync, postAsync } from './common';
 import { useAuthStore } from '@/states/authStore';
 import {
   CreateFloorResponseDto,
-  FloorInfo,
-  GetPictureDetailResponseDto,
-  GetFloorResponseDto,
   EditFloorResponseDto,
+  FloorInfo,
+  GetFloorResponseDto,
 } from '@/types/floor';
 
 interface GetPictureDetailParams {
@@ -20,21 +19,6 @@ interface EditFloorParams {
   floorNo: number;
   floor: FloorInfo;
 }
-
-export const getPictureDetail = async ({
-  pictureNo,
-}: GetPictureDetailParams) => {
-  const response = await getAsync<GetPictureDetailResponseDto, undefined>(
-    `/pictures/${pictureNo}`,
-    {
-      headers: {
-        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
-      },
-    },
-  );
-
-  return response;
-};
 
 export const createFloor = async (floor: FloorInfo) => {
   const response = await postAsync<CreateFloorResponseDto, FloorInfo>(
