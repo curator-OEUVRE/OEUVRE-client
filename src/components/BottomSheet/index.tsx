@@ -93,6 +93,7 @@ interface BottomSheetComponentProps
   children?: React.ReactNode;
   onChange: (index: number) => void;
   snapPoints?: (number | string)[];
+  backdropOpacity?: number;
 }
 
 const BottomSheetComponent = React.forwardRef(
@@ -102,6 +103,7 @@ const BottomSheetComponent = React.forwardRef(
       onChange,
       index,
       snapPoints,
+      backdropOpacity = 0.5,
       ...bottomSheetProps
     }: BottomSheetComponentProps,
     ref: React.ForwardedRef<BottomSheet>,
@@ -113,9 +115,10 @@ const BottomSheetComponent = React.forwardRef(
           {...props}
           disappearsOnIndex={-1}
           appearsOnIndex={0}
+          opacity={backdropOpacity}
         />
       ),
-      [],
+      [backdropOpacity],
     );
     const lastIdx = React.Children.toArray(children).length - 1;
     const { width, height } = useWindowDimensions();
@@ -137,7 +140,6 @@ const BottomSheetComponent = React.forwardRef(
           child
         ),
       );
-
     return (
       <BottomSheet
         ref={ref}
