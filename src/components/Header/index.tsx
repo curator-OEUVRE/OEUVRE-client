@@ -7,10 +7,12 @@ import { COLOR } from '@/constants/styles/colors';
 interface HeaderProps {
   headerLeft?: () => React.ReactNode;
   headerTitle?: string | (() => React.ReactNode);
-  headerRight?: () => React.ReactNode;
+  headerRight?: ({ iconColor }: { iconColor?: string }) => React.ReactNode;
   backgroundColor?: string;
   iconColor?: string;
   onGoBack?: () => void;
+  titleColor?: string;
+  hideBackButton?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -54,29 +56,34 @@ const Header = ({
   onGoBack,
   backgroundColor = COLOR.mono.white,
   iconColor = COLOR.mono.black,
+  titleColor = COLOR.mono.black,
+  hideBackButton = false,
 }: HeaderProps) => {
   const navigation = useNavigation();
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      {headerLeft ? (
-        headerLeft()
-      ) : (
-        <Pressable
-          style={styles.arrowLeft}
-          onPress={() => {
-            onGoBack?.();
-            navigation.goBack();
-          }}
-        >
-          <ArrowBackIcon color={iconColor} />
-        </Pressable>
-      )}
+      {headerLeft
+        ? headerLeft()
+        : !hideBackButton && (
+            <Pressable
+              style={styles.arrowLeft}
+              onPress={() => {
+                onGoBack?.();
+                navigation.goBack();
+              }}
+            >
+              <ArrowBackIcon color={iconColor} />
+            </Pressable>
+          )}
+
       {typeof headerTitle === 'string' ? (
         <Text style={[styles.text, { color: iconColor }]}>{headerTitle}</Text>
       ) : (
         headerTitle && headerTitle()
       )}
-      <View style={styles.right}>{headerRight && headerRight()}</View>
+      <View style={styles.right}>
+        {headerRight && headerRight({ iconColor })}
+      </View>
     </View>
   );
 };

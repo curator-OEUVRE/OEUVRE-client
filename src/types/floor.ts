@@ -23,3 +23,22 @@ export interface GetFloorResponse extends FloorInfo {
 export type CreateFloorResponseDto = ResponseDto<CreateFloorResponse>;
 export type GetFloorResponseDto = ResponseDto<GetFloorResponse>;
 export type EditFloorResponseDto = ResponseDto<string>;
+
+export interface FloorMini {
+  color: string;
+  floorNo: number;
+  thumbnails: {
+    height: number;
+    imageUrl: string;
+    width: number;
+  }[];
+  name: string;
+  queue: number;
+}
+
+export interface PictureMini {
+  imageUrl: string;
+  pictureNo: number;
+  width: number;
+  height: number;
+}

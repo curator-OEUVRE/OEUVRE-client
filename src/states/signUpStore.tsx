@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { FormInputStatus } from '@/components';
 
-interface UserInput<T> {
+export interface UserInput<T> {
   status: FormInputStatus;
   value: T;
   error: string | undefined;

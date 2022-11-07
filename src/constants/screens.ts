@@ -2,6 +2,7 @@ export enum Navigator {
   AuthStack = 'AuthStack',
   FloorStack = 'FloorStack',
   MainTab = 'MainTab',
+  ProfileStack = 'ProfileStack',
 }
 
 export enum Screen {
@@ -23,4 +24,7 @@ export enum Screen {
   FloorViewerScreen = 'FloorViewerScreen',
   EditFloorScreen = 'EditFloorScreen',
   GuestBookScreen = 'GuestBookScreen',
+  MyProfileScreen = 'MyProfileScreen',
+  EditProfileScreen = 'EditProfileScreen',
+  SettingScreen = 'SettingScreen',
 }

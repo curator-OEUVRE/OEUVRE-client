@@ -86,7 +86,7 @@ function processError(
  */
 export async function getAsync<T, D>(
   path: string,
-  config?: AxiosRequestConfig,
+  config?: AxiosRequestConfig<D>,
   errorMessages?: Record<number, string>,
 ): ApiResult<T> {
   try {

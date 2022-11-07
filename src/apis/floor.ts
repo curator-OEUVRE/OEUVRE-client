@@ -6,6 +6,7 @@ import {
   FloorInfo,
   GetFloorResponseDto,
 } from '@/types/floor';
+import type { FloorMini } from '@/types/floor';
 
 interface GetPictureDetailParams {
   pictureNo: number;
@@ -57,3 +58,68 @@ export const editFloor = async ({ floor, floorNo }: EditFloorParams) => {
   );
   return response;
 };
+
+interface GetFloorsParams {
+  page: number;
+  size: number;
+  userNo: number;
+}
+
+interface GetFloorsRequestDto {
+  page: number;
+  size: number;
+}
+
+interface GetFloorsResponseDto {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: {
+    contents: FloorMini[];
+    isLastPage: boolean;
+  };
+  timestamp: string;
+}
+
+export async function getFloors(
+  accessToken: string,
+  { page, size, userNo }: GetFloorsParams,
+) {
+  const response = await getAsync<GetFloorsResponseDto, GetFloorsRequestDto>(
+    `/users/${userNo}/floors`,
+    {
+      headers: {
+        'X-AUTH-TOKEN': accessToken,
+      },
+      params: { page, size },
+    },
+  );
+
+  return response;
+}
+
+type EditFloorsOrderRequestDto = { floorNo: number; queue: number }[];
+
+interface EditFloorsOrderResponseDto {
+  code: number;
+  isSuccess: boolean;
+  message: string;
+  result: string;
+  timestamp: string;
+}
+
+export async function editFloorsOrder(
+  accessToken: string,
+  params: EditFloorsOrderRequestDto,
+) {
+  const response = await patchAsync<
+    EditFloorsOrderResponseDto,
+    EditFloorsOrderRequestDto
+  >('/floors', params, {
+    headers: {
+      'X-AUTH-TOKEN': accessToken,
+    },
+  });
+
+  return response;
+}
