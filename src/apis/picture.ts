@@ -1,4 +1,4 @@
-import { deleteAsync, getAsync, patchAsync } from './common';
+import { deleteAsync, getAsync, patchAsync, postAsync } from './common';
 import { useAuthStore } from '@/states/authStore';
 import {
   GetPictureDetailResponseDto,
@@ -6,9 +6,14 @@ import {
   PatchPictureResponseDto,
   LikePictureResponseDto,
   ScrapPictureResponseDto,
+  GetLikeUsersResponseDto,
 } from '@/types/picture';
 
 interface GetPictureDetailParams {
+  pictureNo: number;
+}
+
+interface GetLikeUsersParams {
   pictureNo: number;
 }
 
@@ -61,8 +66,9 @@ export const patchPicture = async ({
 };
 
 export const likePicture = async ({ pictureNo }: LikePictureParams) => {
-  const response = await getAsync<LikePictureResponseDto, undefined>(
+  const response = await postAsync<LikePictureResponseDto, undefined>(
     `/pictures/${pictureNo}/like`,
+    undefined,
     {
       headers: {
         'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
@@ -85,8 +91,9 @@ export const unlikePicture = async ({ pictureNo }: LikePictureParams) => {
 };
 
 export const scrapPicture = async ({ pictureNo }: ScrapPictureParams) => {
-  const response = await getAsync<ScrapPictureResponseDto, undefined>(
+  const response = await postAsync<ScrapPictureResponseDto, undefined>(
     `/pictures/${pictureNo}/scrap`,
+    undefined,
     {
       headers: {
         'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
@@ -99,6 +106,18 @@ export const scrapPicture = async ({ pictureNo }: ScrapPictureParams) => {
 export const unscrapPicture = async ({ pictureNo }: ScrapPictureParams) => {
   const response = await deleteAsync<ScrapPictureResponseDto, undefined>(
     `/pictures/${pictureNo}/scrap`,
+    {
+      headers: {
+        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
+      },
+    },
+  );
+  return response;
+};
+
+export const getLikeUsers = async ({ pictureNo }: GetLikeUsersParams) => {
+  const response = await getAsync<GetLikeUsersResponseDto, undefined>(
+    `/pictures/${pictureNo}/like`,
     {
       headers: {
         'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,

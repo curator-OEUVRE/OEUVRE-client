@@ -22,6 +22,13 @@ export interface PictureInfo {
   queue: number;
   pictureNo: number;
 }
+
+export interface LikeUser {
+  id: string;
+  name: string;
+  profileImageUrl: string;
+  userNo: number;
+}
 export type GetPictureDetailResponseDto = ResponseDto<PictureDetail>;
 export type PatchPictureResponseDto = ResponseDto<string>;
 export type PatchPictureRequestDto = {
@@ -30,3 +37,4 @@ export type PatchPictureRequestDto = {
 };
 export type LikePictureResponseDto = ResponseDto<string>;
 export type ScrapPictureResponseDto = ResponseDto<string>;
+export type GetLikeUsersResponseDto = ResponseDto<LikeUser[]>;
