@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   },
   date: {
     color: COLOR.mono.gray5,
-    marginBottom: 18,
   },
   left: {
     flexDirection: 'row',
