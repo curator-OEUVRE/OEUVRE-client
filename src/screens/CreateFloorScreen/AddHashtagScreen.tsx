@@ -76,7 +76,7 @@ const AddHashtagScreen = () => {
   const addHashtag = useCallback(
     (newTag: string) => {
       if (hashtags.findIndex((v) => v === newTag) === -1) {
-        setHashtag(route.params.id, [...hashtags, newTag]);
+        setHashtag(route.params.id, [...hashtags, `#${newTag}`]);
       } else {
         setInputText('');
       }
