@@ -144,12 +144,13 @@ const FloorInfoFormScreen = () => {
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
   const onGoBack = () => {
-    if (mode !== FloorMode.ADD_PICTURES) return;
-    setName(snapshot.current.name);
-    setColor(snapshot.current.color);
-    setIsPublic(snapshot.current.isPublic);
-    setIsCommentAvailable(snapshot.current.isCommentAvailable);
-    setIsCommentAvailable(snapshot.current.isCommentAvailable);
+    if (mode === FloorMode.ADD_PICTURES) {
+      setName(snapshot.current.name);
+      setColor(snapshot.current.color);
+      setIsPublic(snapshot.current.isPublic);
+      setIsCommentAvailable(snapshot.current.isCommentAvailable);
+      setIsCommentAvailable(snapshot.current.isCommentAvailable);
+    }
     navigation.goBack();
   };
   const ConfirmButton = useCallback(
@@ -159,7 +160,7 @@ const FloorInfoFormScreen = () => {
           style={[TEXT_STYLE.button16M, styles.confirmText]}
           onPress={() => navigation.navigate(Screen.EditFloorScreen)}
         >
-          {mode === FloorMode.ADD_PICTURES ? '완료' : '다음'}
+          {mode === FloorMode.EDIT ? '완료' : '다음'}
         </Text>
       </Pressable>
     ),
@@ -179,7 +180,7 @@ const FloorInfoFormScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.safeAreaView}>
         <Header
-          headerTitle="플로어 추가"
+          headerTitle={mode === FloorMode.EDIT ? '플로어 편집' : '플로어 추가'}
           headerRight={ConfirmButton}
           onGoBack={onGoBack}
         />
