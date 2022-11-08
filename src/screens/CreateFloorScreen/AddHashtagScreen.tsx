@@ -15,7 +15,7 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 
 export type AddHashtagScreenParams = {
   id: number;
@@ -65,7 +65,8 @@ const AddHashtagScreen = () => {
   const [inputText, setInputText] = useState('');
 
   const { hashtags, setHashtag } = useCreateFloorStore((state) => {
-    const key = state.isEditMode ? 'tempPictures' : 'pictures';
+    const key =
+      state.mode === FloorMode.ADD_PICTURES ? 'tempPictures' : 'pictures';
     return {
       hashtags: state[key][route.params.id].hashtags,
       setHashtag: state.setHashtag,

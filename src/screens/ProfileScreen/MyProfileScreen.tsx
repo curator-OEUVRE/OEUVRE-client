@@ -15,6 +15,7 @@ import type { RootStackParamsList } from '@/feature/Routes';
 import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import { ProfileStackParamsList } from '@/feature/Routes/ProfileStack';
 import useAuth from '@/hooks/useAuth';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 import { useUserStore } from '@/states/userStore';
 import type { FloorMini } from '@/types/floor';
 import type { UserProfile } from '@/types/user';
@@ -32,7 +33,6 @@ export type MyProfileScreenNP = CompositeNavigationProp<
 const MyFloorList = () => {
   const { floors, setFloors, userNo } = useUserStore();
   const { fetchWithToken } = useAuth();
-
   const editFloors = useCallback(
     async (newFloors: FloorMini[]) => {
       const response = await fetchWithToken(
@@ -117,6 +117,7 @@ const MyProfileScreen = () => {
     }),
     shallow,
   );
+  const { setFloorMode } = useCreateFloorStore();
 
   return (
     <ProfileTemplate
@@ -130,6 +131,7 @@ const MyProfileScreen = () => {
         navigation.navigate(Screen.SettingScreen);
       }}
       onAddFloorPress={() => {
+        setFloorMode(FloorMode.CREATE);
         navigation.navigate(Navigator.FloorStack, {
           screen: Screen.AddPictureScreen,
         });

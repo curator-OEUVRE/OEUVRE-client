@@ -33,7 +33,7 @@ import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { getColorByBackgroundColor } from '@/services/common/color';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 import { GetFloorResponse } from '@/types/floor';
 
 const styles = StyleSheet.create({
@@ -73,7 +73,7 @@ const FloorViewerScreen = () => {
     : COLOR.mono.black;
   const isFocused = useIsFocused();
   const navigation = useNavigation<FloorViewerScreenNP>();
-  const { setIsEditMode, setFloor } = useCreateFloorStore();
+  const { setFloorMode, setFloor } = useCreateFloorStore();
   const { floorNo } = params;
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   useEffect(() => {
@@ -131,7 +131,7 @@ const FloorViewerScreen = () => {
 
   const onEditFloor = () => {
     if (!floorInfo) return;
-    setIsEditMode(true);
+    setFloorMode(FloorMode.EDIT);
     setFloor(floorInfo);
     navigation.navigate(Screen.EditFloorScreen, { floorNo });
   };

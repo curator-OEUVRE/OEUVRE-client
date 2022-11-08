@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet } from 'react-native';
 import PictureDescriptionItem from './PictureDescriptionItem';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 
 interface Props {
   onHashtagPress: (id: number) => void;
@@ -13,9 +13,9 @@ const styles = StyleSheet.create({
 });
 
 const PictureDescriptionList = ({ onHashtagPress }: Props) => {
-  const { pictures, onChangeDescriptionByIdx, tempPictures, isEditMode } =
+  const { pictures, onChangeDescriptionByIdx, tempPictures, mode } =
     useCreateFloorStore();
-  const data = isEditMode ? tempPictures : pictures;
+  const data = mode === FloorMode.ADD_PICTURES ? tempPictures : pictures;
   return (
     <FlatList
       data={data}

@@ -32,6 +32,7 @@ import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { validateFloorName } from '@/services/validation/createFloor';
 import {
+  FloorMode,
   FLOOR_BACKGROUND_COLORS,
   useCreateFloorStore,
 } from '@/states/createFloorStore';
@@ -130,7 +131,7 @@ const FloorInfoFormScreen = () => {
     setIsPublic,
     isCommentAvailable,
     setIsCommentAvailable,
-    isEditMode,
+    mode,
   } = useCreateFloorStore();
   const snapshot = useRef({
     name,
@@ -140,16 +141,17 @@ const FloorInfoFormScreen = () => {
     setIsCommentAvailable,
   });
 
+  const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
   const onGoBack = () => {
-    if (!isEditMode) return;
+    if (mode !== FloorMode.ADD_PICTURES) return;
     setName(snapshot.current.name);
     setColor(snapshot.current.color);
     setIsPublic(snapshot.current.isPublic);
     setIsCommentAvailable(snapshot.current.isCommentAvailable);
     setIsCommentAvailable(snapshot.current.isCommentAvailable);
+    navigation.goBack();
   };
-  const navigation = useNavigation<FloorInfoFormScreenNP>();
   const ConfirmButton = useCallback(
     () => (
       <Pressable>
@@ -157,11 +159,11 @@ const FloorInfoFormScreen = () => {
           style={[TEXT_STYLE.button16M, styles.confirmText]}
           onPress={() => navigation.navigate(Screen.EditFloorScreen)}
         >
-          {isEditMode ? '완료' : '다음'}
+          {mode === FloorMode.ADD_PICTURES ? '완료' : '다음'}
         </Text>
       </Pressable>
     ),
-    [navigation, isEditMode],
+    [navigation, mode],
   );
 
   const FloorNameLength = useCallback(

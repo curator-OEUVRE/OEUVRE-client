@@ -23,7 +23,7 @@ import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
 import { getColorByBackgroundColor } from '@/services/common/color';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
@@ -117,9 +117,9 @@ const EditFloorScreen = () => {
     color,
     name,
     createFloor,
-    isEditMode,
+    mode,
     editFloor,
-    setIsEditMode,
+    setFloorMode,
   } = useCreateFloorStore();
 
   const onConfirm = useCallback(async () => {
@@ -141,12 +141,12 @@ const EditFloorScreen = () => {
       };
     });
     setPictures(newPictures);
-    if (isEditMode) {
+    if (mode === FloorMode.EDIT) {
       if (!params?.floorNo) return;
       const result = editFloor(params.floorNo);
       // eslint-disable-next-line no-console
       console.log(result);
-      setIsEditMode(false);
+      setFloorMode(FloorMode.VIEWER);
       navigation.navigate(Screen.FloorViewerScreen, {
         floorNo: params.floorNo,
       });
@@ -162,9 +162,9 @@ const EditFloorScreen = () => {
     pictures,
     setPictures,
     uploadImages,
-    setIsEditMode,
+    setFloorMode,
     editFloor,
-    isEditMode,
+    mode,
     params?.floorNo,
     navigation,
   ]);
@@ -177,35 +177,37 @@ const EditFloorScreen = () => {
     ),
     [onConfirm],
   );
-  const headerTitle = isEditMode
-    ? () => (
-        <Pressable
-          style={styles.wrapTitle}
-          onPress={() => {
-            lockAsync(OrientationLock.PORTRAIT_UP);
-            navigation.navigate(Screen.FloorInfoFormScreen);
-          }}
-        >
-          <Text
-            style={[
-              styles.title,
-              TEXT_STYLE.body16M,
-              { color: colorByBackground },
-            ]}
+  const headerTitle =
+    mode === FloorMode.EDIT
+      ? () => (
+          <Pressable
+            style={styles.wrapTitle}
+            onPress={() => {
+              lockAsync(OrientationLock.PORTRAIT_UP);
+              navigation.navigate(Screen.FloorInfoFormScreen);
+            }}
           >
-            {name.value}
-          </Text>
-          <PencilIcon color={colorByBackground} />
-        </Pressable>
-      )
-    : '플로어 추가';
+            <Text
+              style={[
+                styles.title,
+                TEXT_STYLE.body16M,
+                { color: colorByBackground },
+              ]}
+            >
+              {name.value}
+            </Text>
+            <PencilIcon color={colorByBackground} />
+          </Pressable>
+        )
+      : '플로어 추가';
   const addPictures = useCallback(() => {
     lockAsync(OrientationLock.PORTRAIT_UP);
+    setFloorMode(FloorMode.ADD_PICTURES);
     navigation.navigate(Screen.AddPictureScreen);
-  }, [navigation]);
+  }, [navigation, setFloorMode]);
 
   const onPressPicture = (pictureNo: number) => {
-    if (!isEditMode) return;
+    if (mode !== FloorMode.EDIT) return;
     const picture = pictures.find((p) => p.pictureNo === pictureNo);
     if (!picture) return;
     lockAsync(OrientationLock.PORTRAIT_UP);
@@ -218,6 +220,10 @@ const EditFloorScreen = () => {
         headerRight={ConfirmButton}
         backgroundColor="transparent"
         iconColor={colorByBackground}
+        onGoBack={() => {
+          setFloorMode(FloorMode.VIEWER);
+          navigation.goBack();
+        }}
       />
       <View style={styles.wrapList}>
         <FloorPictureList
@@ -233,6 +239,13 @@ const EditFloorScreen = () => {
         visible={!!selectedPicture}
         imageUri={selectedPicture?.imageUrl || ''}
         hashtags={selectedPicture?.hashtags || []}
+        onBackPress={() => setSelectedPicture(undefined)}
+        onHashtagPress={() => {
+          if (!selectedPicture) return;
+          navigation.navigate(Screen.AddHashtagScreen, {
+            id: selectedPicture.pictureNo,
+          });
+        }}
       />
     </SafeAreaView>
   );

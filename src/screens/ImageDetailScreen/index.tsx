@@ -164,7 +164,6 @@ const ImageDetailScreen = () => {
   const { width, height, description, imageUrl, isLiked, isScraped, isMine } =
     pictureDetail;
 
-  const isBottomSheetOpen = bottomSheetIndex >= 0;
   const scale = useSharedValue(0);
   const isLikeAnimation = useSharedValue(true);
   const onAnimation = useSharedValue(false);

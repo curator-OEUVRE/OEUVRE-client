@@ -20,7 +20,7 @@ import AddCircleIcon from '@/assets/icons/AddCircle';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 import type { PictureInfo } from '@/types/picture';
 
 const LINE_BUTTON_SIZE = 40;
@@ -75,7 +75,7 @@ const FloorPicture = ({
   onPressPicture,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
-  const { isEditMode } = useCreateFloorStore();
+  const { mode } = useCreateFloorStore();
   const BASE_SIZE = height > width ? width : height;
   const imageWidth = useMemo(
     () => BASE_SIZE * item.width,
@@ -201,7 +201,7 @@ const FloorPicture = ({
               source={{ uri: item.imageUrl }}
               style={imageAnimStyle}
             />
-            {isEditMode && renderEditLayer()}
+            {mode === FloorMode.EDIT && renderEditLayer()}
           </View>
           <Text style={[styles.text, TEXT_STYLE.body12R]}>{description}</Text>
         </Pressable>
