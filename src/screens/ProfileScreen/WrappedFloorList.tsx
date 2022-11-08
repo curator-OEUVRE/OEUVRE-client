@@ -14,13 +14,13 @@ interface Props {
 const WrappedFloorList = ({ floors, userNo, setFloors, onDragEnd }: Props) => {
   const { fetchWithToken } = useAuth();
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     async function init() {
       const response = await fetchWithToken(getFloors, {
-        page: 1,
+        page: 0,
         size: 10,
         userNo,
       });
@@ -54,7 +54,7 @@ const WrappedFloorList = ({ floors, userNo, setFloors, onDragEnd }: Props) => {
     setRefreshing(true);
 
     const response = await fetchWithToken(getFloors, {
-      page: 1,
+      page: 0,
       size: 10,
       userNo,
     });

@@ -19,6 +19,7 @@ module.exports = {
     },
     updates: {
       fallbackToCacheTimeout: 0,
+      url: 'https://u.expo.dev/bc755e58-fef2-4c34-8869-6f92386964d6',
     },
     assetBundlePatterns: ['**/*'],
     plugins: [
@@ -40,9 +41,9 @@ module.exports = {
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#FFFFFF',
-        googleServicesFile: './google-services.json',
       },
       package: 'com.curator.oeuvre',
+      googleServicesFile: './google-services.json',
     },
     web: {
       favicon: './assets/favicon.png',

@@ -3,13 +3,13 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Image,
   Pressable,
   StyleSheet,
   Text,
   useWindowDimensions,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -18,7 +18,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getPictureDetail } from '@/apis/picture';
+import { getLikeUsers, getPictureDetail } from '@/apis/picture';
 import * as PictureAPI from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
 import BookmarkIcon from '@/assets/icons/Bookmark';
@@ -41,9 +41,10 @@ import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import UserProfileList from '@/feature/UserProfileList';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
-import { PictureDetail } from '@/types/picture';
+import { LikeUser, PictureDetail } from '@/types/picture';
 
 enum OrientationType {
   portrait,
@@ -60,7 +61,8 @@ export type ImageDetailScreenRP = RouteProp<
   Screen.ImageDetailScreen
 >;
 
-const AnimatedImage = Animated.createAnimatedComponent(Image);
+// @ts-ignore
+const AnimatedImage = Animated.createAnimatedComponent(FastImage);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -76,6 +78,12 @@ const styles = StyleSheet.create({
   imageBackground: {
     flex: 1,
     justifyContent: 'center',
+  },
+  likeTitle: {
+    color: COLOR.mono.black,
+    height: 56,
+    textAlign: 'center',
+    width: '100%',
   },
   text: {
     color: COLOR.mono.gray7,
@@ -129,16 +137,17 @@ const ImageDetailScreen = () => {
 
   const { params } = useRoute<ImageDetailScreenRP>();
   const { pictureNo, color } = params;
-
   const colorByBackground = getColorByBackgroundColor(color);
   const [pictureDetail, setPictureDetail] =
     useState<PictureDetail>(initialPicture);
+  const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
   const [isEditMode, setEditMode] = useState<boolean>(false);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
+  const [likeUserSheetIndex, setLikeUserSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
 
   const bottomSheetRef = useRef<Sheet>(null);
-
+  const likePeoplesRef = useRef<Sheet>(null);
   useEffect(() => {
     const fetchPictureDetail = async () => {
       setLoading(true);
@@ -230,9 +239,26 @@ const ImageDetailScreen = () => {
   const SIZE =
     orientation === OrientationType.landscape ? windowHeight : windowWidth;
   const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
+
+  const showLikesPeople = async () => {
+    const response = await getLikeUsers({ pictureNo });
+    if (response.isSuccess) {
+      const { result } = response.result;
+      setLikeUser(result);
+      setLikeUserSheetIndex(0);
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(response.result.info);
+    }
+  };
+
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
-      <Pressable style={styles.wrapMore} onPress={throttle(toggleLike)}>
+      <Pressable
+        style={styles.wrapMore}
+        onPress={throttle(toggleLike)}
+        onLongPress={showLikesPeople}
+      >
         <Favorite color={colorByBackground} />
       </Pressable>
       <Pressable onPress={() => setBottomSheetIndex(isMine ? 1 : 0)}>
@@ -347,6 +373,23 @@ const ImageDetailScreen = () => {
 
   if (loading) return <Spinner />;
 
+  const renderLikeUsersSheet = () => (
+    <BottomSheet
+      ref={likePeoplesRef}
+      index={likeUserSheetIndex}
+      onChange={setLikeUserSheetIndex}
+      snapPoints={['50%']}
+      backdropOpacity={0.1}
+    >
+      <>
+        <Text style={[styles.likeTitle, TEXT_STYLE.body16M]}>
+          좋아요 {likeUsers.length}
+        </Text>
+        <UserProfileList data={likeUsers} />
+      </>
+    </BottomSheet>
+  );
+
   return (
     <View
       style={[
@@ -367,7 +410,7 @@ const ImageDetailScreen = () => {
           onActivated={toggleLike}
         >
           <Animated.View style={styles.wrapImage}>
-            <Image
+            <FastImage
               source={{ uri: imageUrl }}
               style={styles.imageBackground}
               resizeMode="contain"
@@ -377,6 +420,7 @@ const ImageDetailScreen = () => {
       </TapGestureHandler>
       {renderFooter()}
       {renderBottomSheet()}
+      {renderLikeUsersSheet()}
       <AnimatedImage
         source={isLikeAnimation.value ? IMAGE.heart : IMAGE.bookmark}
         style={[

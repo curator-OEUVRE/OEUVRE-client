@@ -123,3 +123,49 @@ export async function editFloorsOrder(
 
   return response;
 }
+
+interface GetHomeFeedParams {
+  page: number;
+  size: number;
+}
+
+export interface HomeFloor {
+  exhibitionName: string;
+  floorName: string;
+  floorNo: number;
+  height: number;
+  id: string;
+  isMine: boolean;
+  isNew: boolean;
+  isUpdated: boolean;
+  profileImageUrl: string;
+  queue: number;
+  thumbnailUrl: string;
+  updateCount: number;
+  updatedAt: string;
+  userNo: number;
+  width: number;
+}
+
+interface GetHomeFeedResponseDto {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: {
+    contents: HomeFloor[];
+    isLastPage: boolean;
+  };
+  timestamp: string;
+}
+
+export async function getHomeFeed(
+  accessToken: string,
+  { page, size }: GetHomeFeedParams,
+) {
+  const response = await getAsync<GetHomeFeedResponseDto, GetHomeFeedParams>(
+    '/floors/home',
+    { headers: { 'X-AUTH-TOKEN': accessToken }, params: { page, size } },
+  );
+
+  return response;
+}

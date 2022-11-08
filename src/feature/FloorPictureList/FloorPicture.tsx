@@ -5,6 +5,7 @@ import {
   RenderItemParams,
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
+import FastImage from 'react-native-fast-image';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   FadeIn,
@@ -22,6 +23,9 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
 import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 import type { PictureInfo } from '@/types/picture';
+
+// @ts-ignore
+const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 
 const LINE_BUTTON_SIZE = 40;
 
@@ -197,7 +201,7 @@ const FloorPicture = ({
           }}
         >
           <View>
-            <Animated.Image
+            <AnimatedFastImage
               source={{ uri: item.imageUrl }}
               style={imageAnimStyle}
             />

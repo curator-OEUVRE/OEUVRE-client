@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import {
   View,
-  Image,
   StyleSheet,
   Text,
   Pressable,
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
@@ -96,7 +96,10 @@ const ProfileCard = ({
   return (
     <View style={[styles.container, style]}>
       <Pressable onPress={onImagePress}>
-        <Image style={styles.profileImage} source={{ uri: profileImageUrl }} />
+        <FastImage
+          style={styles.profileImage}
+          source={{ uri: profileImageUrl }}
+        />
       </Pressable>
 
       <View style={styles.profileContent}>

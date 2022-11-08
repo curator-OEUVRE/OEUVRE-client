@@ -63,7 +63,7 @@ const MyCollection = () => {
   const { collection, setCollection } = useUserStore();
   const { fetchWithToken } = useAuth();
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
 
   const loadMorePictures = useCallback(async () => {
@@ -79,7 +79,7 @@ const MyCollection = () => {
   const refreshCollection = useCallback(async () => {
     setRefreshing(true);
 
-    const response = await fetchWithToken(getCollection, { page: 1, size: 10 });
+    const response = await fetchWithToken(getCollection, { page: 0, size: 10 });
     if (response.isSuccess) {
       setPage(1);
       setCollection(response.result.result.contents);

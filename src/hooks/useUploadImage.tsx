@@ -2,19 +2,11 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { firebase } from '@/services/firebase';
 
-const makeBlob = (imageUri: string): Promise<Blob> =>
-  new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = () => {
-      resolve(xhr.response);
-    };
-    xhr.onerror = () => {
-      reject(new TypeError('Network request failed'));
-    };
-    xhr.responseType = 'blob';
-    xhr.open('GET', imageUri, true);
-    xhr.send(null);
-  });
+const makeBlob = async (imageUri: string): Promise<Blob> => {
+  const response = await fetch(imageUri);
+  const image = await response.blob();
+  return image;
+};
 
 const useUploadImage = () => {
   const [uploading, setUploading] = useState<boolean>(false);
