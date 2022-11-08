@@ -17,8 +17,15 @@ interface FormInfo<T> {
   isRequired: boolean;
 }
 
+export enum FloorMode {
+  VIEWER,
+  CREATE,
+  EDIT,
+  ADD_PICTURES,
+}
+
 interface CreateFloorStore {
-  isEditMode: boolean;
+  mode: FloorMode;
   pictures: PictureInfo[];
   tempPictures: PictureInfo[];
   name: FormInfo<string>;
@@ -27,7 +34,7 @@ interface CreateFloorStore {
   isPublic: boolean;
   // TODO: enum으로 대체
   texture: number;
-  setIsEditMode: (isEditMode: boolean) => void;
+  setFloorMode: (mode: FloorMode) => void;
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],
   ) => void;
@@ -65,7 +72,7 @@ export const FLOOR_BACKGROUND_COLORS = [
 export const FLOOR_TEXTURES = [[0]];
 
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
-  isEditMode: false,
+  mode: FloorMode.VIEWER,
   pictures: [],
   tempPictures: [],
   name: {
@@ -78,12 +85,13 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   isCommentAvailable: true,
   isPublic: true,
   texture: FLOOR_TEXTURES[0][0],
-  setIsEditMode: (isEditMode) => {
-    set((state) => ({ ...state, isEditMode }));
+  setFloorMode: (mode) => {
+    console.log(mode);
+    set((state) => ({ ...state, mode }));
   },
   createPictures: (images) => {
-    const { isEditMode } = get();
-    const key = isEditMode ? 'tempPictures' : 'pictures';
+    const { mode } = get();
+    const key = mode === FloorMode.ADD_PICTURES ? 'tempPictures' : 'pictures';
     set((state) => ({
       ...state,
       [key]: images.map((info) => createDefaultPictureInfo(info)),
@@ -97,8 +105,8 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   },
   setPictures: (pictures) => set((state) => ({ ...state, pictures })),
   onChangeDescriptionByIdx: (idx: number) => (description: string) => {
-    const { isEditMode } = get();
-    const key = isEditMode ? 'tempPictures' : 'pictures';
+    const { mode } = get();
+    const key = mode === FloorMode.ADD_PICTURES ? 'tempPictures' : 'pictures';
     set((state) => ({
       ...state,
       [key]: [
@@ -109,8 +117,8 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
     }));
   },
   setHashtag: (imageIndex, hashtags) => {
-    const { isEditMode } = get();
-    const key = isEditMode ? 'tempPictures' : 'pictures';
+    const { mode } = get();
+    const key = mode === FloorMode.ADD_PICTURES ? 'tempPictures' : 'pictures';
     set((state) => ({
       ...state,
       [key]: state[key].map((picture, index) => {

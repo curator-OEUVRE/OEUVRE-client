@@ -66,8 +66,11 @@ const Header = ({
             <Pressable
               style={styles.arrowLeft}
               onPress={() => {
-                onGoBack?.();
-                navigation.goBack();
+                if (onGoBack) {
+                  onGoBack();
+                } else {
+                  navigation.goBack();
+                }
               }}
             >
               <ArrowBackIcon color={iconColor} />

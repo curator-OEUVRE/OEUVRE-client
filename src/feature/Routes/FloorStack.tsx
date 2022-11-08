@@ -16,6 +16,8 @@ import {
   EditFloorScreenParams,
   FloorViewerScreen,
   FloorViewerScreenParams,
+  EditDescriptionScreen,
+  EditDescriptionScreenParams,
 } from '@/screens/FloorScreen';
 import GuestBookScreen, {
   GuestBookScreenParams,
@@ -42,6 +44,7 @@ export type FloorStackParamsList = {
   [Screen.GuestBookScreen]: GuestBookScreenParams;
   [Screen.ProfileScreen]: ProfileScreenParams;
   [Screen.MyProfileScreen]: MyProfileScreenParams;
+  [Screen.EditDescriptionScreen]: EditDescriptionScreenParams;
 };
 
 const Stack = createStackNavigator<FloorStackParamsList>();
@@ -75,6 +78,10 @@ const FloorStack = () => (
     <Stack.Screen name={Screen.GuestBookScreen} component={GuestBookScreen} />
     <Stack.Screen name={Screen.ProfileScreen} component={ProfileScreen} />
     <Stack.Screen name={Screen.MyProfileScreen} component={MyProfileScreen} />
+    <Stack.Screen
+      name={Screen.EditDescriptionScreen}
+      component={EditDescriptionScreen}
+    />
   </Stack.Navigator>
 );
 

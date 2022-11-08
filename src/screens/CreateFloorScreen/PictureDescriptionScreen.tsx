@@ -13,7 +13,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import PictureDescriptionList from '@/feature/PictureDescriptionList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -34,13 +34,20 @@ export type PictureDescriptionScreenNP = CompositeNavigationProp<
 
 const PictureDescriptionScreen = () => {
   const navigation = useNavigation<PictureDescriptionScreenNP>();
-  const { isEditMode, pictures, tempPictures, setPictures, clearTempPictures } =
-    useCreateFloorStore();
+  const {
+    mode,
+    pictures,
+    tempPictures,
+    setPictures,
+    clearTempPictures,
+    setFloorMode,
+  } = useCreateFloorStore();
   const headerRight = () => (
     <Pressable
       onPress={() => {
-        if (isEditMode) {
+        if (mode === FloorMode.ADD_PICTURES) {
           setPictures([...pictures, ...tempPictures]);
+          setFloorMode(FloorMode.EDIT);
           clearTempPictures();
           navigation.pop(2);
         } else {
@@ -49,7 +56,7 @@ const PictureDescriptionScreen = () => {
       }}
     >
       <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>
-        {isEditMode ? '완료' : '다음'}
+        {mode === FloorMode.ADD_PICTURES ? '완료' : '다음'}
       </Text>
     </Pressable>
   );

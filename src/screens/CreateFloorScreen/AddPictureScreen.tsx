@@ -9,7 +9,7 @@ import { StyleSheet, View } from 'react-native';
 import { Screen } from '@/constants/screens';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,7 +25,7 @@ export type AddPictureScreenScreenNP = CompositeNavigationProp<
 
 const AddPictureScreen = () => {
   const navigation = useNavigation<AddPictureScreenScreenNP>();
-  const { createPictures, isEditMode, clearTempPictures } =
+  const { createPictures, mode, clearTempPictures, setFloorMode } =
     useCreateFloorStore();
 
   useFocusEffect(() => {
@@ -45,7 +45,10 @@ const AddPictureScreen = () => {
         createPictures(imageUrls);
         navigation.navigate(Screen.PictureDescriptionScreen);
       } else {
-        if (isEditMode) clearTempPictures();
+        if (mode === FloorMode.ADD_PICTURES) {
+          clearTempPictures();
+          setFloorMode(FloorMode.EDIT);
+        }
         navigation.goBack();
       }
     };
