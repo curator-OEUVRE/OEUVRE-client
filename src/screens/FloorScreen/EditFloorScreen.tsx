@@ -18,13 +18,11 @@ import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
-import PictureDescriptionModal from '@/feature/PictureDescriptionModal';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
-import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   check: {
@@ -108,7 +106,6 @@ const EditFloorScreen = () => {
 
   const { params } = useRoute<EditFloorScreenRP>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [selectedPicture, setSelectedPicture] = useState<PictureInfo>();
   const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
   const {
@@ -211,7 +208,7 @@ const EditFloorScreen = () => {
     const picture = pictures.find((p) => p.pictureNo === pictureNo);
     if (!picture) return;
     lockAsync(OrientationLock.PORTRAIT_UP);
-    setSelectedPicture(picture);
+    navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
   };
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
@@ -235,18 +232,6 @@ const EditFloorScreen = () => {
         />
       </View>
       {modalVisible && <SuccessModal onPress={() => {}} />}
-      <PictureDescriptionModal
-        visible={!!selectedPicture}
-        imageUri={selectedPicture?.imageUrl || ''}
-        hashtags={selectedPicture?.hashtags || []}
-        onBackPress={() => setSelectedPicture(undefined)}
-        onHashtagPress={() => {
-          if (!selectedPicture) return;
-          navigation.navigate(Screen.AddHashtagScreen, {
-            id: selectedPicture.pictureNo,
-          });
-        }}
-      />
     </SafeAreaView>
   );
 };

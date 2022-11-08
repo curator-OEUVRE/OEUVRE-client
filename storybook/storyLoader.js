@@ -21,7 +21,6 @@ function loadStories() {
   require('../src/feature/FloorDropdown/FloorDropdown.stories');
   require('../src/feature/GuestBookList/GuestBookItem.stories');
   require('../src/feature/GuestBookList/GuestBookList.stories');
-  require('../src/feature/PictureDescriptionModal/PictureDescriptionModal.stories');
 }
 
 const stories = [
@@ -42,7 +41,6 @@ const stories = [
   '../src/feature/FloorDropdown/FloorDropdown.stories',
   '../src/feature/GuestBookList/GuestBookItem.stories',
   '../src/feature/GuestBookList/GuestBookList.stories',
-  '../src/feature/PictureDescriptionModal/PictureDescriptionModal.stories',
 ];
 
 module.exports = {
