@@ -1,5 +1,6 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   RenderItemParams,
   ScaleDecorator,
@@ -16,13 +17,24 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import AddCircleIcon from '@/assets/icons/AddCircle';
+import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
+import { useCreateFloorStore } from '@/states/createFloorStore';
 import type { PictureInfo } from '@/types/picture';
 
 const LINE_BUTTON_SIZE = 40;
 
 const styles = StyleSheet.create({
+  editLayer: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
   item: {
     alignSelf: 'center',
   },
@@ -63,6 +75,7 @@ const FloorPicture = ({
   onPressPicture,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
+  const { isEditMode } = useCreateFloorStore();
   const BASE_SIZE = height > width ? width : height;
   const imageWidth = useMemo(
     () => BASE_SIZE * item.width,
@@ -153,6 +166,14 @@ const FloorPicture = ({
     item.description.length > 10
       ? `${item.description.substring(0, 10)}...`
       : item.description;
+  const renderEditLayer = () => (
+    <LinearGradient
+      style={styles.editLayer}
+      colors={['rgba(34, 41, 46, 0.2)', 'rgba(34, 41, 46, 0.2)']}
+    >
+      <PencilIcon color={COLOR.mono.white} width={40} height={40} />
+    </LinearGradient>
+  );
   return (
     <GestureDetector gesture={pinchGesture}>
       <ScaleDecorator>
@@ -171,12 +192,17 @@ const FloorPicture = ({
             styles.item,
           ]}
           onLongPress={editable ? drag : undefined}
-          onPress={() => onPressPicture?.(item.pictureNo)}
+          onPress={() => {
+            onPressPicture?.(item.pictureNo);
+          }}
         >
-          <Animated.Image
-            source={{ uri: item.imageUrl }}
-            style={imageAnimStyle}
-          />
+          <View>
+            <Animated.Image
+              source={{ uri: item.imageUrl }}
+              style={imageAnimStyle}
+            />
+            {isEditMode && renderEditLayer()}
+          </View>
           <Text style={[styles.text, TEXT_STYLE.body12R]}>{description}</Text>
         </Pressable>
       </ScaleDecorator>

@@ -2,15 +2,15 @@
 import {
   CompositeNavigationProp,
   RouteProp,
+  useFocusEffect,
   useNavigation,
   useRoute,
-  useFocusEffect,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useLayoutEffect, useState } from 'react';
-import { Pressable, StyleSheet, View, Modal, Text, Image } from 'react-native';
+import { useCallback, useState } from 'react';
+import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
@@ -18,11 +18,13 @@ import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
+import PictureDescriptionModal from '@/feature/PictureDescriptionModal';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import { useCreateFloorStore } from '@/states/createFloorStore';
+import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   check: {
@@ -106,6 +108,7 @@ const EditFloorScreen = () => {
 
   const { params } = useRoute<EditFloorScreenRP>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedPicture, setSelectedPicture] = useState<PictureInfo>();
   const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
   const {
@@ -200,6 +203,14 @@ const EditFloorScreen = () => {
     lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.AddPictureScreen);
   }, [navigation]);
+
+  const onPressPicture = (pictureNo: number) => {
+    if (!isEditMode) return;
+    const picture = pictures.find((p) => p.pictureNo === pictureNo);
+    if (!picture) return;
+    lockAsync(OrientationLock.PORTRAIT_UP);
+    setSelectedPicture(picture);
+  };
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
@@ -214,9 +225,15 @@ const EditFloorScreen = () => {
           editable
           setPictures={setPictures}
           addPictures={addPictures}
+          onPressPicture={onPressPicture}
         />
       </View>
       {modalVisible && <SuccessModal onPress={() => {}} />}
+      <PictureDescriptionModal
+        visible={!!selectedPicture}
+        imageUri={selectedPicture?.imageUrl || ''}
+        hashtags={selectedPicture?.hashtags || []}
+      />
     </SafeAreaView>
   );
 };
