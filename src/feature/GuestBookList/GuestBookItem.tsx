@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginBottom: 24,
-    minHeight: 60,
   },
   date: {
     color: COLOR.mono.gray5,
+    marginBottom: 18,
   },
   left: {
     flexDirection: 'row',
