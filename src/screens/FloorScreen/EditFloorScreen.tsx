@@ -229,7 +229,11 @@ const EditFloorScreen = () => {
         backgroundColor="transparent"
         iconColor={colorByBackground}
         onGoBack={() => {
-          setFloorMode(FloorMode.VIEWER);
+          if (mode === FloorMode.CREATE) {
+            lockAsync(OrientationLock.PORTRAIT_UP);
+          } else if (mode === FloorMode.EDIT) {
+            setFloorMode(FloorMode.VIEWER);
+          }
           navigation.goBack();
         }}
       />
