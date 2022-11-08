@@ -128,7 +128,7 @@ const AddHashtagScreen = () => {
           rightElement={<AddButton />}
           placeholder="태그를 입력해 주세요. (최대 5개)"
           value={inputText}
-          onChangeText={setInputText}
+          onChangeText={(text) => setInputText(text.replace(/\s/g, ''))}
         />
         <View style={styles.tagsContainer}>
           {hashtags.map((tag, index) => (
