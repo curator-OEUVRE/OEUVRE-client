@@ -9,9 +9,16 @@ interface Props {
   userNo: number;
   setFloors: (newFloors: FloorMini[]) => void;
   onDragEnd?: (newFloors: FloorMini[]) => void;
+  onFloorPress?: (floorNo: number) => void;
 }
 
-const WrappedFloorList = ({ floors, userNo, setFloors, onDragEnd }: Props) => {
+const WrappedFloorList = ({
+  floors,
+  userNo,
+  setFloors,
+  onDragEnd,
+  onFloorPress,
+}: Props) => {
   const { fetchWithToken } = useAuth();
 
   const [page, setPage] = useState(0);
@@ -76,6 +83,7 @@ const WrappedFloorList = ({ floors, userNo, setFloors, onDragEnd }: Props) => {
       onEndReached={loadMoreFloors}
       refreshing={refreshing}
       onRefresh={refreshFloors}
+      onFloorPress={onFloorPress}
     />
   );
 };

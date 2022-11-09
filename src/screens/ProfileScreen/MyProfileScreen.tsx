@@ -10,6 +10,7 @@ import WrappedFloorList from './WrappedFloorList';
 import { editFloorsOrder } from '@/apis/floor';
 import { getCollection } from '@/apis/user';
 import { Screen, Navigator } from '@/constants/screens';
+import { COLOR } from '@/constants/styles';
 import Collection from '@/feature/Collection';
 import type { RootStackParamsList } from '@/feature/Routes';
 import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
@@ -31,6 +32,8 @@ export type MyProfileScreenNP = CompositeNavigationProp<
 >;
 
 const MyFloorList = () => {
+  const navigation = useNavigation<MyProfileScreenNP>();
+
   const { floors, setFloors, userNo } = useUserStore();
   const { fetchWithToken } = useAuth();
   const editFloors = useCallback(
@@ -49,17 +52,30 @@ const MyFloorList = () => {
     [fetchWithToken, setFloors],
   );
 
+  const goToFloor = useCallback(
+    (floorNo: number) => {
+      navigation.navigate(Navigator.FloorStack, {
+        screen: Screen.FloorViewerScreen,
+        params: { floorNo },
+      });
+    },
+    [navigation],
+  );
+
   return (
     <WrappedFloorList
       floors={floors}
       userNo={userNo}
       setFloors={setFloors}
       onDragEnd={editFloors}
+      onFloorPress={goToFloor}
     />
   );
 };
 
 const MyCollection = () => {
+  const navigation = useNavigation<MyProfileScreenNP>();
+
   const { collection, setCollection } = useUserStore();
   const { fetchWithToken } = useAuth();
 
@@ -90,13 +106,23 @@ const MyCollection = () => {
     setRefreshing(false);
   }, [fetchWithToken, setCollection]);
 
-  // TODO: `onPicturePress` 구현
+  const goToPicture = useCallback(
+    (pictureNo: number) => {
+      navigation.navigate(Navigator.FloorStack, {
+        screen: Screen.ImageDetailScreen,
+        params: { pictureNo, color: COLOR.mono.white },
+      });
+    },
+    [navigation],
+  );
+
   return (
     <Collection
       pictures={collection}
       refreshing={refreshing}
       onEndReached={loadMorePictures}
       onRefresh={refreshCollection}
+      onPicturePress={goToPicture}
     />
   );
 };
@@ -136,7 +162,6 @@ const MyProfileScreen = () => {
           screen: Screen.AddPictureScreen,
         });
       }}
-      // TODO: `onAddFloorPress` 구현
     />
   );
 };

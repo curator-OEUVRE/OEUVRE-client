@@ -1,9 +1,16 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
+import {
+  type CompositeNavigationProp,
+  type RouteProp,
+  useRoute,
+  useNavigation,
+} from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { useState, useCallback, useEffect } from 'react';
 import ProfileTemplate from './ProfileTemplate';
 import WrappedFloorList from './WrappedFloorList';
 import { followUser, getProfile, unfollowUser } from '@/apis/user';
 import { Screen } from '@/constants/screens';
+import type { RootStackParamsList } from '@/feature/Routes';
 import type { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useAuth from '@/hooks/useAuth';
 import type { FloorMini } from '@/types/floor';
@@ -12,6 +19,11 @@ import type { OtherUserProfile } from '@/types/user';
 export type ProfileScreenParams = {
   userNo: number;
 };
+
+export type ProfileScreenNP = CompositeNavigationProp<
+  StackNavigationProp<FloorStackParamsList, Screen.FloorViewerScreen>,
+  StackNavigationProp<RootStackParamsList>
+>;
 
 export type ProfileScreenRP = RouteProp<
   FloorStackParamsList,
@@ -23,10 +35,24 @@ interface BasicFloorListProps {
 }
 
 const BasicFloorList = ({ userNo }: BasicFloorListProps) => {
+  const navigation = useNavigation<ProfileScreenNP>();
+
   const [floors, setFloors] = useState<FloorMini[]>([]);
 
+  const goToFloor = useCallback(
+    (floorNo: number) => {
+      navigation.navigate(Screen.FloorViewerScreen, { floorNo });
+    },
+    [navigation],
+  );
+
   return (
-    <WrappedFloorList floors={floors} userNo={userNo} setFloors={setFloors} />
+    <WrappedFloorList
+      floors={floors}
+      userNo={userNo}
+      setFloors={setFloors}
+      onFloorPress={goToFloor}
+    />
   );
 };
 
