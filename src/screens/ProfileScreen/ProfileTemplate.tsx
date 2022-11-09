@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   background: {
-    aspectRatio: 375 / 159,
+    height: 160,
     position: 'absolute',
     top: 0,
     width: '100%',
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
   },
   /* eslint-disable-next-line react-native/no-color-literals */
   filter: {
-    aspectRatio: 375 / 159,
     backgroundColor: 'rgba(20, 23, 24, 0.4)',
+    height: 160,
     position: 'absolute',
     width: '100%',
   },
