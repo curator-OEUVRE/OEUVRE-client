@@ -72,6 +72,7 @@ const Header = ({
                   navigation.goBack();
                 }
               }}
+              hitSlop={10}
             >
               <ArrowBackIcon color={iconColor} />
             </Pressable>
