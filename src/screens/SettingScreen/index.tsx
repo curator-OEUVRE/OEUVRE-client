@@ -1,3 +1,8 @@
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { type ReactNode, useState } from 'react';
 import {
   Text,
@@ -13,11 +18,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
 import { Header } from '@/components/Header';
 import { SettingItem } from '@/components/SettingItem';
+import { Screen } from '@/constants/screens';
 import { TEXT_STYLE, COLOR } from '@/constants/styles';
+import { RootStackParamsList } from '@/feature/Routes';
+import { ProfileStackParamsList } from '@/feature/Routes/ProfileStack';
 import { useAuthStore } from '@/states/authStore';
 import { useUserStore } from '@/states/userStore';
 
 export type SettingScreenParams = undefined;
+
+export type SettingScreenNP = CompositeNavigationProp<
+  StackNavigationProp<ProfileStackParamsList, Screen.ProfileScreen>,
+  StackNavigationProp<RootStackParamsList>
+>;
 
 const styles = StyleSheet.create({
   areaContainer: {
@@ -97,7 +110,10 @@ const Arrow = () => (
 );
 
 const SettingScreen = () => {
-  const { followerCount, followingCount, name } = useUserStore();
+  const navigation = useNavigation<SettingScreenNP>();
+
+  const { followerCount, followingCount, name, userNo, exhibitionName } =
+    useUserStore();
   const { clear } = useAuthStore();
 
   const [pushNotiSettings, setPushNotiSettings] = useState({
@@ -120,7 +136,15 @@ const SettingScreen = () => {
       <Header headerTitle="설정" />
       <ScrollView style={styles.container}>
         <Area title="팔로잉 / 팔로워">
-          <View style={styles.followInfoArea}>
+          <Pressable
+            style={styles.followInfoArea}
+            onPress={() => {
+              navigation.navigate(Screen.FollowListScreen, {
+                userNo,
+                exhibitionName,
+              });
+            }}
+          >
             <View style={styles.followInfo}>
               <Text style={TEXT_STYLE.button16M}>팔로잉</Text>
               <Text style={TEXT_STYLE.title20M}>{followingCount}</Text>
@@ -129,7 +153,7 @@ const SettingScreen = () => {
               <Text style={TEXT_STYLE.button16M}>팔로워</Text>
               <Text style={TEXT_STYLE.title20M}>{followerCount}</Text>
             </View>
-          </View>
+          </Pressable>
         </Area>
         <Area title="푸시 알림">
           <SettingItem.Toggle

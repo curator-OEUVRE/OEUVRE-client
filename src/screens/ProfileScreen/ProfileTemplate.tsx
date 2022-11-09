@@ -32,13 +32,20 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   background: {
-    aspectRatio: 375 / 159,
+    height: 160,
     position: 'absolute',
     top: 0,
     width: '100%',
   },
   container: {
     flex: 1,
+  },
+  /* eslint-disable-next-line react-native/no-color-literals */
+  filter: {
+    backgroundColor: 'rgba(20, 23, 24, 0.4)',
+    height: 160,
+    position: 'absolute',
+    width: '100%',
   },
   followInfo: {
     alignItems: 'center',
@@ -149,11 +156,14 @@ const ProfileTemplate = ({
     <>
       <View style={styles.container}>
         {hasBackgroundImage && (
-          <FastImage
-            style={styles.background}
-            source={{ uri: profile.backgroundImageUrl }}
-            resizeMode="cover"
-          />
+          <>
+            <FastImage
+              style={styles.background}
+              source={{ uri: profile.backgroundImageUrl }}
+              resizeMode="cover"
+            />
+            <View style={styles.filter} />
+          </>
         )}
         <SafeAreaView
           style={styles.safeAreaView}

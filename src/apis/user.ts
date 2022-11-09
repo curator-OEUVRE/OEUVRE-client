@@ -1,6 +1,6 @@
 import { deleteAsync, getAsync, patchAsync, postAsync } from './common';
 import type { PictureMini } from '@/types/floor';
-import type { MyProfile, OtherUserProfile } from '@/types/user';
+import type { MyProfile, OtherUserProfile, UserMini } from '@/types/user';
 
 interface SignUpRequestDto {
   /** @example 2000-06-21 */
@@ -151,6 +151,32 @@ export async function patchMyProfile(
     PatchMyProfileResponseDto,
     PatchMyProfileRequestDto
   >('/users/my-profile', data, { headers: { 'X-AUTH-TOKEN': accessToken } });
+
+  return response;
+}
+
+interface GetFollowersResponseDto {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: UserMini[];
+  timestamp: string;
+}
+
+export async function getFollowers(accessToken: string, userNo: number) {
+  const response = await getAsync<GetFollowersResponseDto, undefined>(
+    `/users/${userNo}/follower`,
+    { headers: { 'X-AUTH-TOKEN': accessToken } },
+  );
+
+  return response;
+}
+
+export async function getFollowings(accessToken: string, userNo: number) {
+  const response = await getAsync<GetFollowersResponseDto, undefined>(
+    `/users/${userNo}/following`,
+    { headers: { 'X-AUTH-TOKEN': accessToken } },
+  );
 
   return response;
 }
