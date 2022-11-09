@@ -164,7 +164,7 @@ const UserProfileForm = ({ onNextPress }: Props) => {
       <FormInput
         label="자기 소개"
         value={introduceMessage.value}
-        placeholder="본인을 가볍게 소개해 주세요. (총 150자)"
+        placeholder="본인을 가볍게 소개해 주세요. (총 20자)"
         onChangeText={(value) =>
           setIntroduceMessage({ ...introduceMessage, value })
         }
