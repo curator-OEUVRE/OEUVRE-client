@@ -1,6 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  useWindowDimensions,
+} from 'react-native';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
 import { COLOR } from '@/constants/styles/colors';
 
@@ -58,8 +65,11 @@ const Header = ({
   hideBackButton = false,
 }: HeaderProps) => {
   const navigation = useNavigation();
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const marginTop = isLandscape && Platform.OS === 'ios' ? 18 : 0;
   return (
-    <View style={[styles.container, { backgroundColor }]}>
+    <View style={[styles.container, { backgroundColor, marginTop }]}>
       {headerLeft
         ? headerLeft()
         : !hideBackButton && (
