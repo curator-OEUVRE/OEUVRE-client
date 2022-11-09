@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
 
 const keyExtractor = (item: FloorMini) => `${item.floorNo}`;
 
-const ListEmptyComponent = () => (
+const ListEmptyComponent = ({ editable }: { editable: boolean }) => (
   <View style={styles.listEmptyComponent}>
     <AddFloorIcon color={COLOR.mono.gray3} width={72} height={72} />
     <Text style={[TEXT_STYLE.body16M, styles.emptyText]}>
-      새로운 플로어를 추가해 보세요
+      {editable ? '새로운 플로어를 추가해 보세요' : '아직 플로어가 없어요'}
     </Text>
   </View>
 );
@@ -76,6 +76,11 @@ const FloorList = ({
     [onDragEnd],
   );
 
+  const renderListEmptyComponent = useCallback(
+    () => <ListEmptyComponent editable={editable ?? false} />,
+    [editable],
+  );
+
   return (
     <DraggableFlatList
       data={sortedFloors}
@@ -83,7 +88,7 @@ const FloorList = ({
       renderItem={renderItem}
       onDragEnd={handleDragEnd}
       style={styles.flatList}
-      ListEmptyComponent={ListEmptyComponent}
+      ListEmptyComponent={renderListEmptyComponent}
       refreshing={refreshing}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
