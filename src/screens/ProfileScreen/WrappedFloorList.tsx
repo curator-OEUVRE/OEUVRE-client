@@ -33,7 +33,7 @@ const WrappedFloorList = ({
       });
       if (response.isSuccess) {
         setFloors(response.result.result.contents);
-        setPage(1);
+        setPage(0);
       }
     }
 

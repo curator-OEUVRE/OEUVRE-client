@@ -83,7 +83,10 @@ const MyCollection = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const loadMorePictures = useCallback(async () => {
-    const response = await fetchWithToken(getCollection, { page, size: 10 });
+    const response = await fetchWithToken(getCollection, {
+      page: page + 1,
+      size: 10,
+    });
     if (response.isSuccess) {
       setCollection([...collection, ...response.result.result.contents]);
       setPage((prev) => prev + 1);
@@ -97,7 +100,7 @@ const MyCollection = () => {
 
     const response = await fetchWithToken(getCollection, { page: 0, size: 10 });
     if (response.isSuccess) {
-      setPage(1);
+      setPage(0);
       setCollection(response.result.result.contents);
     } else {
       console.error(response.result);
