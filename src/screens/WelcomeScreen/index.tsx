@@ -61,7 +61,7 @@ const WelcomeScreen = () => {
       style={styles.background}
     >
       <SafeAreaView style={styles.container}>
-        <Header backgroundColor="transparent" />
+        <Header iconColor={COLOR.mono.white} backgroundColor="transparent" />
         <Text style={[styles.message, TEXT_STYLE.title24M]}>
           <Text style={TEXT_STYLE.title24B}>열심히 입력중인 모습입니다 </Text>
           님,{'\n'}OEUVRE에{'\n'}오신 것을 환영해요!
