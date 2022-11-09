@@ -1,5 +1,7 @@
+import type { NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Screen } from '@/constants/screens';
+import ProfileStack, { type ProfileStackParamsList } from './ProfileStack';
+import { Navigator, Screen } from '@/constants/screens';
 import {
   AddPictureScreen,
   AddPictureScreenParams,
@@ -25,12 +27,6 @@ import GuestBookScreen, {
 import ImageDetailScreen, {
   ImageDetailScreenParams,
 } from '@/screens/ImageDetailScreen';
-import ProfileScreen, {
-  type ProfileScreenParams,
-} from '@/screens/ProfileScreen';
-import MyProfileScreen, {
-  type MyProfileScreenParams,
-} from '@/screens/ProfileScreen/MyProfileScreen';
 
 export type FloorStackParamsList = {
   [Screen.AddPictureScreen]: AddPictureScreenParams;
@@ -42,8 +38,7 @@ export type FloorStackParamsList = {
   [Screen.EditFloorScreen]: EditFloorScreenParams;
   [Screen.ImageDetailScreen]: ImageDetailScreenParams;
   [Screen.GuestBookScreen]: GuestBookScreenParams;
-  [Screen.ProfileScreen]: ProfileScreenParams;
-  [Screen.MyProfileScreen]: MyProfileScreenParams;
+  [Navigator.ProfileStack]: NavigatorScreenParams<ProfileStackParamsList>;
   [Screen.EditDescriptionScreen]: EditDescriptionScreenParams;
 };
 
@@ -76,8 +71,7 @@ const FloorStack = () => (
     />
     <Stack.Screen name={Screen.EditFloorScreen} component={EditFloorScreen} />
     <Stack.Screen name={Screen.GuestBookScreen} component={GuestBookScreen} />
-    <Stack.Screen name={Screen.ProfileScreen} component={ProfileScreen} />
-    <Stack.Screen name={Screen.MyProfileScreen} component={MyProfileScreen} />
+    <Stack.Screen name={Navigator.ProfileStack} component={ProfileStack} />
     <Stack.Screen
       name={Screen.EditDescriptionScreen}
       component={EditDescriptionScreen}

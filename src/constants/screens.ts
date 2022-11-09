@@ -29,4 +29,5 @@ export enum Screen {
   EditProfileScreen = 'EditProfileScreen',
   SettingScreen = 'SettingScreen',
   EditDescriptionScreen = 'EditDescriptionScreen',
+  FollowListScreen = 'FollowListScreen',
 }

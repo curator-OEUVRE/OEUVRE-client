@@ -22,3 +22,12 @@ export interface OtherUserProfile extends UserProfile {
   isFollower: boolean;
   isFollowing: boolean;
 }
+
+export interface UserMini {
+  id: string;
+  isFollowing: boolean;
+  isMe: boolean;
+  name: string;
+  profileImageUrl: string;
+  userNo: number;
+}
