@@ -81,7 +81,7 @@ const HomeScreen = () => {
 
     const response = await fetchWithToken(getHomeFeed, { page: 0, size: 10 });
     if (response.isSuccess) {
-      setPage(1);
+      setPage(0);
       setData(response.result.result.contents);
     } else {
       console.error(response.result);
