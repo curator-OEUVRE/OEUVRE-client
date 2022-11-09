@@ -141,7 +141,7 @@ const ImageDetailScreen = () => {
   const [pictureDetail, setPictureDetail] =
     useState<PictureDetail>(initialPicture);
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
-  const [isEditMode, setEditMode] = useState<boolean>(false);
+  const [isEditMode, setEditMode] = useState<boolean>(true);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [likeUserSheetIndex, setLikeUserSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
