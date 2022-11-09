@@ -14,6 +14,16 @@ import { Profile } from '@/components/Profile';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 const styles = StyleSheet.create({
+  badge: {
+    borderRadius: 5,
+    left: 8,
+    paddingHorizontal: 8,
+    position: 'absolute',
+    top: 8,
+  },
+  badgeText: {
+    color: COLOR.mono.white,
+  },
   container: {
     flexDirection: 'row',
   },
@@ -96,7 +106,7 @@ const FloorTicket = ({
               <Text style={TEXT_STYLE.body16M}>{floor.floorName}</Text>
               <View style={styles.exhibitionArea}>
                 <Text style={[TEXT_STYLE.body12R, styles.queueText]}>
-                  {floor.queue}
+                  {floor.queue}F
                 </Text>
                 <Text style={[TEXT_STYLE.body12R, styles.exhibitionText]}>
                   {floor.exhibitionName}
@@ -133,6 +143,22 @@ const FloorTicket = ({
             ]}
             resizeMode="contain"
           />
+          {(floor.isNew || floor.isUpdated) && (
+            <View
+              style={[
+                styles.badge,
+                {
+                  backgroundColor: floor.isNew
+                    ? COLOR.system.red
+                    : COLOR.mono.gray7,
+                },
+              ]}
+            >
+              <Text style={[TEXT_STYLE.body12M, styles.badgeText]}>
+                {floor.isNew ? 'NEW' : floor.updateCount}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </Pressable>
