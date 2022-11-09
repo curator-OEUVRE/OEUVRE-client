@@ -89,7 +89,10 @@ const Collection = ({
       // @ts-ignore
       renderItem={renderItem}
       numColumns={2}
-      contentContainerStyle={{ paddingRight: width * 0.1 * (1 / 3) }}
+      contentContainerStyle={{
+        marginTop: width * 0.1 * (1 / 3),
+        paddingRight: width * 0.1 * (1 / 3),
+      }}
       onEndReached={onEndReached}
       refreshing={refreshing}
       onRefresh={onRefresh}
