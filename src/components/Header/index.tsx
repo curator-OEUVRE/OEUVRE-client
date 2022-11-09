@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
+import { TEXT_STYLE } from '@/constants/styles';
 import { COLOR } from '@/constants/styles/colors';
 
 interface HeaderProps {
@@ -42,10 +43,6 @@ const styles = StyleSheet.create({
     right: 18,
     zIndex: 10,
   },
-  text: {
-    fontFamily: 'bold',
-    fontSize: 18,
-  },
 });
 
 const Header = ({
@@ -79,7 +76,9 @@ const Header = ({
           )}
 
       {typeof headerTitle === 'string' ? (
-        <Text style={[styles.text, { color: iconColor }]}>{headerTitle}</Text>
+        <Text style={[TEXT_STYLE.body16M, { color: iconColor }]}>
+          {headerTitle}
+        </Text>
       ) : (
         headerTitle && headerTitle()
       )}
