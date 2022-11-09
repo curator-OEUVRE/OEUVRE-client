@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLOR.mono.white,
   },
+  padding: {
+    paddingHorizontal: 20,
+  },
 });
 
 interface Props {
@@ -50,6 +53,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
       infoMessage="개인정보를 입력해 주세요"
       button={button}
       gap={54}
+      style={styles.padding}
     >
       <FormInput
         label="사용자 아이디"

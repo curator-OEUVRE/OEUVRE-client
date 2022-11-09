@@ -1,10 +1,17 @@
 import { useState, useMemo } from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import TermItem from './TermItem';
 import Line from '@/assets/icons/Line';
 import { UserInputLayout, Button } from '@/components';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import { styles } from '@/screens/FloorScreen/EditDescriptionScreen';
 import { useSignUpStore } from '@/states/signUpStore';
+
+const extraStyles = StyleSheet.create({
+  padding: {
+    paddingHorizontal: 20,
+  },
+});
 
 const Prefix = ({ isRequired }: { isRequired: boolean }) => (
   <Text
@@ -96,6 +103,7 @@ const TermsForm = ({ onNextPress }: Props) => {
       infoMessage="가입약관을 확인해 주세요"
       gap={8}
       button={button}
+      style={extraStyles.padding}
     >
       <TermItem
         label="약관 전체 동의"
