@@ -14,6 +14,7 @@ import { Pressable, StyleSheet, View, Modal, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
+import { Spinner } from '@/components/Spinner';
 import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
@@ -114,6 +115,7 @@ const EditFloorScreen = () => {
   const { params } = useRoute<EditFloorScreenRP>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [newFloorNo, setNewFloorNo] = useState<number>();
+  const [loading, setLoading] = useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
   const {
@@ -130,6 +132,7 @@ const EditFloorScreen = () => {
   const onConfirm = useCallback(async () => {
     const newImages = pictures.filter((picture) => picture.pictureNo === 0);
     const images = newImages.map((picture) => picture.imageUrl);
+    setLoading(true);
     const urls = await uploadImages(images, name.value);
     let idx = 0;
     const newPictures = pictures.map((picture, i) => {
@@ -148,7 +151,8 @@ const EditFloorScreen = () => {
     setPictures(newPictures);
     if (mode === FloorMode.EDIT) {
       if (!params?.floorNo) return;
-      const result = editFloor(params.floorNo);
+      const result = await editFloor(params.floorNo);
+      setLoading(false);
       // eslint-disable-next-line no-console
       console.log(result);
       setFloorMode(FloorMode.VIEWER);
@@ -157,6 +161,7 @@ const EditFloorScreen = () => {
       });
     } else {
       const result = await createFloor();
+      setLoading(false);
       // eslint-disable-next-line no-console
       console.log(result);
       if (result.isSuccess) {
@@ -263,6 +268,7 @@ const EditFloorScreen = () => {
           }}
         />
       )}
+      {loading && <Spinner />}
     </SafeAreaView>
   );
 };
