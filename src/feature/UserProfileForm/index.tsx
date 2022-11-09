@@ -1,6 +1,13 @@
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
-import { Text, StyleSheet, Pressable, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  Text,
+  StyleSheet,
+  Pressable,
+  View,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import { signUp } from '@/apis/user';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import AddProfileIcon from '@/assets/icons/AddProfile';
@@ -31,6 +38,17 @@ const styles = StyleSheet.create({
     color: COLOR.mono.white,
   },
   label: { color: COLOR.mono.black, marginBottom: 8 },
+  /* eslint-disable-next-line react-native/no-color-literals */
+  loading: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    bottom: 0,
+    justifyContent: 'center',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
   pressable: {
     height: 125,
     position: 'relative',
@@ -63,6 +81,8 @@ const UserProfileForm = ({ onNextPress }: Props) => {
   const [image, setImage] = useState<string | undefined>(undefined);
   const { uploading, uploadImage } = useUploadImage();
 
+  const [loading, setLoading] = useState(false);
+
   const { setToken } = useAuthStore();
 
   const pickImage = async () => {
@@ -78,6 +98,8 @@ const UserProfileForm = ({ onNextPress }: Props) => {
   };
 
   const onCompleteUpload = async (url: string) => {
+    setLoading(true);
+
     setProfileImageUrl({
       ...profileImageUrl,
       value: url,
@@ -95,6 +117,8 @@ const UserProfileForm = ({ onNextPress }: Props) => {
       type: loginInfo.type,
     });
 
+    setLoading(false);
+
     if (response.isSuccess) {
       clearSignUpStore();
       const { accessToken, refreshToken } = response.result.result;
@@ -103,6 +127,7 @@ const UserProfileForm = ({ onNextPress }: Props) => {
     } else {
       // eslint-disable-next-line no-console
       console.log(response.result.info);
+      Alert.alert('문제가 발생했습니다. 다시 시도하거나 문의해 주세요.');
     }
   };
 
@@ -120,75 +145,82 @@ const UserProfileForm = ({ onNextPress }: Props) => {
   );
 
   return (
-    <UserInputLayout
-      infoMessage="OEUVRE 프로필을 완성해주세요"
-      button={button}
-      gap={54}
-    >
-      <View>
-        <Text style={[TEXT_STYLE.body14B, styles.label]}>프로필 사진</Text>
-        <View style={styles.wrapProfile}>
-          <Pressable style={styles.pressable} onPress={pickImage}>
-            {image ? <Profile imageUrl={image} /> : <AddProfileIcon />}
-            <AddCircleIcon style={styles.addIcon} />
-          </Pressable>
+    <>
+      <UserInputLayout
+        infoMessage="OEUVRE 프로필을 완성해주세요"
+        button={button}
+        gap={54}
+      >
+        <View>
+          <Text style={[TEXT_STYLE.body14B, styles.label]}>프로필 사진</Text>
+          <View style={styles.wrapProfile}>
+            <Pressable style={styles.pressable} onPress={pickImage}>
+              {image ? <Profile imageUrl={image} /> : <AddProfileIcon />}
+              <AddCircleIcon style={styles.addIcon} />
+            </Pressable>
+          </View>
         </View>
-      </View>
-      <FormInput
-        label="전시회 이름"
-        value={exhibitionName.value}
-        placeholder="본인 전시회의 이름을 입력해 주세요. (총 2-10자)"
-        onChangeText={(value) =>
-          setExhibitionName({ ...exhibitionName, value })
-        }
-        status={exhibitionName.status}
-        message={exhibitionName.error}
-        onBlur={() => {
-          const [isValidated, error] = validateExhibitionName(
-            exhibitionName.value,
-          );
-          if (isValidated) {
-            setExhibitionName({
-              ...exhibitionName,
-              status: FormInputStatus.Valid,
-            });
-          } else {
-            setExhibitionName({
-              ...exhibitionName,
-              status: FormInputStatus.Error,
-              error,
-            });
+        <FormInput
+          label="전시회 이름"
+          value={exhibitionName.value}
+          placeholder="본인 전시회의 이름을 입력해 주세요. (총 2-10자)"
+          onChangeText={(value) =>
+            setExhibitionName({ ...exhibitionName, value })
           }
-        }}
-      />
-      <FormInput
-        label="자기 소개"
-        value={introduceMessage.value}
-        placeholder="본인을 가볍게 소개해 주세요. (총 20자)"
-        onChangeText={(value) =>
-          setIntroduceMessage({ ...introduceMessage, value })
-        }
-        status={introduceMessage.status}
-        message={introduceMessage.error}
-        onBlur={() => {
-          const [isValidated, error] = validateIntroduceMessage(
-            introduceMessage.value,
-          );
-          if (isValidated) {
-            setIntroduceMessage({
-              ...introduceMessage,
-              status: FormInputStatus.Valid,
-            });
-          } else {
-            setIntroduceMessage({
-              ...introduceMessage,
-              status: FormInputStatus.Error,
-              error,
-            });
+          status={exhibitionName.status}
+          message={exhibitionName.error}
+          onBlur={() => {
+            const [isValidated, error] = validateExhibitionName(
+              exhibitionName.value,
+            );
+            if (isValidated) {
+              setExhibitionName({
+                ...exhibitionName,
+                status: FormInputStatus.Valid,
+              });
+            } else {
+              setExhibitionName({
+                ...exhibitionName,
+                status: FormInputStatus.Error,
+                error,
+              });
+            }
+          }}
+        />
+        <FormInput
+          label="자기 소개"
+          value={introduceMessage.value}
+          placeholder="본인을 가볍게 소개해 주세요. (총 20자)"
+          onChangeText={(value) =>
+            setIntroduceMessage({ ...introduceMessage, value })
           }
-        }}
-      />
-    </UserInputLayout>
+          status={introduceMessage.status}
+          message={introduceMessage.error}
+          onBlur={() => {
+            const [isValidated, error] = validateIntroduceMessage(
+              introduceMessage.value,
+            );
+            if (isValidated) {
+              setIntroduceMessage({
+                ...introduceMessage,
+                status: FormInputStatus.Valid,
+              });
+            } else {
+              setIntroduceMessage({
+                ...introduceMessage,
+                status: FormInputStatus.Error,
+                error,
+              });
+            }
+          }}
+        />
+      </UserInputLayout>
+      {loading && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color={COLOR.mono.black} />
+        </View>
+      )}
+    </>
   );
 };
 
