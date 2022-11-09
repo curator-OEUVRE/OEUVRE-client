@@ -199,7 +199,7 @@ const EditProfileScreen = () => {
         exhibitionName: tmpExhibitionName.value,
         introduceMessage: tmpIntroduceMessage.value,
         backgroundImageUrl: images[0],
-        profileImageUrl: images[0],
+        profileImageUrl: images[1],
       });
       navigation.goBack();
     } else {
