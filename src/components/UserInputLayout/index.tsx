@@ -7,7 +7,7 @@ import { TEXT_STYLE } from '@/constants/styles/textStyles';
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     position: 'relative',
   },
   text: {

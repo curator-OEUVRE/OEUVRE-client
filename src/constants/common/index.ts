@@ -9,7 +9,7 @@ export const SIGNUP_CONFIG = {
     limit: [2, 10],
   },
   introduceMessage: {
-    limit: [1, 150],
+    limit: [0, 20],
   },
 };
 
@@ -32,7 +32,7 @@ export const ERROR_MESSAGE = {
   EMPTY_EXHIBITION_NAME: '전시회 이름을 입력해주세요',
   TOO_SHORT_EXHIBITION_NAME: `전시회 이름은 ${SIGNUP_CONFIG.exhibitionName.limit[0]}자 이상이어야 해요`,
   TOO_LONG_EXHIBITION_NAME: `전시회 이름은 ${SIGNUP_CONFIG.exhibitionName.limit[1]}자까지 작성이 가능해요`,
-  EMPTY_INTRODUCE_MESSAGE: '자기소개를 입력해주세요',
+  // EMPTY_INTRODUCE_MESSAGE: '자기소개를 입력해주세요',
   TOO_LONG_INTRODUCE_MESSAGE: `자기 소개는 ${SIGNUP_CONFIG.introduceMessage.limit[1]}자까지 작성이 가능해요`,
   COMMON_TYPE: '입력이 올바르지 않습니다.',
   EMPTY_FLOOR_NAME: '플로어 이름을 입력해주세요',

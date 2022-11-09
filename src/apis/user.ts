@@ -11,8 +11,9 @@ interface SignUpRequestDto {
   introduceMessage: string;
   isAlarmOn: boolean;
   name: string;
-  profileImageUrl: string;
+  profileImageUrl: string | null;
   type: 'APPLE' | 'GOOGLE' | 'KAKAO';
+  backgroundImageUrl: string | null;
 }
 
 interface SignUpResponseDto {
@@ -176,6 +177,29 @@ export async function getFollowings(accessToken: string, userNo: number) {
   const response = await getAsync<GetFollowersResponseDto, undefined>(
     `/users/${userNo}/following`,
     { headers: { 'X-AUTH-TOKEN': accessToken } },
+  );
+
+  return response;
+}
+
+interface CheckIdResponseDto {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: {
+    isPossible: boolean;
+  };
+  timestamp: string;
+}
+
+interface CheckIdRequestDto {
+  id: string;
+}
+
+export async function checkId(id: string) {
+  const response = await getAsync<CheckIdResponseDto, CheckIdRequestDto>(
+    '/users/check-id',
+    { params: { id } },
   );
 
   return response;

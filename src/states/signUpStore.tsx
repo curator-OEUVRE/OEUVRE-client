@@ -17,7 +17,8 @@ export interface SignUpValues {
   userId: UserInput<string>;
   name: UserInput<string>;
   birthDay: UserInput<Date>;
-  profileImageUrl: UserInput<string>;
+  // profileImageUrl: UserInput<string>;
+  // backgroundImageUrl: UserInput<string>;
   exhibitionName: UserInput<string>;
   introduceMessage: UserInput<string>;
 }
@@ -28,7 +29,8 @@ interface SignUpState extends SignUpValues {
   setUserId: (data: UserInput<string>) => void;
   setName: (data: UserInput<string>) => void;
   setBirthDay: (data: UserInput<Date>) => void;
-  setProfileImageUrl: (data: UserInput<string>) => void;
+  // setProfileImageUrl: (data: UserInput<string>) => void;
+  // setBackgroundImageUrl: (data: UserInput<string>) => void;
   setExhibitionName: (data: UserInput<string>) => void;
   setIntroduceMessage: (data: UserInput<string>) => void;
   clearSignUpStore: () => void;
@@ -58,13 +60,16 @@ export const useSignUpStore = create<SignUpState>()((set) => ({
   setName: (data) => set((state) => ({ ...state, name: data })),
   birthDay: createInitialUserInput(new Date()),
   setBirthDay: (data) => set((state) => ({ ...state, birthDay: data })),
-  profileImageUrl: createInitialUserInput(''),
-  setProfileImageUrl: (data) =>
-    set((state) => ({ ...state, profileImageUrl: data })),
+  // profileImageUrl: createInitialUserInput('', false),
+  // setProfileImageUrl: (data) =>
+  //   set((state) => ({ ...state, profileImageUrl: data })),
+  // backgroundImageUrl: createInitialUserInput('', false),
+  // setBackgroundImageUrl: (data) =>
+  //   set((state) => ({ ...state, backgroundImageUrl: data })),
   exhibitionName: createInitialUserInput(''),
   setExhibitionName: (data) =>
     set((state) => ({ ...state, exhibitionName: data })),
-  introduceMessage: createInitialUserInput(''),
+  introduceMessage: createInitialUserInput('', false),
   setIntroduceMessage: (data) =>
     set((state) => ({ ...state, introduceMessage: data })),
   clearSignUpStore: () => set({}),

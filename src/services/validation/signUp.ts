@@ -62,9 +62,9 @@ export const validateIntroduceMessage = (
   value: string,
 ): [boolean, undefined | string] => {
   const config = SIGNUP_CONFIG.introduceMessage;
-  if (value.length === 0) {
-    return [false, ERROR_MESSAGE.EMPTY_INTRODUCE_MESSAGE];
-  }
+  // if (value.length === 0) {
+  //   return [false, ERROR_MESSAGE.EMPTY_INTRODUCE_MESSAGE];
+  // }
   if (value.length > config.limit[1]) {
     return [false, ERROR_MESSAGE.TOO_LONG_INTRODUCE_MESSAGE];
   }
