@@ -115,7 +115,7 @@ const GustBookItem = ({ data, deleteItem, reportItem }: GustBookItemProps) => {
               {comment}
             </Text>
             <Text style={[styles.date, TEXT_STYLE.body12R]}>
-              {formatCreatedAt(createdAt.replace(/ /g, 'T'))}
+              {formatCreatedAt(createdAt)}
             </Text>
           </View>
         </View>
