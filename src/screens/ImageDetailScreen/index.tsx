@@ -141,7 +141,7 @@ const ImageDetailScreen = () => {
   const [pictureDetail, setPictureDetail] =
     useState<PictureDetail>(initialPicture);
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
-  const [isEditMode, setEditMode] = useState<boolean>(false);
+  const [isEditMode, setEditMode] = useState<boolean>(true);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [likeUserSheetIndex, setLikeUserSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
@@ -235,7 +235,7 @@ const ImageDetailScreen = () => {
   }, [isScraped, scaleImage, pictureNo, isLikeAnimation]);
 
   const orientation =
-    width > height ? OrientationType.landscape : OrientationType.portrait;
+    width >= height ? OrientationType.landscape : OrientationType.portrait;
   const SIZE =
     orientation === OrientationType.landscape ? windowHeight : windowWidth;
   const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
@@ -310,7 +310,6 @@ const ImageDetailScreen = () => {
           <BottomSheetItem
             label="플로어 방문하기"
             icon={<PhotoIcon color={COLOR.mono.black} />}
-            onPress={toggleScrap}
           />
           <BottomSheetItem
             label="사진 스크랩하기"
@@ -344,12 +343,10 @@ const ImageDetailScreen = () => {
           <BottomSheetItem
             label="프로필 보기"
             icon={<PersonIcon color={COLOR.mono.black} />}
-            onPress={toggleScrap}
           />
           <BottomSheetItem
             label="플로어 방문하기"
             icon={<PhotoIcon color={COLOR.mono.black} />}
-            onPress={toggleScrap}
           />
           <BottomSheetItem
             label="사진 스크랩하기"

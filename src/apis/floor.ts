@@ -8,10 +8,6 @@ import {
 } from '@/types/floor';
 import type { FloorMini } from '@/types/floor';
 
-interface GetPictureDetailParams {
-  pictureNo: number;
-}
-
 interface GetFloorParams {
   floorNo: number;
 }

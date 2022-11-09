@@ -23,6 +23,7 @@ import GuestBookInput from '@/feature/GuestBookInput';
 import GuestBookList from '@/feature/GuestBookList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { useUserStore } from '@/states/userStore';
 import { GuestBookInfo, OtherFloor } from '@/types/guestbook';
 
 export type GuestBookScreenParams = {
@@ -60,6 +61,7 @@ const GuestBookScreen = () => {
   const [otherFloors, setOtherFloors] = useState<OtherFloor[]>([]);
   const [otherFloorsLoading, setOtherFloorsLoading] = useState<boolean>(false);
   const { floorNo } = params;
+  const { profileImageUrl } = useUserStore();
   useEffect(() => {
     const fetchCommentsData = async () => {
       setCommentsLoading(true);
@@ -170,10 +172,7 @@ const GuestBookScreen = () => {
             isLoading={commentsLoading}
           />
         </View>
-        <GuestBookInput
-          avatarUri="http://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
-          onSubmit={onSubmit}
-        />
+        <GuestBookInput avatarUri={profileImageUrl} onSubmit={onSubmit} />
       </WithKeyboardAvoidingView>
     </SafeAreaView>
   );

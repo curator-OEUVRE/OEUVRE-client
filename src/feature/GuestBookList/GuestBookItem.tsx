@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginBottom: 24,
-    minHeight: 60,
   },
   date: {
     color: COLOR.mono.gray5,
@@ -116,7 +115,7 @@ const GustBookItem = ({ data, deleteItem, reportItem }: GustBookItemProps) => {
               {comment}
             </Text>
             <Text style={[styles.date, TEXT_STYLE.body12R]}>
-              {formatCreatedAt(createdAt.replace(/ /g, 'T'))}
+              {formatCreatedAt(createdAt)}
             </Text>
           </View>
         </View>

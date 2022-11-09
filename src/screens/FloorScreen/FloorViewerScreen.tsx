@@ -155,7 +155,10 @@ const FloorViewerScreen = () => {
   ];
   const bottomSheetForVisiter = (
     <BottomSheetItemGroup>
-      <BottomSheetItem label="님 프로필 보기" icon={<PersonIcon />} />
+      <BottomSheetItem
+        label="님 프로필 보기"
+        icon={<PersonIcon color={COLOR.mono.black} />}
+      />
       <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
       <BottomSheetItem
         label="플로어 신고하기"

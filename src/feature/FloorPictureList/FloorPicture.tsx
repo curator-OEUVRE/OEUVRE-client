@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   text: {
     color: COLOR.mono.gray7,
     marginTop: 5,
+    textAlign: 'center',
   },
 });
 
