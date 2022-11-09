@@ -3,7 +3,7 @@ import {
   type CompositeNavigationProp,
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import ProfileTemplate from './ProfileTemplate';
 import WrappedFloorList from './WrappedFloorList';
@@ -115,6 +115,10 @@ const MyCollection = () => {
     },
     [navigation],
   );
+
+  useEffect(() => {
+    if (collection.length === 0) refreshCollection();
+  }, [collection.length, refreshCollection]);
 
   return (
     <Collection
