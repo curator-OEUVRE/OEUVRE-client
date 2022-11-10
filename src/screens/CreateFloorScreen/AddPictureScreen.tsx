@@ -5,17 +5,11 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
-import { StyleSheet, View } from 'react-native';
+import { Spinner } from '@/components/Spinner';
 import { Screen } from '@/constants/screens';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export type AddPictureScreenParams = undefined;
 export type AddPictureScreenScreenNP = CompositeNavigationProp<
@@ -27,7 +21,6 @@ const AddPictureScreen = () => {
   const navigation = useNavigation<AddPictureScreenScreenNP>();
   const { createPictures, mode, clearTempPictures, setFloorMode } =
     useCreateFloorStore();
-
   useFocusEffect(() => {
     const pickImage = async () => {
       const result = await launchImageLibraryAsync({
@@ -54,7 +47,7 @@ const AddPictureScreen = () => {
     };
     pickImage();
   });
-  return <View style={styles.container} />;
+  return <Spinner />;
 };
 
 export default AddPictureScreen;

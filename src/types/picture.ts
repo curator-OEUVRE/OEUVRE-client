@@ -10,6 +10,8 @@ export type PictureDetail = {
   isScraped: boolean;
   pictureNo: number;
   width: number;
+  userNo: number;
+  userId: string;
 };
 
 export interface PictureInfo {

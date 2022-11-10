@@ -151,7 +151,6 @@ const FloorInfoFormScreen = () => {
       setIsCommentAvailable(snapshot.current.isCommentAvailable);
       setIsCommentAvailable(snapshot.current.isCommentAvailable);
     }
-    navigation.goBack();
   };
   const ConfirmButton = useCallback(
     () => (

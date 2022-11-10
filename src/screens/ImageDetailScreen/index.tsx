@@ -1,5 +1,12 @@
 import Sheet from '@gorhom/bottom-sheet';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -18,10 +25,11 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getLikeUsers, getPictureDetail } from '@/apis/picture';
 import * as PictureAPI from '@/apis/picture';
+import { getLikeUsers, getPictureDetail } from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
 import BookmarkIcon from '@/assets/icons/Bookmark';
+import BookmarkFilledIcon from '@/assets/icons/BookmarkFilled';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
 import FavoriteIcon from '@/assets/icons/Favorite';
@@ -40,6 +48,7 @@ import {
 import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import UserProfileList from '@/feature/UserProfileList';
 import { getColorByBackgroundColor } from '@/services/common/color';
@@ -55,6 +64,11 @@ export interface ImageDetailScreenParams {
   pictureNo: number;
   color: string;
 }
+
+export type ImageDetailScreenNP = CompositeNavigationProp<
+  StackNavigationProp<FloorStackParamsList, Screen.ImageDetailScreen>,
+  StackNavigationProp<RootStackParamsList>
+>;
 
 export type ImageDetailScreenRP = RouteProp<
   FloorStackParamsList,
@@ -85,9 +99,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '100%',
   },
+  // eslint-disable-next-line react-native/no-color-literals
+  shadow: {
+    elevation: 20,
+    overflow: 'visible',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+  },
   text: {
     color: COLOR.mono.gray7,
     textAlign: 'center',
+  },
+  wrapButton: {
+    marginRight: 9,
   },
   wrapFooter: {
     lineHeight: 21,
@@ -114,9 +143,6 @@ const styles = StyleSheet.create({
   wrapImage: {
     flex: 1,
   },
-  wrapMore: {
-    marginRight: 9,
-  },
 });
 
 const initialPicture = {
@@ -129,9 +155,13 @@ const initialPicture = {
   isScraped: false,
   pictureNo: 1,
   width: 0.5,
+  userNo: 0,
+  userId: '',
 };
 
 const ImageDetailScreen = () => {
+  const navigation = useNavigation<ImageDetailScreenNP>();
+
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -148,6 +178,15 @@ const ImageDetailScreen = () => {
 
   const bottomSheetRef = useRef<Sheet>(null);
   const likePeoplesRef = useRef<Sheet>(null);
+  useFocusEffect(
+    useCallback(() => {
+      const lockOrientation = async () => {
+        await lockAsync(OrientationLock.LANDSCAPE);
+      };
+      lockOrientation();
+    }, []),
+  );
+
   useEffect(() => {
     const fetchPictureDetail = async () => {
       setLoading(true);
@@ -155,12 +194,6 @@ const ImageDetailScreen = () => {
       if (response.isSuccess) {
         const { result } = response.result;
         setPictureDetail(result);
-        const { width, height } = result;
-        lockAsync(
-          width > height
-            ? OrientationLock.LANDSCAPE
-            : OrientationLock.PORTRAIT_UP,
-        );
       } else {
         // eslint-disable-next-line no-console
         console.log(response.result.info);
@@ -170,8 +203,16 @@ const ImageDetailScreen = () => {
     fetchPictureDetail();
   }, [pictureNo]);
 
-  const { width, height, description, imageUrl, isLiked, isScraped, isMine } =
-    pictureDetail;
+  const {
+    description,
+    imageUrl,
+    isLiked,
+    isScraped,
+    isMine,
+    floorNo,
+    userId,
+    userNo,
+  } = pictureDetail;
 
   const scale = useSharedValue(0);
   const isLikeAnimation = useSharedValue(true);
@@ -217,6 +258,14 @@ const ImageDetailScreen = () => {
     });
   }, [isEditMode, isLikeAnimation, isLiked, pictureNo, scaleImage]);
 
+  const visitFloor = useCallback(() => {
+    navigation.navigate(Screen.FloorViewerScreen, { floorNo });
+  }, [floorNo, navigation]);
+
+  const visitProfile = useCallback(() => {
+    navigation.navigate(Screen.ProfileScreen, { userNo });
+  }, [userNo, navigation]);
+
   const toggleScrap = useCallback(async () => {
     const API = isScraped ? PictureAPI.unscrapPicture : PictureAPI.scrapPicture;
     bottomSheetRef.current?.close();
@@ -235,10 +284,13 @@ const ImageDetailScreen = () => {
   }, [isScraped, scaleImage, pictureNo, isLikeAnimation]);
 
   const orientation =
-    width >= height ? OrientationType.landscape : OrientationType.portrait;
+    windowWidth >= windowHeight
+      ? OrientationType.landscape
+      : OrientationType.portrait;
   const SIZE =
     orientation === OrientationType.landscape ? windowHeight : windowWidth;
   const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
+  const Bookmark = isScraped ? BookmarkFilledIcon : BookmarkIcon;
 
   const showLikesPeople = async () => {
     const response = await getLikeUsers({ pictureNo });
@@ -255,11 +307,14 @@ const ImageDetailScreen = () => {
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
       <Pressable
-        style={styles.wrapMore}
+        style={styles.wrapButton}
         onPress={throttle(toggleLike)}
         onLongPress={showLikesPeople}
       >
         <Favorite color={colorByBackground} />
+      </Pressable>
+      <Pressable onPress={throttle(toggleScrap)} style={styles.wrapButton}>
+        <Bookmark color={colorByBackground} width={26} height={26} />
       </Pressable>
       <Pressable onPress={() => setBottomSheetIndex(isMine ? 1 : 0)}>
         <MoreIcon color={colorByBackground} />
@@ -310,11 +365,7 @@ const ImageDetailScreen = () => {
           <BottomSheetItem
             label="플로어 방문하기"
             icon={<PhotoIcon color={COLOR.mono.black} />}
-          />
-          <BottomSheetItem
-            label="사진 스크랩하기"
-            icon={<BookmarkIcon />}
-            onPress={toggleScrap}
+            onPress={visitFloor}
           />
           <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
         </BottomSheetItemGroup>
@@ -328,7 +379,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, toggleScrap],
+    [bottomSheetIndex, visitFloor],
   );
 
   const bottomSheetForVisiter = useMemo(
@@ -341,17 +392,14 @@ const ImageDetailScreen = () => {
       >
         <BottomSheetItemGroup>
           <BottomSheetItem
-            label="프로필 보기"
+            label={`${userId} 프로필 보기`}
             icon={<PersonIcon color={COLOR.mono.black} />}
+            onPress={visitProfile}
           />
           <BottomSheetItem
             label="플로어 방문하기"
             icon={<PhotoIcon color={COLOR.mono.black} />}
-          />
-          <BottomSheetItem
-            label="사진 스크랩하기"
-            icon={<BookmarkIcon />}
-            onPress={toggleScrap}
+            onPress={visitFloor}
           />
           <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
           <BottomSheetItem
@@ -362,7 +410,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, toggleScrap],
+    [bottomSheetIndex, visitFloor, userId, visitProfile],
   );
 
   const renderBottomSheet = () =>
@@ -409,7 +457,7 @@ const ImageDetailScreen = () => {
           <Animated.View style={styles.wrapImage}>
             <FastImage
               source={{ uri: imageUrl }}
-              style={styles.imageBackground}
+              style={[styles.imageBackground, isEditMode && styles.shadow]}
               resizeMode="contain"
             />
           </Animated.View>

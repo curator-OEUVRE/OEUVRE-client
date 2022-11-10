@@ -50,6 +50,18 @@ const styles = StyleSheet.create({
   lineContainer: {
     alignSelf: 'center',
   },
+  // eslint-disable-next-line react-native/no-color-literals
+  shadow: {
+    elevation: 20,
+    overflow: 'visible',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+  },
   text: {
     color: COLOR.mono.gray7,
     marginTop: 5,
@@ -201,7 +213,7 @@ const FloorPicture = ({
             onPressPicture?.(item.pictureNo);
           }}
         >
-          <View>
+          <View style={styles.shadow}>
             <AnimatedFastImage
               source={{ uri: item.imageUrl }}
               style={imageAnimStyle}

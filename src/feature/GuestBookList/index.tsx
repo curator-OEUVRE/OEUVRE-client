@@ -9,6 +9,7 @@ interface GuestBookListProps {
   onReport: (idx: number) => void;
   fetchMore: () => void;
   isLoading: boolean;
+  onPressProfile?: (userNo: number) => void;
 }
 
 const keyExtractor = (item: GuestBookInfo) => `comment_${item.commentNo}`;
@@ -19,6 +20,7 @@ const GuestBookList = ({
   onReport,
   fetchMore,
   isLoading,
+  onPressProfile,
 }: GuestBookListProps) => (
   <>
     <FlatList
@@ -28,6 +30,7 @@ const GuestBookList = ({
           data={item}
           deleteItem={() => onDelete(index)}
           reportItem={() => onReport(index)}
+          onPressProfile={onPressProfile}
         />
       )}
       keyExtractor={keyExtractor}

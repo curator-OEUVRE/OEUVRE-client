@@ -10,7 +10,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFloor } from '@/apis/floor';
 import AlertIcon from '@/assets/icons/Alert';
@@ -106,6 +106,10 @@ const FloorViewerScreen = () => {
     [],
   );
 
+  const onReport = useCallback(() => {
+    Alert.alert('신고 완료', '신고 완료했습니다.');
+  }, []);
+
   const onPressMore = useCallback(() => {
     setBottomSheetIndex(floorInfo?.isMine ? 1 : 0);
   }, [floorInfo?.isMine]);
@@ -136,10 +140,12 @@ const FloorViewerScreen = () => {
     navigation.navigate(Screen.EditFloorScreen, { floorNo });
   };
 
+  const visitProfile = useCallback(() => {
+    if (!floorInfo) return;
+    navigation.navigate(Screen.ProfileScreen, { userNo: floorInfo.userNo });
+  }, [floorInfo, navigation]);
+
   const bottomSheetForEditor = [
-    <BottomSheetItemGroup key="share">
-      <BottomSheetItem label="플로어 공유하기" icon={<ShareIcon />} />
-    </BottomSheetItemGroup>,
     <BottomSheetItemGroup key="edit">
       <BottomSheetItem
         label="플로어 수정하기"
@@ -156,14 +162,16 @@ const FloorViewerScreen = () => {
   const bottomSheetForVisiter = (
     <BottomSheetItemGroup>
       <BottomSheetItem
-        label="님 프로필 보기"
+        label={`${floorInfo?.userId}님 프로필 보기`}
         icon={<PersonIcon color={COLOR.mono.black} />}
+        onPress={visitProfile}
       />
       <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
       <BottomSheetItem
         label="플로어 신고하기"
         icon={<AlertIcon color={COLOR.system.red} />}
         color={COLOR.system.red}
+        onPress={onReport}
       />
     </BottomSheetItemGroup>
   );
