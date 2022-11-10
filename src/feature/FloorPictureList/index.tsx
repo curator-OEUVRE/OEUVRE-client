@@ -77,6 +77,11 @@ const FloorPictureList = ({
   const isDragging = useDerivedValue(
     () => activeIndexAnim.current?.value !== -1,
   );
+  const draggingPictureNo = useDerivedValue(() => {
+    if (!activeIndexAnim.current || activeIndexAnim.current.value < 0)
+      return -1;
+    return pictures[activeIndexAnim.current.value].pictureNo;
+  });
 
   const [activeLine, setActiveLine] = useState(0);
 
@@ -119,9 +124,14 @@ const FloorPictureList = ({
 
   const onDragEnd = (newData: PictureInfo[]) => {
     if (onEnter.value && activeIndexAnim.current) {
-      newData.splice(activeIndexAnim.current.value, 1);
+      setPictures?.(
+        newData.filter(
+          (picture) => picture.pictureNo !== draggingPictureNo.value,
+        ),
+      );
+    } else {
+      setPictures?.(newData);
     }
-    setPictures?.(newData);
   };
   const measureLayout = () => {
     setTimeout(() => {
@@ -153,7 +163,6 @@ const FloorPictureList = ({
               : // 순서가 바뀌면 y축 변화 무시
                 picture,
           );
-
           onDragEnd(newPictures);
         }}
         onAnimValInit={(animVals) => {
