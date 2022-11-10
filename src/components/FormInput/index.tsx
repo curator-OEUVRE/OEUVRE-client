@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   message: {
-    color: COLOR.system.blue,
+    color: COLOR.system.red,
     marginTop: 4,
   },
   statusIcon: {

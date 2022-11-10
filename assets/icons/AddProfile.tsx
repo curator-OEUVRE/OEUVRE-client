@@ -1,49 +1,45 @@
 import * as React from 'react';
 import Svg, {
+  SvgProps,
   Circle,
   Mask,
   G,
   Defs,
   LinearGradient,
-  SvgProps,
   Stop,
 } from 'react-native-svg';
 
 const SvgComponent = (props: SvgProps) => (
-  <Svg
-    width={125}
-    height={125}
-    viewBox="0 0 125 125"
-    fill="none"
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props}
-  >
-    <Circle cx={62.5} cy={62.5} r={62.5} fill="url(#paint0_linear_926_12289)" />
-    <Circle cx={62.9768} cy={47.7097} r={21.9466} fill="#9AB2B5" />
+  <Svg width={90} height={90} fill="none" viewBox="0 0 90 90" {...props}>
+    <Circle cx={45} cy={45} r={45} fill="url(#a)" />
+    <Circle cx={45.343} cy={34.351} r={15.802} fill="#7B7F82" />
     <Mask
-      id="a"
+      id="b"
+      style={{
+        maskType: 'alpha',
+      }}
       maskUnits="userSpaceOnUse"
       x={0}
       y={0}
-      width={125}
-      height={125}
+      width={90}
+      height={90}
     >
-      <Circle cx={62.5} cy={62.5} r={62.5} fill="#ECF1F0" />
+      <Circle cx={45} cy={45} r={45} fill="#ECF1F0" />
     </Mask>
-    <G mask="url(#a)">
-      <Circle cx={62.9772} cy={119.275} r={44.8473} fill="#9AB2B5" />
+    <G mask="url(#b)">
+      <Circle cx={45.343} cy={85.878} r={32.29} fill="#7B7F82" />
     </G>
     <Defs>
       <LinearGradient
-        id="paint0_linear_926_12289"
-        x1={62.5}
+        id="a"
+        x1={45}
         y1={0}
-        x2={62.5}
-        y2={125}
+        x2={45}
+        y2={90}
         gradientUnits="userSpaceOnUse"
       >
-        <Stop stopColor="#CCDCDE" />
-        <Stop offset={1} stopColor="#ECF1F0" />
+        <Stop stopColor="#A7A9AB" />
+        <Stop offset={1} stopColor="#D3D4D5" />
       </LinearGradient>
     </Defs>
   </Svg>

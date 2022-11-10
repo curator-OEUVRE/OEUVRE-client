@@ -149,8 +149,8 @@ const FloorTicket = ({
                 styles.badge,
                 {
                   backgroundColor: floor.isNew
-                    ? COLOR.system.red
-                    : COLOR.mono.gray7,
+                    ? COLOR.mono.gray7
+                    : COLOR.system.red,
                 },
               ]}
             >

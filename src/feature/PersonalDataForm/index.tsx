@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
+import { checkId } from '@/apis/user';
 import {
   Button,
   FormInput,
@@ -13,6 +15,9 @@ import { useSignUpStore } from '@/states/signUpStore';
 const styles = StyleSheet.create({
   buttonText: {
     color: COLOR.mono.white,
+  },
+  padding: {
+    paddingHorizontal: 20,
   },
 });
 
@@ -39,43 +44,77 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
     </Button>
   );
 
+  const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+
   return (
     <UserInputLayout
       infoMessage="개인정보를 입력해 주세요"
       button={button}
       gap={54}
+      style={styles.padding}
     >
       <FormInput
         label="사용자 아이디"
         value={userId.value}
         placeholder="영문자, 숫자 및 밑줄만 사용할 수 있어요. (총 4-15자)"
-        onChangeText={(value) => setUserId({ ...userId, value })}
-        status={userId.status}
-        message={userId.error}
-        onBlur={() => {
-          const [isValidated, error] = validateUserId(userId.value);
+        onChangeText={(value) => {
+          if (timer) {
+            clearTimeout(timer);
+          }
+
+          const [isValidated, error] = validateUserId(value);
           if (isValidated) {
-            setUserId({ ...userId, status: FormInputStatus.Valid });
+            setUserId({ ...userId, value });
+
+            const newTimer = setTimeout(async () => {
+              const response = await checkId(value);
+              if (response.isSuccess) {
+                if (response.result.result.isPossible) {
+                  setUserId({
+                    ...userId,
+                    value,
+                    status: FormInputStatus.Valid,
+                  });
+                } else {
+                  setUserId({
+                    ...userId,
+                    value,
+                    status: FormInputStatus.Error,
+                    error:
+                      '이 사용자 아이디는 이미 다른 사람이 사용하고 있어요',
+                  });
+                }
+              }
+            }, 1000);
+            setTimer(newTimer);
           } else {
-            setUserId({ ...userId, status: FormInputStatus.Error, error });
+            setUserId({
+              ...userId,
+              value,
+              status: FormInputStatus.Error,
+              error,
+            });
           }
         }}
+        status={userId.status}
+        message={userId.error}
       />
       <FormInput
         label="이름"
         value={name.value}
         placeholder="본인의 이름을 입력해 주세요. (총 2-10자)"
-        onChangeText={(value) => setName({ ...name, value })}
-        status={name.status}
-        message={name.error}
-        onBlur={() => {
-          const [isValidated, error] = validateName(name.value);
+        onChangeText={(value) => {
+          const [isValidated, error] = validateName(value);
           if (isValidated) {
-            setName({ ...name, status: FormInputStatus.Valid });
+            setName({ ...name, value, status: FormInputStatus.Valid });
           } else {
-            setName({ ...name, status: FormInputStatus.Error, error });
+            setName({ ...name, value, status: FormInputStatus.Error, error });
           }
         }}
+        status={name.status}
+        message={name.error}
       />
       <FormInputDate
         label="생년월일"

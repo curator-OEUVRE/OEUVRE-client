@@ -8,10 +8,17 @@ import {
   ViewStyle,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import AddCircleIcon from '@/assets/icons/AddCircle';
+import AddProfileIcon from '@/assets/icons/AddProfile';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 const styles = StyleSheet.create({
+  addIcon: {
+    left: 70,
+    position: 'absolute',
+    top: 60,
+  },
   container: {
     flexDirection: 'row',
     height: 98,
@@ -29,6 +36,9 @@ const styles = StyleSheet.create({
   },
   idText: {
     color: COLOR.mono.gray4,
+  },
+  imageArea: {
+    position: 'relative',
   },
   introduceMessageText: {
     color: COLOR.mono.gray7,
@@ -63,7 +73,7 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  profileImageUrl: string;
+  profileImageUrl?: string | null;
   name: string;
   id: string;
   introduceMessage?: string;
@@ -73,6 +83,7 @@ interface Props {
   onImagePress?: () => void;
   isFollowing?: boolean;
   isFollower?: boolean;
+  hasAddIcon?: boolean;
 }
 
 const ProfileCard = ({
@@ -86,6 +97,7 @@ const ProfileCard = ({
   onImagePress,
   isFollowing,
   isFollower,
+  hasAddIcon,
 }: Props) => {
   const followButtonText = useMemo(() => {
     if (isFollowing) return '팔로잉';
@@ -96,10 +108,28 @@ const ProfileCard = ({
   return (
     <View style={[styles.container, style]}>
       <Pressable onPress={onImagePress}>
-        <FastImage
-          style={styles.profileImage}
-          source={{ uri: profileImageUrl }}
-        />
+        <View style={styles.imageArea}>
+          {profileImageUrl ? (
+            <FastImage
+              style={styles.profileImage}
+              source={{ uri: profileImageUrl }}
+            />
+          ) : (
+            <AddProfileIcon
+              style={styles.profileImage}
+              width={90}
+              height={90}
+            />
+          )}
+          {hasAddIcon && (
+            <AddCircleIcon
+              width={24}
+              height={24}
+              color={COLOR.mono.gray7}
+              style={styles.addIcon}
+            />
+          )}
+        </View>
       </Pressable>
 
       <View style={styles.profileContent}>

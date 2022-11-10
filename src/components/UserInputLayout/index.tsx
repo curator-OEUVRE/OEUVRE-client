@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import { WithKeyboardAvoidingView } from '../WithKeyboardAvoidingView';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
@@ -7,7 +14,7 @@ import { TEXT_STYLE } from '@/constants/styles/textStyles';
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     position: 'relative',
   },
   text: {
@@ -28,6 +35,7 @@ interface UserInputLayoutProps {
   infoMessage: string;
   gap?: number;
   button?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
 }
 
 const UserInputLayout = ({
@@ -35,6 +43,7 @@ const UserInputLayout = ({
   infoMessage,
   gap = 0,
   button,
+  style,
 }: UserInputLayoutProps) => {
   const renderChildren = () =>
     React.Children.map(children, (child) => (
@@ -43,7 +52,9 @@ const UserInputLayout = ({
   return (
     <WithKeyboardAvoidingView>
       <Text style={[styles.text, TEXT_STYLE.title20M]}>{infoMessage}</Text>
-      <ScrollView style={styles.content}>{renderChildren()}</ScrollView>
+      <ScrollView style={[styles.content, style]}>
+        {renderChildren()}
+      </ScrollView>
       {button && <View style={styles.wrapButton}>{button}</View>}
     </WithKeyboardAvoidingView>
   );
