@@ -10,6 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Alert,
   Pressable,
   StyleSheet,
   Text,
@@ -406,6 +407,9 @@ const ImageDetailScreen = () => {
             label="사진 신고하기"
             icon={<AlertIcon color={COLOR.system.red} />}
             color={COLOR.system.red}
+            onPress={() => {
+              Alert.alert('신고되었습니다.');
+            }}
           />
         </BottomSheetItemGroup>
       </BottomSheet>
