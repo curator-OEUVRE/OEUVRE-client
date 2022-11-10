@@ -25,11 +25,11 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Shadow } from 'react-native-shadow-2';
-import { getLikeUsers, getPictureDetail } from '@/apis/picture';
 import * as PictureAPI from '@/apis/picture';
+import { getLikeUsers, getPictureDetail } from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
 import BookmarkIcon from '@/assets/icons/Bookmark';
+import BookmarkFilledIcon from '@/assets/icons/BookmarkFilled';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
 import FavoriteIcon from '@/assets/icons/Favorite';
@@ -115,6 +115,9 @@ const styles = StyleSheet.create({
     color: COLOR.mono.gray7,
     textAlign: 'center',
   },
+  wrapButton: {
+    marginRight: 9,
+  },
   wrapFooter: {
     lineHeight: 21,
     paddingHorizontal: 20,
@@ -139,9 +142,6 @@ const styles = StyleSheet.create({
   },
   wrapImage: {
     flex: 1,
-  },
-  wrapMore: {
-    marginRight: 9,
   },
 });
 
@@ -204,8 +204,6 @@ const ImageDetailScreen = () => {
   }, [pictureNo]);
 
   const {
-    width,
-    height,
     description,
     imageUrl,
     isLiked,
@@ -286,10 +284,13 @@ const ImageDetailScreen = () => {
   }, [isScraped, scaleImage, pictureNo, isLikeAnimation]);
 
   const orientation =
-    width >= height ? OrientationType.landscape : OrientationType.portrait;
+    windowWidth >= windowHeight
+      ? OrientationType.landscape
+      : OrientationType.portrait;
   const SIZE =
     orientation === OrientationType.landscape ? windowHeight : windowWidth;
   const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
+  const Bookmark = isScraped ? BookmarkFilledIcon : BookmarkIcon;
 
   const showLikesPeople = async () => {
     const response = await getLikeUsers({ pictureNo });
@@ -306,11 +307,14 @@ const ImageDetailScreen = () => {
   const headerRight = () => (
     <View style={styles.wrapHeaderRight}>
       <Pressable
-        style={styles.wrapMore}
+        style={styles.wrapButton}
         onPress={throttle(toggleLike)}
         onLongPress={showLikesPeople}
       >
         <Favorite color={colorByBackground} />
+      </Pressable>
+      <Pressable onPress={throttle(toggleScrap)} style={styles.wrapButton}>
+        <Bookmark color={colorByBackground} width={26} height={26} />
       </Pressable>
       <Pressable onPress={() => setBottomSheetIndex(isMine ? 1 : 0)}>
         <MoreIcon color={colorByBackground} />
@@ -363,11 +367,6 @@ const ImageDetailScreen = () => {
             icon={<PhotoIcon color={COLOR.mono.black} />}
             onPress={visitFloor}
           />
-          <BottomSheetItem
-            label="사진 스크랩하기"
-            icon={<BookmarkIcon />}
-            onPress={toggleScrap}
-          />
           <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
         </BottomSheetItemGroup>
         <BottomSheetItemGroup>
@@ -380,7 +379,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, toggleScrap, visitFloor],
+    [bottomSheetIndex, visitFloor],
   );
 
   const bottomSheetForVisiter = useMemo(
@@ -402,11 +401,6 @@ const ImageDetailScreen = () => {
             icon={<PhotoIcon color={COLOR.mono.black} />}
             onPress={visitFloor}
           />
-          <BottomSheetItem
-            label="사진 스크랩하기"
-            icon={<BookmarkIcon />}
-            onPress={toggleScrap}
-          />
           <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
           <BottomSheetItem
             label="사진 신고하기"
@@ -416,7 +410,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, toggleScrap, visitFloor, userId, visitProfile],
+    [bottomSheetIndex, visitFloor, userId, visitProfile],
   );
 
   const renderBottomSheet = () =>
