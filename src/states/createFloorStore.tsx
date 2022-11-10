@@ -50,6 +50,7 @@ interface CreateFloorStore {
   createFloor: () => ApiResult<CreateFloorResponseDto>;
   editFloor: (floorNo: number) => ApiResult<EditFloorResponseDto>;
   setFloor: (floor: FloorInfo) => void;
+  clearCreateFloorStore: () => void;
 }
 
 const createDefaultPictureInfo = (info: Partial<PictureInfo>): PictureInfo => ({
@@ -71,7 +72,7 @@ export const FLOOR_BACKGROUND_COLORS = [
 
 export const FLOOR_TEXTURES = [[0]];
 
-export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
+const defaultValues = {
   mode: FloorMode.VIEWER,
   pictures: [],
   tempPictures: [],
@@ -85,6 +86,10 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   isCommentAvailable: true,
   isPublic: true,
   texture: FLOOR_TEXTURES[0][0],
+};
+
+export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
+  ...defaultValues,
   setFloorMode: (mode) => {
     console.log(mode);
     set((state) => ({ ...state, mode }));
@@ -147,6 +152,8 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       pictures,
       texture,
     });
+    const { clearCreateFloorStore } = get();
+    clearCreateFloorStore();
     return result;
   },
   editFloor: async (floorNo: number) => {
@@ -163,6 +170,8 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       },
       floorNo,
     });
+    const { clearCreateFloorStore } = get();
+    clearCreateFloorStore();
     return result;
   },
   setFloor: (floor) => {
@@ -175,5 +184,9 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
         value: floor.name,
       },
     }));
+  },
+  clearCreateFloorStore: () => {
+    const state = get();
+    set({ ...state, ...defaultValues });
   },
 }));

@@ -112,6 +112,7 @@ const GuestBookScreen = () => {
 
   const onSubmit = useCallback(
     async (comment: string) => {
+      if (comment.length === 0) return;
       setCommentsLoading(true);
       const response = await createComment({ floorNo, comment });
       if (response.isSuccess) {

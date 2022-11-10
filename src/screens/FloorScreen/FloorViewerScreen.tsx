@@ -137,9 +137,6 @@ const FloorViewerScreen = () => {
   };
 
   const bottomSheetForEditor = [
-    <BottomSheetItemGroup key="share">
-      <BottomSheetItem label="플로어 공유하기" icon={<ShareIcon />} />
-    </BottomSheetItemGroup>,
     <BottomSheetItemGroup key="edit">
       <BottomSheetItem
         label="플로어 수정하기"
