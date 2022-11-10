@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     width: 40,
+    zIndex: 100,
   },
 });
 
@@ -122,13 +123,13 @@ const FloorPictureList = ({
     }
     setPictures?.(newData);
   };
-
   const measureLayout = () => {
-    if (pressableRef.current) {
+    setTimeout(() => {
+      if (!pressableRef.current) return;
       pressableRef.current.measure((x, y, width, height, pageX, pageY) => {
         layoutRef.value = { pageX, pageY, width, height };
       });
-    }
+    }, 1000);
   };
 
   return (
