@@ -13,6 +13,7 @@ import {
   ViewStyle,
   StyleProp,
   ScrollView,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
@@ -260,16 +261,28 @@ const SettingScreen = () => {
         </Area>
         <Divider />
         <Area title="정책">
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              Linking.openURL(
+                'https://makeus-challenge.notion.site/9dfb41a1e9284a6cae315db1cf7d9c5b',
+              );
+            }}
+          >
             <SettingItem.Base
               left={<SettingItemLabel label="서비스 약관" />}
               right={<Arrow />}
               style={styles.settingItem}
             />
           </Pressable>
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              Linking.openURL(
+                'https://makeus-challenge.notion.site/c97ed10160a74e9d87dcfadb01fea89b',
+              );
+            }}
+          >
             <SettingItem.Base
-              left={<SettingItemLabel label="동의사항" />}
+              left={<SettingItemLabel label="개인정보 처리방침" />}
               right={<Arrow />}
               style={styles.settingItem}
             />
