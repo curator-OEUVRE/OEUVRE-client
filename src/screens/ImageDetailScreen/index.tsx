@@ -1,5 +1,5 @@
 import Sheet from '@gorhom/bottom-sheet';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useFocusEffect, useRoute } from '@react-navigation/native';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -148,6 +148,15 @@ const ImageDetailScreen = () => {
 
   const bottomSheetRef = useRef<Sheet>(null);
   const likePeoplesRef = useRef<Sheet>(null);
+  useFocusEffect(
+    useCallback(() => {
+      const lockOrientation = async () => {
+        await lockAsync(OrientationLock.LANDSCAPE);
+      };
+      lockOrientation();
+    }, []),
+  );
+
   useEffect(() => {
     const fetchPictureDetail = async () => {
       setLoading(true);
@@ -155,12 +164,6 @@ const ImageDetailScreen = () => {
       if (response.isSuccess) {
         const { result } = response.result;
         setPictureDetail(result);
-        const { width, height } = result;
-        lockAsync(
-          width > height
-            ? OrientationLock.LANDSCAPE
-            : OrientationLock.PORTRAIT_UP,
-        );
       } else {
         // eslint-disable-next-line no-console
         console.log(response.result.info);
