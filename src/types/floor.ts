@@ -8,6 +8,8 @@ export interface FloorInfo {
   name: string;
   pictures: PictureInfo[];
   texture: number;
+  userId: number;
+  userNo: number;
 }
 
 export interface CreateFloorResponse {
