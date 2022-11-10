@@ -99,6 +99,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '100%',
   },
+  // eslint-disable-next-line react-native/no-color-literals
+  shadow: {
+    elevation: 20,
+    overflow: 'visible',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+  },
   text: {
     color: COLOR.mono.gray7,
     textAlign: 'center',
@@ -451,7 +463,7 @@ const ImageDetailScreen = () => {
           <Animated.View style={styles.wrapImage}>
             <FastImage
               source={{ uri: imageUrl }}
-              style={styles.imageBackground}
+              style={[styles.imageBackground, isEditMode && styles.shadow]}
               resizeMode="contain"
             />
           </Animated.View>
