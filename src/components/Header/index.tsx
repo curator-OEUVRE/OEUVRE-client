@@ -75,9 +75,8 @@ const Header = ({
               onPress={() => {
                 if (onGoBack) {
                   onGoBack();
-                } else {
-                  navigation.goBack();
                 }
+                navigation.goBack();
               }}
               hitSlop={10}
             >

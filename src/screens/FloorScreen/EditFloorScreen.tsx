@@ -239,7 +239,6 @@ const EditFloorScreen = () => {
           } else if (mode === FloorMode.EDIT) {
             setFloorMode(FloorMode.VIEWER);
           }
-          navigation.goBack();
         }}
       />
       <View style={styles.wrapList}>
