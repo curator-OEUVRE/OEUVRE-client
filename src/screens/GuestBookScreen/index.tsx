@@ -117,7 +117,7 @@ const GuestBookScreen = () => {
       const response = await createComment({ floorNo, comment });
       if (response.isSuccess) {
         const { result } = response.result;
-        setcomments((prev) => [result, ...prev]);
+        setcomments((prev) => [{ ...result, isMine: true }, ...prev]);
       }
       setCommentsLoading(false);
     },
