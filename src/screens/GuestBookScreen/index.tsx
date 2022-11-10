@@ -156,6 +156,14 @@ const GuestBookScreen = () => {
     }
     setCommentsLoading(false);
   }, [page, floorNo]);
+
+  const visitProfile = useCallback(
+    (userNo: number) => {
+      navigation.navigate(Screen.ProfileScreen, { userNo });
+    },
+    [navigation],
+  );
+
   if (otherFloorsLoading) {
     return <Spinner />;
   }
@@ -171,6 +179,7 @@ const GuestBookScreen = () => {
             onReport={onReport}
             fetchMore={fetchMore}
             isLoading={commentsLoading}
+            onPressProfile={visitProfile}
           />
         </View>
         <GuestBookInput avatarUri={profileImageUrl} onSubmit={onSubmit} />

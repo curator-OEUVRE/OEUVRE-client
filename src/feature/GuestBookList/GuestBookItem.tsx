@@ -21,6 +21,7 @@ interface GustBookItemProps {
   data: GuestBookInfo;
   deleteItem: () => void;
   reportItem: () => void;
+  onPressProfile?: (userNo: number) => void;
 }
 
 const BUTTON_SIZE = 60;
@@ -56,8 +57,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const GustBookItem = ({ data, deleteItem, reportItem }: GustBookItemProps) => {
-  const { comment, isMine, userId, createdAt, profileImageUrl } = data;
+const GustBookItem = ({
+  data,
+  deleteItem,
+  reportItem,
+  onPressProfile,
+}: GustBookItemProps) => {
+  const { comment, isMine, userId, createdAt, profileImageUrl, userNo } = data;
   const position = useSharedValue(0);
   const { width: windowWidth } = useDimensions();
   const buttonAreaWidth = isMine ? BUTTON_SIZE * 2 : BUTTON_SIZE;
@@ -108,7 +114,9 @@ const GustBookItem = ({ data, deleteItem, reportItem }: GustBookItemProps) => {
     <GestureDetector gesture={composed}>
       <Animated.View style={[styles.container, animatedStyle, { width }]}>
         <View style={[{ width: windowWidth }, styles.left]}>
-          <Profile size={30} imageUrl={profileImageUrl} />
+          <Pressable onPress={() => onPressProfile?.(userNo)}>
+            <Profile size={30} imageUrl={profileImageUrl} />
+          </Pressable>
           <View style={styles.wrapComment}>
             <Text style={[styles.comment, TEXT_STYLE.body12R]}>
               <Text style={TEXT_STYLE.body12B}>{userId} </Text>

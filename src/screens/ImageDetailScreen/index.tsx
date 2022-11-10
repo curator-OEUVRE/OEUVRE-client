@@ -1,5 +1,12 @@
 import Sheet from '@gorhom/bottom-sheet';
-import { RouteProp, useFocusEffect, useRoute } from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -18,6 +25,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Shadow } from 'react-native-shadow-2';
 import { getLikeUsers, getPictureDetail } from '@/apis/picture';
 import * as PictureAPI from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
@@ -40,6 +48,7 @@ import {
 import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import UserProfileList from '@/feature/UserProfileList';
 import { getColorByBackgroundColor } from '@/services/common/color';
@@ -55,6 +64,11 @@ export interface ImageDetailScreenParams {
   pictureNo: number;
   color: string;
 }
+
+export type ImageDetailScreenNP = CompositeNavigationProp<
+  StackNavigationProp<FloorStackParamsList, Screen.ImageDetailScreen>,
+  StackNavigationProp<RootStackParamsList>
+>;
 
 export type ImageDetailScreenRP = RouteProp<
   FloorStackParamsList,
@@ -129,9 +143,13 @@ const initialPicture = {
   isScraped: false,
   pictureNo: 1,
   width: 0.5,
+  userNo: 0,
+  userId: '',
 };
 
 const ImageDetailScreen = () => {
+  const navigation = useNavigation<ImageDetailScreenNP>();
+
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -173,8 +191,18 @@ const ImageDetailScreen = () => {
     fetchPictureDetail();
   }, [pictureNo]);
 
-  const { width, height, description, imageUrl, isLiked, isScraped, isMine } =
-    pictureDetail;
+  const {
+    width,
+    height,
+    description,
+    imageUrl,
+    isLiked,
+    isScraped,
+    isMine,
+    floorNo,
+    userId,
+    userNo,
+  } = pictureDetail;
 
   const scale = useSharedValue(0);
   const isLikeAnimation = useSharedValue(true);
@@ -219,6 +247,14 @@ const ImageDetailScreen = () => {
       };
     });
   }, [isEditMode, isLikeAnimation, isLiked, pictureNo, scaleImage]);
+
+  const visitFloor = useCallback(() => {
+    navigation.navigate(Screen.FloorViewerScreen, { floorNo });
+  }, [floorNo, navigation]);
+
+  const visitProfile = useCallback(() => {
+    navigation.navigate(Screen.ProfileScreen, { userNo });
+  }, [userNo, navigation]);
 
   const toggleScrap = useCallback(async () => {
     const API = isScraped ? PictureAPI.unscrapPicture : PictureAPI.scrapPicture;
@@ -313,6 +349,7 @@ const ImageDetailScreen = () => {
           <BottomSheetItem
             label="플로어 방문하기"
             icon={<PhotoIcon color={COLOR.mono.black} />}
+            onPress={visitFloor}
           />
           <BottomSheetItem
             label="사진 스크랩하기"
@@ -331,7 +368,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, toggleScrap],
+    [bottomSheetIndex, toggleScrap, visitFloor],
   );
 
   const bottomSheetForVisiter = useMemo(
@@ -344,12 +381,14 @@ const ImageDetailScreen = () => {
       >
         <BottomSheetItemGroup>
           <BottomSheetItem
-            label="프로필 보기"
+            label={`${userId} 프로필 보기`}
             icon={<PersonIcon color={COLOR.mono.black} />}
+            onPress={visitProfile}
           />
           <BottomSheetItem
             label="플로어 방문하기"
             icon={<PhotoIcon color={COLOR.mono.black} />}
+            onPress={visitFloor}
           />
           <BottomSheetItem
             label="사진 스크랩하기"
@@ -365,7 +404,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, toggleScrap],
+    [bottomSheetIndex, toggleScrap, visitFloor, userId, visitProfile],
   );
 
   const renderBottomSheet = () =>
