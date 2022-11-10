@@ -78,6 +78,9 @@ const styles = StyleSheet.create({
   toggleItem: {
     marginBottom: 8,
   },
+  userInputLayout: {
+    paddingHorizontal: 20,
+  },
 });
 
 interface FloorIconProps {
@@ -186,6 +189,7 @@ const FloorInfoFormScreen = () => {
         <UserInputLayout
           infoMessage={`멋진 사진이네요!\n플로어를 소개해 주세요`}
           gap={28}
+          style={styles.userInputLayout}
         >
           <FormInput
             label="플로어 이름"
