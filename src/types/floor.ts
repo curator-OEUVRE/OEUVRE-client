@@ -8,7 +8,7 @@ export interface FloorInfo {
   name: string;
   pictures: PictureInfo[];
   texture: number;
-  userId?: number;
+  userId?: string;
   userNo?: number;
 }
 

@@ -171,6 +171,7 @@ const FloorPicture = ({
                 <AddCircleIcon
                   width={LINE_BUTTON_SIZE}
                   height={LINE_BUTTON_SIZE}
+                  color={COLOR.mono.gray7}
                 />
               </Animated.View>
             </Pressable>

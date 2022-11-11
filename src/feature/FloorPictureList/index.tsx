@@ -57,7 +57,8 @@ interface Layout {
   pageY: number;
 }
 
-const keyExtractor = (item: PictureInfo): string => item.imageUrl;
+const keyExtractor = (item: PictureInfo, index: number): string =>
+  `item_${index}_${item.pictureNo}`;
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const FloorPictureList = ({
@@ -77,10 +78,10 @@ const FloorPictureList = ({
   const isDragging = useDerivedValue(
     () => activeIndexAnim.current?.value !== -1,
   );
-  const draggingPictureNo = useDerivedValue(() => {
+  const draggingPictureUrl = useDerivedValue(() => {
     if (!activeIndexAnim.current || activeIndexAnim.current.value < 0)
-      return -1;
-    return pictures[activeIndexAnim.current.value].pictureNo;
+      return '';
+    return pictures[activeIndexAnim.current.value].imageUrl;
   });
 
   const [activeLine, setActiveLine] = useState(0);
@@ -126,7 +127,7 @@ const FloorPictureList = ({
     if (onEnter.value && activeIndexAnim.current) {
       setPictures?.(
         newData.filter(
-          (picture) => picture.pictureNo !== draggingPictureNo.value,
+          (picture) => picture.imageUrl !== draggingPictureUrl.value,
         ),
       );
     } else {

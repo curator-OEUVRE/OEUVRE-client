@@ -5,7 +5,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -26,7 +26,7 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 
 export type EditDescriptionScreenParams = {
   pictureNo: number;
@@ -93,21 +93,50 @@ const EditDescriptionScreen = () => {
   const { params } = useRoute<EditDescriptionScreenRP>();
   const { pictureNo } = params;
 
-  const { pictures, onChangeDescriptionByIdx } = useCreateFloorStore();
+  const {
+    pictures,
+    onChangeDescriptionByIdx,
+    pictureDetail,
+    mode,
+    setPictureDetail,
+  } = useCreateFloorStore();
   const idx = pictures.findIndex((p) => p.pictureNo === pictureNo);
   const picture = idx >= 0 ? pictures[idx] : undefined;
   const setDescription = idx >= 0 ? onChangeDescriptionByIdx(idx) : undefined;
-  const [text, setText] = useState(picture?.description || '');
+  const defaultText = picture?.description || '';
+  const [text, setText] = useState(defaultText);
+
+  const onPress = useCallback(() => {
+    if (mode === FloorMode.VIEWER) {
+      setPictureDetail({ ...pictureDetail, description: text });
+    }
+    setDescription?.(text);
+    navigation.goBack();
+  }, [setDescription, text, navigation, mode, pictureDetail, setPictureDetail]);
 
   const headerRight = () => (
-    <Pressable
-      onPress={() => {
-        setDescription?.(text);
-        navigation.goBack();
-      }}
-    >
+    <Pressable onPress={onPress}>
       <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>완료</Text>
     </Pressable>
+  );
+
+  const hashtagArea = (
+    <View style={styles.hashtagArea}>
+      <Pressable
+        onPress={() => {
+          navigation.navigate(Screen.AddHashtagScreen, { id: idx });
+        }}
+      >
+        <Hashtag />
+      </Pressable>
+      <View style={styles.tagsContainer}>
+        {(picture?.hashtags || []).map((tag) => (
+          <Text key={tag} style={[TEXT_STYLE.body12R, styles.tag]}>
+            {tag}
+          </Text>
+        ))}
+      </View>
+    </View>
   );
 
   return (
@@ -118,7 +147,9 @@ const EditDescriptionScreen = () => {
           <ScrollView style={styles.container}>
             <Image
               style={styles.image}
-              source={{ uri: picture?.imageUrl }}
+              source={{
+                uri: picture?.imageUrl,
+              }}
               resizeMode="contain"
             />
             <View style={styles.contentContainer}>
@@ -139,22 +170,7 @@ const EditDescriptionScreen = () => {
                 <Text style={styles.lengthText}>{text.length}/50</Text>
               )}
             </View>
-            <View style={styles.hashtagArea}>
-              <Pressable
-                onPress={() => {
-                  navigation.navigate(Screen.AddHashtagScreen, { id: idx });
-                }}
-              >
-                <Hashtag />
-              </Pressable>
-              <View style={styles.tagsContainer}>
-                {(picture?.hashtags || []).map((tag) => (
-                  <Text key={tag} style={[TEXT_STYLE.body12R, styles.tag]}>
-                    #{tag}
-                  </Text>
-                ))}
-              </View>
-            </View>
+            {hashtagArea}
           </ScrollView>
         </TouchableWithoutFeedback>
       </WithKeyboardAvoidingView>

@@ -9,8 +9,8 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import { Pressable, StyleSheet, View, Modal, Text, Image } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
@@ -111,7 +111,6 @@ const EditFloorScreen = () => {
       lockOrientation();
     }, []),
   );
-
   const { params } = useRoute<EditFloorScreenRP>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [newFloorNo, setNewFloorNo] = useState<number>();
@@ -150,11 +149,13 @@ const EditFloorScreen = () => {
     });
     setPictures(newPictures);
     if (mode === FloorMode.EDIT) {
-      if (!params?.floorNo) return;
-      const result = await editFloor(params.floorNo);
+      if (!params?.floorNo) {
+        setLoading(false);
+        return;
+      }
+      await editFloor(params.floorNo);
       setLoading(false);
       // eslint-disable-next-line no-console
-      console.log(result);
       setFloorMode(FloorMode.VIEWER);
       navigation.navigate(Screen.FloorViewerScreen, {
         floorNo: params.floorNo,
@@ -163,7 +164,6 @@ const EditFloorScreen = () => {
       const result = await createFloor();
       setLoading(false);
       // eslint-disable-next-line no-console
-      console.log(result);
       if (result.isSuccess) {
         setNewFloorNo(result.result.result.floorNo);
         setModalVisible(true);
@@ -178,8 +178,8 @@ const EditFloorScreen = () => {
     setFloorMode,
     editFloor,
     mode,
-    params?.floorNo,
     navigation,
+    params,
   ]);
   const colorByBackground = getColorByBackgroundColor(color);
   const ConfirmButton = useCallback(

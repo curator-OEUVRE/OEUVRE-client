@@ -28,9 +28,14 @@ const useUploadImage = () => {
 
   const uploadImages = async (images: string[], path: string) => {
     setUploading(true);
-    const downloadURL = await Promise.all(
-      images.map((image) => upload(image, path, uuidv4())),
-    );
+    let downloadURL: string[] = [];
+    try {
+      downloadURL = await Promise.all(
+        images.map((image) => upload(image, path, uuidv4())),
+      );
+    } catch (e: any) {
+      console.log(e.message);
+    }
     setUploading(false);
     return downloadURL;
   };

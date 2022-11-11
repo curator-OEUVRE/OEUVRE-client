@@ -27,7 +27,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as PictureAPI from '@/apis/picture';
-import { getLikeUsers, getPictureDetail } from '@/apis/picture';
+import { getLikeUsers } from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
 import BookmarkIcon from '@/assets/icons/Bookmark';
 import BookmarkFilledIcon from '@/assets/icons/BookmarkFilled';
@@ -54,6 +54,7 @@ import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import UserProfileList from '@/feature/UserProfileList';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
+import { useCreateFloorStore } from '@/states/createFloorStore';
 import { LikeUser, PictureDetail } from '@/types/picture';
 
 enum OrientationType {
@@ -146,20 +147,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const initialPicture = {
-  description: '...',
-  floorNo: 1,
-  height: 0.5,
-  imageUrl: '',
-  isLiked: false,
-  isMine: false,
-  isScraped: false,
-  pictureNo: 1,
-  width: 0.5,
-  userNo: 0,
-  userId: '',
-};
-
 const ImageDetailScreen = () => {
   const navigation = useNavigation<ImageDetailScreenNP>();
 
@@ -169,8 +156,8 @@ const ImageDetailScreen = () => {
   const { params } = useRoute<ImageDetailScreenRP>();
   const { pictureNo, color } = params;
   const colorByBackground = getColorByBackgroundColor(color);
-  const [pictureDetail, setPictureDetail] =
-    useState<PictureDetail>(initialPicture);
+  const { pictureDetail, setPictureDetail, fetchPictureDetail } =
+    useCreateFloorStore();
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
   const [isEditMode, setEditMode] = useState<boolean>(true);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
@@ -187,22 +174,14 @@ const ImageDetailScreen = () => {
       lockOrientation();
     }, []),
   );
-
   useEffect(() => {
-    const fetchPictureDetail = async () => {
+    const fetchData = async () => {
       setLoading(true);
-      const response = await getPictureDetail({ pictureNo });
-      if (response.isSuccess) {
-        const { result } = response.result;
-        setPictureDetail(result);
-      } else {
-        // eslint-disable-next-line no-console
-        console.log(response.result.info);
-      }
+      await fetchPictureDetail(pictureNo);
       setLoading(false);
     };
-    fetchPictureDetail();
-  }, [pictureNo]);
+    fetchData();
+  }, [pictureNo, fetchPictureDetail]);
 
   const {
     description,
@@ -214,7 +193,6 @@ const ImageDetailScreen = () => {
     userId,
     userNo,
   } = pictureDetail;
-
   const scale = useSharedValue(0);
   const isLikeAnimation = useSharedValue(true);
   const onAnimation = useSharedValue(false);
@@ -247,17 +225,24 @@ const ImageDetailScreen = () => {
   const toggleLike = useCallback(async () => {
     if (!isEditMode) return;
     const API = isLiked ? PictureAPI.unlikePicture : PictureAPI.likePicture;
-    await API({ pictureNo });
-    setPictureDetail((prev) => {
-      if (!prev) return prev;
+    if (!isLiked) {
       isLikeAnimation.value = true;
-      if (!prev.isLiked) scaleImage();
-      return {
-        ...prev,
-        isLiked: !prev.isLiked,
-      };
+      scaleImage();
+    }
+    await API({ pictureNo });
+    setPictureDetail({
+      ...pictureDetail,
+      isLiked: !isLiked,
     });
-  }, [isEditMode, isLikeAnimation, isLiked, pictureNo, scaleImage]);
+  }, [
+    isEditMode,
+    isLikeAnimation,
+    isLiked,
+    pictureNo,
+    scaleImage,
+    pictureDetail,
+    setPictureDetail,
+  ]);
 
   const visitFloor = useCallback(() => {
     navigation.navigate(Screen.FloorViewerScreen, { floorNo });
@@ -269,26 +254,35 @@ const ImageDetailScreen = () => {
 
   const toggleScrap = useCallback(async () => {
     const API = isScraped ? PictureAPI.unscrapPicture : PictureAPI.scrapPicture;
+    if (!isScraped) {
+      isLikeAnimation.value = false;
+      scaleImage();
+    }
     bottomSheetRef.current?.close();
     await API({ pictureNo });
-    setPictureDetail((prev) => {
-      if (!prev) return prev;
-      if (!prev.isScraped) {
-        isLikeAnimation.value = false;
-        scaleImage();
-      }
-      return {
-        ...prev,
-        isScraped: !prev.isScraped,
-      };
+    setPictureDetail({
+      ...pictureDetail,
+      isScraped: !isScraped,
     });
-  }, [isScraped, scaleImage, pictureNo, isLikeAnimation]);
+  }, [
+    isScraped,
+    scaleImage,
+    pictureNo,
+    isLikeAnimation,
+    pictureDetail,
+    setPictureDetail,
+  ]);
 
   const deletePicture = useCallback(async () => {
     bottomSheetRef.current?.close();
     await PictureAPI.deletePicture({ pictureNo });
     navigation.goBack();
   }, [pictureNo, navigation]);
+
+  const editDescription = useCallback(() => {
+    lockAsync(OrientationLock.PORTRAIT_UP);
+    navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
+  }, [navigation, pictureNo]);
 
   const orientation =
     windowWidth >= windowHeight
@@ -381,7 +375,11 @@ const ImageDetailScreen = () => {
           /> */}
         </BottomSheetItemGroup>
         <BottomSheetItemGroup>
-          <BottomSheetItem label="설명 수정하기" icon={<EditIcon />} />
+          <BottomSheetItem
+            label="설명 수정하기"
+            icon={<EditIcon />}
+            onPress={editDescription}
+          />
           <BottomSheetItem
             label="사진 삭제하기"
             icon={<DeleteIcon />}
@@ -391,7 +389,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, visitFloor, deletePicture],
+    [bottomSheetIndex, visitFloor, deletePicture, editDescription],
   );
 
   const bottomSheetForVisiter = useMemo(
