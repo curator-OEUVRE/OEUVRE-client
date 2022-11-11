@@ -34,9 +34,18 @@ const App = () => {
   const { isReady, setIsReady, onLayout } = useSplash();
   useEffect(() => {
     const initialFetch = async () => {
+      const start = new Date().getTime();
       await loadFonts();
       await lockAsync(OrientationLock.PORTRAIT_UP);
-      setIsReady(true);
+      const end = new Date().getTime();
+
+      if (end - start < 2000) {
+        setTimeout(() => {
+          setIsReady(true);
+        }, 2000 - end + start);
+      } else {
+        setIsReady(true);
+      }
     };
     initialFetch();
   }, [setIsReady]);
