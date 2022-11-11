@@ -98,7 +98,7 @@ const FloorViewerScreen = () => {
   useFocusEffect(
     useCallback(() => {
       const lockOrientation = async () => {
-        await lockAsync(OrientationLock.LANDSCAPE);
+        await lockAsync(OrientationLock.LANDSCAPE_LEFT);
       };
       lockOrientation();
     }, []),
