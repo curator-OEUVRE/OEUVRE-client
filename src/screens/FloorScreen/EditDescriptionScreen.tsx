@@ -7,18 +7,18 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useState } from 'react';
 import {
-  View,
-  ScrollView,
-  TouchableWithoutFeedback,
+  Image,
   Keyboard,
   Pressable,
-  Text,
-  Image,
-  TextInput,
+  ScrollView,
   StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import shallow from 'zustand/shallow';
+import { patchPicture } from '@/apis/picture';
 import Hashtag from '@/assets/icons/Hashtag';
 import { Header } from '@/components/Header';
 import { WithKeyboardAvoidingView } from '@/components/WithKeyboardAvoidingView';
@@ -108,11 +108,23 @@ const EditDescriptionScreen = () => {
 
   const onPress = useCallback(() => {
     if (mode === FloorMode.VIEWER) {
+      if (!picture) return;
+      const { description, hashtags } = picture;
+      patchPicture({ description, hashtags, pictureNo });
       setPictureDetail({ ...pictureDetail, description: text });
     }
     setDescription?.(text);
     navigation.goBack();
-  }, [setDescription, text, navigation, mode, pictureDetail, setPictureDetail]);
+  }, [
+    setDescription,
+    text,
+    navigation,
+    mode,
+    pictureDetail,
+    setPictureDetail,
+    picture,
+    pictureNo,
+  ]);
 
   const headerRight = () => (
     <Pressable onPress={onPress}>
