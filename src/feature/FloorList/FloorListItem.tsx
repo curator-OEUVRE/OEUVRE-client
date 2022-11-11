@@ -92,6 +92,9 @@ const FloorListItem = ({ item, onPress, drag, editable }: Props) => (
           data={item.thumbnails}
           renderItem={FloorImage}
           contentContainerStyle={styles.contentContainer}
+          maxToRenderPerBatch={5}
+          initialNumToRender={5}
+          windowSize={5}
         />
       </View>
     </Pressable>
