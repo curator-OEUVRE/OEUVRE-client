@@ -284,6 +284,12 @@ const ImageDetailScreen = () => {
     });
   }, [isScraped, scaleImage, pictureNo, isLikeAnimation]);
 
+  const deletePicture = useCallback(async () => {
+    bottomSheetRef.current?.close();
+    await PictureAPI.deletePicture({ pictureNo });
+    navigation.goBack();
+  }, [pictureNo, navigation]);
+
   const orientation =
     windowWidth >= windowHeight
       ? OrientationType.landscape
@@ -376,11 +382,12 @@ const ImageDetailScreen = () => {
             label="사진 삭제하기"
             icon={<DeleteIcon />}
             color={COLOR.system.red}
+            onPress={deletePicture}
           />
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, visitFloor],
+    [bottomSheetIndex, visitFloor, deletePicture],
   );
 
   const bottomSheetForVisiter = useMemo(

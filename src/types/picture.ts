@@ -40,3 +40,4 @@ export type PatchPictureRequestDto = {
 export type LikePictureResponseDto = ResponseDto<string>;
 export type ScrapPictureResponseDto = ResponseDto<string>;
 export type GetLikeUsersResponseDto = ResponseDto<LikeUser[]>;
+export type DeletePictureResponseDto = ResponseDto<string>;

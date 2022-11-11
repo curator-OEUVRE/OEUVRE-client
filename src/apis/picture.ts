@@ -7,6 +7,7 @@ import {
   LikePictureResponseDto,
   ScrapPictureResponseDto,
   GetLikeUsersResponseDto,
+  DeletePictureResponseDto,
 } from '@/types/picture';
 
 interface GetPictureDetailParams {
@@ -28,6 +29,10 @@ interface LikePictureParams {
 }
 
 interface ScrapPictureParams {
+  pictureNo: number;
+}
+
+interface DeletePictureParams {
   pictureNo: number;
 }
 
@@ -118,6 +123,18 @@ export const unscrapPicture = async ({ pictureNo }: ScrapPictureParams) => {
 export const getLikeUsers = async ({ pictureNo }: GetLikeUsersParams) => {
   const response = await getAsync<GetLikeUsersResponseDto, undefined>(
     `/pictures/${pictureNo}/like`,
+    {
+      headers: {
+        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
+      },
+    },
+  );
+  return response;
+};
+
+export const deletePicture = async ({ pictureNo }: DeletePictureParams) => {
+  const response = await deleteAsync<DeletePictureResponseDto, undefined>(
+    `/pictures/${pictureNo}`,
     {
       headers: {
         'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,

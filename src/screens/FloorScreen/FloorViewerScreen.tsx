@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-raw-text */
+import Sheet from '@gorhom/bottom-sheet';
 import {
   CompositeNavigationProp,
   RouteProp,
@@ -9,10 +10,10 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getFloor } from '@/apis/floor';
+import * as FloorAPI from '@/apis/floor';
 import AlertIcon from '@/assets/icons/Alert';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
@@ -34,6 +35,7 @@ import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
+import { useUserStore } from '@/states/userStore';
 import { GetFloorResponse } from '@/types/floor';
 
 const styles = StyleSheet.create({
@@ -74,11 +76,14 @@ const FloorViewerScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation<FloorViewerScreenNP>();
   const { setFloorMode, setFloor } = useCreateFloorStore();
+  const { deleteFloor } = useUserStore();
   const { floorNo } = params;
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
+  const bottomSheetRef = useRef<Sheet>(null);
   useEffect(() => {
+    if (!isFocused) return;
     const fetchFloor = async () => {
-      const response = await getFloor({ floorNo });
+      const response = await FloorAPI.getFloor({ floorNo });
       if (response.isSuccess) {
         const { result } = response.result;
         setFloorInfo(result);
@@ -140,6 +145,12 @@ const FloorViewerScreen = () => {
     navigation.navigate(Screen.EditFloorScreen, { floorNo });
   };
 
+  const onDeleteFloor = useCallback(async () => {
+    bottomSheetRef.current?.close();
+    await deleteFloor(floorNo);
+    navigation.goBack();
+  }, [floorNo, navigation, deleteFloor]);
+
   const visitProfile = useCallback(() => {
     if (!floorInfo) return;
     navigation.navigate(Screen.ProfileScreen, { userNo: floorInfo.userNo });
@@ -156,6 +167,7 @@ const FloorViewerScreen = () => {
         label="플로어 삭제하기"
         icon={<DeleteIcon />}
         color={COLOR.system.red}
+        onPress={onDeleteFloor}
       />
     </BottomSheetItemGroup>,
   ];
@@ -180,6 +192,7 @@ const FloorViewerScreen = () => {
   const { pictures, color, name, isMine } = floorInfo;
   const renderBottomSheet = () => (
     <BottomSheet
+      ref={bottomSheetRef}
       index={bottomSheetIndex}
       onChange={(index) => setBottomSheetIndex(index)}
       snapPoints={isMine ? [114, 204] : [192]}

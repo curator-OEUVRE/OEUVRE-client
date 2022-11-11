@@ -8,8 +8,8 @@ export interface FloorInfo {
   name: string;
   pictures: PictureInfo[];
   texture: number;
-  userId: number;
-  userNo: number;
+  userId?: number;
+  userNo?: number;
 }
 
 export interface CreateFloorResponse {
@@ -25,6 +25,7 @@ export interface GetFloorResponse extends FloorInfo {
 export type CreateFloorResponseDto = ResponseDto<CreateFloorResponse>;
 export type GetFloorResponseDto = ResponseDto<GetFloorResponse>;
 export type EditFloorResponseDto = ResponseDto<string>;
+export type DeleteFloorResponseDto = ResponseDto<string>;
 
 export interface FloorMini {
   color: string;

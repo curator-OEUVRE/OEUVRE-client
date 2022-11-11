@@ -1,7 +1,8 @@
-import { getAsync, patchAsync, postAsync } from './common';
+import { deleteAsync, getAsync, patchAsync, postAsync } from './common';
 import { useAuthStore } from '@/states/authStore';
 import {
   CreateFloorResponseDto,
+  DeleteFloorResponseDto,
   EditFloorResponseDto,
   FloorInfo,
   GetFloorResponseDto,
@@ -165,3 +166,19 @@ export async function getHomeFeed(
 
   return response;
 }
+
+interface DeleteFloorParams {
+  floorNo: number;
+}
+
+export const deleteFloor = async ({ floorNo }: DeleteFloorParams) => {
+  const response = await deleteAsync<DeleteFloorResponseDto, undefined>(
+    `/floors/${floorNo}`,
+    {
+      headers: {
+        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
+      },
+    },
+  );
+  return response;
+};

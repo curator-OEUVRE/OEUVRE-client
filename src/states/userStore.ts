@@ -1,5 +1,11 @@
 import create from 'zustand';
-import type { FloorMini, PictureMini } from '@/types/floor';
+import { ApiResult } from '@/apis/common';
+import * as FloorAPI from '@/apis/floor';
+import type {
+  FloorMini,
+  PictureMini,
+  DeleteFloorResponseDto,
+} from '@/types/floor';
 import type { MyProfile } from '@/types/user';
 
 interface UserStore extends MyProfile {
@@ -8,9 +14,10 @@ interface UserStore extends MyProfile {
   setUser: (user: Partial<MyProfile>) => void;
   setFloors: (floors: FloorMini[]) => void;
   setCollection: (collection: PictureMini[]) => void;
+  deleteFloor: (floorNo: number) => ApiResult<DeleteFloorResponseDto>;
 }
 
-export const useUserStore = create<UserStore>()((set) => ({
+export const useUserStore = create<UserStore>()((set, get) => ({
   backgroundImageUrl: '',
   exhibitionName: '',
   followerCount: 0,
@@ -30,4 +37,10 @@ export const useUserStore = create<UserStore>()((set) => ({
   setUser: (user) => set((state) => ({ ...state, ...user })),
   setFloors: (floors) => set((state) => ({ ...state, floors })),
   setCollection: (collection) => set((state) => ({ ...state, collection })),
+  deleteFloor: async (floorNo: number) => {
+    const response = await FloorAPI.deleteFloor({ floorNo });
+    const { floors, setFloors } = get();
+    setFloors(floors.filter((floor) => floor.floorNo !== floorNo));
+    return response;
+  },
 }));
