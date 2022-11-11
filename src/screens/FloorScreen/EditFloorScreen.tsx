@@ -233,9 +233,9 @@ const EditFloorScreen = () => {
         headerRight={ConfirmButton}
         backgroundColor="transparent"
         iconColor={colorByBackground}
-        onGoBack={() => {
+        onGoBack={async () => {
           if (mode === FloorMode.CREATE) {
-            lockAsync(OrientationLock.PORTRAIT_UP);
+            await lockAsync(OrientationLock.PORTRAIT_UP);
           } else if (mode === FloorMode.EDIT) {
             setFloorMode(FloorMode.VIEWER);
           }

@@ -197,15 +197,8 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
     return result;
   },
   editFloor: async (floorNo: number) => {
-    const {
-      color,
-      isCommentAvailable,
-      isPublic,
-      name,
-      pictures,
-      texture,
-      fetchFloor,
-    } = get();
+    const { color, isCommentAvailable, isPublic, name, pictures, texture } =
+      get();
     const result = await FloorAPI.editFloor({
       floor: {
         color,
@@ -217,7 +210,6 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       },
       floorNo,
     });
-    await fetchFloor(floorNo);
     return result;
   },
   setFloor: (floor) => {

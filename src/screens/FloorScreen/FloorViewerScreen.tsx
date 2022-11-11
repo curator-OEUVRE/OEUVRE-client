@@ -83,14 +83,6 @@ const FloorViewerScreen = () => {
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
   const bottomSheetRef = useRef<Sheet>(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await fetchFloor(floorNo);
-      setLoading(false);
-    };
-    fetchData();
-  }, [floorNo, fetchFloor]);
 
   const colorByBackground = getColorByBackgroundColor(color);
 
@@ -103,11 +95,15 @@ const FloorViewerScreen = () => {
     }, []),
   );
 
-  useEffect(
-    () => () => {
-      lockAsync(OrientationLock.PORTRAIT_UP);
-    },
-    [],
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        await fetchFloor(floorNo);
+        setLoading(false);
+      };
+      fetchData();
+    }, [fetchFloor, floorNo]),
   );
 
   const onReport = useCallback(() => {
@@ -214,6 +210,9 @@ const FloorViewerScreen = () => {
         headerRight={ConfirmButton}
         backgroundColor="transparent"
         iconColor={colorByBackground}
+        onGoBack={async () => {
+          await lockAsync(OrientationLock.PORTRAIT_UP);
+        }}
       />
       <View style={styles.wrapList}>
         <FloorPictureList

@@ -147,7 +147,7 @@ const FloorInfoFormScreen = () => {
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
   const onGoBack = () => {
-    if (mode === FloorMode.ADD_PICTURES) {
+    if (mode === FloorMode.EDIT) {
       setName(snapshot.current.name);
       setColor(snapshot.current.color);
       setIsPublic(snapshot.current.isPublic);
