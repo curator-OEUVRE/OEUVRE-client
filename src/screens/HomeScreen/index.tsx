@@ -157,6 +157,9 @@ const HomeScreen = () => {
           data.length === 0 ? styles.container : {},
         ]}
         ListEmptyComponent={ListEmptyComponent}
+        maxToRenderPerBatch={5}
+        initialNumToRender={5}
+        windowSize={5}
       />
     </SafeAreaView>
   );

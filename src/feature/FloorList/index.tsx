@@ -101,6 +101,9 @@ const FloorList = ({
           refreshing={refreshing ?? false}
         />
       }
+      maxToRenderPerBatch={5}
+      initialNumToRender={5}
+      windowSize={5}
     />
   );
 };

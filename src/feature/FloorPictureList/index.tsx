@@ -175,6 +175,9 @@ const FloorPictureList = ({
         /* eslint-disable-next-line react-native/no-inline-styles */
         contentContainerStyle={{ paddingHorizontal: editable ? 36 : 44 }}
         allowAnotherDirection
+        maxToRenderPerBatch={7}
+        initialNumToRender={7}
+        windowSize={7}
       />
       {editable && (
         <View style={styles.bottom}>
