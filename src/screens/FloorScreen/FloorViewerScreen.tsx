@@ -219,6 +219,7 @@ const FloorViewerScreen = () => {
           pictures={pictures}
           editable={false}
           onPressPicture={onPressPicture}
+          color={colorByBackground}
         />
       </View>
       {guestBookButton}

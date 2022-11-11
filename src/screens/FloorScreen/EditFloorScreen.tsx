@@ -248,6 +248,7 @@ const EditFloorScreen = () => {
           setPictures={setPictures}
           addPictures={addPictures}
           onPressPicture={onPressPicture}
+          color={colorByBackground}
         />
       </View>
       {modalVisible && (

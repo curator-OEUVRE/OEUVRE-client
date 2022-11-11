@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
   },
   text: {
-    color: COLOR.mono.gray7,
     textAlign: 'center',
   },
   wrapButton: {
@@ -350,7 +349,15 @@ const ImageDetailScreen = () => {
           { paddingBottom: insets.bottom },
         ]}
       >
-        <Text style={[styles.text, TEXT_STYLE.body14R]}>{description}</Text>
+        <Text
+          style={[
+            styles.text,
+            TEXT_STYLE.body14R,
+            { color: colorByBackground },
+          ]}
+        >
+          {description}
+        </Text>
       </View>
     );
 
@@ -360,7 +367,7 @@ const ImageDetailScreen = () => {
         ref={bottomSheetRef}
         index={bottomSheetIndex}
         onChange={(index) => setBottomSheetIndex(index)}
-        snapPoints={[114, 300]}
+        snapPoints={[95, 200]}
       >
         <BottomSheetItemGroup>
           <BottomSheetItem

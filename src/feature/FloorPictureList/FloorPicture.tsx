@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
   },
   text: {
-    color: COLOR.mono.gray7,
     marginTop: 5,
     textAlign: 'center',
   },
@@ -77,6 +76,7 @@ interface FloorPictureProps extends RenderItemParams<PictureInfo> {
   setActiveLine: (line: number) => void;
   addPictures?: () => void;
   onPressPicture?: (pictureNo: number) => void;
+  color?: string;
 }
 
 const FloorPicture = ({
@@ -90,6 +90,7 @@ const FloorPicture = ({
   activeIndexAnim,
   addPictures,
   onPressPicture,
+  color = COLOR.mono.gray7,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
   const { mode } = useCreateFloorStore();
@@ -221,7 +222,9 @@ const FloorPicture = ({
             />
             {mode === FloorMode.EDIT && renderEditLayer()}
           </View>
-          <Text style={[styles.text, TEXT_STYLE.body12R]}>{description}</Text>
+          <Text style={[styles.text, TEXT_STYLE.body12R, { color }]}>
+            {description}
+          </Text>
         </Pressable>
       </ScaleDecorator>
     </GestureDetector>

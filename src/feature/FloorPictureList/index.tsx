@@ -48,6 +48,7 @@ interface Props {
   setPictures?: (newData: PictureInfo[]) => void;
   addPictures?: () => void;
   onPressPicture?: (pictureNo: number) => void;
+  color?: string;
 }
 
 interface Layout {
@@ -67,6 +68,7 @@ const FloorPictureList = ({
   setPictures,
   addPictures,
   onPressPicture,
+  color,
 }: Props) => {
   const { height: windowHeight } = useDimensions();
   const translateY = useRef<SharedValue<number>>();
@@ -106,6 +108,7 @@ const FloorPictureList = ({
         setActiveLine={setActiveLine}
         activeIndexAnim={activeIndexAnim.current}
         onPressPicture={onPressPicture}
+        color={color}
       />
     ),
     [
@@ -116,6 +119,7 @@ const FloorPictureList = ({
       activeIndexAnim,
       addPictures,
       onPressPicture,
+      color,
     ],
   );
 
