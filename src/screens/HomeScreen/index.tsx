@@ -4,12 +4,19 @@ import {
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useEffect, useState, useCallback } from 'react';
-import type { ListRenderItemInfo } from 'react-native';
-import { FlatList, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  type ListRenderItemInfo,
+  View,
+  Text,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getHomeFeed, type HomeFloor } from '@/apis/floor';
+import PhotoIcon from '@/assets/icons/Photo';
 import { Header } from '@/components/Header';
 import { Navigator, Screen } from '@/constants/screens';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorTicket from '@/feature/FloorTicket';
 import type { RootStackParamsList } from '@/feature/Routes';
 import type { HomeStackParamsList } from '@/feature/Routes/HomeStack';
@@ -35,10 +42,23 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 24,
   },
+  emptyText: {
+    color: COLOR.mono.gray4,
+    marginTop: 8,
+  },
   ticket: {
     marginBottom: 32,
   },
 });
+
+const ListEmptyComponent = () => (
+  <View>
+    <PhotoIcon width={72} height={72} color={COLOR.mono.gray3} />
+    <Text style={[TEXT_STYLE.body16M, styles.emptyText]}>
+      아직 새로운 전시가 없어요
+    </Text>
+  </View>
+);
 
 const keyExtractor = (item: HomeFloor) => `${item.floorNo}`;
 
@@ -121,6 +141,7 @@ const HomeScreen = () => {
         onEndReachedThreshold={0.5}
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.contentContainer}
+        ListEmptyComponent={ListEmptyComponent}
       />
     </SafeAreaView>
   );

@@ -40,7 +40,11 @@ const tabIconStyles = StyleSheet.create({
 
 const TabIcon = ({ isFocused, icon }: TabIconProps) => (
   <View style={tabIconStyles.container}>
-    {icon({ color: isFocused ? COLOR.mono.black : COLOR.mono.gray3 })}
+    {icon({
+      color: isFocused ? COLOR.mono.black : COLOR.mono.gray3,
+      width: 30,
+      height: 30,
+    })}
   </View>
 );
 

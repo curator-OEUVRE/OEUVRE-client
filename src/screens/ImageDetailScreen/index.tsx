@@ -365,7 +365,7 @@ const ImageDetailScreen = () => {
         <BottomSheetItemGroup>
           <BottomSheetItem
             label="플로어 방문하기"
-            icon={<PhotoIcon color={COLOR.mono.black} />}
+            icon={<PhotoIcon color={COLOR.mono.black} width={26} height={26} />}
             onPress={visitFloor}
           />
           <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
@@ -399,7 +399,7 @@ const ImageDetailScreen = () => {
           />
           <BottomSheetItem
             label="플로어 방문하기"
-            icon={<PhotoIcon color={COLOR.mono.black} />}
+            icon={<PhotoIcon color={COLOR.mono.black} width={26} height={26} />}
             onPress={visitFloor}
           />
           <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
