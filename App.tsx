@@ -14,6 +14,8 @@ const isStorybookEnabled = process.env.STORYBOOK_ENABLED === 'true';
 
 const white = '#fff';
 
+const SPLASH_TIME = 1000;
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: white,
@@ -39,10 +41,10 @@ const App = () => {
       await lockAsync(OrientationLock.PORTRAIT_UP);
       const end = new Date().getTime();
 
-      if (end - start < 2000) {
+      if (end - start < SPLASH_TIME) {
         setTimeout(() => {
           setIsReady(true);
-        }, 2000 - end + start);
+        }, SPLASH_TIME - end + start);
       } else {
         setIsReady(true);
       }
