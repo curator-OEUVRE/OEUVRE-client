@@ -21,8 +21,7 @@
       "channel": "production",
       "env": {
         "API_URL": "https://0euvre.link"
-      },
-      "autoIncrement": true
+      }
     }
   },
   "submit": {
