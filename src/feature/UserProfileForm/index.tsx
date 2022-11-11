@@ -121,7 +121,6 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
     });
 
     if (response.isSuccess) {
-      clearSignUpStore();
       const { accessToken, refreshToken } = response.result.result;
       setToken(accessToken, refreshToken);
       onNextPress?.();

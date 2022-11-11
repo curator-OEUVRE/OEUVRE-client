@@ -43,34 +43,32 @@ const createInitialUserInput = <T,>(value: T, isRequired: boolean = true) => ({
   error: '',
 });
 
-export const useSignUpStore = create<SignUpState>()((set) => ({
+const initialState: SignUpValues = {
   loginInfo: {
     email: '',
     type: 'APPLE',
   },
+  isMarketingAgreed: false,
+  userId: createInitialUserInput(''),
+  name: createInitialUserInput(''),
+  birthDay: createInitialUserInput(new Date()),
+  exhibitionName: createInitialUserInput(''),
+  introduceMessage: createInitialUserInput(''),
+};
+
+export const useSignUpStore = create<SignUpState>()((set) => ({
+  ...initialState,
   setLoginInfo: (email, type) =>
     set((state) => ({ ...state, loginInfo: { email, type } })),
-  isMarketingAgreed: false,
   setIsMarketingAgreed: (isMarketingAgreed) =>
     set((state) => ({ ...state, isMarketingAgreed })),
-  userId: createInitialUserInput(''),
   setUserId: (data: UserInput<string>) =>
     set((state) => ({ ...state, userId: data })),
-  name: createInitialUserInput(''),
   setName: (data) => set((state) => ({ ...state, name: data })),
-  birthDay: createInitialUserInput(new Date()),
   setBirthDay: (data) => set((state) => ({ ...state, birthDay: data })),
-  // profileImageUrl: createInitialUserInput('', false),
-  // setProfileImageUrl: (data) =>
-  //   set((state) => ({ ...state, profileImageUrl: data })),
-  // backgroundImageUrl: createInitialUserInput('', false),
-  // setBackgroundImageUrl: (data) =>
-  //   set((state) => ({ ...state, backgroundImageUrl: data })),
-  exhibitionName: createInitialUserInput(''),
   setExhibitionName: (data) =>
     set((state) => ({ ...state, exhibitionName: data })),
-  introduceMessage: createInitialUserInput('', false),
   setIntroduceMessage: (data) =>
     set((state) => ({ ...state, introduceMessage: data })),
-  clearSignUpStore: () => set({}),
+  clearSignUpStore: () => set((state) => ({ ...state, ...initialState })),
 }));

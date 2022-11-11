@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-raw-text */
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
@@ -10,6 +10,7 @@ import { Navigator, Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles/colors';
 import { TEXT_STYLE } from '@/constants/styles/textStyles';
 import { RootStackParamsList } from '@/feature/Routes';
+import { useSignUpStore } from '@/states/signUpStore';
 
 export type WelcomeScreenParams = {
   name: string;
@@ -52,6 +53,12 @@ const styles = StyleSheet.create({
 
 const WelcomeScreen = () => {
   const navigation = useNavigation<WelcomeScreenNP>();
+  const { name, clearSignUpStore } = useSignUpStore();
+  const [displayName, setDisplayName] = useState(name.value);
+
+  useEffect(() => {
+    if (name.value.length > 0) setDisplayName(name.value);
+  }, [name.value]);
 
   return (
     <ImageBackground
@@ -63,12 +70,13 @@ const WelcomeScreen = () => {
       <SafeAreaView style={styles.container}>
         <Header iconColor={COLOR.mono.white} backgroundColor="transparent" />
         <Text style={[styles.message, TEXT_STYLE.title24M]}>
-          <Text style={TEXT_STYLE.title24B}>열심히 입력중인 모습입니다 </Text>
+          <Text style={TEXT_STYLE.title24B}>{`${displayName} `}</Text>
           님,{'\n'}OEUVRE에{'\n'}오신 것을 환영해요!
         </Text>
         <View style={styles.buttonWrapper}>
           <Button
             onPress={() => {
+              clearSignUpStore();
               navigation.navigate(Navigator.MainTab, {
                 screen: Navigator.HomeStack,
                 params: {
