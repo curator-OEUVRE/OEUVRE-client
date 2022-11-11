@@ -214,11 +214,14 @@ const ProfileTemplate = ({
         </View>
         <BottomSheetItemGroup>
           <BottomSheetItem
-            label="팔로우하기"
+            label={isFollowing ? '팔로우 취소하기' : '팔로우하기'}
             icon={
               <PersonIcon width={26} height={26} color={COLOR.mono.black} />
             }
             color={COLOR.mono.black}
+            onPress={() => {
+              onFollowPress?.(isFollowing ?? false);
+            }}
           />
           <BottomSheetItem
             label="차단하기"
