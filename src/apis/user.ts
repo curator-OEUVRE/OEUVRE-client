@@ -204,3 +204,20 @@ export async function checkId(id: string) {
 
   return response;
 }
+
+interface DeactiveUserResponseDto {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: string;
+  timestamp: string;
+}
+
+export async function deactiveUser(accessToken: string) {
+  const response = await deleteAsync<DeactiveUserResponseDto, undefined>(
+    '/users',
+    { headers: { 'X-AUTH-TOKEN': accessToken } },
+  );
+
+  return response;
+}

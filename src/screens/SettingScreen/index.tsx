@@ -16,6 +16,7 @@ import {
   Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { deactiveUser } from '@/apis/user';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
 import { Header } from '@/components/Header';
 import { SettingItem } from '@/components/SettingItem';
@@ -23,6 +24,7 @@ import { Screen } from '@/constants/screens';
 import { TEXT_STYLE, COLOR } from '@/constants/styles';
 import { RootStackParamsList } from '@/feature/Routes';
 import { ProfileStackParamsList } from '@/feature/Routes/ProfileStack';
+import useAuth from '@/hooks/useAuth';
 import { useAuthStore } from '@/states/authStore';
 import { useUserStore } from '@/states/userStore';
 
@@ -67,6 +69,9 @@ const styles = StyleSheet.create({
   },
   subLabel: {
     paddingLeft: 20,
+  },
+  textSettingItem: {
+    marginBottom: 18,
   },
 });
 
@@ -116,6 +121,7 @@ const SettingScreen = () => {
   const { followerCount, followingCount, name, userNo, exhibitionName } =
     useUserStore();
   const { clear } = useAuthStore();
+  const { fetchWithToken } = useAuth();
 
   const [pushNotiSettings, setPushNotiSettings] = useState({
     message: false,
@@ -256,7 +262,38 @@ const SettingScreen = () => {
               );
             }}
           >
-            <SettingItemLabel label="로그아웃" style={styles.settingItem} />
+            <SettingItemLabel label="로그아웃" style={styles.textSettingItem} />
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              Alert.alert(
+                `${name} 님,\n정말로 계정을\n삭제하시겠어요?`,
+                undefined,
+                [
+                  {
+                    text: '계정 삭제하기',
+                    onPress: async () => {
+                      const response = await fetchWithToken(deactiveUser);
+                      if (response.isSuccess) {
+                        clear();
+                      } else {
+                        console.error(response.result);
+                        Alert.alert(
+                          '문제가 발생했습니다. 다시 시도하거나 문의해 주세요.',
+                        );
+                      }
+                    },
+                    style: 'destructive',
+                  },
+                  { text: '취소하기', style: 'cancel' },
+                ],
+              );
+            }}
+          >
+            <SettingItemLabel
+              label="계정 삭제"
+              style={styles.textSettingItem}
+            />
           </Pressable>
         </Area>
         <Divider />

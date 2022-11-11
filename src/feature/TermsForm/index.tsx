@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, Linking } from 'react-native';
 import TermItem from './TermItem';
 import Line from '@/assets/icons/Line';
 import { UserInputLayout, Button } from '@/components';
@@ -30,14 +30,29 @@ const TERMS = [
   {
     label: '서비스 이용약관 동의',
     isRequired: true,
+    onPress: () => {
+      Linking.openURL(
+        'https://makeus-challenge.notion.site/9dfb41a1e9284a6cae315db1cf7d9c5b',
+      );
+    },
   },
   {
     label: '개인정보 처리방침 동의',
     isRequired: true,
+    onPress: () => {
+      Linking.openURL(
+        'https://makeus-challenge.notion.site/c97ed10160a74e9d87dcfadb01fea89b',
+      );
+    },
   },
   {
     label: '마케팅 정보 수신 동의',
     isRequired: false,
+    onPress: () => {
+      Linking.openURL(
+        'https://makeus-challenge.notion.site/c97ed10160a74e9d87dcfadb01fea89b',
+      );
+    },
   },
 ];
 
@@ -120,7 +135,7 @@ const TermsForm = ({ onNextPress }: Props) => {
           label={term.label}
           isChecked={checked[index]}
           onCheckboxPress={() => toggleChecked(index)}
-          onLabelPress={() => {}}
+          onLabelPress={term.onPress}
           prefix={<Prefix isRequired={term.isRequired} />}
         />
       ))}
