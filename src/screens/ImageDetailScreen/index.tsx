@@ -374,7 +374,11 @@ const ImageDetailScreen = () => {
             icon={<PhotoIcon color={COLOR.mono.black} width={26} height={26} />}
             onPress={visitFloor}
           />
-          <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
+          {/* <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />}
+          onPress={() => {
+            Share.share()
+          }}
+          /> */}
         </BottomSheetItemGroup>
         <BottomSheetItemGroup>
           <BottomSheetItem label="설명 수정하기" icon={<EditIcon />} />
