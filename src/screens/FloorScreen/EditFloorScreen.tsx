@@ -106,7 +106,7 @@ const EditFloorScreen = () => {
   useFocusEffect(
     useCallback(() => {
       const lockOrientation = async () => {
-        await lockAsync(OrientationLock.LANDSCAPE_LEFT);
+        await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
       };
       lockOrientation();
     }, []),
