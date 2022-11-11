@@ -3,7 +3,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import * as ImagePicker from 'expo-image-picker';
+import { MediaTypeOptions } from 'expo-image-picker';
 import { useCallback, useState } from 'react';
 import {
   View,
@@ -30,6 +30,7 @@ import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import type { ProfileStackParamsList } from '@/feature/Routes/ProfileStack';
 import useAuth from '@/hooks/useAuth';
 import useUploadImage from '@/hooks/useUploadImage';
+import { getSingleImageFromLibrary } from '@/services/common/image';
 import {
   validateExhibitionName,
   validateIntroduceMessage,
@@ -100,13 +101,13 @@ const styles = StyleSheet.create({
 });
 
 const pickImage = async (callback: (url: string) => void) => {
-  const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
+  const [result, canUpload] = await getSingleImageFromLibrary({
+    mediaTypes: MediaTypeOptions.All,
     allowsEditing: true,
     aspect: [4, 3],
     quality: 1,
   });
-  if (!result.cancelled) {
+  if (result && canUpload) {
     callback(result.uri);
   }
 };

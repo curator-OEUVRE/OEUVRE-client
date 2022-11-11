@@ -1,4 +1,4 @@
-import * as ImagePicker from 'expo-image-picker';
+import { MediaTypeOptions } from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import {
@@ -21,6 +21,7 @@ import {
 } from '@/components';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useUploadImage from '@/hooks/useUploadImage';
+import { getSingleImageFromLibrary } from '@/services/common/image';
 import { formatDate } from '@/services/date/format';
 import {
   validateExhibitionName,
@@ -92,13 +93,13 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
   const { setToken } = useAuthStore();
 
   const pickImage = async (callback: (uri: string) => void) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    const [result, canUpload] = await getSingleImageFromLibrary({
+      mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
-    if (!result.cancelled) {
+    if (result && canUpload) {
       callback(result.uri);
     }
   };

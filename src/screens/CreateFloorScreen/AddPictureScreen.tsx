@@ -4,11 +4,12 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker';
+import { MediaTypeOptions } from 'expo-image-picker';
 import { Spinner } from '@/components/Spinner';
 import { Screen } from '@/constants/screens';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { getImagesFromLibrary } from '@/services/common/image';
 import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 
 export type AddPictureScreenParams = undefined;
@@ -23,12 +24,18 @@ const AddPictureScreen = () => {
     useCreateFloorStore();
   useFocusEffect(() => {
     const pickImage = async () => {
-      const result = await launchImageLibraryAsync({
+      const [result, canUpload] = await getImagesFromLibrary({
         mediaTypes: MediaTypeOptions.All,
-        allowsMultipleSelection: true,
-        quality: 1,
+        // allowsMultipleSelection: true,
+        // quality: 1,
       });
-      if (!result.cancelled) {
+      // const result = await launchImageLibraryAsync({
+      //   mediaTypes: MediaTypeOptions.All,
+      //   allowsMultipleSelection: true,
+      //   quality: 1,
+      // });
+
+      if (result && canUpload) {
         const { selected } = result;
         const imageUrls = selected?.map((imageInfo) => ({
           imageUrl: imageInfo.uri,
