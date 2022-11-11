@@ -100,11 +100,12 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
         }}
         status={userId.status}
         message={userId.error}
+        isRequired={userId.isRequired}
       />
       <FormInput
-        label="이름"
+        label="닉네임"
         value={name.value}
-        placeholder="본인의 이름을 입력해 주세요. (총 2-10자)"
+        placeholder="활동할 닉네임을 입력해 주세요. (총 2-10자)"
         onChangeText={(value) => {
           const [isValidated, error] = validateName(value);
           if (isValidated) {
@@ -115,6 +116,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
         }}
         status={name.status}
         message={name.error}
+        isRequired={name.isRequired}
       />
       <FormInputDate
         label="생년월일"
@@ -125,6 +127,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
         }}
         status={birthDay.status}
         message={birthDay.error}
+        isRequired={birthDay.isRequired}
       />
     </UserInputLayout>
   );

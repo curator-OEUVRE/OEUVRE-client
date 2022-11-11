@@ -109,7 +109,7 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
     background: string | null,
   ) => {
     const response = await signUp({
-      birthday: formatDate(birthDay.value),
+      birthday: birthDay.value ? formatDate(birthDay.value) : null,
       email: loginInfo.email,
       exhibitionName: exhibitionName.value,
       id: userId.value,
@@ -195,7 +195,7 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
     >
       <View>
         <Text style={[TEXT_STYLE.body14B, styles.label, styles.padding]}>
-          프로필 사진
+          프로필
         </Text>
         <View>
           <Pressable
@@ -256,6 +256,7 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
         status={exhibitionName.status}
         message={exhibitionName.error}
         containerStyle={styles.padding}
+        isRequired={exhibitionName.isRequired}
       />
       <FormInput
         label="자기 소개"
@@ -281,6 +282,7 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
         status={introduceMessage.status}
         message={introduceMessage.error}
         containerStyle={styles.padding}
+        isRequired={introduceMessage.isRequired}
       />
     </UserInputLayout>
   );

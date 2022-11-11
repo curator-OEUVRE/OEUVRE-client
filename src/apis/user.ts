@@ -4,11 +4,11 @@ import type { MyProfile, OtherUserProfile, UserMini } from '@/types/user';
 
 interface SignUpRequestDto {
   /** @example 2000-06-21 */
-  birthday: string;
+  birthday: string | null;
   email: string;
   exhibitionName: string;
   id: string;
-  introduceMessage: string;
+  introduceMessage: string | null;
   isAlarmOn: boolean;
   name: string;
   profileImageUrl: string | null;
@@ -29,6 +29,7 @@ interface SignUpResponseDto {
 }
 
 export async function signUp(info: SignUpRequestDto) {
+  console.log(info);
   const response = await postAsync<SignUpResponseDto, SignUpRequestDto>(
     '/users',
     info,

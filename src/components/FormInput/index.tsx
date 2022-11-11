@@ -30,6 +30,7 @@ interface Props extends TextInputProps {
   message?: string;
   leftElement?: ReactNode;
   rightElement?: ReactNode;
+  isRequired?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -52,9 +53,15 @@ const styles = StyleSheet.create({
     color: COLOR.mono.black,
     marginBottom: 8,
   },
+  labelArea: {
+    flexDirection: 'row',
+  },
   message: {
     color: COLOR.system.red,
     marginTop: 4,
+  },
+  requiredText: {
+    color: COLOR.system.blue,
   },
   statusIcon: {
     marginLeft: 5,
@@ -91,12 +98,20 @@ export const FormInput = forwardRef<TextInput, Props>(
       containerStyle,
       leftElement,
       rightElement,
+      isRequired,
       ...textInputProps
     }: Props,
     ref,
   ) => (
     <View style={containerStyle}>
-      {label && <Text style={[TEXT_STYLE.body14B, styles.label]}>{label}</Text>}
+      {label && (
+        <View style={styles.labelArea}>
+          <Text style={[TEXT_STYLE.body14B, styles.label]}>{label}</Text>
+          {isRequired && (
+            <Text style={[TEXT_STYLE.body14B, styles.requiredText]}>*</Text>
+          )}
+        </View>
+      )}
 
       <View style={styles.inputContainer}>
         {leftElement}

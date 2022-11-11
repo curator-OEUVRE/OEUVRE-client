@@ -16,7 +16,7 @@ export interface SignUpValues {
   isMarketingAgreed: boolean;
   userId: UserInput<string>;
   name: UserInput<string>;
-  birthDay: UserInput<Date>;
+  birthDay: UserInput<Date | undefined>;
   // profileImageUrl: UserInput<string>;
   // backgroundImageUrl: UserInput<string>;
   exhibitionName: UserInput<string>;
@@ -51,9 +51,9 @@ const initialState: SignUpValues = {
   isMarketingAgreed: false,
   userId: createInitialUserInput(''),
   name: createInitialUserInput(''),
-  birthDay: createInitialUserInput(new Date()),
+  birthDay: createInitialUserInput(undefined, false),
   exhibitionName: createInitialUserInput(''),
-  introduceMessage: createInitialUserInput(''),
+  introduceMessage: createInitialUserInput('', false),
 };
 
 export const useSignUpStore = create<SignUpState>()((set) => ({
