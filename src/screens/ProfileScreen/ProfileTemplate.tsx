@@ -187,14 +187,16 @@ const ProfileTemplate = ({
             onFollowPress={onFollowPress}
             onEditPress={onEditPress}
           />
-          {isMyProfile ? (
-            <Tab.Navigator screenOptions={screenOptions}>
-              <Tab.Screen name="FloorList" component={renderFloorList} />
-              <Tab.Screen name="Collection" component={renderCollection} />
-            </Tab.Navigator>
-          ) : (
-            renderFloorList()
-          )}
+          <View style={styles.container}>
+            {isMyProfile ? (
+              <Tab.Navigator screenOptions={screenOptions}>
+                <Tab.Screen name="FloorList" component={renderFloorList} />
+                <Tab.Screen name="Collection" component={renderCollection} />
+              </Tab.Navigator>
+            ) : (
+              renderFloorList()
+            )}
+          </View>
         </SafeAreaView>
       </View>
       <BottomSheet
