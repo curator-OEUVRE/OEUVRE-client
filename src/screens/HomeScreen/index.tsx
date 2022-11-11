@@ -42,6 +42,15 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 24,
   },
+  emptyContainer: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  emptyContent: {
+    alignItems: 'center',
+    justiftContent: 'center',
+  },
   emptyText: {
     color: COLOR.mono.gray4,
     marginTop: 8,
@@ -52,7 +61,7 @@ const styles = StyleSheet.create({
 });
 
 const ListEmptyComponent = () => (
-  <View>
+  <View style={styles.emptyContent}>
     <PhotoIcon width={72} height={72} color={COLOR.mono.gray3} />
     <Text style={[TEXT_STYLE.body16M, styles.emptyText]}>
       아직 새로운 전시가 없어요
@@ -132,17 +141,22 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <Header hideBackButton headerTitle="피드" />
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        refreshing={refreshing}
-        onRefresh={refresh}
-        onEndReached={loadMoreFloors}
-        onEndReachedThreshold={0.5}
-        keyExtractor={keyExtractor}
-        contentContainerStyle={styles.contentContainer}
-        ListEmptyComponent={ListEmptyComponent}
-      />
+      {data.length > 0 ? (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          refreshing={refreshing}
+          onRefresh={refresh}
+          onEndReached={loadMoreFloors}
+          onEndReachedThreshold={0.5}
+          keyExtractor={keyExtractor}
+          contentContainerStyle={styles.contentContainer}
+        />
+      ) : (
+        <View style={styles.emptyContainer}>
+          <ListEmptyComponent />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
