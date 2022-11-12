@@ -2,7 +2,6 @@ import Sheet from '@gorhom/bottom-sheet';
 import {
   CompositeNavigationProp,
   RouteProp,
-  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -55,7 +54,7 @@ import UserProfileList from '@/feature/UserProfileList';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
 import { useCreateFloorStore } from '@/states/createFloorStore';
-import { LikeUser, PictureDetail } from '@/types/picture';
+import { LikeUser } from '@/types/picture';
 
 enum OrientationType {
   portrait,
@@ -165,14 +164,14 @@ const ImageDetailScreen = () => {
 
   const bottomSheetRef = useRef<Sheet>(null);
   const likePeoplesRef = useRef<Sheet>(null);
-  useFocusEffect(
-    useCallback(() => {
-      const lockOrientation = async () => {
-        await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
-      };
-      lockOrientation();
-    }, []),
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const lockOrientation = async () => {
+  //       await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
+  //     };
+  //     lockOrientation();
+  //   }, []),
+  // );
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
