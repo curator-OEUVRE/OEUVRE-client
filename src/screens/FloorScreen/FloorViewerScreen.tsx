@@ -26,7 +26,7 @@ import {
   BottomSheetItemGroup,
 } from '@/components';
 import { Header } from '@/components/Header';
-import { Screen } from '@/constants/screens';
+import { Screen, Navigator } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
@@ -145,7 +145,10 @@ const FloorViewerScreen = () => {
   }, [floorNo, navigation, deleteFloor]);
 
   const visitProfile = useCallback(() => {
-    navigation.navigate(Screen.ProfileScreen, { userNo });
+    navigation.navigate(Navigator.ProfileStack, {
+      screen: Screen.ProfileScreen,
+      params: { userNo },
+    });
   }, [userNo, navigation]);
 
   const bottomSheetForEditor = [

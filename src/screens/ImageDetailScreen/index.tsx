@@ -47,7 +47,7 @@ import {
   Spinner,
 } from '@/components/index';
 import { IMAGE } from '@/constants/images';
-import { Screen } from '@/constants/screens';
+import { Screen, Navigator } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
@@ -248,7 +248,10 @@ const ImageDetailScreen = () => {
   }, [floorNo, navigation]);
 
   const visitProfile = useCallback(() => {
-    navigation.navigate(Screen.ProfileScreen, { userNo });
+    navigation.navigate(Navigator.ProfileStack, {
+      screen: Screen.ProfileScreen,
+      params: { userNo },
+    });
   }, [userNo, navigation]);
 
   const toggleScrap = useCallback(async () => {

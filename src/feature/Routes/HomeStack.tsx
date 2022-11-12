@@ -20,7 +20,11 @@ const HomeStack = () => (
     }}
   >
     <Stack.Screen name={Screen.HomeScreen} component={HomeScreen} />
-    <Stack.Screen name={Screen.ProfileScreen} component={ProfileScreen} />
+    <Stack.Screen
+      name={Screen.ProfileScreen}
+      component={ProfileScreen}
+      getId={({ params }) => `${params.userNo}`}
+    />
   </Stack.Navigator>
 );
 
