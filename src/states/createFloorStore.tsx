@@ -118,7 +118,6 @@ const defaultValues = {
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   ...defaultValues,
   setFloorMode: (mode) => {
-    console.log(mode);
     set((state) => ({ ...state, mode }));
   },
   createPictures: (images) => {
