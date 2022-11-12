@@ -47,11 +47,17 @@ export const getImagesFromLibrary = async <
     ...options,
     allowsMultipleSelection: true,
   });
+  let pictures: ImagePicker.ImageInfo[] = [];
+  let canUpload = true;
   if (!result.cancelled) {
-    const canUpload = await checkFileSize(
-      result.selected.map((info) => info.uri),
-    );
-    return [result, canUpload] as const;
+    if (!Array.isArray(result.selected)) {
+      pictures.push(result as unknown as ImagePicker.ImageInfo);
+    } else {
+      pictures = result.selected;
+    }
+    canUpload = await checkFileSize(pictures.map((info) => info.uri));
+
+    return [pictures, canUpload] as const;
   }
   return [undefined, false] as const;
 };

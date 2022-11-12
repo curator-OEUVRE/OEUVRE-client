@@ -36,8 +36,7 @@ const AddPictureScreen = () => {
       // });
 
       if (result && canUpload) {
-        const { selected } = result;
-        const imageUrls = selected?.map((imageInfo) => ({
+        const imageUrls = result?.map((imageInfo) => ({
           imageUrl: imageInfo.uri,
           width: (imageInfo.width * 0.5) / imageInfo.height,
           height: 0.5,
