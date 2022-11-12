@@ -181,7 +181,7 @@ const FloorInfoFormScreen = () => {
   const FloorNameLength = useCallback(
     () => (
       <Text style={[TEXT_STYLE.body14R, styles.floorNameLengthText]}>
-        {name.value.length}/{CREATE_FLOOR_CONFIG.floorName.limit[1]}
+        {CREATE_FLOOR_CONFIG.floorName.limit[1] - name.value.length}
       </Text>
     ),
     [name.value.length],
@@ -217,9 +217,7 @@ const FloorInfoFormScreen = () => {
                 setName({ status: FormInputStatus.Error, error });
               }
             }}
-            rightElement={
-              name.value.length > 0 ? <FloorNameLength /> : undefined
-            }
+            rightElement={<FloorNameLength />}
           />
           <View>
             <Text style={[styles.subtitle, TEXT_STYLE.body14B]}>

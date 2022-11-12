@@ -179,7 +179,7 @@ const EditDescriptionScreen = () => {
                 style={[TEXT_STYLE.body14R, styles.textInput]}
               />
               {text.length > 0 && (
-                <Text style={styles.lengthText}>{text.length}/50</Text>
+                <Text style={styles.lengthText}>{50 - text.length}</Text>
               )}
             </View>
             {hashtagArea}
