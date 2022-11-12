@@ -32,4 +32,5 @@ export enum Screen {
   EditDescriptionScreen = 'EditDescriptionScreen',
   FollowListScreen = 'FollowListScreen',
   ExplorationScreen = 'ExplorationScreen',
+  HashtagFloorScreen = 'HashtagFloorScreen',
 }

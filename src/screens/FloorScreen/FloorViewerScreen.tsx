@@ -142,7 +142,7 @@ const FloorViewerScreen = () => {
     await deleteFloor(floorNo);
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
-
+  console.log(floorNo);
   const visitProfile = useCallback(() => {
     navigation.navigate(Navigator.ProfileStack, {
       screen: Screen.ProfileScreen,
