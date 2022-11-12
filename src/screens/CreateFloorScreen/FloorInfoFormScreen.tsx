@@ -160,7 +160,13 @@ const FloorInfoFormScreen = () => {
       <Pressable>
         <Text
           style={[TEXT_STYLE.button16M, styles.confirmText]}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            if (mode === FloorMode.EDIT) {
+              navigation.goBack();
+            } else {
+              navigation.navigate(Screen.EditFloorScreen);
+            }
+          }}
         >
           {mode === FloorMode.EDIT ? '완료' : '다음'}
         </Text>
