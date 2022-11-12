@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { useMemo, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   RenderItemParams,
@@ -77,6 +77,7 @@ interface FloorPictureProps extends RenderItemParams<PictureInfo> {
   addPictures?: (index: number) => void;
   onPressPicture?: (pictureNo: number) => void;
   color?: string;
+  renderDescription?: (picture: PictureInfo) => ReactNode;
 }
 
 const FloorPicture = ({
@@ -91,6 +92,7 @@ const FloorPicture = ({
   addPictures,
   onPressPicture,
   color = COLOR.mono.gray7,
+  renderDescription,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
   const { mode } = useCreateFloorStore();
@@ -197,7 +199,7 @@ const FloorPicture = ({
     <GestureDetector gesture={pinchGesture}>
       <ScaleDecorator>
         {editable && index !== 0 && line}
-        <Pressable
+        <View
           style={[
             /* eslint-disable-next-line react-native/no-inline-styles */
             {
@@ -210,22 +212,29 @@ const FloorPicture = ({
             },
             styles.item,
           ]}
-          onLongPress={editable ? drag : undefined}
-          onPress={() => {
-            onPressPicture?.(item.pictureNo);
-          }}
         >
-          <View style={styles.shadow}>
-            <AnimatedFastImage
-              source={{ uri: item.imageUrl }}
-              style={imageAnimStyle}
-            />
-            {mode === FloorMode.EDIT && renderEditLayer()}
-          </View>
-          <Text style={[styles.text, TEXT_STYLE.body12R, { color }]}>
-            {description}
-          </Text>
-        </Pressable>
+          <Pressable
+            onLongPress={editable ? drag : undefined}
+            onPress={() => {
+              onPressPicture?.(item.pictureNo);
+            }}
+          >
+            <View style={styles.shadow}>
+              <AnimatedFastImage
+                source={{ uri: item.imageUrl }}
+                style={imageAnimStyle}
+              />
+              {mode === FloorMode.EDIT && renderEditLayer()}
+            </View>
+          </Pressable>
+          {renderDescription ? (
+            renderDescription(item)
+          ) : (
+            <Text style={[styles.text, TEXT_STYLE.body12R, { color }]}>
+              {description}
+            </Text>
+          )}
+        </View>
       </ScaleDecorator>
     </GestureDetector>
   );
