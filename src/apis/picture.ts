@@ -165,7 +165,6 @@ export const getPicturesByHashtag = async ({
     size: size.toString(),
     sortBy,
   });
-  console.log(`/hashtags/${hashtagNo}/pictures?${params}`);
   const response = await getAsync<GetPicturesByHashtagResponseDto, undefined>(
     `/hashtags/${hashtagNo}/pictures?${params}`,
     {
@@ -174,6 +173,5 @@ export const getPicturesByHashtag = async ({
       },
     },
   );
-  console.log(response);
   return response;
 };
