@@ -84,7 +84,7 @@ const PictureDescriptionItem = ({
       <View style={styles.tagsContainer}>
         {hashtags.map((tag) => (
           <Text key={tag} style={[TEXT_STYLE.body14R, styles.tag]}>
-            #{tag}
+            {tag}
           </Text>
         ))}
       </View>

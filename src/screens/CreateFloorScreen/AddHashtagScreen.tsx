@@ -102,10 +102,11 @@ const AddHashtagScreen = () => {
     ),
     [navigation.goBack],
   );
-
+  const disabled = hashtags.length >= 5;
   const AddButton = useCallback(
     () => (
       <Pressable
+        disabled={disabled}
         onPress={() => {
           setInputText((prev) => {
             addHashtag(prev);
@@ -113,20 +114,33 @@ const AddHashtagScreen = () => {
           });
         }}
       >
-        <Text style={TEXT_STYLE.body16R}>추가</Text>
+        <Text
+          style={[
+            TEXT_STYLE.body16R,
+            { color: disabled ? COLOR.mono.gray7 : COLOR.mono.gray4 },
+          ]}
+        >
+          추가
+        </Text>
       </Pressable>
     ),
-    [addHashtag],
+    [addHashtag, disabled],
   );
+
+  const placeholder = disabled
+    ? '태그를 더는 입력할 수 없어요. (최대 5개)'
+    : '태그를 입력해 주세요. (최대 5개)';
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <Header headerTitle="사진 태그 추가" headerRight={ConfirmButton} />
+
       <View style={styles.container}>
         <FormInput
+          editable={!disabled}
           leftElement={<Prefix />}
           rightElement={<AddButton />}
-          placeholder="태그를 입력해 주세요. (최대 5개)"
+          placeholder={placeholder}
           value={inputText}
           onChangeText={(text) => setInputText(text.replace(/\s/g, ''))}
         />
