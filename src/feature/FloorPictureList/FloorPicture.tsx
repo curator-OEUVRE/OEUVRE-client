@@ -17,6 +17,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { Shadow } from 'react-native-shadow-2';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
@@ -49,18 +50,6 @@ const styles = StyleSheet.create({
   },
   lineContainer: {
     alignSelf: 'center',
-  },
-  // eslint-disable-next-line react-native/no-color-literals
-  shadow: {
-    elevation: 20,
-    overflow: 'visible',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
   },
   text: {
     marginTop: 5,
@@ -219,13 +208,18 @@ const FloorPicture = ({
               onPressPicture?.(item.pictureNo);
             }}
           >
-            <View style={styles.shadow}>
+            <Shadow
+              distance={5}
+              offset={[2, 2]}
+              startColor="#00000030"
+              endColor="#00000000"
+            >
               <AnimatedFastImage
                 source={{ uri: item.imageUrl }}
                 style={imageAnimStyle}
               />
               {mode === FloorMode.EDIT && renderEditLayer()}
-            </View>
+            </Shadow>
           </Pressable>
           {renderDescription ? (
             renderDescription(item)
