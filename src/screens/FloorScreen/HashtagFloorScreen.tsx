@@ -11,7 +11,7 @@ import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getFloor } from '@/apis/floor';
+import { getPicturesByHashtag } from '@/apis/picture';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
 import { Header, Profile, Spinner } from '@/components';
 import { Navigator, Screen } from '@/constants/screens';
@@ -19,8 +19,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import { GetFloorResponse } from '@/types/floor';
-import { PictureInfo } from '@/types/picture';
+import { HashtagPicture, PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   arrowLeft: {
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
 });
 
 export interface HashtagFloorScreenParams {
-  floorNo: number;
+  hashtagNo: number;
 }
 
 export type HashtagFloorScreenRP = RouteProp<
@@ -69,20 +68,22 @@ export type HashtagFloorScreenNP = CompositeNavigationProp<
   StackNavigationProp<RootStackParamsList>
 >;
 
-enum OrderBy {
-  POPULARITY,
-  LATEST,
+enum SortBy {
+  POPULAR = 'popular',
+  RECENT = 'recent',
 }
 const color = COLOR.mono.gray1;
 
 const HashtagFloorScreen = () => {
   const { params } = useRoute<HashtagFloorScreenRP>();
   const navigation = useNavigation<HashtagFloorScreenNP>();
-  const { floorNo } = params;
-  const [floorInfo, setFloorInfo] = useState<GetFloorResponse>();
+  const { hashtagNo } = params;
+  const [pictures, setPictures] = useState<HashtagPicture[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.POPULARITY);
-
+  const [isLastPage, setIsLastPage] = useState<boolean>(false);
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
+  const [page, setPage] = useState<number>(0);
+  console.log(hashtagNo);
   useFocusEffect(
     useCallback(() => {
       const lockOrientation = async () => {
@@ -96,23 +97,25 @@ const HashtagFloorScreen = () => {
     useCallback(() => {
       const fetchData = async () => {
         setLoading(true);
-        const response = await getFloor({ floorNo });
+        const response = await getPicturesByHashtag({
+          hashtagNo,
+          page: 0,
+          sortBy: sortBy as string,
+        });
         if (response.isSuccess) {
           const { result } = response.result;
-          setFloorInfo(result);
+          setPictures(result.contents);
+          setIsLastPage(result.isLastPage);
+        } else {
+          // eslint-disable-next-line no-console
+          console.log(response.result.errorMessage);
         }
         setLoading(false);
+        setPage((prev) => prev + 1);
       };
       fetchData();
-    }, [floorNo]),
+    }, [hashtagNo, sortBy]),
   );
-
-  const visitProfile = useCallback(() => {
-    navigation.navigate(Navigator.ProfileStack, {
-      screen: Screen.ProfileScreen,
-      params: { userNo: 0 },
-    });
-  }, [navigation]);
 
   const headerLeft = useCallback(
     () => (
@@ -135,14 +138,17 @@ const HashtagFloorScreen = () => {
       <View style={styles.wrapButtons}>
         <Pressable
           style={styles.left}
-          onPress={() => setOrderBy(OrderBy.POPULARITY)}
+          onPress={() => {
+            setSortBy(SortBy.POPULAR);
+            setPage(0);
+          }}
         >
           <Text
             style={[
               TEXT_STYLE.body16M,
               {
                 color:
-                  orderBy === OrderBy.POPULARITY
+                  sortBy === SortBy.POPULAR
                     ? COLOR.mono.black
                     : COLOR.mono.gray3,
               },
@@ -151,13 +157,18 @@ const HashtagFloorScreen = () => {
             인기순
           </Text>
         </Pressable>
-        <Pressable onPress={() => setOrderBy(OrderBy.LATEST)}>
+        <Pressable
+          onPress={() => {
+            setSortBy(SortBy.RECENT);
+            setPage(0);
+          }}
+        >
           <Text
             style={[
               TEXT_STYLE.body16M,
               {
                 color:
-                  orderBy === OrderBy.LATEST
+                  sortBy === SortBy.RECENT
                     ? COLOR.mono.black
                     : COLOR.mono.gray3,
               },
@@ -168,7 +179,7 @@ const HashtagFloorScreen = () => {
         </Pressable>
       </View>
     ),
-    [orderBy],
+    [sortBy],
   );
 
   const onPressPicture = useCallback(
@@ -192,19 +203,51 @@ const HashtagFloorScreen = () => {
   );
 
   const renderDescription = useCallback(
-    ({ description }: PictureInfo) => (
-      <Pressable style={styles.wrapProfile}>
-        <Profile
-          imageUrl="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-          size={20}
-        />
-        <Text style={[styles.userId, TEXT_STYLE.body12R]}>{description}</Text>
+    ({ id, profileImageUrl, userNo }: PictureInfo) => (
+      <Pressable
+        style={styles.wrapProfile}
+        onPress={async () => {
+          if (!userNo) return;
+          await lockAsync(OrientationLock.PORTRAIT_UP);
+          onPressProfile(userNo);
+        }}
+      >
+        <Profile imageUrl={profileImageUrl || ''} size={20} />
+        <Text style={[styles.userId, TEXT_STYLE.body12R]}>{id}</Text>
       </Pressable>
     ),
-    [],
+    [onPressProfile],
   );
 
   if (loading) return <Spinner />;
+  const data = pictures.map((p, idx) => ({
+    ...p,
+    hashtags: [],
+    location: 0,
+    queue: idx,
+    description: '',
+  }));
+
+  const fetchMore = async () => {
+    if (isLastPage || page >= 3) return;
+    setLoading(true);
+    const response = await getPicturesByHashtag({
+      hashtagNo,
+      page,
+      sortBy: sortBy as string,
+    });
+    if (response.isSuccess) {
+      const { result } = response.result;
+      setPictures((prev) => [...prev, ...result.contents]);
+      setIsLastPage(result.isLastPage);
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(response.result.errorMessage);
+    }
+    setLoading(false);
+    setPage((prev) => prev + 1);
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
@@ -217,10 +260,11 @@ const HashtagFloorScreen = () => {
       />
       <View style={styles.wrapList}>
         <FloorPictureList
-          pictures={floorInfo?.pictures || []}
+          pictures={data}
           editable={false}
           onPressPicture={onPressPicture}
           renderDescription={renderDescription}
+          onEndReached={fetchMore}
         />
       </View>
     </SafeAreaView>

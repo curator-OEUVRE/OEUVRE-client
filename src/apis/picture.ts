@@ -8,6 +8,7 @@ import {
   ScrapPictureResponseDto,
   GetLikeUsersResponseDto,
   DeletePictureResponseDto,
+  GetPicturesByHashtagResponseDto,
 } from '@/types/picture';
 
 interface GetPictureDetailParams {
@@ -35,6 +36,15 @@ interface ScrapPictureParams {
 interface DeletePictureParams {
   pictureNo: number;
 }
+
+interface GetPicturesByHashtagPrams {
+  hashtagNo: number;
+  page: number;
+  size?: number;
+  sortBy: string;
+}
+
+const DEFAULT_SIZE = 5;
 
 export const getPictureDetail = async ({
   pictureNo,
@@ -141,5 +151,29 @@ export const deletePicture = async ({ pictureNo }: DeletePictureParams) => {
       },
     },
   );
+  return response;
+};
+
+export const getPicturesByHashtag = async ({
+  hashtagNo,
+  page,
+  size = DEFAULT_SIZE,
+  sortBy,
+}: GetPicturesByHashtagPrams) => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    size: size.toString(),
+    sortBy,
+  });
+  console.log(`/hashtags/${hashtagNo}/pictures?${params}`);
+  const response = await getAsync<GetPicturesByHashtagResponseDto, undefined>(
+    `/hashtags/${hashtagNo}/pictures?${params}`,
+    {
+      headers: {
+        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
+      },
+    },
+  );
+  console.log(response);
   return response;
 };
