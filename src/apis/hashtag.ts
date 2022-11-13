@@ -55,11 +55,18 @@ export async function searchHashtags(
   accessToken: string,
   { keyword, page, size }: SearchHashtagsRequestDto,
 ) {
+  const hasSharpCharacter = keyword.length > 0 && keyword[0] === '#';
+
   const response = await getAsync<
     SearchHashtagsResponseDto,
     SearchHashtagsRequestDto
   >('/hashtags', {
-    params: { keyword, page, size },
+    params: {
+      keyword:
+        keyword.length === 0 || hasSharpCharacter ? keyword : `#${keyword}`,
+      page,
+      size,
+    },
     headers: { 'X-AUTH-TOKEN': accessToken },
   });
 

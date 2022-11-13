@@ -63,7 +63,7 @@ const SearchResultTemplate = <Item,>({
     const response = await fetchWithToken(searchItems, {
       keyword,
       page: page + 1,
-      size: 10,
+      size: 20,
     });
     if (response.isSuccess) {
       setPage((prev) => prev + 1);
