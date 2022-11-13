@@ -194,8 +194,8 @@ const EditFloorScreen = () => {
       ? () => (
           <Pressable
             style={styles.wrapTitle}
-            onPress={() => {
-              lockAsync(OrientationLock.PORTRAIT_UP);
+            onPress={async () => {
+              await lockAsync(OrientationLock.PORTRAIT_UP);
               navigation.navigate(Screen.FloorInfoFormScreen);
             }}
           >
@@ -213,19 +213,19 @@ const EditFloorScreen = () => {
         )
       : '플로어 추가';
   const addPictures = useCallback(
-    (index: number) => {
-      lockAsync(OrientationLock.PORTRAIT_UP);
+    async (index: number) => {
+      await lockAsync(OrientationLock.PORTRAIT_UP);
       setFloorMode({ mode: FloorMode.ADD_PICTURES, startIndex: index });
       navigation.navigate(Screen.AddPictureScreen);
     },
     [navigation, setFloorMode],
   );
 
-  const onPressPicture = (pictureNo: number) => {
+  const onPressPicture = async (pictureNo: number) => {
     if (mode !== FloorMode.EDIT) return;
     const picture = pictures.find((p) => p.pictureNo === pictureNo);
     if (!picture) return;
-    lockAsync(OrientationLock.PORTRAIT_UP);
+    await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
   };
   return (

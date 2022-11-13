@@ -27,6 +27,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
+import { PictureDetail, PictureInfo } from '@/types/picture';
 
 export type EditDescriptionScreenParams = {
   pictureNo: number;
@@ -100,15 +101,19 @@ const EditDescriptionScreen = () => {
     mode,
     setPictureDetail,
   } = useCreateFloorStore();
+  let picture: PictureDetail | PictureInfo = pictureDetail;
   const idx = pictures.findIndex((p) => p.pictureNo === pictureNo);
-  const picture = idx >= 0 ? pictures[idx] : undefined;
+  if (idx >= 0) {
+    picture = pictures[idx];
+  }
+
   const setDescription = idx >= 0 ? onChangeDescriptionByIdx(idx) : undefined;
   const defaultText = picture?.description || '';
   const [text, setText] = useState(defaultText);
   const onPress = useCallback(async () => {
     if (mode === FloorMode.VIEWER) {
       if (!picture) return;
-      const { hashtags } = picture;
+      const { hashtags } = idx >= 0 ? picture : pictureDetail;
       await patchPicture({
         description: text,
         hashtags,
@@ -127,6 +132,7 @@ const EditDescriptionScreen = () => {
     setPictureDetail,
     picture,
     pictureNo,
+    idx,
   ]);
 
   const headerRight = () => (
@@ -134,7 +140,7 @@ const EditDescriptionScreen = () => {
       <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>완료</Text>
     </Pressable>
   );
-
+  const { hashtags } = idx >= 0 ? picture : pictureDetail;
   const hashtagArea = (
     <View style={styles.hashtagArea}>
       <Pressable
@@ -145,7 +151,7 @@ const EditDescriptionScreen = () => {
         <Hashtag />
       </Pressable>
       <View style={styles.tagsContainer}>
-        {(picture?.hashtags || []).map((tag) => (
+        {hashtags.map((tag) => (
           <Text key={tag} style={[TEXT_STYLE.body12R, styles.tag]}>
             {tag}
           </Text>

@@ -15,6 +15,7 @@ export interface PictureDetail extends Picture {
   isScraped: boolean;
   userNo: number;
   userId: string;
+  hashtags: string[];
 }
 
 export interface PictureInfo extends Picture {

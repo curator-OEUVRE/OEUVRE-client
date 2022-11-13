@@ -63,35 +63,41 @@ const AddHashtagScreen = () => {
   const navigation = useNavigation<AddHashtagScreenNP>();
 
   const [inputText, setInputText] = useState('');
-
   const { hashtags, setHashtag } = useCreateFloorStore((state) => {
     const key =
       state.mode === FloorMode.ADD_PICTURES ? 'tempPictures' : 'pictures';
+    if (route.params.id === -1) {
+      return {
+        hashtags: state.pictureDetail.hashtags,
+        setHashtag: (tags: string[]) => {
+          state.setPictureDetail({ ...state.pictureDetail, hashtags: tags });
+        },
+      };
+    }
     return {
       hashtags: state[key][route.params.id].hashtags,
-      setHashtag: state.setHashtag,
+      setHashtag: (tags: string[]) => {
+        state.setHashtag(route.params.id, tags);
+      },
     };
   }, shallow);
 
   const addHashtag = useCallback(
     (newTag: string) => {
       if (hashtags.findIndex((v) => v === newTag) === -1) {
-        setHashtag(route.params.id, [...hashtags, `#${newTag}`]);
+        setHashtag([...hashtags, `#${newTag}`]);
       } else {
         setInputText('');
       }
     },
-    [route.params.id, hashtags, setHashtag],
+    [hashtags, setHashtag],
   );
 
   const deleteHashtag = useCallback(
     (index: number) => {
-      setHashtag(
-        route.params.id,
-        hashtags.slice(0, index).concat(hashtags.slice(index + 1)),
-      );
+      setHashtag(hashtags.slice(0, index).concat(hashtags.slice(index + 1)));
     },
-    [route.params.id, hashtags, setHashtag],
+    [hashtags, setHashtag],
   );
 
   const ConfirmButton = useCallback(

@@ -246,7 +246,8 @@ const ImageDetailScreen = () => {
     navigation.navigate(Screen.FloorViewerScreen, { floorNo });
   }, [floorNo, navigation]);
 
-  const visitProfile = useCallback(() => {
+  const visitProfile = useCallback(async () => {
+    await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Navigator.ProfileStack, {
       screen: Screen.ProfileScreen,
       params: { userNo },
@@ -280,8 +281,8 @@ const ImageDetailScreen = () => {
     navigation.goBack();
   }, [pictureNo, navigation]);
 
-  const editDescription = useCallback(() => {
-    lockAsync(OrientationLock.PORTRAIT_UP);
+  const editDescription = useCallback(async () => {
+    await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
   }, [navigation, pictureNo]);
 

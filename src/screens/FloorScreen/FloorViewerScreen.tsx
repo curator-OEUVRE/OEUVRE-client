@@ -142,7 +142,6 @@ const FloorViewerScreen = () => {
     await deleteFloor(floorNo);
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
-  console.log(floorNo);
   const visitProfile = useCallback(() => {
     navigation.navigate(Navigator.ProfileStack, {
       screen: Screen.ProfileScreen,
@@ -196,8 +195,8 @@ const FloorViewerScreen = () => {
   const guestBookButton = (
     <Pressable
       style={styles.textBubble}
-      onPress={() => {
-        lockAsync(OrientationLock.PORTRAIT_UP);
+      onPress={async () => {
+        await lockAsync(OrientationLock.PORTRAIT_UP);
         navigation.navigate(Screen.GuestBookScreen, { floorNo });
       }}
     >
