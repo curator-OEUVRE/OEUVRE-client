@@ -121,7 +121,8 @@ const HashtagFloorScreen = () => {
     () => (
       <Pressable
         style={styles.arrowLeft}
-        onPress={() => {
+        onPress={async () => {
+          await lockAsync(OrientationLock.PORTRAIT_UP);
           navigation.goBack();
         }}
         hitSlop={10}
@@ -253,9 +254,6 @@ const HashtagFloorScreen = () => {
       <Header
         headerTitle={headertitle}
         backgroundColor="transparent"
-        onGoBack={async () => {
-          await lockAsync(OrientationLock.PORTRAIT_UP);
-        }}
         headerLeft={headerLeft}
       />
       <View style={styles.wrapList}>
