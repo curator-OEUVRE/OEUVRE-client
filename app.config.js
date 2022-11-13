@@ -36,7 +36,7 @@ module.exports = {
       bundleIdentifier: 'com.curator.oeuvre',
       googleServicesFile: './GoogleService-Info.plist',
       requireFullScreen: true,
-      buildNumber: '2',
+      buildNumber: '3',
     },
     android: {
       adaptiveIcon: {
@@ -45,7 +45,7 @@ module.exports = {
       },
       package: 'com.curator.oeuvre',
       googleServicesFile: './google-services.json',
-      versionCode: 2,
+      versionCode: 3,
     },
     web: {
       favicon: './assets/favicon.png',
