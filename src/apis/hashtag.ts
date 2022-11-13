@@ -1,4 +1,5 @@
 import { getAsync } from './common';
+import { SearchRequestDto } from '@/types/common';
 
 export interface PictureByHashtag {
   pictureNo: number;
@@ -29,6 +30,38 @@ export async function getPopularHashtags(accessToken: string) {
     '/hashtags/popular',
     { headers: { 'X-AUTH-TOKEN': accessToken } },
   );
+
+  return response;
+}
+
+interface SearchHashtagsRequestDto extends SearchRequestDto {}
+
+interface SearchHashtagsResponseDto {
+  timestamp: string;
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: {
+    isLastPage: boolean;
+    contents: {
+      hashtagNo: number;
+      hashtag: string;
+      tagCount: number;
+    }[];
+  };
+}
+
+export async function searchHashtags(
+  accessToken: string,
+  { keyword, page, size }: SearchHashtagsRequestDto,
+) {
+  const response = await getAsync<
+    SearchHashtagsResponseDto,
+    SearchHashtagsRequestDto
+  >('/hashtags', {
+    params: { keyword, page, size },
+    headers: { 'X-AUTH-TOKEN': accessToken },
+  });
 
   return response;
 }

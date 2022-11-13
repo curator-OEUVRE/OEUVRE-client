@@ -30,7 +30,7 @@ export type ExplorationScreenParams = undefined;
 export type ExplorationScreenNP = CompositeNavigationProp<
   StackNavigationProp<ExplorationStackParamsList, Screen.ExplorationScreen>,
   CompositeNavigationProp<
-    StackNavigationProp<MainTabParamsList, Navigator.HomeStack>,
+    StackNavigationProp<MainTabParamsList, Navigator.ExplorationStack>,
     StackNavigationProp<RootStackParamsList>
   >
 >;
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    marginLeft: 20,
     marginTop: 32,
   },
   padding: {

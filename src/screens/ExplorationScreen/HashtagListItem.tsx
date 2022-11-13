@@ -21,8 +21,12 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 40,
   },
+  contentContainer: {
+    paddingHorizontal: 20,
+  },
   hashtag: {
     marginBottom: 16,
+    marginLeft: 20,
   },
   pictureListItemContainer: {
     marginRight: 8,
@@ -120,6 +124,7 @@ const HashtagListItem = ({
         initialNumToRender={5}
         windowSize={5}
         horizontal
+        contentContainerStyle={styles.contentContainer}
       />
     </Pressable>
   );
