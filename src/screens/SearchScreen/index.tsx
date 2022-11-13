@@ -106,15 +106,21 @@ const SearchScreen = () => {
     ),
     [keyword, myUserNo, navigation],
   );
+  const onHashtagPress = useCallback(
+    (hashtagNo: number, hashtag: string) => {
+      navigation.navigate(Navigator.FloorStack, {
+        screen: Screen.HashtagFloorScreen,
+        params: { hashtag, hashtagNo },
+      });
+    },
+    [navigation],
+  );
 
   const renderHashtagSearchResult = useCallback(
     () => (
-      <HashtagSearchResult
-        keyword={keyword}
-        // TODO: `onHashtagPress` 구현
-      />
+      <HashtagSearchResult keyword={keyword} onHashtagPress={onHashtagPress} />
     ),
-    [keyword],
+    [keyword, onHashtagPress],
   );
 
   const renderFloorSearchResult = useCallback(

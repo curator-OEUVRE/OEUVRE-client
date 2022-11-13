@@ -17,7 +17,7 @@ interface HashtagResult {
 }
 
 interface HashtagResultItemProps extends HashtagResult {
-  onPress?: (hashtagNo: number) => void;
+  onPress?: (hashtagNo: number, hashtag: string) => void;
 }
 
 const styles = StyleSheet.create({
@@ -40,7 +40,7 @@ const HashtagResultItem = ({
   <Pressable
     style={styles.itemContainer}
     onPress={() => {
-      onPress?.(hashtagNo);
+      onPress?.(hashtagNo, hashtag);
     }}
   >
     <HashtagIcon width={36} height={36} color={COLOR.mono.gray3} />
@@ -54,7 +54,7 @@ const HashtagResultItem = ({
 
 interface Props {
   keyword: string;
-  onHashtagPress?: (hashtagNo: number) => void;
+  onHashtagPress?: (hashtagNo: number, hashtag: string) => void;
 }
 
 const keyExtractor = (item: HashtagResult) => `${item.hashtagNo}`;
