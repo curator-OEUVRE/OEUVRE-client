@@ -22,7 +22,7 @@ export const CREATE_FLOOR_CONFIG = {
 export const ERROR_MESSAGE = {
   DUPLICATED_ID: '이 사용자 아이디는 이미 다른 사람이 사용하고 있어요',
   EMPTY_ID: '아이디를 입력해주세요',
-  INVALID_ID: `아이디는 ${SIGNUP_CONFIG.userId.limit[0]}~${SIGNUP_CONFIG.userId.limit[1]}자 영문/숫자 입니다.`,
+  INVALID_ID: `아이디는 영문 소문자, 숫자, 밑줄만 사용할 수 있어요`,
   TOO_SHORT_ID: `사용자 아이디는 ${SIGNUP_CONFIG.userId.limit[0]}자 이상이어야 해요`,
   TOO_LONG_ID: `사용자 아이디는 ${SIGNUP_CONFIG.userId.limit[1]}자까지 작성이 가능해요`,
   EMPTY_NAME: '아이디를 입력해주세요',

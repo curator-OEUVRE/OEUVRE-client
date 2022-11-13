@@ -34,6 +34,10 @@ interface Props extends TextInputProps {
 }
 
 const styles = StyleSheet.create({
+  confirmMessage: {
+    color: COLOR.system.blue,
+    marginTop: 4,
+  },
   input: {
     flex: 1,
     // 기본 스타일 초기화
@@ -141,7 +145,7 @@ interface FormInputDateProps extends Omit<Props, 'onChange' | 'value'> {
 
 export const FormInputDate = ({
   onChange,
-  value = new Date(),
+  value,
   ...props
 }: FormInputDateProps) => {
   const [show, setShow] = useState<boolean>(false);
@@ -156,7 +160,7 @@ export const FormInputDate = ({
           {...props}
           pointerEvents="none"
           editable={false}
-          value={value.toLocaleDateString()}
+          value={value?.toLocaleDateString()}
         />
       </Pressable>
       {show && (
@@ -164,7 +168,7 @@ export const FormInputDate = ({
           <DateTimePicker
             maximumDate={new Date()}
             testID="dateTimePicker"
-            value={value}
+            value={value ?? new Date()}
             mode="date"
             display={Platform.OS === 'android' ? 'default' : 'spinner'}
             is24Hour
@@ -177,7 +181,9 @@ export const FormInputDate = ({
           />
           {Platform.OS === 'ios' && (
             <Pressable onPress={() => setShow(false)}>
-              <Text style={[TEXT_STYLE.body16R, styles.message]}>완료</Text>
+              <Text style={[TEXT_STYLE.body16R, styles.confirmMessage]}>
+                완료
+              </Text>
             </Pressable>
           )}
         </>

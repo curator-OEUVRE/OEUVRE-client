@@ -121,7 +121,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
       <FormInputDate
         label="생년월일"
         value={birthDay.value}
-        placeholder="생년월일을 추가해 주세요"
+        placeholder="생년월일을 추가해 주세요. (선택)"
         onChange={(value) => {
           setBirthDay({ ...birthDay, value, status: FormInputStatus.Valid });
         }}

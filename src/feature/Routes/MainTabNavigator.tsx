@@ -67,8 +67,8 @@ const TabBar = (props: BottomTabBarProps) => (
 export type MainTabParamsList = {
   [Navigator.HomeStack]: NavigatorScreenParams<HomeStackParamsList>;
   [Navigator.ExplorationStack]: NavigatorScreenParams<ExplorationStackParamsList>;
-  [Screen.GroupFeedScreen]: GroupFeedScreenParams;
-  [Screen.NotificationScreen]: NotificationScreenParams;
+  // [Screen.GroupFeedScreen]: GroupFeedScreenParams;
+  // [Screen.NotificationScreen]: NotificationScreenParams;
   [Navigator.ProfileStack]: NavigatorScreenParams<ProfileStackParamsList>;
 };
 
@@ -91,8 +91,8 @@ const screenOptions: ScreenOptions = ({ route }) => ({
         return <TabIcon isFocused={props.focused} icon={SearchIcon} />;
       // case Screen.GroupFeedScreen:
       //   return <TabIcon isFocused={props.focused} icon={GroupIcon} />;
-      case Screen.NotificationScreen:
-        return <TabIcon isFocused={props.focused} icon={NotificationIcon} />;
+      // case Screen.NotificationScreen:
+      //   return <TabIcon isFocused={props.focused} icon={NotificationIcon} />;
       case Navigator.ProfileStack:
         return <TabIcon isFocused={props.focused} icon={PhotoIcon} />;
       default:
@@ -119,10 +119,10 @@ const MainTabNavigator = () => (
       component={ExplorationStack}
     />
     {/* <MainTab.Screen name={Screen.GroupFeedScreen} component={GroupFeedScreen} /> */}
-    <MainTab.Screen
+    {/* <MainTab.Screen
       name={Screen.NotificationScreen}
       component={NotificationScreen}
-    />
+    /> */}
     <MainTab.Screen name={Navigator.ProfileStack} component={ProfileStack} />
   </MainTab.Navigator>
 );

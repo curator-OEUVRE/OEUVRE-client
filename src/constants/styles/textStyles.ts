@@ -27,6 +27,7 @@ export const TEXT_STYLE = {
   body16M: {
     fontSize: 16,
     fontFamily: 'medium',
+    lineHeight: 16 * 1.5,
   },
   body16R: {
     fontSize: 16,

@@ -15,9 +15,10 @@ interface UserStore extends MyProfile {
   setFloors: (floors: FloorMini[]) => void;
   setCollection: (collection: PictureMini[]) => void;
   deleteFloor: (floorNo: number) => ApiResult<DeleteFloorResponseDto>;
+  clearUserStore: () => void;
 }
 
-export const useUserStore = create<UserStore>()((set, get) => ({
+const initialState = {
   backgroundImageUrl: '',
   exhibitionName: '',
   followerCount: 0,
@@ -34,6 +35,10 @@ export const useUserStore = create<UserStore>()((set, get) => ({
   floors: [],
   userNo: -1,
   collection: [],
+};
+
+export const useUserStore = create<UserStore>()((set, get) => ({
+  ...initialState,
   setUser: (user) => set((state) => ({ ...state, ...user })),
   setFloors: (floors) => set((state) => ({ ...state, floors })),
   setCollection: (collection) => set((state) => ({ ...state, collection })),
@@ -43,4 +48,5 @@ export const useUserStore = create<UserStore>()((set, get) => ({
     setFloors(floors.filter((floor) => floor.floorNo !== floorNo));
     return response;
   },
+  clearUserStore: () => set((state) => ({ ...state, ...initialState })),
 }));

@@ -2,7 +2,7 @@ import { ERROR_MESSAGE, SIGNUP_CONFIG } from '@/constants/common';
 
 const regEx = {
   name: /^[a-zA-Z가-힣]{2,10}$/,
-  userId: /^[0-9a-zA-Z-_]{4,15}$/,
+  userId: /^[0-9a-z-_]{4,15}$/,
   exhibitionName: /^[a-zA-Z가-힣]{2,10}$/,
 };
 

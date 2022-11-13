@@ -118,8 +118,14 @@ const Arrow = () => (
 const SettingScreen = () => {
   const navigation = useNavigation<SettingScreenNP>();
 
-  const { followerCount, followingCount, name, userNo, exhibitionName } =
-    useUserStore();
+  const {
+    followerCount,
+    followingCount,
+    name,
+    userNo,
+    exhibitionName,
+    clearUserStore,
+  } = useUserStore();
   const { clear } = useAuthStore();
   const { fetchWithToken } = useAuth();
 
@@ -256,7 +262,14 @@ const SettingScreen = () => {
                 `${name} 님,\nOEUVRE에서 로그아웃하시겠어요?`,
                 undefined,
                 [
-                  { text: '로그아웃', onPress: clear, style: 'destructive' },
+                  {
+                    text: '로그아웃',
+                    onPress: () => {
+                      clear();
+                      clearUserStore();
+                    },
+                    style: 'destructive',
+                  },
                   { text: '취소하기', style: 'cancel' },
                 ],
               );

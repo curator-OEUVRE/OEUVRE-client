@@ -97,7 +97,6 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
     });
     if (result && canUpload) {
       callback(result.uri);
