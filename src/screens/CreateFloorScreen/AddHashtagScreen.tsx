@@ -108,7 +108,8 @@ const AddHashtagScreen = () => {
     ),
     [navigation.goBack],
   );
-  const disabled = hashtags.length >= 5;
+  const maxCount = hashtags.length >= 5;
+  const disabled = maxCount || inputText.length === 0;
   const AddButton = useCallback(
     () => (
       <Pressable
@@ -123,7 +124,7 @@ const AddHashtagScreen = () => {
         <Text
           style={[
             TEXT_STYLE.body16R,
-            { color: disabled ? COLOR.mono.gray7 : COLOR.mono.gray4 },
+            { color: !disabled ? COLOR.mono.gray7 : COLOR.mono.gray4 },
           ]}
         >
           추가
@@ -133,7 +134,7 @@ const AddHashtagScreen = () => {
     [addHashtag, disabled],
   );
 
-  const placeholder = disabled
+  const placeholder = maxCount
     ? '태그를 더는 입력할 수 없어요. (최대 5개)'
     : '태그를 입력해 주세요. (최대 5개)';
 
@@ -143,7 +144,7 @@ const AddHashtagScreen = () => {
 
       <View style={styles.container}>
         <FormInput
-          editable={!disabled}
+          editable={!maxCount}
           leftElement={<Prefix />}
           rightElement={<AddButton />}
           placeholder={placeholder}
