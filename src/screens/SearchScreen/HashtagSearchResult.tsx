@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import SearchResultTemplate from './SearchResultTemplate';
 import { searchHashtags } from '@/apis/hashtag';
-import HashtagIcon from '@/assets/icons/Hashtag';
+import HashtagIcon from '@/assets/icons/NormalHashtag';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 interface HashtagResult {
