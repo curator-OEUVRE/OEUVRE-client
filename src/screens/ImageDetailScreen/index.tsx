@@ -420,7 +420,7 @@ const ImageDetailScreen = () => {
             icon={<PhotoIcon color={COLOR.mono.black} width={26} height={26} />}
             onPress={visitFloor}
           />
-          <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
+          {/* <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} /> */}
           <BottomSheetItem
             label="사진 신고하기"
             icon={<AlertIcon color={COLOR.system.red} />}

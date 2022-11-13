@@ -171,7 +171,7 @@ const FloorViewerScreen = () => {
         icon={<PersonIcon color={COLOR.mono.black} />}
         onPress={visitProfile}
       />
-      <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} />
+      {/* <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} /> */}
       <BottomSheetItem
         label="플로어 신고하기"
         icon={<AlertIcon color={COLOR.system.red} />}
