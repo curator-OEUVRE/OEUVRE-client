@@ -46,7 +46,7 @@ interface Props {
   pictures: PictureInfo[];
   editable?: boolean;
   setPictures?: (newData: PictureInfo[]) => void;
-  addPictures?: () => void;
+  addPictures?: (index: number) => void;
   onPressPicture?: (pictureNo: number) => void;
   color?: string;
 }

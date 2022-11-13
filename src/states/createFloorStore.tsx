@@ -25,6 +25,15 @@ export enum FloorMode {
   ADD_PICTURES,
 }
 
+export type SetFloorModeParams =
+  | {
+      mode: FloorMode.CREATE | FloorMode.EDIT | FloorMode.VIEWER;
+    }
+  | {
+      mode: FloorMode.ADD_PICTURES;
+      startIndex: number;
+    };
+
 interface CreateFloorStore {
   mode: FloorMode;
   pictureDetail: PictureDetail;
@@ -40,7 +49,8 @@ interface CreateFloorStore {
   userId: string;
   userNo: number;
   floorNo?: number;
-  setFloorMode: (mode: FloorMode) => void;
+  startIndex: number;
+  setFloorMode: (params: SetFloorModeParams) => void;
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],
   ) => void;
@@ -113,12 +123,13 @@ const defaultValues = {
   isMine: true,
   userNo: 0,
   userId: '',
+  startIndex: -1,
 };
 
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   ...defaultValues,
   setFloorMode: (mode) => {
-    set((state) => ({ ...state, mode }));
+    set((state) => ({ ...state, ...mode }));
   },
   createPictures: (images) => {
     const { mode } = get();
@@ -143,7 +154,6 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
     if (response.isSuccess) {
       const { result } = response.result;
       setPictureDetail(result);
-      console.log(result);
     } else {
       console.log(response.result.errorMessage);
     }

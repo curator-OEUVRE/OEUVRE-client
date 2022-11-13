@@ -74,7 +74,7 @@ interface FloorPictureProps extends RenderItemParams<PictureInfo> {
   activeLine: number;
   activeIndexAnim?: SharedValue<number>;
   setActiveLine: (line: number) => void;
-  addPictures?: () => void;
+  addPictures?: (index: number) => void;
   onPressPicture?: (pictureNo: number) => void;
   color?: string;
 }
@@ -167,7 +167,7 @@ const FloorPicture = ({
           style={[styles.line, animStyle, { height: BASE_SIZE * 0.5 }]}
         >
           {isLineActive && (
-            <Pressable onPress={() => addPictures?.()}>
+            <Pressable onPress={() => addPictures?.(index || -1)}>
               <Animated.View entering={FadeIn} exiting={FadeOut}>
                 <AddCircleIcon
                   width={LINE_BUTTON_SIZE}

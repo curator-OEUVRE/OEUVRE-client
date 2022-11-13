@@ -164,7 +164,7 @@ const MyProfileScreen = () => {
         navigation.navigate(Screen.SettingScreen);
       }}
       onAddFloorPress={() => {
-        setFloorMode(FloorMode.CREATE);
+        setFloorMode({ mode: FloorMode.CREATE });
         navigation.navigate(Navigator.FloorStack, {
           screen: Screen.AddPictureScreen,
         });

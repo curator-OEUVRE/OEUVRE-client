@@ -133,7 +133,7 @@ const FloorViewerScreen = () => {
   );
 
   const onEditFloor = () => {
-    setFloorMode(FloorMode.EDIT);
+    setFloorMode({ mode: FloorMode.EDIT });
     navigation.navigate(Screen.EditFloorScreen, { floorNo });
   };
 

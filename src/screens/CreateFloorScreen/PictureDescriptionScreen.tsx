@@ -41,13 +41,18 @@ const PictureDescriptionScreen = () => {
     setPictures,
     clearTempPictures,
     setFloorMode,
+    startIndex,
   } = useCreateFloorStore();
   const headerRight = () => (
     <Pressable
       onPress={() => {
         if (mode === FloorMode.ADD_PICTURES) {
-          setPictures([...pictures, ...tempPictures]);
-          setFloorMode(FloorMode.EDIT);
+          setPictures([
+            ...pictures.slice(0, startIndex),
+            ...tempPictures,
+            ...pictures.slice(startIndex),
+          ]);
+          setFloorMode({ mode: FloorMode.EDIT });
           clearTempPictures();
           navigation.pop(2);
         } else {
