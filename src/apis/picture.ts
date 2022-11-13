@@ -44,7 +44,7 @@ interface GetPicturesByHashtagPrams {
   sortBy: string;
 }
 
-const DEFAULT_SIZE = 5;
+const DEFAULT_SIZE = 10;
 
 export const getPictureDetail = async ({
   pictureNo,

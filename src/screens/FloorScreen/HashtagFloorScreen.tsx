@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
 
 export interface HashtagFloorScreenParams {
   hashtagNo: number;
+  hashtag: string;
 }
 
 export type HashtagFloorScreenRP = RouteProp<
@@ -77,13 +78,12 @@ const color = COLOR.mono.gray1;
 const HashtagFloorScreen = () => {
   const { params } = useRoute<HashtagFloorScreenRP>();
   const navigation = useNavigation<HashtagFloorScreenNP>();
-  const { hashtagNo } = params;
+  const { hashtagNo, hashtag } = params;
   const [pictures, setPictures] = useState<HashtagPicture[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
   const [page, setPage] = useState<number>(0);
-  console.log(hashtagNo);
   useFocusEffect(
     useCallback(() => {
       const lockOrientation = async () => {
@@ -127,10 +127,10 @@ const HashtagFloorScreen = () => {
         hitSlop={10}
       >
         <ArrowBackIcon color={COLOR.mono.black} />
-        <Text>#태그태그태그태그</Text>
+        <Text style={{ color: COLOR.mono.black }}>{hashtag}</Text>
       </Pressable>
     ),
-    [navigation],
+    [navigation, hashtag],
   );
 
   const headertitle = useCallback(
