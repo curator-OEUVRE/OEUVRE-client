@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
+    marginLeft: 20,
     marginTop: 32,
   },
   padding: {
@@ -127,7 +128,6 @@ const ExplorationScreen = () => {
               maxToRenderPerBatch={3}
               initialNumToRender={3}
               windowSize={3}
-              style={styles.padding}
               refreshing={refreshing}
               onRefresh={fetchAndSetData}
             />
