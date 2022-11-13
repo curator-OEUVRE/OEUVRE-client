@@ -19,6 +19,7 @@ function loadStories() {
   require('../src/feature/GuestBookList/GuestBookList.stories');
   require('../src/feature/KakaoLogin/KakaoLogin.stories');
   require('../src/feature/ProfileCard/ProfileCard.stories');
+  require('../src/feature/SearchInput/SearchInput.stories');
   require('../src/feature/TermsForm/TermsForm.stories');
 }
 
@@ -38,6 +39,7 @@ const stories = [
   '../src/feature/GuestBookList/GuestBookList.stories',
   '../src/feature/KakaoLogin/KakaoLogin.stories',
   '../src/feature/ProfileCard/ProfileCard.stories',
+  '../src/feature/SearchInput/SearchInput.stories',
   '../src/feature/TermsForm/TermsForm.stories',
 ];
 
