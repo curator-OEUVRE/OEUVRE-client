@@ -40,9 +40,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 12,
   },
+  contentContainer: {
+    paddingTop: 16,
+  },
   listContainer: {
     flex: 1,
-    marginTop: 32,
+    marginTop: 16,
   },
   padding: {
     paddingHorizontal: 20,
@@ -129,6 +132,7 @@ const ExplorationScreen = () => {
               windowSize={3}
               refreshing={refreshing}
               onRefresh={fetchAndSetData}
+              contentContainerStyle={styles.contentContainer}
             />
           </View>
         </View>
