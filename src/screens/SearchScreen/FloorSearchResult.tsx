@@ -51,7 +51,11 @@ const FloorResultItem = ({
       onPress?.(floorNo);
     }}
   >
-    <FastImage source={{ uri: thumbnailUrl }} style={styles.thumbnail} />
+    <FastImage
+      source={{ uri: thumbnailUrl }}
+      style={styles.thumbnail}
+      resizeMode="contain"
+    />
     <View style={styles.itemTextArea}>
       <Text style={TEXT_STYLE.body14M}>{floorName}</Text>
       <Text style={TEXT_STYLE.body12M}>{exhibitionName}</Text>
