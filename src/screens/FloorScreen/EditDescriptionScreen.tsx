@@ -105,12 +105,15 @@ const EditDescriptionScreen = () => {
   const setDescription = idx >= 0 ? onChangeDescriptionByIdx(idx) : undefined;
   const defaultText = picture?.description || '';
   const [text, setText] = useState(defaultText);
-
-  const onPress = useCallback(() => {
+  const onPress = useCallback(async () => {
     if (mode === FloorMode.VIEWER) {
       if (!picture) return;
-      const { description, hashtags } = picture;
-      patchPicture({ description, hashtags, pictureNo });
+      const { hashtags } = picture;
+      await patchPicture({
+        description: text,
+        hashtags,
+        pictureNo,
+      });
       setPictureDetail({ ...pictureDetail, description: text });
     }
     setDescription?.(text);
