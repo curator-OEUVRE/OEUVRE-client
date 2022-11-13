@@ -1,5 +1,6 @@
 import { deleteAsync, getAsync, patchAsync, postAsync } from './common';
 import { useAuthStore } from '@/states/authStore';
+import { SearchRequestDto } from '@/types/common';
 import {
   CreateFloorResponseDto,
   DeleteFloorResponseDto,
@@ -182,3 +183,38 @@ export const deleteFloor = async ({ floorNo }: DeleteFloorParams) => {
   );
   return response;
 };
+
+interface SearchFloorsRequestDto extends SearchRequestDto {}
+
+interface SearchFloorsResponseDto {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: {
+    contents: {
+      exhibitionName: string;
+      floorName: string;
+      floorNo: number;
+      height: number;
+      thumbnailUrl: string;
+      width: number;
+    }[];
+    isLastPage: boolean;
+  };
+  timestamp: string;
+}
+
+export async function searchFloors(
+  accessToken: string,
+  { keyword, page, size }: SearchFloorsRequestDto,
+) {
+  const response = await getAsync<
+    SearchFloorsResponseDto,
+    SearchFloorsRequestDto
+  >('/floors', {
+    params: { keyword, page, size },
+    headers: { 'X-AUTH-TOKEN': accessToken },
+  });
+
+  return response;
+}

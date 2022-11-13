@@ -1,4 +1,5 @@
 import { deleteAsync, getAsync, patchAsync, postAsync } from './common';
+import { SearchRequestDto } from '@/types/common';
 import type { PictureMini } from '@/types/floor';
 import type { MyProfile, OtherUserProfile, UserMini } from '@/types/user';
 
@@ -29,7 +30,6 @@ interface SignUpResponseDto {
 }
 
 export async function signUp(info: SignUpRequestDto) {
-  console.log(info);
   const response = await postAsync<SignUpResponseDto, SignUpRequestDto>(
     '/users',
     info,
@@ -219,6 +219,39 @@ export async function deactiveUser(accessToken: string) {
     '/users',
     { headers: { 'X-AUTH-TOKEN': accessToken } },
   );
+
+  return response;
+}
+
+interface SearchUsersRequestDto extends SearchRequestDto {}
+
+interface SearchUsersResponseDto {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: {
+    contents: {
+      id: string;
+      name: string;
+      profileImageUrl: string;
+      userNo: number;
+    }[];
+    isLastPage: boolean;
+  };
+  timestamp: string;
+}
+
+export async function searchUsers(
+  accessToken: string,
+  { keyword, page, size }: SearchUsersRequestDto,
+) {
+  const response = await getAsync<
+    SearchUsersResponseDto,
+    SearchUsersRequestDto
+  >('/users', {
+    params: { keyword, page, size },
+    headers: { 'X-AUTH-TOKEN': accessToken },
+  });
 
   return response;
 }

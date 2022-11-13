@@ -81,8 +81,11 @@ const MyCollection = () => {
 
   const [page, setPage] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
+  const [isLastPage, setIsLastPage] = useState(false);
 
   const loadMorePictures = useCallback(async () => {
+    if (isLastPage) return;
+
     const response = await fetchWithToken(getCollection, {
       page: page + 1,
       size: 10,
@@ -90,10 +93,11 @@ const MyCollection = () => {
     if (response.isSuccess) {
       setCollection([...collection, ...response.result.result.contents]);
       setPage((prev) => prev + 1);
+      setIsLastPage(response.result.result.isLastPage);
     } else {
       console.error(response.result);
     }
-  }, [fetchWithToken, page, setCollection, collection]);
+  }, [fetchWithToken, page, setCollection, collection, isLastPage]);
 
   const refreshCollection = useCallback(async () => {
     setRefreshing(true);
@@ -102,6 +106,7 @@ const MyCollection = () => {
     if (response.isSuccess) {
       setPage(0);
       setCollection(response.result.result.contents);
+      setIsLastPage(false);
     } else {
       console.error(response.result);
     }

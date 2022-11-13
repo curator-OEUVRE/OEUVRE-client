@@ -4,6 +4,7 @@ export enum Navigator {
   MainTab = 'MainTab',
   ProfileStack = 'ProfileStack',
   HomeStack = 'HomeStack',
+  ExplorationStack = 'ExplorationStack',
 }
 
 export enum Screen {
@@ -30,4 +31,5 @@ export enum Screen {
   SettingScreen = 'SettingScreen',
   EditDescriptionScreen = 'EditDescriptionScreen',
   FollowListScreen = 'FollowListScreen',
+  ExplorationScreen = 'ExplorationScreen',
 }

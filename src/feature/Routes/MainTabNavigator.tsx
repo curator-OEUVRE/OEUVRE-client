@@ -7,6 +7,9 @@ import {
 import { NavigatorScreenParams, RouteProp } from '@react-navigation/native';
 import { View, StyleSheet } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
+import ExplorationStack, {
+  type ExplorationStackParamsList,
+} from './ExplorationStack';
 import HomeStack, { type HomeStackParamsList } from './HomeStack';
 import ProfileStack, { type ProfileStackParamsList } from './ProfileStack';
 import GroupIcon from '@/assets/icons/Group';
@@ -23,7 +26,6 @@ import GroupFeedScreen, {
 import NotificationScreen, {
   NotificationScreenParams,
 } from '@/screens/NotificationScreen';
-import SearchScreen, { SearchScreenParams } from '@/screens/SearchScreen';
 
 interface TabIconProps {
   isFocused?: boolean;
@@ -64,7 +66,7 @@ const TabBar = (props: BottomTabBarProps) => (
 
 export type MainTabParamsList = {
   [Navigator.HomeStack]: NavigatorScreenParams<HomeStackParamsList>;
-  [Screen.SearchScreen]: SearchScreenParams;
+  [Navigator.ExplorationStack]: NavigatorScreenParams<ExplorationStackParamsList>;
   [Screen.GroupFeedScreen]: GroupFeedScreenParams;
   [Screen.NotificationScreen]: NotificationScreenParams;
   [Navigator.ProfileStack]: NavigatorScreenParams<ProfileStackParamsList>;
@@ -85,7 +87,7 @@ const screenOptions: ScreenOptions = ({ route }) => ({
     switch (route.name) {
       case Navigator.HomeStack:
         return <TabIcon isFocused={props.focused} icon={HomeIcon} />;
-      case Screen.SearchScreen:
+      case Navigator.ExplorationStack:
         return <TabIcon isFocused={props.focused} icon={SearchIcon} />;
       // case Screen.GroupFeedScreen:
       //   return <TabIcon isFocused={props.focused} icon={GroupIcon} />;
@@ -112,7 +114,10 @@ const MainTabNavigator = () => (
     screenOptions={screenOptions}
   >
     <MainTab.Screen name={Navigator.HomeStack} component={HomeStack} />
-    <MainTab.Screen name={Screen.SearchScreen} component={SearchScreen} />
+    <MainTab.Screen
+      name={Navigator.ExplorationStack}
+      component={ExplorationStack}
+    />
     {/* <MainTab.Screen name={Screen.GroupFeedScreen} component={GroupFeedScreen} /> */}
     <MainTab.Screen
       name={Screen.NotificationScreen}
