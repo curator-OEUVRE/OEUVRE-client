@@ -26,14 +26,7 @@ const AddPictureScreen = () => {
     const pickImage = async () => {
       const [result, canUpload] = await getImagesFromLibrary({
         mediaTypes: MediaTypeOptions.All,
-        // allowsMultipleSelection: true,
-        // quality: 1,
       });
-      // const result = await launchImageLibraryAsync({
-      //   mediaTypes: MediaTypeOptions.All,
-      //   allowsMultipleSelection: true,
-      //   quality: 1,
-      // });
 
       if (result && canUpload) {
         const imageUrls = result?.map((imageInfo) => ({
