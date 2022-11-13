@@ -24,7 +24,7 @@ export const COLOR = {
     purple: '#F4F2F9',
   },
   system: {
-    blue: '#68C6D0',
+    blue: '#5AB5BF',
     red: '#EE5A5A',
   },
 } as const;
