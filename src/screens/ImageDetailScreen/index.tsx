@@ -200,11 +200,11 @@ const ImageDetailScreen = () => {
 
   const scaleImage = useCallback(() => {
     onAnimation.value = true;
-    scale.value = withSpring(1, undefined, (isFinished) => {
+    scale.value = withSpring(1, { restSpeedThreshold: 5 }, (isFinished) => {
       if (isFinished) {
         scale.value = withDelay(
-          500,
-          withSpring(0, undefined, (done) => {
+          100,
+          withSpring(0, { restSpeedThreshold: 5 }, (done) => {
             if (done) {
               onAnimation.value = false;
             }
@@ -246,7 +246,8 @@ const ImageDetailScreen = () => {
     navigation.navigate(Screen.FloorViewerScreen, { floorNo });
   }, [floorNo, navigation]);
 
-  const visitProfile = useCallback(() => {
+  const visitProfile = useCallback(async () => {
+    await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Navigator.ProfileStack, {
       screen: Screen.ProfileScreen,
       params: { userNo },
@@ -280,8 +281,8 @@ const ImageDetailScreen = () => {
     navigation.goBack();
   }, [pictureNo, navigation]);
 
-  const editDescription = useCallback(() => {
-    lockAsync(OrientationLock.PORTRAIT_UP);
+  const editDescription = useCallback(async () => {
+    await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
   }, [navigation, pictureNo]);
 
@@ -289,8 +290,7 @@ const ImageDetailScreen = () => {
     windowWidth >= windowHeight
       ? OrientationType.landscape
       : OrientationType.portrait;
-  const SIZE =
-    orientation === OrientationType.landscape ? windowHeight : windowWidth;
+  const SIZE = 84;
   const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
   const Bookmark = isScraped ? BookmarkFilledIcon : BookmarkIcon;
 

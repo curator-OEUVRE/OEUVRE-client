@@ -24,14 +24,8 @@ interface HeaderProps {
 
 const styles = StyleSheet.create({
   arrowLeft: {
-    alignItems: 'center',
     height: 26,
-    justifyContent: 'center',
-    left: 13,
-    position: 'absolute',
-    top: 10,
     width: 26,
-    zIndex: 10,
   },
   container: {
     alignItems: 'center',
@@ -41,6 +35,14 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     zIndex: 100,
+  },
+  left: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: 13,
+    position: 'absolute',
+    top: 10,
+    zIndex: 10,
   },
   right: {
     alignItems: 'center',
@@ -67,22 +69,24 @@ const Header = ({
   const marginTop = isLandscape && Platform.OS === 'ios' ? 18 : 0;
   return (
     <View style={[styles.container, { backgroundColor, marginTop }]}>
-      {headerLeft
-        ? headerLeft()
-        : !hideBackButton && (
-            <Pressable
-              style={styles.arrowLeft}
-              onPress={() => {
-                if (onGoBack) {
-                  onGoBack();
-                }
-                navigation.goBack();
-              }}
-              hitSlop={10}
-            >
-              <ArrowBackIcon color={iconColor} />
-            </Pressable>
-          )}
+      <View style={styles.left}>
+        {headerLeft
+          ? headerLeft()
+          : !hideBackButton && (
+              <Pressable
+                style={styles.arrowLeft}
+                onPress={() => {
+                  if (onGoBack) {
+                    onGoBack();
+                  }
+                  navigation.goBack();
+                }}
+                hitSlop={10}
+              >
+                <ArrowBackIcon color={iconColor} />
+              </Pressable>
+            )}
+      </View>
 
       {typeof headerTitle === 'string' ? (
         <Text style={[TEXT_STYLE.body16M, { color: iconColor }]}>

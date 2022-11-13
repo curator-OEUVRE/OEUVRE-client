@@ -3,7 +3,8 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Keyboard, Pressable, StyleSheet, Text } from 'react-native';
+import React from 'react';
+import { Keyboard, Pressable, StyleSheet, Text, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WithKeyboardAvoidingView } from '@/components';
@@ -22,6 +23,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR.mono.white,
     flex: 1,
+  },
+  content: {
     paddingHorizontal: 20,
   },
 });
@@ -68,15 +71,16 @@ const PictureDescriptionScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header headerTitle="플로어 추가" headerRight={headerRight} />
-
       <WithKeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <PictureDescriptionList
-            onHashtagPress={(id: number) => {
-              navigation.navigate(Screen.AddHashtagScreen, { id });
-            }}
-          />
-        </TouchableWithoutFeedback>
+        <View style={styles.content}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <PictureDescriptionList
+              onHashtagPress={(id: number) => {
+                navigation.navigate(Screen.AddHashtagScreen, { id });
+              }}
+            />
+          </TouchableWithoutFeedback>
+        </View>
       </WithKeyboardAvoidingView>
     </SafeAreaView>
   );

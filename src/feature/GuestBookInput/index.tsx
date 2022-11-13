@@ -84,6 +84,7 @@ const GuestBookInput = ({ avatarUri, onSubmit }: GuestBookInputProps) => {
             setComment('');
             Keyboard.dismiss();
           }}
+          disabled={comment.length === 0}
         >
           <CheckIcon
             color={comment.length > 0 ? COLOR.system.blue : COLOR.mono.gray3}

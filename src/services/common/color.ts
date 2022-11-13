@@ -9,5 +9,5 @@ export const getColorByBackgroundColor = (hexColor: string) => {
   const b = (rgb >> 0) & 0xff; // blue 추출
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
   // 색상 선택
-  return luma < 127.5 ? COLOR.mono.white : COLOR.mono.gray7; // 글자색이
+  return luma < 127.5 ? COLOR.mono.white : COLOR.mono.gray5; // 글자색이
 };

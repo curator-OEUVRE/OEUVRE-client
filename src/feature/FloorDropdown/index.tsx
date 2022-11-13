@@ -75,31 +75,29 @@ const styles = StyleSheet.create({
 const FloorDropDown = ({ currentIdx, floors, onPress }: FloorDropDownProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const renderFloors = () =>
-    floors
-      .map(({ name, floorNo }, idx) => (
-        <Pressable
-          style={[styles.option, idx > 0 && styles.borderBottom]}
-          onPress={() => {
-            onPress(floorNo);
-            setOpen(false);
-          }}
-          key={`floor_${idx + 1}_${name}`}
+    floors.map(({ name, floorNo }, idx) => (
+      <Pressable
+        style={[styles.option, idx > 0 && styles.borderBottom]}
+        onPress={() => {
+          onPress(floorNo);
+          setOpen(false);
+        }}
+        key={`floor_${floors.length - idx}_${name}`}
+      >
+        <Text style={styles.floorNum}>{floors.length - idx}F</Text>
+        <Text
+          style={[
+            styles.floorName,
+            {
+              color: currentIdx === idx ? COLOR.mono.gray3 : COLOR.mono.gray7,
+            },
+            TEXT_STYLE.body14R,
+          ]}
         >
-          <Text style={styles.floorNum}>{idx + 1}F</Text>
-          <Text
-            style={[
-              styles.floorName,
-              {
-                color: currentIdx === idx ? COLOR.mono.gray3 : COLOR.mono.gray7,
-              },
-              TEXT_STYLE.body14R,
-            ]}
-          >
-            {name}
-          </Text>
-        </Pressable>
-      ))
-      .reverse();
+          {name}
+        </Text>
+      </Pressable>
+    ));
   return (
     <View style={styles.container}>
       <Pressable

@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { useCallback, useRef, useState } from 'react';
-
+import { useCallback, useRef, useState, ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
@@ -49,6 +48,8 @@ interface Props {
   addPictures?: (index: number) => void;
   onPressPicture?: (pictureNo: number) => void;
   color?: string;
+  onEndReached?: () => void;
+  renderDescription?: (picture: PictureInfo) => ReactNode;
 }
 
 interface Layout {
@@ -69,6 +70,8 @@ const FloorPictureList = ({
   addPictures,
   onPressPicture,
   color,
+  onEndReached,
+  renderDescription,
 }: Props) => {
   const { height: windowHeight } = useDimensions();
   const translateY = useRef<SharedValue<number>>();
@@ -109,6 +112,7 @@ const FloorPictureList = ({
         activeIndexAnim={activeIndexAnim.current}
         onPressPicture={onPressPicture}
         color={color}
+        renderDescription={renderDescription}
       />
     ),
     [
@@ -120,6 +124,7 @@ const FloorPictureList = ({
       addPictures,
       onPressPicture,
       color,
+      renderDescription,
     ],
   );
 
@@ -183,6 +188,8 @@ const FloorPictureList = ({
         maxToRenderPerBatch={7}
         initialNumToRender={7}
         windowSize={7}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.1}
       />
       {editable && (
         <View style={styles.bottom}>

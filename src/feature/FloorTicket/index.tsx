@@ -6,14 +6,20 @@ import {
   useWindowDimensions,
   type StyleProp,
   type ViewStyle,
+  Platform,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { Shadow } from 'react-native-shadow-2';
 import type { HomeFloor } from '@/apis/floor';
 import DashLine from '@/assets/icons/DashLine';
 import { Profile } from '@/components/Profile';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 const styles = StyleSheet.create({
+  androidMargin: {
+    marginLeft: 2,
+    marginTop: 2,
+  },
   badge: {
     borderRadius: 5,
     left: 8,
@@ -58,18 +64,6 @@ const styles = StyleSheet.create({
   queueText: {
     color: COLOR.mono.gray3,
   },
-  /* eslint-disable-next-line react-native/no-color-literals */
-  shadow: {
-    elevation: 6,
-    overflow: 'visible',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-  },
   thumbnail: {
     zIndex: -1,
   },
@@ -99,7 +93,17 @@ const FloorTicket = ({
 
   return (
     <Pressable onPress={handleFloorPress} style={containerStyle}>
-      <View style={[styles.container, styles.shadow, { height: height * 0.2 }]}>
+      <Shadow
+        distance={5}
+        offset={[2, 2]}
+        startColor="#00000020"
+        endColor="#00000000"
+        style={[
+          styles.container,
+          { height: height * 0.2 },
+          Platform.OS === 'android' && styles.androidMargin,
+        ]}
+      >
         <View style={styles.content}>
           <View style={styles.contentInner}>
             <View>
@@ -160,7 +164,7 @@ const FloorTicket = ({
             </View>
           )}
         </View>
-      </View>
+      </Shadow>
     </Pressable>
   );
 };

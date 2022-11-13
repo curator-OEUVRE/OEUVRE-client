@@ -63,35 +63,41 @@ const AddHashtagScreen = () => {
   const navigation = useNavigation<AddHashtagScreenNP>();
 
   const [inputText, setInputText] = useState('');
-
   const { hashtags, setHashtag } = useCreateFloorStore((state) => {
     const key =
       state.mode === FloorMode.ADD_PICTURES ? 'tempPictures' : 'pictures';
+    if (route.params.id === -1) {
+      return {
+        hashtags: state.pictureDetail.hashtags,
+        setHashtag: (tags: string[]) => {
+          state.setPictureDetail({ ...state.pictureDetail, hashtags: tags });
+        },
+      };
+    }
     return {
       hashtags: state[key][route.params.id].hashtags,
-      setHashtag: state.setHashtag,
+      setHashtag: (tags: string[]) => {
+        state.setHashtag(route.params.id, tags);
+      },
     };
   }, shallow);
 
   const addHashtag = useCallback(
     (newTag: string) => {
       if (hashtags.findIndex((v) => v === newTag) === -1) {
-        setHashtag(route.params.id, [...hashtags, `#${newTag}`]);
+        setHashtag([...hashtags, `#${newTag}`]);
       } else {
         setInputText('');
       }
     },
-    [route.params.id, hashtags, setHashtag],
+    [hashtags, setHashtag],
   );
 
   const deleteHashtag = useCallback(
     (index: number) => {
-      setHashtag(
-        route.params.id,
-        hashtags.slice(0, index).concat(hashtags.slice(index + 1)),
-      );
+      setHashtag(hashtags.slice(0, index).concat(hashtags.slice(index + 1)));
     },
-    [route.params.id, hashtags, setHashtag],
+    [hashtags, setHashtag],
   );
 
   const ConfirmButton = useCallback(
@@ -102,10 +108,12 @@ const AddHashtagScreen = () => {
     ),
     [navigation.goBack],
   );
-
+  const maxCount = hashtags.length >= 5;
+  const disabled = maxCount || inputText.length === 0;
   const AddButton = useCallback(
     () => (
       <Pressable
+        disabled={disabled}
         onPress={() => {
           setInputText((prev) => {
             addHashtag(prev);
@@ -113,20 +121,33 @@ const AddHashtagScreen = () => {
           });
         }}
       >
-        <Text style={TEXT_STYLE.body16R}>추가</Text>
+        <Text
+          style={[
+            TEXT_STYLE.body16R,
+            { color: !disabled ? COLOR.mono.gray7 : COLOR.mono.gray4 },
+          ]}
+        >
+          추가
+        </Text>
       </Pressable>
     ),
-    [addHashtag],
+    [addHashtag, disabled],
   );
+
+  const placeholder = maxCount
+    ? '태그를 더는 입력할 수 없어요. (최대 5개)'
+    : '태그를 입력해 주세요. (최대 5개)';
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <Header headerTitle="사진 태그 추가" headerRight={ConfirmButton} />
+
       <View style={styles.container}>
         <FormInput
+          editable={!maxCount}
           leftElement={<Prefix />}
           rightElement={<AddButton />}
-          placeholder="태그를 입력해 주세요. (최대 5개)"
+          placeholder={placeholder}
           value={inputText}
           onChangeText={(text) => setInputText(text.replace(/\s/g, ''))}
         />

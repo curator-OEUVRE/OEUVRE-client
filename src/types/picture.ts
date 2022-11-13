@@ -1,28 +1,30 @@
 import { ResponseDto } from './common';
 
-export type PictureDetail = {
+export interface Picture {
   description: string;
-  floorNo: number;
   height: number;
+  width: number;
+  pictureNo: number;
   imageUrl: string;
+}
+
+export interface PictureDetail extends Picture {
+  floorNo: number;
   isLiked: boolean;
   isMine: boolean;
   isScraped: boolean;
-  pictureNo: number;
-  width: number;
   userNo: number;
   userId: string;
-};
-
-export interface PictureInfo {
-  imageUrl: string;
-  description: string;
   hashtags: string[];
-  width: number;
-  height: number;
+}
+
+export interface PictureInfo extends Picture {
+  hashtags: string[];
   location: number;
   queue: number;
-  pictureNo: number;
+  userNo?: number;
+  id?: string;
+  profileImageUrl?: string;
 }
 
 export interface LikeUser {
@@ -31,6 +33,18 @@ export interface LikeUser {
   profileImageUrl: string;
   userNo: number;
 }
+
+export interface HashtagPicture extends Picture {
+  userNo: number;
+  id: string;
+  profileImageUrl: string;
+}
+
+export interface GetPicturesByHashtagResponse {
+  contents: HashtagPicture[];
+  isLastPage: boolean;
+}
+
 export type GetPictureDetailResponseDto = ResponseDto<PictureDetail>;
 export type PatchPictureResponseDto = ResponseDto<string>;
 export type PatchPictureRequestDto = {
@@ -41,3 +55,5 @@ export type LikePictureResponseDto = ResponseDto<string>;
 export type ScrapPictureResponseDto = ResponseDto<string>;
 export type GetLikeUsersResponseDto = ResponseDto<LikeUser[]>;
 export type DeletePictureResponseDto = ResponseDto<string>;
+export type GetPicturesByHashtagResponseDto =
+  ResponseDto<GetPicturesByHashtagResponse>;
