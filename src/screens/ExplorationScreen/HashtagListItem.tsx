@@ -82,7 +82,7 @@ const PictureListItem = ({
 };
 
 interface Props extends HashtagInfo {
-  onPress?: (hashtagNo: number) => void;
+  onPress?: (hashtagNo: number, hashtag: string) => void;
   onPicturePress?: (pictureNo: number) => void;
   onProfilePress?: (userNo: number) => void;
 }
@@ -111,7 +111,7 @@ const HashtagListItem = ({
   return (
     <Pressable
       onPress={() => {
-        onPress?.(hashtagNo);
+        onPress?.(hashtagNo, hashtag);
       }}
       style={styles.container}
     >

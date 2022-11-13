@@ -107,6 +107,12 @@ const ExplorationScreen = () => {
             navigation.navigate(Screen.ProfileScreen, { userNo });
           }
         }}
+        onPress={(hashtagNo, hashtag) => {
+          navigation.navigate(Navigator.FloorStack, {
+            screen: Screen.HashtagFloorScreen,
+            params: { hashtag, hashtagNo },
+          });
+        }}
       />
     ),
     [navigation, myUserNo],
