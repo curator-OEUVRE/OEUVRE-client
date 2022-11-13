@@ -44,11 +44,11 @@ const AddPictureScreen = () => {
         createPictures(imageUrls);
         navigation.navigate(Screen.PictureDescriptionScreen);
       } else {
+        navigation.goBack();
         if (mode === FloorMode.ADD_PICTURES) {
           clearTempPictures();
-          setFloorMode(FloorMode.EDIT);
+          setFloorMode({ mode: FloorMode.EDIT });
         }
-        navigation.goBack();
       }
     };
     pickImage();

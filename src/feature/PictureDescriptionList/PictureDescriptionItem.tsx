@@ -95,7 +95,7 @@ const PictureDescriptionItem = ({
         <Hashtag />
       </Pressable>
       {description.length > 0 && (
-        <Text style={styles.count}>{description.length}/50</Text>
+        <Text style={styles.count}>{50 - description.length}</Text>
       )}
     </View>
   </View>

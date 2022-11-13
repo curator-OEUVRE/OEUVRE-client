@@ -64,13 +64,19 @@ const FloorStack = () => (
     <Stack.Screen
       name={Screen.FloorViewerScreen}
       component={FloorViewerScreen}
+      getId={({ params }) => `${params.floorNo}`}
     />
     <Stack.Screen
       name={Screen.ImageDetailScreen}
       component={ImageDetailScreen}
+      getId={({ params }) => `${params.pictureNo}`}
     />
     <Stack.Screen name={Screen.EditFloorScreen} component={EditFloorScreen} />
-    <Stack.Screen name={Screen.GuestBookScreen} component={GuestBookScreen} />
+    <Stack.Screen
+      name={Screen.GuestBookScreen}
+      component={GuestBookScreen}
+      getId={({ params }) => `${params.floorNo}`}
+    />
     <Stack.Screen name={Navigator.ProfileStack} component={ProfileStack} />
     <Stack.Screen
       name={Screen.EditDescriptionScreen}

@@ -16,7 +16,7 @@ import {
 } from '@/apis/guestbook';
 import { Header, Spinner } from '@/components';
 import { WithKeyboardAvoidingView } from '@/components/WithKeyboardAvoidingView';
-import { Screen } from '@/constants/screens';
+import { Screen, Navigator } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import FloorDropDown from '@/feature/FloorDropdown';
 import GuestBookInput from '@/feature/GuestBookInput';
@@ -159,7 +159,10 @@ const GuestBookScreen = () => {
 
   const visitProfile = useCallback(
     (userNo: number) => {
-      navigation.navigate(Screen.ProfileScreen, { userNo });
+      navigation.navigate(Navigator.ProfileStack, {
+        screen: Screen.ProfileScreen,
+        params: { userNo },
+      });
     },
     [navigation],
   );

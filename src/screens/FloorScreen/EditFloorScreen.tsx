@@ -155,7 +155,7 @@ const EditFloorScreen = () => {
       await editFloor(params.floorNo);
       setLoading(false);
       // eslint-disable-next-line no-console
-      setFloorMode(FloorMode.VIEWER);
+      setFloorMode({ mode: FloorMode.VIEWER });
       navigation.navigate(Screen.FloorViewerScreen, {
         floorNo: params.floorNo,
       });
@@ -212,11 +212,14 @@ const EditFloorScreen = () => {
           </Pressable>
         )
       : '플로어 추가';
-  const addPictures = useCallback(() => {
-    lockAsync(OrientationLock.PORTRAIT_UP);
-    setFloorMode(FloorMode.ADD_PICTURES);
-    navigation.navigate(Screen.AddPictureScreen);
-  }, [navigation, setFloorMode]);
+  const addPictures = useCallback(
+    (index: number) => {
+      lockAsync(OrientationLock.PORTRAIT_UP);
+      setFloorMode({ mode: FloorMode.ADD_PICTURES, startIndex: index });
+      navigation.navigate(Screen.AddPictureScreen);
+    },
+    [navigation, setFloorMode],
+  );
 
   const onPressPicture = (pictureNo: number) => {
     if (mode !== FloorMode.EDIT) return;
@@ -236,7 +239,7 @@ const EditFloorScreen = () => {
           if (mode === FloorMode.CREATE) {
             await lockAsync(OrientationLock.PORTRAIT_UP);
           } else if (mode === FloorMode.EDIT) {
-            setFloorMode(FloorMode.VIEWER);
+            setFloorMode({ mode: FloorMode.VIEWER });
           }
         }}
       />

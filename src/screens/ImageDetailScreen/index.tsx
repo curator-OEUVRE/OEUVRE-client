@@ -2,7 +2,6 @@ import Sheet from '@gorhom/bottom-sheet';
 import {
   CompositeNavigationProp,
   RouteProp,
-  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -47,7 +46,7 @@ import {
   Spinner,
 } from '@/components/index';
 import { IMAGE } from '@/constants/images';
-import { Screen } from '@/constants/screens';
+import { Screen, Navigator } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
@@ -55,7 +54,7 @@ import UserProfileList from '@/feature/UserProfileList';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
 import { useCreateFloorStore } from '@/states/createFloorStore';
-import { LikeUser, PictureDetail } from '@/types/picture';
+import { LikeUser } from '@/types/picture';
 
 enum OrientationType {
   portrait,
@@ -165,14 +164,14 @@ const ImageDetailScreen = () => {
 
   const bottomSheetRef = useRef<Sheet>(null);
   const likePeoplesRef = useRef<Sheet>(null);
-  useFocusEffect(
-    useCallback(() => {
-      const lockOrientation = async () => {
-        await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
-      };
-      lockOrientation();
-    }, []),
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const lockOrientation = async () => {
+  //       await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
+  //     };
+  //     lockOrientation();
+  //   }, []),
+  // );
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -248,7 +247,10 @@ const ImageDetailScreen = () => {
   }, [floorNo, navigation]);
 
   const visitProfile = useCallback(() => {
-    navigation.navigate(Screen.ProfileScreen, { userNo });
+    navigation.navigate(Navigator.ProfileStack, {
+      screen: Screen.ProfileScreen,
+      params: { userNo },
+    });
   }, [userNo, navigation]);
 
   const toggleScrap = useCallback(async () => {

@@ -9,7 +9,7 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AlertIcon from '@/assets/icons/Alert';
@@ -21,12 +21,12 @@ import ShareIcon from '@/assets/icons/Share';
 import TextBubbleIcon from '@/assets/icons/TextBubble';
 import {
   BottomSheet,
-  Spinner,
   BottomSheetItem,
   BottomSheetItemGroup,
+  Spinner,
 } from '@/components';
 import { Header } from '@/components/Header';
-import { Screen } from '@/constants/screens';
+import { Navigator, Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
@@ -94,7 +94,6 @@ const FloorViewerScreen = () => {
       lockOrientation();
     }, []),
   );
-
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
@@ -134,7 +133,7 @@ const FloorViewerScreen = () => {
   );
 
   const onEditFloor = () => {
-    setFloorMode(FloorMode.EDIT);
+    setFloorMode({ mode: FloorMode.EDIT });
     navigation.navigate(Screen.EditFloorScreen, { floorNo });
   };
 
@@ -145,7 +144,10 @@ const FloorViewerScreen = () => {
   }, [floorNo, navigation, deleteFloor]);
 
   const visitProfile = useCallback(() => {
-    navigation.navigate(Screen.ProfileScreen, { userNo });
+    navigation.navigate(Navigator.ProfileStack, {
+      screen: Screen.ProfileScreen,
+      params: { userNo },
+    });
   }, [userNo, navigation]);
 
   const bottomSheetForEditor = [

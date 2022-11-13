@@ -44,9 +44,6 @@ export type FloorInfoFormScreenNP = CompositeNavigationProp<
 >;
 
 const styles = StyleSheet.create({
-  confirmText: {
-    color: COLOR.system.blue,
-  },
   floorIconWrap: {
     position: 'relative',
   },
@@ -155,24 +152,36 @@ const FloorInfoFormScreen = () => {
       setIsCommentAvailable(snapshot.current.isCommentAvailable);
     }
   };
+  const disabled = name.status !== FormInputStatus.Valid;
   const ConfirmButton = useCallback(
     () => (
-      <Pressable>
+      <Pressable
+        disabled={disabled}
+        onPress={() => {
+          if (mode === FloorMode.EDIT) {
+            navigation.goBack();
+          } else {
+            navigation.navigate(Screen.EditFloorScreen);
+          }
+        }}
+      >
         <Text
-          style={[TEXT_STYLE.button16M, styles.confirmText]}
-          onPress={() => navigation.goBack()}
+          style={[
+            TEXT_STYLE.button16M,
+            { color: disabled ? COLOR.mono.gray3 : COLOR.system.blue },
+          ]}
         >
           {mode === FloorMode.EDIT ? '완료' : '다음'}
         </Text>
       </Pressable>
     ),
-    [navigation, mode],
+    [navigation, mode, disabled],
   );
 
   const FloorNameLength = useCallback(
     () => (
       <Text style={[TEXT_STYLE.body14R, styles.floorNameLengthText]}>
-        {name.value.length}/{CREATE_FLOOR_CONFIG.floorName.limit[1]}
+        {CREATE_FLOOR_CONFIG.floorName.limit[1] - name.value.length}
       </Text>
     ),
     [name.value.length],
@@ -208,9 +217,7 @@ const FloorInfoFormScreen = () => {
                 setName({ status: FormInputStatus.Error, error });
               }
             }}
-            rightElement={
-              name.value.length > 0 ? <FloorNameLength /> : undefined
-            }
+            rightElement={<FloorNameLength />}
           />
           <View>
             <Text style={[styles.subtitle, TEXT_STYLE.body14B]}>
