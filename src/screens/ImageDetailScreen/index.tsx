@@ -85,9 +85,6 @@ const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
     position: 'absolute',
-    shadowOffset: { width: 0, height: 20 },
-    shadowOpacity: 0.35,
-    shadowRadius: 35,
     top: '50%',
   },
   imageBackground: {

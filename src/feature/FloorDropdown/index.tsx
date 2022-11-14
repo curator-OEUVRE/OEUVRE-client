@@ -116,6 +116,7 @@ const FloorDropDown = ({ currentIdx, floors, onPress }: FloorDropDownProps) => {
           style={styles.wrapOptions}
           startColor="#00000025"
           sides={{ bottom: true, top: false, start: false, end: false }}
+          paintInside
         >
           <ScrollView style={styles.scrollView} persistentScrollbar>
             <View onStartShouldSetResponder={() => true}>{renderFloors()}</View>

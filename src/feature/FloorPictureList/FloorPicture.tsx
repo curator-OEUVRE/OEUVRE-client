@@ -213,6 +213,7 @@ const FloorPicture = ({
               offset={[2, 2]}
               startColor="#00000030"
               endColor="#00000000"
+              paintInside
             >
               <AnimatedFastImage
                 source={{ uri: item.imageUrl }}

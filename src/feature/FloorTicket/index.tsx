@@ -98,6 +98,7 @@ const FloorTicket = ({
         offset={[2, 2]}
         startColor="#00000020"
         endColor="#00000000"
+        paintInside
         style={[
           styles.container,
           { height: height * 0.2 },
