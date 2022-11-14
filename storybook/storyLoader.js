@@ -21,6 +21,7 @@ function loadStories() {
   require('../src/feature/ProfileCard/ProfileCard.stories');
   require('../src/feature/SearchInput/SearchInput.stories');
   require('../src/feature/TermsForm/TermsForm.stories');
+  require('../src/feature/NotificationList/NotificationItem.stories');
 }
 
 const stories = [
@@ -41,6 +42,7 @@ const stories = [
   '../src/feature/ProfileCard/ProfileCard.stories',
   '../src/feature/SearchInput/SearchInput.stories',
   '../src/feature/TermsForm/TermsForm.stories',
+  '../src/feature/NotificationList/NotificationItem.stories',
 ];
 
 module.exports = {
