@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 import { Profile } from '@/components/Profile';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
-import { formatCreatedAt } from '@/services/date/format';
+import { formatDateStrToKorean } from '@/services/date/format';
 import { Notification } from '@/types/notification';
 
 interface NotificationItemProps {
@@ -29,6 +29,16 @@ const styles = StyleSheet.create({
   date: {
     color: COLOR.mono.gray5,
   },
+  new: {
+    backgroundColor: COLOR.system.red,
+    borderRadius: 6,
+    height: 12,
+    left: 1,
+    position: 'absolute',
+    top: 1,
+    width: 12,
+    zIndex: 10,
+  },
   right: {
     flexDirection: 'row',
     flex: 1,
@@ -51,12 +61,16 @@ const NotificationItem = ({
   onPressProfile,
   text,
 }: NotificationItemProps) => {
-  const { profileImageUrl, sendUserNo, createdAt } = notification;
+  const { profileImageUrl, sendUserNo, createdAt, isRead } = notification;
+  const newIcon = <View style={styles.new} />;
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => onPressProfile?.(sendUserNo)}>
-        <Profile imageUrl={profileImageUrl} size={56} />
-      </Pressable>
+      <View>
+        {!isRead && newIcon}
+        <Pressable onPress={() => onPressProfile?.(sendUserNo)}>
+          <Profile imageUrl={profileImageUrl} size={56} />
+        </Pressable>
+      </View>
       <Pressable style={styles.right} onPress={() => onPress?.(notification)}>
         <View style={styles.content}>
           <Text style={[TEXT_STYLE.body12B, styles.text]}>{text}</Text>
@@ -64,7 +78,7 @@ const NotificationItem = ({
         </View>
         <View style={styles.wrapDate}>
           <Text style={[styles.date, TEXT_STYLE.body12M]}>
-            {formatCreatedAt(createdAt)}
+            {formatDateStrToKorean(createdAt)}
           </Text>
         </View>
       </Pressable>
