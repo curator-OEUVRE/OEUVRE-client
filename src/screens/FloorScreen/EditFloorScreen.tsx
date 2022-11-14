@@ -180,7 +180,10 @@ const EditFloorScreen = () => {
     navigation,
     params,
   ]);
-  const colorByBackground = getColorByBackgroundColor(color);
+  const iconColorByBackground = getColorByBackgroundColor(color);
+  const textColorByBackground = getColorByBackgroundColor(color, {
+    dark: COLOR.mono.gray5,
+  });
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onConfirm}>
@@ -203,12 +206,12 @@ const EditFloorScreen = () => {
               style={[
                 styles.title,
                 TEXT_STYLE.body16M,
-                { color: colorByBackground },
+                { color: iconColorByBackground },
               ]}
             >
               {name.value}
             </Text>
-            <PencilIcon color={colorByBackground} />
+            <PencilIcon color={iconColorByBackground} />
           </Pressable>
         )
       : '플로어 추가';
@@ -234,7 +237,7 @@ const EditFloorScreen = () => {
         headerTitle={headerTitle}
         headerRight={ConfirmButton}
         backgroundColor="transparent"
-        iconColor={colorByBackground}
+        iconColor={iconColorByBackground}
         onGoBack={async () => {
           if (mode === FloorMode.CREATE) {
             await lockAsync(OrientationLock.PORTRAIT_UP);
@@ -250,7 +253,7 @@ const EditFloorScreen = () => {
           setPictures={setPictures}
           addPictures={addPictures}
           onPressPicture={onPressPicture}
-          color={colorByBackground}
+          color={textColorByBackground}
         />
       </View>
       {modalVisible && (

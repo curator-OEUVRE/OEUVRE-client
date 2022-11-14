@@ -151,7 +151,10 @@ const ImageDetailScreen = () => {
   const { params } = useRoute<ImageDetailScreenRP>();
   const { pictureNo } = params;
   const color = params.color || COLOR.mono.white;
-  const colorByBackground = getColorByBackgroundColor(color);
+  const iconColorByBackground = getColorByBackgroundColor(color);
+  const textColorByBackground = getColorByBackgroundColor(color, {
+    dark: COLOR.mono.gray5,
+  });
   const { pictureDetail, setPictureDetail, fetchPictureDetail } =
     useCreateFloorStore();
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
@@ -311,13 +314,13 @@ const ImageDetailScreen = () => {
         onPress={throttle(toggleLike)}
         onLongPress={showLikesPeople}
       >
-        <Favorite color={colorByBackground} />
+        <Favorite color={iconColorByBackground} />
       </Pressable>
       <Pressable onPress={throttle(toggleScrap)} style={styles.wrapButton}>
-        <Bookmark color={colorByBackground} width={26} height={26} />
+        <Bookmark color={iconColorByBackground} width={26} height={26} />
       </Pressable>
       <Pressable onPress={() => setBottomSheetIndex(isMine ? 1 : 0)}>
-        <MoreIcon color={colorByBackground} />
+        <MoreIcon color={iconColorByBackground} />
       </Pressable>
     </View>
   );
@@ -332,7 +335,7 @@ const ImageDetailScreen = () => {
         ]}
       >
         <Header
-          iconColor={colorByBackground}
+          iconColor={iconColorByBackground}
           backgroundColor="transparent"
           headerRight={headerRight}
         />
@@ -353,7 +356,7 @@ const ImageDetailScreen = () => {
           style={[
             styles.text,
             TEXT_STYLE.body14R,
-            { color: colorByBackground },
+            { color: textColorByBackground },
           ]}
         >
           {description}

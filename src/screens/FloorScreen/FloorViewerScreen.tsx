@@ -84,7 +84,10 @@ const FloorViewerScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const bottomSheetRef = useRef<Sheet>(null);
 
-  const colorByBackground = getColorByBackgroundColor(color);
+  const iconColorByBackground = getColorByBackgroundColor(color);
+  const textColorByBackground = getColorByBackgroundColor(color, {
+    dark: COLOR.mono.gray5,
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -116,10 +119,10 @@ const FloorViewerScreen = () => {
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onPressMore}>
-        <MoreIcon color={colorByBackground} />
+        <MoreIcon color={iconColorByBackground} />
       </Pressable>
     ),
-    [onPressMore, colorByBackground],
+    [onPressMore, iconColorByBackground],
   );
 
   const onPressPicture = useCallback(
@@ -200,7 +203,7 @@ const FloorViewerScreen = () => {
         navigation.navigate(Screen.GuestBookScreen, { floorNo });
       }}
     >
-      <TextBubbleIcon color={colorByBackground} />
+      <TextBubbleIcon color={iconColorByBackground} />
     </Pressable>
   );
   if (loading) return <Spinner />;
@@ -210,7 +213,7 @@ const FloorViewerScreen = () => {
         headerTitle={name.value}
         headerRight={ConfirmButton}
         backgroundColor="transparent"
-        iconColor={colorByBackground}
+        iconColor={iconColorByBackground}
         onGoBack={async () => {
           await lockAsync(OrientationLock.PORTRAIT_UP);
         }}
@@ -220,7 +223,7 @@ const FloorViewerScreen = () => {
           pictures={pictures}
           editable={false}
           onPressPicture={onPressPicture}
-          color={colorByBackground}
+          color={textColorByBackground}
         />
       </View>
       {guestBookButton}
