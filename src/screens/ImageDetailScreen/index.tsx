@@ -63,7 +63,7 @@ enum OrientationType {
 
 export interface ImageDetailScreenParams {
   pictureNo: number;
-  color: string;
+  color?: string;
 }
 
 export type ImageDetailScreenNP = CompositeNavigationProp<
@@ -152,7 +152,8 @@ const ImageDetailScreen = () => {
   const insets = useSafeAreaInsets();
 
   const { params } = useRoute<ImageDetailScreenRP>();
-  const { pictureNo, color } = params;
+  const { pictureNo } = params;
+  const color = params.color || COLOR.mono.white;
   const colorByBackground = getColorByBackgroundColor(color);
   const { pictureDetail, setPictureDetail, fetchPictureDetail } =
     useCreateFloorStore();
