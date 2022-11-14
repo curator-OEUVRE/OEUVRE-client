@@ -19,7 +19,7 @@ import { Notification } from '@/types/notification';
 
 export type NotificationScreenParams = undefined;
 export type NotificationScreenNP = CompositeNavigationProp<
-  StackNavigationProp<MainTabParamsList, Screen.NotificationScreen>,
+  StackNavigationProp<MainTabParamsList, Navigator.NotificationStack>,
   StackNavigationProp<RootStackParamsList>
 >;
 const styles = StyleSheet.create({
