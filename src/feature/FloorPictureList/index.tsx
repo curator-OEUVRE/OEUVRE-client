@@ -190,6 +190,7 @@ const FloorPictureList = ({
         windowSize={7}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.1}
+        showsHorizontalScrollIndicator={false}
       />
       {editable && (
         <View style={styles.bottom}>

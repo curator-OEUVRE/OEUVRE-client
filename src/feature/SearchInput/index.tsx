@@ -12,8 +12,8 @@ interface Props {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: COLOR.mono.gray2,
-    borderRadius: 10,
+    backgroundColor: COLOR.mono.gray1,
+    borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'center',
     paddingHorizontal: 8,

@@ -118,8 +118,8 @@ const GustBookItem = ({
             <Profile size={30} imageUrl={profileImageUrl} />
           </Pressable>
           <View style={styles.wrapComment}>
-            <Text style={[styles.comment, TEXT_STYLE.body12R]}>
-              <Text style={TEXT_STYLE.body12B}>{userId} </Text>
+            <Text style={[styles.comment, TEXT_STYLE.body14R]}>
+              <Text style={TEXT_STYLE.body14B}>{userId} </Text>
               {comment}
             </Text>
             <Text style={[styles.date, TEXT_STYLE.body12R]}>
