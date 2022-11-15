@@ -77,6 +77,7 @@ const FloorViewerScreen = () => {
     userId,
     name,
     pictures,
+    clearCreateFloorStore,
   } = useCreateFloorStore();
   const { deleteFloor } = useUserStore();
   const { floorNo } = params;
@@ -215,6 +216,7 @@ const FloorViewerScreen = () => {
         backgroundColor="transparent"
         iconColor={iconColorByBackground}
         onGoBack={async () => {
+          clearCreateFloorStore();
           await lockAsync(OrientationLock.PORTRAIT_UP);
         }}
       />

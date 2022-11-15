@@ -103,6 +103,7 @@ const initialPicture = {
   width: 0.5,
   userNo: 0,
   userId: '',
+  hashtags: [],
 };
 
 const defaultValues = {
