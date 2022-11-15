@@ -2,13 +2,16 @@
 import { loadAsync } from 'expo-font';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StorybookUIRoot from './storybook';
+import { checkUpdate } from '@/apis/notification';
 import { Routes } from '@/feature/Routes';
+import useIntervalAsync from '@/hooks/useIntervalAsync';
 import useSplash from '@/hooks/useSplash';
+import { useGlobalStore } from '@/states/globalStore';
 
 const isStorybookEnabled = process.env.STORYBOOK_ENABLED === 'true';
 
@@ -51,6 +54,20 @@ const App = () => {
     };
     initialFetch();
   }, [setIsReady]);
+
+  const { setIsUpdated } = useGlobalStore();
+
+  const fetchIsUpdated = useCallback(async () => {
+    const response = await checkUpdate();
+    if (response.isSuccess) {
+      const { result } = response.result;
+      setIsUpdated(result.isUpdated);
+    } else {
+      setIsUpdated(false);
+    }
+  }, [setIsUpdated]);
+
+  useIntervalAsync(fetchIsUpdated, 60 * 1000);
 
   if (!isReady) {
     return null;

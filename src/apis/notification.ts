@@ -1,6 +1,7 @@
 import { getAsync } from './common';
 import { useAuthStore } from '@/states/authStore';
 import { GetNotificationResponseDto } from '@/types/notification';
+import { CheckUpdateResponseDto } from '@/types/picture';
 
 const DEFAULT_SIZE = 10;
 
@@ -19,6 +20,18 @@ export const getNotification = async ({
   });
   const response = await getAsync<GetNotificationResponseDto, undefined>(
     `/pictures?${params}`,
+    {
+      headers: {
+        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
+      },
+    },
+  );
+  return response;
+};
+
+export const checkUpdate = async () => {
+  const response = await getAsync<CheckUpdateResponseDto, undefined>(
+    `/pictures/update-check`,
     {
       headers: {
         'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
