@@ -151,7 +151,7 @@ const FloorPicture = ({
           style={[styles.line, animStyle, { height: BASE_SIZE * 0.5 }]}
         >
           {isLineActive && (
-            <Pressable onPress={() => addPictures?.(index || -1)}>
+            <Pressable onPress={() => addPictures?.(index ?? -1)}>
               <Animated.View entering={FadeIn} exiting={FadeOut}>
                 <AddCircleIcon
                   width={LINE_BUTTON_SIZE}
