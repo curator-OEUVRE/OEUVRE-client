@@ -200,9 +200,6 @@ const ImageDetailScreen = () => {
   const imageTranslationY = useSharedValue(0);
   const initialFocalX = useSharedValue(0);
   const initialFocalY = useSharedValue(0);
-  const prevImageScale = useSharedValue(1);
-  const prevImageTranslationX = useSharedValue(0);
-  const prevImageTranslationY = useSharedValue(0);
 
   const isLikeAnimation = useSharedValue(true);
   const onAnimation = useSharedValue(false);
@@ -459,9 +456,9 @@ const ImageDetailScreen = () => {
 
   const mainImageStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: prevImageTranslationX.value + imageTranslationX.value },
-      { translateY: prevImageTranslationY.value + imageTranslationY.value },
-      { scale: prevImageScale.value * imageScale.value },
+      { translateX: imageTranslationX.value },
+      { translateY: imageTranslationY.value },
+      { scale: imageScale.value },
     ],
   }));
 
@@ -476,14 +473,10 @@ const ImageDetailScreen = () => {
       imageTranslationX.value = e.focalX - initialFocalX.value;
       imageTranslationY.value = e.focalY - initialFocalY.value;
     })
-    .onEnd((e) => {
+    .onEnd(() => {
       imageScale.value = 1;
       imageTranslationX.value = 0;
       imageTranslationY.value = 0;
-
-      prevImageScale.value *= e.scale;
-      prevImageTranslationX.value += e.focalX - initialFocalX.value;
-      prevImageTranslationY.value += e.focalY - initialFocalY.value;
     });
 
   if (loading) return <Spinner />;
