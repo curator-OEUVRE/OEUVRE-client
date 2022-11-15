@@ -89,7 +89,7 @@ const FloorPictureList = ({
     return pictures[activeIndexAnim.current.value].imageUrl;
   });
 
-  const [activeLine, setActiveLine] = useState(0);
+  const [activeLine, setActiveLine] = useState(-1);
 
   const onEnter = useDerivedValue(() => {
     const cx = absoluteX.current?.value;
