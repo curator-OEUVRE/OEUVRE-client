@@ -1,5 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { Screen } from '@/constants/screens';
+import FollowListScreen, {
+  FollowListScreenParams,
+} from '@/screens/FollowListScreen';
 import NotificationScreen, {
   type NotificationScreenParams,
 } from '@/screens/NotificationScreen';
@@ -10,6 +13,7 @@ import ProfileScreen, {
 export type NotificationStackParamsList = {
   [Screen.NotificationScreen]: NotificationScreenParams;
   [Screen.ProfileScreen]: ProfileScreenParams;
+  [Screen.FollowListScreen]: FollowListScreenParams;
 };
 
 const Stack = createStackNavigator<NotificationStackParamsList>();
@@ -30,6 +34,7 @@ const NotificationStack = () => (
       component={ProfileScreen}
       getId={({ params }) => `${params.userNo}`}
     />
+    <Stack.Screen name={Screen.FollowListScreen} component={FollowListScreen} />
   </Stack.Navigator>
 );
 

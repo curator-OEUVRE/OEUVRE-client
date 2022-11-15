@@ -61,6 +61,7 @@ const BasicFloorList = ({ userNo }: BasicFloorListProps) => {
 
 const ProfileScreen = () => {
   const route = useRoute<ProfileScreenRP>();
+  const navigation = useNavigation<ProfileScreenNP>();
   const { fetchWithToken } = useAuth();
 
   const [profile, setProfile] = useState<OtherUserProfile>({
@@ -112,6 +113,12 @@ const ProfileScreen = () => {
       isFollower={profile.isFollower}
       isFollowing={profile.isFollowing}
       onFollowPress={toggleFollowUser}
+      onFollowAreaPress={() => {
+        navigation.navigate(Screen.FollowListScreen, {
+          userNo: route.params.userNo,
+          exhibitionName: profile.exhibitionName,
+        });
+      }}
     />
   );
 };

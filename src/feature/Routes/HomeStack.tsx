@@ -1,5 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { Screen } from '@/constants/screens';
+import FollowListScreen, {
+  FollowListScreenParams,
+} from '@/screens/FollowListScreen';
 import HomeScreen, { type HomeScreenParams } from '@/screens/HomeScreen';
 import ProfileScreen, {
   type ProfileScreenParams,
@@ -8,6 +11,7 @@ import ProfileScreen, {
 export type HomeStackParamsList = {
   [Screen.HomeScreen]: HomeScreenParams;
   [Screen.ProfileScreen]: ProfileScreenParams;
+  [Screen.FollowListScreen]: FollowListScreenParams;
 };
 
 const Stack = createStackNavigator<HomeStackParamsList>();
@@ -25,6 +29,7 @@ const HomeStack = () => (
       component={ProfileScreen}
       getId={({ params }) => `${params.userNo}`}
     />
+    <Stack.Screen name={Screen.FollowListScreen} component={FollowListScreen} />
   </Stack.Navigator>
 );
 

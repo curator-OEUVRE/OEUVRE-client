@@ -100,6 +100,7 @@ interface Props {
   onSettingPress?: () => void;
   onFollowPress?: (isFollowing: boolean) => void;
   onEditPress?: () => void;
+  onFollowAreaPress?: () => void;
 }
 
 const ProfileTemplate = ({
@@ -112,6 +113,7 @@ const ProfileTemplate = ({
   onSettingPress,
   onFollowPress,
   onEditPress,
+  onFollowAreaPress,
 }: Props) => {
   const hasBackgroundImage = !!profile.backgroundImageUrl;
   const isMyProfile = !!renderCollection;
@@ -204,7 +206,10 @@ const ProfileTemplate = ({
         onChange={setBottomSheetIndex}
         snapPoints={[260]}
       >
-        <View style={styles.followInfoContainer}>
+        <Pressable
+          style={styles.followInfoContainer}
+          onPress={onFollowAreaPress}
+        >
           <View style={styles.followInfo}>
             <Text style={TEXT_STYLE.button16M}>팔로잉</Text>
             <Text style={TEXT_STYLE.title20M}>{profile.followingCount}</Text>
@@ -213,7 +218,7 @@ const ProfileTemplate = ({
             <Text style={TEXT_STYLE.button16M}>팔로워</Text>
             <Text style={TEXT_STYLE.title20M}>{profile.followerCount}</Text>
           </View>
-        </View>
+        </Pressable>
         <BottomSheetItemGroup>
           <BottomSheetItem
             label={isFollowing ? '팔로우 취소하기' : '팔로우하기'}
