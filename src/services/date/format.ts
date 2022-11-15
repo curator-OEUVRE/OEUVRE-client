@@ -15,6 +15,22 @@ export const formatDate = (date: Date) => {
   }`;
 };
 
+export const formatDateStrToKorean = (dateStr: string) => {
+  const date = moment(dateStr);
+  const now = moment();
+  const diff = now.diff(date);
+  if (diff >= DAY) {
+    return `${date.month() + 1}월 ${date.date()}일`;
+  }
+  if (diff >= HOUR) {
+    return `${Math.floor(diff / HOUR)}시간`;
+  }
+  if (diff >= MIN) {
+    return `${Math.floor(diff / MIN)}분`;
+  }
+  return '방금';
+};
+
 export const formatCreatedAt = (dateStr: string) => {
   const date = moment(dateStr);
   const now = moment();

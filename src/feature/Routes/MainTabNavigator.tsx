@@ -11,6 +11,9 @@ import ExplorationStack, {
   type ExplorationStackParamsList,
 } from './ExplorationStack';
 import HomeStack, { type HomeStackParamsList } from './HomeStack';
+import NotificationStack, {
+  type NotificationStackParamsList,
+} from './NotificationStack';
 import ProfileStack, { type ProfileStackParamsList } from './ProfileStack';
 import GroupIcon from '@/assets/icons/Group';
 import HomeIcon from '@/assets/icons/Home';
@@ -23,9 +26,6 @@ import { BOTTOM_TAB_HEIGHT } from '@/constants/styles/sizes';
 import GroupFeedScreen, {
   GroupFeedScreenParams,
 } from '@/screens/GroupFeedScreen';
-import NotificationScreen, {
-  NotificationScreenParams,
-} from '@/screens/NotificationScreen';
 
 interface TabIconProps {
   isFocused?: boolean;
@@ -68,7 +68,7 @@ export type MainTabParamsList = {
   [Navigator.HomeStack]: NavigatorScreenParams<HomeStackParamsList>;
   [Navigator.ExplorationStack]: NavigatorScreenParams<ExplorationStackParamsList>;
   // [Screen.GroupFeedScreen]: GroupFeedScreenParams;
-  // [Screen.NotificationScreen]: NotificationScreenParams;
+  [Navigator.NotificationStack]: NavigatorScreenParams<NotificationStackParamsList>;
   [Navigator.ProfileStack]: NavigatorScreenParams<ProfileStackParamsList>;
 };
 
@@ -91,8 +91,8 @@ const screenOptions: ScreenOptions = ({ route }) => ({
         return <TabIcon isFocused={props.focused} icon={SearchIcon} />;
       // case Screen.GroupFeedScreen:
       //   return <TabIcon isFocused={props.focused} icon={GroupIcon} />;
-      // case Screen.NotificationScreen:
-      //   return <TabIcon isFocused={props.focused} icon={NotificationIcon} />;
+      case Navigator.NotificationStack:
+        return <TabIcon isFocused={props.focused} icon={NotificationIcon} />;
       case Navigator.ProfileStack:
         return <TabIcon isFocused={props.focused} icon={PhotoIcon} />;
       default:
@@ -119,10 +119,10 @@ const MainTabNavigator = () => (
       component={ExplorationStack}
     />
     {/* <MainTab.Screen name={Screen.GroupFeedScreen} component={GroupFeedScreen} /> */}
-    {/* <MainTab.Screen
-      name={Screen.NotificationScreen}
-      component={NotificationScreen}
-    /> */}
+    <MainTab.Screen
+      name={Navigator.NotificationStack}
+      component={NotificationStack}
+    />
     <MainTab.Screen name={Navigator.ProfileStack} component={ProfileStack} />
   </MainTab.Navigator>
 );

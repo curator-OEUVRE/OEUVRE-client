@@ -5,6 +5,7 @@ export enum Navigator {
   ProfileStack = 'ProfileStack',
   HomeStack = 'HomeStack',
   ExplorationStack = 'ExplorationStack',
+  NotificationStack = 'NotificationStack',
 }
 
 export enum Screen {
