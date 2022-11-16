@@ -15,6 +15,7 @@ import NotificationList from '@/feature/NotificationList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import useAuth from '@/hooks/useAuth';
+import { useGlobalStore } from '@/states/globalStore';
 import { Notification } from '@/types/notification';
 
 export type NotificationScreenParams = undefined;
@@ -34,6 +35,7 @@ const NotificationScreen = () => {
   const [page, setPage] = useState<number>(0);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const { fetchWithToken } = useAuth();
+  const { setIsUpdated } = useGlobalStore();
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
@@ -42,13 +44,14 @@ const NotificationScreen = () => {
           const { result } = response.result;
           setData(result.contents);
           setIsLastPage(result.isLastPage);
+          setIsUpdated(false);
         } else {
           // eslint-disable-next-line no-console
           console.log(response.result.errorMessage);
         }
       };
       fetchData();
-    }, []),
+    }, [setIsUpdated]),
   );
 
   const fetchMore = useCallback(async () => {
