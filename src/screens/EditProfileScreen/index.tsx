@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 
 const pickImage = async (callback: (url: string) => void) => {
   const [result, canUpload] = await getSingleImageFromLibrary({
-    mediaTypes: MediaTypeOptions.All,
+    mediaTypes: MediaTypeOptions.Images,
     allowsEditing: true,
     aspect: [4, 3],
   });

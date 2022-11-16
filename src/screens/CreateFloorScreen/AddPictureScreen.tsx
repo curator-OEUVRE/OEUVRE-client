@@ -25,7 +25,7 @@ const AddPictureScreen = () => {
   useFocusEffect(() => {
     const pickImage = async () => {
       const [result, canUpload] = await getImagesFromLibrary({
-        mediaTypes: MediaTypeOptions.All,
+        mediaTypes: MediaTypeOptions.Images,
       });
 
       if (result && canUpload) {
