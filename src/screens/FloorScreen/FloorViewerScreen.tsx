@@ -79,6 +79,7 @@ const FloorViewerScreen = () => {
     pictures,
     clearCreateFloorStore,
   } = useCreateFloorStore();
+
   const { deleteFloor } = useUserStore();
   const { floorNo } = params;
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
@@ -161,6 +162,7 @@ const FloorViewerScreen = () => {
   const onDeleteFloor = useCallback(async () => {
     bottomSheetRef.current?.close();
     await deleteFloor(floorNo);
+    await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
   const visitProfile = useCallback(() => {
@@ -181,7 +183,16 @@ const FloorViewerScreen = () => {
         label="플로어 삭제하기"
         icon={<DeleteIcon />}
         color={COLOR.system.red}
-        onPress={onDeleteFloor}
+        onPress={() => {
+          Alert.alert(`플로어를\n삭제하시겠어요?`, undefined, [
+            {
+              text: '플로어 삭제하기',
+              onPress: onDeleteFloor,
+              style: 'destructive',
+            },
+            { text: '취소하기', style: 'cancel' },
+          ]);
+        }}
       />
     </BottomSheetItemGroup>,
   ];

@@ -394,7 +394,16 @@ const ImageDetailScreen = () => {
             label="사진 삭제하기"
             icon={<DeleteIcon />}
             color={COLOR.system.red}
-            onPress={deletePicture}
+            onPress={() => {
+              Alert.alert(`사진을\n삭제하시겠어요?`, undefined, [
+                {
+                  text: '사진 삭제하기',
+                  onPress: deletePicture,
+                  style: 'destructive',
+                },
+                { text: '취소하기', style: 'cancel' },
+              ]);
+            }}
           />
         </BottomSheetItemGroup>
       </BottomSheet>
