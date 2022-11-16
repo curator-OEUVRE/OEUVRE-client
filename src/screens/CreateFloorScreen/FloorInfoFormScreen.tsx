@@ -3,8 +3,9 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import {
+  BackHandler,
   Image,
   Keyboard,
   Pressable,
@@ -143,15 +144,28 @@ const FloorInfoFormScreen = () => {
 
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
-  const onGoBack = () => {
+  const onGoBack = useCallback(() => {
     if (mode === FloorMode.EDIT) {
       setName(snapshot.current.name);
       setColor(snapshot.current.color);
       setIsPublic(snapshot.current.isPublic);
       setIsCommentAvailable(snapshot.current.isCommentAvailable);
-      setIsCommentAvailable(snapshot.current.isCommentAvailable);
     }
-  };
+  }, [mode, setColor, setIsCommentAvailable, setIsPublic, setName]);
+
+  useEffect(() => {
+    const backAction = () => {
+      onGoBack();
+      navigation.goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, [onGoBack, navigation]);
+
   const disabled = name.status !== FormInputStatus.Valid;
   const ConfirmButton = useCallback(
     () => (

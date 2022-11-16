@@ -9,8 +9,8 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useRef, useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert, Pressable, StyleSheet, View, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AlertIcon from '@/assets/icons/Alert';
 import DeleteIcon from '@/assets/icons/Delete';
@@ -84,11 +84,28 @@ const FloorViewerScreen = () => {
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
   const bottomSheetRef = useRef<Sheet>(null);
-
   const iconColorByBackground = getColorByBackgroundColor(color);
   const textColorByBackground = getColorByBackgroundColor(color, {
     dark: COLOR.mono.gray5,
   });
+
+  const onGoBack = useCallback(async () => {
+    clearCreateFloorStore();
+    await lockAsync(OrientationLock.PORTRAIT_UP);
+  }, [clearCreateFloorStore]);
+
+  useEffect(() => {
+    const backAction = () => {
+      onGoBack();
+      navigation.goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, [onGoBack, navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -207,6 +224,7 @@ const FloorViewerScreen = () => {
       <TextBubbleIcon color={iconColorByBackground} />
     </Pressable>
   );
+
   if (loading) return <Spinner />;
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
@@ -215,10 +233,7 @@ const FloorViewerScreen = () => {
         headerRight={ConfirmButton}
         backgroundColor="transparent"
         iconColor={iconColorByBackground}
-        onGoBack={async () => {
-          clearCreateFloorStore();
-          await lockAsync(OrientationLock.PORTRAIT_UP);
-        }}
+        onGoBack={onGoBack}
       />
       <View style={styles.wrapList}>
         <FloorPictureList

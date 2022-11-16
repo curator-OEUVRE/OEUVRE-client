@@ -10,7 +10,15 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { BlurView } from 'expo-blur';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useState } from 'react';
-import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  BackHandler,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
@@ -127,6 +135,27 @@ const EditFloorScreen = () => {
     setFloorMode,
   } = useCreateFloorStore();
 
+  const onGoBack = useCallback(async () => {
+    if (mode === FloorMode.CREATE) {
+      await lockAsync(OrientationLock.PORTRAIT_UP);
+    } else if (mode === FloorMode.EDIT) {
+      setFloorMode({ mode: FloorMode.VIEWER });
+    }
+  }, [mode, setFloorMode]);
+
+  useEffect(() => {
+    const backAction = () => {
+      onGoBack();
+      navigation.goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, [onGoBack, navigation]);
+
   const onConfirm = useCallback(async () => {
     const newImages = pictures.filter((picture) => picture.pictureNo === 0);
     const images = newImages.map((picture) => picture.imageUrl);
@@ -231,6 +260,7 @@ const EditFloorScreen = () => {
     await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
   };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
@@ -238,13 +268,7 @@ const EditFloorScreen = () => {
         headerRight={ConfirmButton}
         backgroundColor="transparent"
         iconColor={iconColorByBackground}
-        onGoBack={async () => {
-          if (mode === FloorMode.CREATE) {
-            await lockAsync(OrientationLock.PORTRAIT_UP);
-          } else if (mode === FloorMode.EDIT) {
-            setFloorMode({ mode: FloorMode.VIEWER });
-          }
-        }}
+        onGoBack={onGoBack}
       />
       <View style={styles.wrapList}>
         <FloorPictureList
