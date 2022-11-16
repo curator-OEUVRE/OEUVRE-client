@@ -7,6 +7,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   getComments,
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
 
 const GuestBookScreen = () => {
   const navigation = useNavigation<GuestBookScreenNP>();
+  const flatListRef = useRef<FlatList>(null);
   const isLastPage = useRef<boolean>(true);
   const { params } = useRoute<GuestBookScreenRP>();
   const [page, setPage] = useState<number>(0);
@@ -121,6 +123,7 @@ const GuestBookScreen = () => {
         setcomments((prev) => [{ ...result, isMine: true }, ...prev]);
       }
       setCommentsLoading(false);
+      flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     },
     [floorNo],
   );
@@ -184,6 +187,7 @@ const GuestBookScreen = () => {
       <WithKeyboardAvoidingView>
         <View style={styles.content}>
           <GuestBookList
+            ref={flatListRef}
             data={comments}
             onDelete={onDelete}
             onReport={onReport}

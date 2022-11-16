@@ -29,7 +29,6 @@ const GoogleLogin = ({ onSuccess }: Props) => {
       if (isSignedIn) await GoogleSignin.signOut();
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo);
       setUser(user);
       if (userInfo.idToken) onSuccess?.(userInfo.idToken);
     } catch (error: any) {
