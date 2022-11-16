@@ -50,6 +50,7 @@ interface CreateFloorStore {
   userNo: number;
   floorNo?: number;
   startIndex: number;
+  hasNewComment?: boolean;
   setFloorMode: (params: SetFloorModeParams) => void;
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],

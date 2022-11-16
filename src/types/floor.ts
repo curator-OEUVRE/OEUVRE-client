@@ -10,6 +10,7 @@ export interface FloorInfo {
   texture: number;
   userId?: string;
   userNo?: number;
+  hasNewComment?: boolean;
 }
 
 export interface CreateFloorResponse {

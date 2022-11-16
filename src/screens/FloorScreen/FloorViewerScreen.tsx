@@ -40,6 +40,16 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.mono.white,
     flex: 1,
   },
+  new: {
+    backgroundColor: COLOR.system.red,
+    borderRadius: 6,
+    height: 7,
+    position: 'absolute',
+    right: 1,
+    top: 1,
+    width: 7,
+    zIndex: 10,
+  },
   textBubble: {
     bottom: '7%',
     position: 'absolute',
@@ -78,6 +88,7 @@ const FloorViewerScreen = () => {
     name,
     pictures,
     clearCreateFloorStore,
+    hasNewComment,
   } = useCreateFloorStore();
 
   const { deleteFloor } = useUserStore();
@@ -223,6 +234,7 @@ const FloorViewerScreen = () => {
       {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
     </BottomSheet>
   );
+  const newIcon = <View style={styles.new} />;
 
   const guestBookButton = (
     <Pressable
@@ -232,6 +244,7 @@ const FloorViewerScreen = () => {
         navigation.navigate(Screen.GuestBookScreen, { floorNo });
       }}
     >
+      {hasNewComment && newIcon}
       <TextBubbleIcon color={iconColorByBackground} />
     </Pressable>
   );
