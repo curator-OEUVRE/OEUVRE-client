@@ -95,7 +95,7 @@ const NotificationScreen = () => {
 
   const onPressProfile = useCallback(
     (userNo: number) => {
-      navigation.navigate(Navigator.ProfileStack, {
+      navigation.navigate(Navigator.NotificationStack, {
         screen: Screen.ProfileScreen,
         params: { userNo },
       });

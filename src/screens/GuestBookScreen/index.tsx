@@ -61,6 +61,7 @@ const GuestBookScreen = () => {
   const [otherFloors, setOtherFloors] = useState<OtherFloor[]>([]);
   const [otherFloorsLoading, setOtherFloorsLoading] = useState<boolean>(false);
   const { floorNo } = params;
+  const { userNo: myUserNo } = useUserStore();
   const { profileImageUrl } = useUserStore();
   useEffect(() => {
     const fetchCommentsData = async () => {
@@ -159,12 +160,18 @@ const GuestBookScreen = () => {
 
   const visitProfile = useCallback(
     (userNo: number) => {
-      navigation.navigate(Navigator.ProfileStack, {
-        screen: Screen.ProfileScreen,
-        params: { userNo },
-      });
+      if (myUserNo === userNo) {
+        navigation.navigate(Navigator.ProfileStack, {
+          screen: Screen.MyProfileScreen,
+        });
+      } else {
+        navigation.navigate(Navigator.ProfileStack, {
+          screen: Screen.ProfileScreen,
+          params: { userNo },
+        });
+      }
     },
-    [navigation],
+    [navigation, myUserNo],
   );
 
   if (otherFloorsLoading) {
