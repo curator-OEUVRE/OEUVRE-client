@@ -128,9 +128,6 @@ const styles = StyleSheet.create({
     height: 120,
     paddingTop: 17,
   },
-  wrapHeaderLandscape: {
-    marginTop: 10,
-  },
   wrapHeaderPortrait: {
     marginBottom: 26,
   },
@@ -328,9 +325,7 @@ const ImageDetailScreen = () => {
     isEditMode && (
       <View
         style={[
-          orientation === OrientationType.landscape
-            ? styles.wrapHeaderLandscape
-            : styles.wrapHeaderPortrait,
+          orientation === OrientationType.portrait && styles.wrapHeaderPortrait,
           { paddingTop: insets.top },
         ]}
       >
