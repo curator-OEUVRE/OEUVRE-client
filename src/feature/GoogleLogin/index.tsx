@@ -25,6 +25,8 @@ const GoogleLogin = ({ onSuccess }: Props) => {
 
   const signIn = async () => {
     try {
+      const isSignedIn = await GoogleSignin.isSignedIn();
+      if (isSignedIn) await GoogleSignin.signOut();
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
