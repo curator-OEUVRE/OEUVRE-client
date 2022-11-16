@@ -57,3 +57,4 @@ export type GetLikeUsersResponseDto = ResponseDto<LikeUser[]>;
 export type DeletePictureResponseDto = ResponseDto<string>;
 export type GetPicturesByHashtagResponseDto =
   ResponseDto<GetPicturesByHashtagResponse>;
+export type CheckUpdateResponseDto = ResponseDto<{ isUpdated: boolean }>;

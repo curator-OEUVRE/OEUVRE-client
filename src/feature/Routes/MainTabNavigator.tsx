@@ -17,6 +17,7 @@ import NotificationStack, {
 import ProfileStack, { type ProfileStackParamsList } from './ProfileStack';
 import GroupIcon from '@/assets/icons/Group';
 import HomeIcon from '@/assets/icons/Home';
+import NewNotificationIcon from '@/assets/icons/NewNotification';
 import NotificationIcon from '@/assets/icons/Notification';
 import PhotoIcon from '@/assets/icons/Photo';
 import SearchIcon from '@/assets/icons/Search';
@@ -26,6 +27,7 @@ import { BOTTOM_TAB_HEIGHT } from '@/constants/styles/sizes';
 import GroupFeedScreen, {
   GroupFeedScreenParams,
 } from '@/screens/GroupFeedScreen';
+import { useGlobalStore } from '@/states/globalStore';
 
 interface TabIconProps {
   isFocused?: boolean;
@@ -49,6 +51,20 @@ const TabIcon = ({ isFocused, icon }: TabIconProps) => (
     })}
   </View>
 );
+
+const NotificationTabIcon = ({ isFocused }: { isFocused: boolean }) => {
+  const { isUpdated } = useGlobalStore();
+  const icon = isUpdated ? NewNotificationIcon : NotificationIcon;
+  return (
+    <View style={tabIconStyles.container}>
+      {icon({
+        color: isFocused ? COLOR.mono.black : COLOR.mono.gray3,
+        width: 30,
+        height: 30,
+      })}
+    </View>
+  );
+};
 
 const tabBarStyles = StyleSheet.create({
   container: {
@@ -92,7 +108,7 @@ const screenOptions: ScreenOptions = ({ route }) => ({
       // case Screen.GroupFeedScreen:
       //   return <TabIcon isFocused={props.focused} icon={GroupIcon} />;
       case Navigator.NotificationStack:
-        return <TabIcon isFocused={props.focused} icon={NotificationIcon} />;
+        return <NotificationTabIcon isFocused={props.focused} />;
       case Navigator.ProfileStack:
         return <TabIcon isFocused={props.focused} icon={PhotoIcon} />;
       default:
