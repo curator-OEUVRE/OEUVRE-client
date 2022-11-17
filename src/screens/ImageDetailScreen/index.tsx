@@ -27,6 +27,7 @@ import Animated, {
   useSharedValue,
   withDelay,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as PictureAPI from '@/apis/picture';
@@ -299,7 +300,7 @@ const ImageDetailScreen = () => {
     windowWidth >= windowHeight
       ? OrientationType.landscape
       : OrientationType.portrait;
-  const SIZE = 84;
+  const SIZE = 150;
   const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
   const Bookmark = isScraped ? BookmarkFilledIcon : BookmarkIcon;
 
@@ -474,9 +475,9 @@ const ImageDetailScreen = () => {
       imageTranslationY.value = e.focalY - initialFocalY.value;
     })
     .onEnd(() => {
-      imageScale.value = 1;
-      imageTranslationX.value = 0;
-      imageTranslationY.value = 0;
+      imageScale.value = withTiming(1);
+      imageTranslationX.value = withTiming(0);
+      imageTranslationY.value = withTiming(0);
     });
 
   if (loading) return <Spinner />;
