@@ -2,6 +2,7 @@
 import { loadAsync } from 'expo-font';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
+import * as Updates from 'expo-updates';
 import { useCallback, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -42,6 +43,16 @@ const App = () => {
       const start = new Date().getTime();
       await loadFonts();
       await lockAsync(OrientationLock.DEFAULT);
+      try {
+        const updateCheckResult = await Updates.checkForUpdateAsync();
+        if (updateCheckResult.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+      }
       const end = new Date().getTime();
 
       if (end - start < SPLASH_TIME) {
