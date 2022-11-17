@@ -6,11 +6,12 @@ import {
   useWindowDimensions,
   type ListRenderItemInfo,
   FlatList,
+  View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import type { PictureByHashtag, HashtagInfo } from '@/apis/hashtag';
 import { Profile } from '@/components/Profile';
-import { TEXT_STYLE } from '@/constants/styles';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 interface PictureListItemProps extends PictureByHashtag {
   onPress?: (pictureNo: number) => void;
@@ -26,6 +27,10 @@ const styles = StyleSheet.create({
   },
   hashtag: {
     marginBottom: 16,
+    marginLeft: 2,
+  },
+  hashtagContainer: {
+    flexDirection: 'row',
     marginLeft: 20,
   },
   pictureListItemContainer: {
@@ -38,6 +43,9 @@ const styles = StyleSheet.create({
   },
   profileText: {
     marginLeft: 4,
+  },
+  sharp: {
+    color: COLOR.mono.gray3,
   },
 });
 
@@ -74,8 +82,8 @@ const PictureListItem = ({
         }}
         style={styles.profileArea}
       >
-        <Profile imageUrl={profileImageUrl} size={20} />
-        <Text style={[TEXT_STYLE.body12M, styles.profileText]}>{id}</Text>
+        <Profile imageUrl={profileImageUrl} size={18} />
+        <Text style={[TEXT_STYLE.body12R, styles.profileText]}>{id}</Text>
       </Pressable>
     </Pressable>
   );
@@ -115,7 +123,13 @@ const HashtagListItem = ({
       }}
       style={styles.container}
     >
-      <Text style={[TEXT_STYLE.button16M, styles.hashtag]}>{hashtag}</Text>
+      <View style={styles.hashtagContainer}>
+        <Text style={[TEXT_STYLE.button16M, styles.sharp]}>#</Text>
+        <Text style={[TEXT_STYLE.button16M, styles.hashtag]}>
+          {hashtag[0] === '#' ? hashtag.slice(1) : hashtag}
+        </Text>
+      </View>
+
       <FlatList
         data={pictures}
         renderItem={renderItem}
@@ -125,6 +139,7 @@ const HashtagListItem = ({
         windowSize={5}
         horizontal
         contentContainerStyle={styles.contentContainer}
+        showsHorizontalScrollIndicator={false}
       />
     </Pressable>
   );

@@ -17,7 +17,11 @@ import {
   View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { TapGestureHandler } from 'react-native-gesture-handler';
+import {
+  Gesture,
+  TapGestureHandler,
+  GestureDetector,
+} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -190,6 +194,13 @@ const ImageDetailScreen = () => {
     userNo,
   } = pictureDetail;
   const scale = useSharedValue(0);
+
+  const imageScale = useSharedValue(1);
+  const imageTranslationX = useSharedValue(0);
+  const imageTranslationY = useSharedValue(0);
+  const initialFocalX = useSharedValue(0);
+  const initialFocalY = useSharedValue(0);
+
   const isLikeAnimation = useSharedValue(true);
   const onAnimation = useSharedValue(false);
   const onSingleTap = useCallback(() => {
@@ -443,6 +454,31 @@ const ImageDetailScreen = () => {
   const renderBottomSheet = () =>
     isMine ? bottomSheetForEditor : bottomSheetForVisiter;
 
+  const mainImageStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: imageTranslationX.value },
+      { translateY: imageTranslationY.value },
+      { scale: imageScale.value },
+    ],
+  }));
+
+  const pinchGesture = Gesture.Pinch()
+    .onBegin((e) => {
+      imageScale.value = e.scale;
+      initialFocalX.value = e.focalX;
+      initialFocalY.value = e.focalY;
+    })
+    .onUpdate((e) => {
+      imageScale.value = e.scale;
+      imageTranslationX.value = e.focalX - initialFocalX.value;
+      imageTranslationY.value = e.focalY - initialFocalY.value;
+    })
+    .onEnd(() => {
+      imageScale.value = 1;
+      imageTranslationX.value = 0;
+      imageTranslationY.value = 0;
+    });
+
   if (loading) return <Spinner />;
 
   const renderLikeUsersSheet = () => (
@@ -463,49 +499,53 @@ const ImageDetailScreen = () => {
   );
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          paddingLeft: insets.left,
-          paddingRight: insets.right,
-          backgroundColor: color,
-        },
-      ]}
-    >
-      {renderHeader()}
-      <TapGestureHandler waitFor={doubleTapRef} onActivated={onSingleTap}>
-        <TapGestureHandler
-          maxDelayMs={250}
-          ref={doubleTapRef}
-          numberOfTaps={2}
-          onActivated={toggleLike}
-        >
-          <Animated.View style={styles.wrapImage}>
-            <FastImage
-              source={{ uri: imageUrl }}
-              style={[styles.imageBackground, isEditMode && styles.shadow]}
-              resizeMode="contain"
-            />
-          </Animated.View>
-        </TapGestureHandler>
-      </TapGestureHandler>
-      {renderFooter()}
-      {renderBottomSheet()}
-      {renderLikeUsersSheet()}
-      <AnimatedImage
-        source={isLikeAnimation.value ? IMAGE.heart : IMAGE.bookmark}
+    <GestureDetector gesture={pinchGesture}>
+      <View
         style={[
-          styles.image,
-          imageStyle,
+          styles.container,
           {
-            height: SIZE,
-            width: SIZE,
-            marginTop: (SIZE / 2) * -1,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+            backgroundColor: color,
           },
         ]}
-      />
-    </View>
+      >
+        {renderHeader()}
+
+        <TapGestureHandler waitFor={doubleTapRef} onActivated={onSingleTap}>
+          <TapGestureHandler
+            maxDelayMs={250}
+            ref={doubleTapRef}
+            numberOfTaps={2}
+            onActivated={toggleLike}
+          >
+            <Animated.View style={[styles.wrapImage, mainImageStyle]}>
+              <FastImage
+                source={{ uri: imageUrl }}
+                style={[styles.imageBackground, isEditMode && styles.shadow]}
+                resizeMode="contain"
+              />
+            </Animated.View>
+          </TapGestureHandler>
+        </TapGestureHandler>
+
+        {renderFooter()}
+        {renderBottomSheet()}
+        {renderLikeUsersSheet()}
+        <AnimatedImage
+          source={isLikeAnimation.value ? IMAGE.heart : IMAGE.bookmark}
+          style={[
+            styles.image,
+            imageStyle,
+            {
+              height: SIZE,
+              width: SIZE,
+              marginTop: (SIZE / 2) * -1,
+            },
+          ]}
+        />
+      </View>
+    </GestureDetector>
   );
 };
 

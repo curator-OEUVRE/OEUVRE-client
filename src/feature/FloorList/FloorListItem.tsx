@@ -98,6 +98,7 @@ const FloorListItem = ({ item, onPress, drag, editable }: Props) => (
           maxToRenderPerBatch={5}
           initialNumToRender={5}
           windowSize={5}
+          showsHorizontalScrollIndicator={false}
         />
       </View>
     </Pressable>

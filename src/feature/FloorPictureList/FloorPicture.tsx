@@ -99,13 +99,6 @@ const FloorPicture = ({
 
   const index = getIndex();
   const isLineActive = useMemo(() => activeLine === index, [activeLine, index]);
-  const [, setFlag] = useState(false);
-
-  // 순서가 바뀌면 바뀐 컴포넌트만 리렌더링이 되므로,
-  // 구분선을 제대로 렌더링하기 위해 한번 강제로 리렌더링을 트리거해야 함
-  useDerivedValue(() => {
-    runOnJS(setFlag)(isDragging.value);
-  });
 
   const animStyle = useAnimatedStyle(() => ({
     width: withSpring(isDragging.value ? 0 : 1),
@@ -141,7 +134,7 @@ const FloorPicture = ({
     <Pressable
       onPress={() => {
         if (index !== undefined) {
-          setActiveLine(isLineActive ? 0 : index);
+          setActiveLine(isLineActive ? -1 : index);
         }
       }}
       style={styles.item}
@@ -158,7 +151,7 @@ const FloorPicture = ({
           style={[styles.line, animStyle, { height: BASE_SIZE * 0.5 }]}
         >
           {isLineActive && (
-            <Pressable onPress={() => addPictures?.(index || -1)}>
+            <Pressable onPress={() => addPictures?.(index ?? -1)}>
               <Animated.View entering={FadeIn} exiting={FadeOut}>
                 <AddCircleIcon
                   width={LINE_BUTTON_SIZE}
@@ -187,7 +180,6 @@ const FloorPicture = ({
   return (
     <GestureDetector gesture={pinchGesture}>
       <ScaleDecorator>
-        {editable && index !== 0 && line}
         <View
           style={[
             /* eslint-disable-next-line react-native/no-inline-styles */
@@ -230,6 +222,7 @@ const FloorPicture = ({
             </Text>
           )}
         </View>
+        {editable && line}
       </ScaleDecorator>
     </GestureDetector>
   );

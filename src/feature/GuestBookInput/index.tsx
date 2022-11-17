@@ -1,13 +1,7 @@
 import { useState } from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  View,
-  Keyboard,
-} from 'react-native';
+import { Pressable, StyleSheet, TextInput, View, Keyboard } from 'react-native';
 import CheckIcon from '@/assets/icons/Check';
+import { Profile } from '@/components/Profile';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 interface GuestBookInputProps {
@@ -25,11 +19,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     width: '100%',
-  },
-  image: {
-    borderRadius: 20,
-    height: 40,
-    width: 40,
   },
   textInput: {
     flex: 1,
@@ -64,11 +53,7 @@ const GuestBookInput = ({ avatarUri, onSubmit }: GuestBookInputProps) => {
   const [comment, setComment] = useState<string>('');
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: avatarUri }}
-        style={styles.image}
-        resizeMode="cover"
-      />
+      <Profile imageUrl={avatarUri} size={40} />
       <View style={styles.wrapInput}>
         <TextInput
           placeholder="방명록을 입력하세요."

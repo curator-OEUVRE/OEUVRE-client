@@ -247,7 +247,7 @@ const EditFloorScreen = () => {
   const addPictures = useCallback(
     async (index: number) => {
       await lockAsync(OrientationLock.PORTRAIT_UP);
-      setFloorMode({ mode: FloorMode.ADD_PICTURES, startIndex: index });
+      setFloorMode({ mode: FloorMode.ADD_PICTURES, startIndex: index + 1 });
       navigation.navigate(Screen.AddPictureScreen);
     },
     [navigation, setFloorMode],

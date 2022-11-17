@@ -73,7 +73,7 @@ const NotificationItem = ({
       </View>
       <Pressable style={styles.right} onPress={() => onPress?.(notification)}>
         <View style={styles.content}>
-          <Text style={[TEXT_STYLE.body12B, styles.text]}>{text}</Text>
+          <Text style={[TEXT_STYLE.body14M, styles.text]}>{text}</Text>
           {footer}
         </View>
         <View style={styles.wrapDate}>

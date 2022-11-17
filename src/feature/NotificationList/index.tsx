@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   text: {
-    color: COLOR.mono.black,
+    color: COLOR.mono.gray5,
   },
 });
 
@@ -50,7 +50,7 @@ const NotificationList = ({
           return undefined;
         case 'COMMENT':
           return (
-            <Text style={[styles.text, TEXT_STYLE.body12M]}>{comment}</Text>
+            <Text style={[styles.text, TEXT_STYLE.body14M]}>{comment}</Text>
           );
         default:
           return undefined;
