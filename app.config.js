@@ -20,6 +20,7 @@ module.exports = {
     updates: {
       fallbackToCacheTimeout: 0,
       url: 'https://u.expo.dev/bc755e58-fef2-4c34-8869-6f92386964d6',
+      checkAutomatically: 'ON_ERROR_RECOVERY',
     },
     assetBundlePatterns: ['**/*'],
     plugins: [
