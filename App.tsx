@@ -41,7 +41,7 @@ const App = () => {
     const initialFetch = async () => {
       const start = new Date().getTime();
       await loadFonts();
-      await lockAsync(OrientationLock.PORTRAIT_UP);
+      await lockAsync(OrientationLock.DEFAULT);
       const end = new Date().getTime();
 
       if (end - start < SPLASH_TIME) {
