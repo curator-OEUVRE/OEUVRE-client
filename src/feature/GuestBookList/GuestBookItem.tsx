@@ -119,7 +119,9 @@ const GustBookItem = ({
           </Pressable>
           <View style={styles.wrapComment}>
             <Text style={[styles.comment, TEXT_STYLE.body14R]}>
-              <Text style={TEXT_STYLE.body14B}>{userId} </Text>
+              <Pressable onPress={() => onPressProfile?.(userNo)}>
+                <Text style={TEXT_STYLE.body14B}>{userId} </Text>
+              </Pressable>
               {comment}
             </Text>
             <Text style={[styles.date, TEXT_STYLE.body12R]}>
