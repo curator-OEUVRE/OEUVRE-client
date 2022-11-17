@@ -1,6 +1,6 @@
 {
   "name": "oeuvre-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "start": "cross-env STORYBOOK_ENABLED=false expo start --dev-client",
     "start:storybook": "cross-env STORYBOOK_ENABLED=true expo start --dev-client",
