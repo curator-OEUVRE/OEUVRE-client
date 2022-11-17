@@ -4,15 +4,16 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ImageBackground,
   StyleSheet,
   Text,
   View,
   Platform,
+  Pressable,
 } from 'react-native';
-import { login } from '@/apis/login';
+import { checkGuestLogin, login, loginAsGuest } from '@/apis/login';
 import Logo from '@/assets/icons/Logo';
 import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles/colors';
@@ -43,6 +44,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  guestLoginButton: {
+    color: COLOR.mono.white,
+    padding: 12,
+  },
   text: {
     color: COLOR.mono.white,
     lineHeight: 24,
@@ -69,6 +74,7 @@ const LoginScreen = () => {
   const navigation = useNavigation<LoginScreenNP>();
   const { setToken } = useAuthStore();
   const { setLoginInfo } = useSignUpStore();
+  const [allowGuest, setAllowGuest] = useState(false);
 
   const onSuccess = async (
     token: string,
@@ -91,6 +97,20 @@ const LoginScreen = () => {
       navigation.navigate(Screen.TermsFormScreen);
     }
   };
+
+  useEffect(() => {
+    const init = async () => {
+      const response = await checkGuestLogin();
+      if (response.isSuccess) {
+        console.log(response.result.result);
+        setAllowGuest(response.result.result);
+      } else {
+        console.error(response.result);
+      }
+    };
+
+    init();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -128,6 +148,21 @@ const LoginScreen = () => {
               onSuccess(token, 'kakao');
             }}
           />
+          {allowGuest && (
+            <Pressable
+              onPress={async () => {
+                const response = await loginAsGuest();
+                if (response.isSuccess) {
+                  setToken(
+                    response.result.result.accessToken,
+                    response.result.result.refreshToken,
+                  );
+                }
+              }}
+            >
+              <Text style={styles.guestLoginButton}>Guest Login</Text>
+            </Pressable>
+          )}
         </View>
       </ImageBackground>
     </View>
