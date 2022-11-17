@@ -256,7 +256,7 @@ const ImageDetailScreen = () => {
   }, [floorNo, navigation]);
 
   const visitProfile = useCallback(async () => {
-    await lockAsync(OrientationLock.PORTRAIT_UP);
+    // await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Navigator.ProfileStack, {
       screen: Screen.ProfileScreen,
       params: { userNo },
@@ -291,7 +291,7 @@ const ImageDetailScreen = () => {
   }, [pictureNo, navigation]);
 
   const editDescription = useCallback(async () => {
-    await lockAsync(OrientationLock.PORTRAIT_UP);
+    // await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
   }, [navigation, pictureNo]);
 

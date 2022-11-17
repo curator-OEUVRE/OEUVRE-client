@@ -103,7 +103,7 @@ const FloorViewerScreen = () => {
 
   const onGoBack = useCallback(async () => {
     clearCreateFloorStore();
-    await lockAsync(OrientationLock.PORTRAIT_UP);
+    // await lockAsync(OrientationLock.PORTRAIT_UP);
   }, [clearCreateFloorStore]);
 
   useEffect(() => {
@@ -119,14 +119,14 @@ const FloorViewerScreen = () => {
     return () => backHandler.remove();
   }, [onGoBack, navigation]);
 
-  useFocusEffect(
-    useCallback(() => {
-      const lockOrientation = async () => {
-        await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
-      };
-      lockOrientation();
-    }, []),
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const lockOrientation = async () => {
+  //       await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
+  //     };
+  //     lockOrientation();
+  //   }, []),
+  // );
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
@@ -173,7 +173,7 @@ const FloorViewerScreen = () => {
   const onDeleteFloor = useCallback(async () => {
     bottomSheetRef.current?.close();
     await deleteFloor(floorNo);
-    await lockAsync(OrientationLock.PORTRAIT_UP);
+    // await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
   const visitProfile = useCallback(() => {
@@ -240,7 +240,7 @@ const FloorViewerScreen = () => {
     <Pressable
       style={styles.textBubble}
       onPress={async () => {
-        await lockAsync(OrientationLock.PORTRAIT_UP);
+        // await lockAsync(OrientationLock.PORTRAIT_UP);
         navigation.navigate(Screen.GuestBookScreen, { floorNo });
       }}
     >

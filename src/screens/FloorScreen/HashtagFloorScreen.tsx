@@ -86,14 +86,14 @@ const HashtagFloorScreen = () => {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
   const [page, setPage] = useState<number>(0);
   const { userNo: myUserNo } = useUserStore();
-  useFocusEffect(
-    useCallback(() => {
-      const lockOrientation = async () => {
-        await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
-      };
-      lockOrientation();
-    }, []),
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const lockOrientation = async () => {
+  //       await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
+  //     };
+  //     lockOrientation();
+  //   }, []),
+  // );
 
   useFocusEffect(
     useCallback(() => {
@@ -124,7 +124,7 @@ const HashtagFloorScreen = () => {
       <Pressable
         style={styles.arrowLeft}
         onPress={async () => {
-          await lockAsync(OrientationLock.PORTRAIT_UP);
+          // await lockAsync(OrientationLock.PORTRAIT_UP);
           navigation.goBack();
         }}
         hitSlop={10}
@@ -217,7 +217,7 @@ const HashtagFloorScreen = () => {
         style={styles.wrapProfile}
         onPress={async () => {
           if (!userNo) return;
-          await lockAsync(OrientationLock.PORTRAIT_UP);
+          // await lockAsync(OrientationLock.PORTRAIT_UP);
           onPressProfile(userNo);
         }}
       >

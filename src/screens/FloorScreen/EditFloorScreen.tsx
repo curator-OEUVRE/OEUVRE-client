@@ -110,14 +110,14 @@ const SuccessModal = ({ onPress }: SuccessModalProps) => {
 };
 
 const EditFloorScreen = () => {
-  useFocusEffect(
-    useCallback(() => {
-      const lockOrientation = async () => {
-        await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
-      };
-      lockOrientation();
-    }, []),
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const lockOrientation = async () => {
+  //       await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
+  //     };
+  //     lockOrientation();
+  //   }, []),
+  // );
   const { params } = useRoute<EditFloorScreenRP>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [newFloorNo, setNewFloorNo] = useState<number>();
@@ -137,7 +137,7 @@ const EditFloorScreen = () => {
 
   const onGoBack = useCallback(async () => {
     if (mode === FloorMode.CREATE) {
-      await lockAsync(OrientationLock.PORTRAIT_UP);
+      // await lockAsync(OrientationLock.PORTRAIT_UP);
     } else if (mode === FloorMode.EDIT) {
       setFloorMode({ mode: FloorMode.VIEWER });
     }
@@ -227,7 +227,7 @@ const EditFloorScreen = () => {
           <Pressable
             style={styles.wrapTitle}
             onPress={async () => {
-              await lockAsync(OrientationLock.PORTRAIT_UP);
+              // await lockAsync(OrientationLock.PORTRAIT_UP);
               navigation.navigate(Screen.FloorInfoFormScreen);
             }}
           >
@@ -246,7 +246,7 @@ const EditFloorScreen = () => {
       : '플로어 추가';
   const addPictures = useCallback(
     async (index: number) => {
-      await lockAsync(OrientationLock.PORTRAIT_UP);
+      // await lockAsync(OrientationLock.PORTRAIT_UP);
       setFloorMode({ mode: FloorMode.ADD_PICTURES, startIndex: index + 1 });
       navigation.navigate(Screen.AddPictureScreen);
     },
@@ -257,7 +257,7 @@ const EditFloorScreen = () => {
     if (mode !== FloorMode.EDIT) return;
     const picture = pictures.find((p) => p.pictureNo === pictureNo);
     if (!picture) return;
-    await lockAsync(OrientationLock.PORTRAIT_UP);
+    // await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
   };
 
