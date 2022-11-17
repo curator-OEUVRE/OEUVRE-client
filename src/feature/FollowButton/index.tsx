@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.mono.gray7,
     borderRadius: 5,
     height: 18,
+    justifyContent: 'center',
     paddingHorizontal: 8,
   },
   followingButton: {

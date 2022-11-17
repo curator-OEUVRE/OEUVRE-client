@@ -18,7 +18,7 @@ import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
   buttonText: {
-    color: COLOR.oeuvre.blue4,
+    color: COLOR.system.blue,
   },
   container: {
     backgroundColor: COLOR.mono.white,
