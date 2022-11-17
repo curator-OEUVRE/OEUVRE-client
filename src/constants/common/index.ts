@@ -25,7 +25,7 @@ export const ERROR_MESSAGE = {
   INVALID_ID: `아이디는 영문 소문자, 숫자, 밑줄만 사용할 수 있어요`,
   TOO_SHORT_ID: `사용자 아이디는 ${SIGNUP_CONFIG.userId.limit[0]}자 이상이어야 해요`,
   TOO_LONG_ID: `사용자 아이디는 ${SIGNUP_CONFIG.userId.limit[1]}자까지 작성이 가능해요`,
-  EMPTY_NAME: '아이디를 입력해주세요',
+  EMPTY_NAME: '이름을 입력해주세요',
   INVALID_NAME: `이름은 ${SIGNUP_CONFIG.name.limit[0]}~${SIGNUP_CONFIG.name.limit[1]}자 한문/영문 입니다.`,
   TOO_SHORT_NAME: `이름은 ${SIGNUP_CONFIG.name.limit[0]}자 이상이어야 해요`,
   TOO_LONG_NAME: `이름은 ${SIGNUP_CONFIG.name.limit[1]}자까지 작성이 가능해요`,

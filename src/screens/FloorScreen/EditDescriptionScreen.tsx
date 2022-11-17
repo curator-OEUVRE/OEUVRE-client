@@ -45,7 +45,7 @@ export type EditDescriptionScreenNP = CompositeNavigationProp<
 
 export const styles = StyleSheet.create({
   buttonText: {
-    color: COLOR.oeuvre.blue4,
+    color: COLOR.system.blue,
   },
   container: {
     flex: 1,

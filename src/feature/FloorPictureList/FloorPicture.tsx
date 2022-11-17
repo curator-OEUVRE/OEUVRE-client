@@ -166,8 +166,8 @@ const FloorPicture = ({
     </Pressable>
   );
   const description =
-    item.description.length > 10
-      ? `${item.description.substring(0, 10)}...`
+    item.description.length > 20
+      ? `${item.description.substring(0, 20)}...`
       : item.description;
   const renderEditLayer = () => (
     <LinearGradient
@@ -178,53 +178,51 @@ const FloorPicture = ({
     </LinearGradient>
   );
   return (
-    <GestureDetector gesture={pinchGesture}>
-      <ScaleDecorator>
-        <View
-          style={[
-            /* eslint-disable-next-line react-native/no-inline-styles */
-            {
-              marginHorizontal: editable ? 24 : 16,
-              transform: [
-                {
-                  translateY: item.location * BASE_SIZE,
-                },
-              ],
-            },
-            styles.item,
-          ]}
+    <ScaleDecorator>
+      <View
+        style={[
+          /* eslint-disable-next-line react-native/no-inline-styles */
+          {
+            marginHorizontal: editable ? 24 : 16,
+            transform: [
+              {
+                translateY: item.location * BASE_SIZE,
+              },
+            ],
+          },
+          styles.item,
+        ]}
+      >
+        <Pressable
+          onLongPress={editable ? drag : undefined}
+          onPress={() => {
+            onPressPicture?.(item.pictureNo);
+          }}
         >
-          <Pressable
-            onLongPress={editable ? drag : undefined}
-            onPress={() => {
-              onPressPicture?.(item.pictureNo);
-            }}
+          <Shadow
+            distance={5}
+            offset={[2, 2]}
+            startColor="#00000030"
+            endColor="#00000000"
+            paintInside
           >
-            <Shadow
-              distance={5}
-              offset={[2, 2]}
-              startColor="#00000030"
-              endColor="#00000000"
-              paintInside
-            >
-              <AnimatedFastImage
-                source={{ uri: item.imageUrl }}
-                style={imageAnimStyle}
-              />
-              {mode === FloorMode.EDIT && renderEditLayer()}
-            </Shadow>
-          </Pressable>
-          {renderDescription ? (
-            renderDescription(item)
-          ) : (
-            <Text style={[styles.text, TEXT_STYLE.body12R, { color }]}>
-              {description}
-            </Text>
-          )}
-        </View>
-        {editable && line}
-      </ScaleDecorator>
-    </GestureDetector>
+            <AnimatedFastImage
+              source={{ uri: item.imageUrl }}
+              style={imageAnimStyle}
+            />
+            {mode === FloorMode.EDIT && renderEditLayer()}
+          </Shadow>
+        </Pressable>
+        {renderDescription ? (
+          renderDescription(item)
+        ) : (
+          <Text style={[styles.text, TEXT_STYLE.body12R, { color }]}>
+            {description}
+          </Text>
+        )}
+      </View>
+      {editable && line}
+    </ScaleDecorator>
   );
 };
 
