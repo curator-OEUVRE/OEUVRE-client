@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getNotification } from '@/apis/notification';
 import { followUser, unfollowUser } from '@/apis/user';
@@ -15,6 +15,7 @@ import NotificationList from '@/feature/NotificationList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import useAuth from '@/hooks/useAuth';
+import { useGlobalStore } from '@/states/globalStore';
 import { Notification } from '@/types/notification';
 
 export type NotificationScreenParams = undefined;
@@ -25,7 +26,6 @@ export type NotificationScreenNP = CompositeNavigationProp<
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
   },
 });
 
@@ -35,6 +35,7 @@ const NotificationScreen = () => {
   const [page, setPage] = useState<number>(0);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const { fetchWithToken } = useAuth();
+  const { setIsUpdated } = useGlobalStore();
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
@@ -43,13 +44,14 @@ const NotificationScreen = () => {
           const { result } = response.result;
           setData(result.contents);
           setIsLastPage(result.isLastPage);
+          setIsUpdated(false);
         } else {
           // eslint-disable-next-line no-console
           console.log(response.result.errorMessage);
         }
       };
       fetchData();
-    }, []),
+    }, [setIsUpdated]),
   );
 
   const fetchMore = useCallback(async () => {
@@ -96,7 +98,7 @@ const NotificationScreen = () => {
 
   const onPressProfile = useCallback(
     (userNo: number) => {
-      navigation.navigate(Navigator.ProfileStack, {
+      navigation.navigate(Navigator.NotificationStack, {
         screen: Screen.ProfileScreen,
         params: { userNo },
       });
@@ -133,7 +135,7 @@ const NotificationScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header headerTitle="알림" hideBackButton />
       <NotificationList
         data={data}
@@ -142,7 +144,7 @@ const NotificationScreen = () => {
         onPressProfile={onPressProfile}
         onPress={onPressNotification}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

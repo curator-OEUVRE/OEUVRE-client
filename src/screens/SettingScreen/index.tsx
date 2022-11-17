@@ -280,7 +280,7 @@ const SettingScreen = () => {
           <Pressable
             onPress={() => {
               Alert.alert(
-                `${name} 님,\n정말로 계정을\n삭제하시겠어요?`,
+                `${name} 님,\n정말로 계정을 삭제하시겠어요?`,
                 undefined,
                 [
                   {

@@ -14,6 +14,9 @@ interface NotificationListProps {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+  },
   text: {
     color: COLOR.mono.black,
   },
@@ -83,6 +86,7 @@ const NotificationList = ({
   );
   return (
     <FlatList
+      style={styles.container}
       renderItem={renderItem}
       data={data}
       onEndReachedThreshold={0.2}

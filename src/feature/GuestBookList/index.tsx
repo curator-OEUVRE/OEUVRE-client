@@ -1,3 +1,4 @@
+import React from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import GuestBookItem from './GuestBookItem';
 import { Spinner } from '@/components';
@@ -14,31 +15,37 @@ interface GuestBookListProps {
 
 const keyExtractor = (item: GuestBookInfo) => `comment_${item.commentNo}`;
 
-const GuestBookList = ({
-  data,
-  onDelete,
-  onReport,
-  fetchMore,
-  isLoading,
-  onPressProfile,
-}: GuestBookListProps) => (
-  <>
-    <FlatList
-      data={data}
-      renderItem={({ item, index }) => (
-        <GuestBookItem
-          data={item}
-          deleteItem={() => onDelete(index)}
-          reportItem={() => onReport(index)}
-          onPressProfile={onPressProfile}
-        />
-      )}
-      keyExtractor={keyExtractor}
-      onEndReachedThreshold={0.1}
-      onEndReached={fetchMore}
-    />
-    {isLoading && <Spinner />}
-  </>
+const GuestBookList = React.forwardRef(
+  (
+    {
+      data,
+      onDelete,
+      onReport,
+      fetchMore,
+      isLoading,
+      onPressProfile,
+    }: GuestBookListProps,
+    ref: React.ForwardedRef<FlatList>,
+  ) => (
+    <>
+      <FlatList
+        ref={ref}
+        data={data}
+        renderItem={({ item, index }) => (
+          <GuestBookItem
+            data={item}
+            deleteItem={() => onDelete(index)}
+            reportItem={() => onReport(index)}
+            onPressProfile={onPressProfile}
+          />
+        )}
+        keyExtractor={keyExtractor}
+        onEndReachedThreshold={0.1}
+        onEndReached={fetchMore}
+      />
+      {isLoading && <Spinner />}
+    </>
+  ),
 );
 
 export default GuestBookList;

@@ -128,9 +128,6 @@ const styles = StyleSheet.create({
     height: 120,
     paddingTop: 17,
   },
-  wrapHeaderLandscape: {
-    marginTop: 10,
-  },
   wrapHeaderPortrait: {
     marginBottom: 26,
   },
@@ -151,7 +148,10 @@ const ImageDetailScreen = () => {
   const { params } = useRoute<ImageDetailScreenRP>();
   const { pictureNo } = params;
   const color = params.color || COLOR.mono.white;
-  const colorByBackground = getColorByBackgroundColor(color);
+  const iconColorByBackground = getColorByBackgroundColor(color);
+  const textColorByBackground = getColorByBackgroundColor(color, {
+    dark: COLOR.mono.gray5,
+  });
   const { pictureDetail, setPictureDetail, fetchPictureDetail } =
     useCreateFloorStore();
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
@@ -311,13 +311,13 @@ const ImageDetailScreen = () => {
         onPress={throttle(toggleLike)}
         onLongPress={showLikesPeople}
       >
-        <Favorite color={colorByBackground} />
+        <Favorite color={iconColorByBackground} />
       </Pressable>
       <Pressable onPress={throttle(toggleScrap)} style={styles.wrapButton}>
-        <Bookmark color={colorByBackground} width={26} height={26} />
+        <Bookmark color={iconColorByBackground} width={26} height={26} />
       </Pressable>
       <Pressable onPress={() => setBottomSheetIndex(isMine ? 1 : 0)}>
-        <MoreIcon color={colorByBackground} />
+        <MoreIcon color={iconColorByBackground} />
       </Pressable>
     </View>
   );
@@ -325,14 +325,12 @@ const ImageDetailScreen = () => {
     isEditMode && (
       <View
         style={[
-          orientation === OrientationType.landscape
-            ? styles.wrapHeaderLandscape
-            : styles.wrapHeaderPortrait,
+          orientation === OrientationType.portrait && styles.wrapHeaderPortrait,
           { paddingTop: insets.top },
         ]}
       >
         <Header
-          iconColor={colorByBackground}
+          iconColor={iconColorByBackground}
           backgroundColor="transparent"
           headerRight={headerRight}
         />
@@ -353,7 +351,7 @@ const ImageDetailScreen = () => {
           style={[
             styles.text,
             TEXT_STYLE.body14R,
-            { color: colorByBackground },
+            { color: textColorByBackground },
           ]}
         >
           {description}
@@ -391,7 +389,16 @@ const ImageDetailScreen = () => {
             label="사진 삭제하기"
             icon={<DeleteIcon />}
             color={COLOR.system.red}
-            onPress={deletePicture}
+            onPress={() => {
+              Alert.alert(`사진을\n삭제하시겠어요?`, undefined, [
+                {
+                  text: '사진 삭제하기',
+                  onPress: deletePicture,
+                  style: 'destructive',
+                },
+                { text: '취소하기', style: 'cancel' },
+              ]);
+            }}
           />
         </BottomSheetItemGroup>
       </BottomSheet>

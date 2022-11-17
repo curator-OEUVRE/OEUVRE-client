@@ -9,8 +9,8 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useRef, useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert, Pressable, StyleSheet, View, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AlertIcon from '@/assets/icons/Alert';
 import DeleteIcon from '@/assets/icons/Delete';
@@ -39,6 +39,16 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR.mono.white,
     flex: 1,
+  },
+  new: {
+    backgroundColor: COLOR.system.red,
+    borderRadius: 6,
+    height: 7,
+    position: 'absolute',
+    right: 1,
+    top: 1,
+    width: 7,
+    zIndex: 10,
   },
   textBubble: {
     bottom: '7%',
@@ -77,14 +87,37 @@ const FloorViewerScreen = () => {
     userId,
     name,
     pictures,
+    clearCreateFloorStore,
+    hasNewComment,
   } = useCreateFloorStore();
+
   const { deleteFloor } = useUserStore();
   const { floorNo } = params;
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
   const bottomSheetRef = useRef<Sheet>(null);
+  const iconColorByBackground = getColorByBackgroundColor(color);
+  const textColorByBackground = getColorByBackgroundColor(color, {
+    dark: COLOR.mono.gray5,
+  });
 
-  const colorByBackground = getColorByBackgroundColor(color);
+  const onGoBack = useCallback(async () => {
+    clearCreateFloorStore();
+    await lockAsync(OrientationLock.PORTRAIT_UP);
+  }, [clearCreateFloorStore]);
+
+  useEffect(() => {
+    const backAction = () => {
+      onGoBack();
+      navigation.goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, [onGoBack, navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -116,10 +149,10 @@ const FloorViewerScreen = () => {
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onPressMore}>
-        <MoreIcon color={colorByBackground} />
+        <MoreIcon color={iconColorByBackground} />
       </Pressable>
     ),
-    [onPressMore, colorByBackground],
+    [onPressMore, iconColorByBackground],
   );
 
   const onPressPicture = useCallback(
@@ -140,6 +173,7 @@ const FloorViewerScreen = () => {
   const onDeleteFloor = useCallback(async () => {
     bottomSheetRef.current?.close();
     await deleteFloor(floorNo);
+    await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
   const visitProfile = useCallback(() => {
@@ -160,7 +194,16 @@ const FloorViewerScreen = () => {
         label="플로어 삭제하기"
         icon={<DeleteIcon />}
         color={COLOR.system.red}
-        onPress={onDeleteFloor}
+        onPress={() => {
+          Alert.alert(`플로어를\n삭제하시겠어요?`, undefined, [
+            {
+              text: '플로어 삭제하기',
+              onPress: onDeleteFloor,
+              style: 'destructive',
+            },
+            { text: '취소하기', style: 'cancel' },
+          ]);
+        }}
       />
     </BottomSheetItemGroup>,
   ];
@@ -191,6 +234,7 @@ const FloorViewerScreen = () => {
       {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
     </BottomSheet>
   );
+  const newIcon = <View style={styles.new} />;
 
   const guestBookButton = (
     <Pressable
@@ -200,9 +244,11 @@ const FloorViewerScreen = () => {
         navigation.navigate(Screen.GuestBookScreen, { floorNo });
       }}
     >
-      <TextBubbleIcon color={colorByBackground} />
+      {hasNewComment && newIcon}
+      <TextBubbleIcon color={iconColorByBackground} />
     </Pressable>
   );
+
   if (loading) return <Spinner />;
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
@@ -210,17 +256,15 @@ const FloorViewerScreen = () => {
         headerTitle={name.value}
         headerRight={ConfirmButton}
         backgroundColor="transparent"
-        iconColor={colorByBackground}
-        onGoBack={async () => {
-          await lockAsync(OrientationLock.PORTRAIT_UP);
-        }}
+        iconColor={iconColorByBackground}
+        onGoBack={onGoBack}
       />
       <View style={styles.wrapList}>
         <FloorPictureList
           pictures={pictures}
           editable={false}
           onPressPicture={onPressPicture}
-          color={colorByBackground}
+          color={textColorByBackground}
         />
       </View>
       {guestBookButton}

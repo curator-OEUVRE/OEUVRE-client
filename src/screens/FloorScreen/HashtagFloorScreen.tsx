@@ -19,6 +19,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { useUserStore } from '@/states/userStore';
 import { HashtagPicture, PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
@@ -84,6 +85,7 @@ const HashtagFloorScreen = () => {
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
   const [page, setPage] = useState<number>(0);
+  const { userNo: myUserNo } = useUserStore();
   useFocusEffect(
     useCallback(() => {
       const lockOrientation = async () => {
@@ -195,12 +197,18 @@ const HashtagFloorScreen = () => {
 
   const onPressProfile = useCallback(
     (userNo: number) => {
-      navigation.navigate(Navigator.ProfileStack, {
-        screen: Screen.ProfileScreen,
-        params: { userNo },
-      });
+      if (myUserNo === userNo) {
+        navigation.navigate(Navigator.ProfileStack, {
+          screen: Screen.MyProfileScreen,
+        });
+      } else {
+        navigation.navigate(Navigator.ProfileStack, {
+          screen: Screen.ProfileScreen,
+          params: { userNo },
+        });
+      }
     },
-    [navigation],
+    [navigation, myUserNo],
   );
 
   const renderDescription = useCallback(

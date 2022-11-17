@@ -12,6 +12,7 @@ import {
 } from 'react-native-draggable-flatlist';
 import FastImage from 'react-native-fast-image';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import { getColorByBackgroundColor } from '@/services/common/color';
 import type { FloorMini } from '@/types/floor';
 
 interface Props extends RenderItemParams<FloorMini> {
@@ -32,9 +33,6 @@ const styles = StyleSheet.create({
   flatList: {
     height: 143,
     width: '100%',
-  },
-  floorNameText: {
-    color: COLOR.mono.gray7,
   },
   floorNoText: {
     color: COLOR.mono.gray3,
@@ -82,7 +80,12 @@ const FloorListItem = ({ item, onPress, drag, editable }: Props) => (
           <Text style={[TEXT_STYLE.body14R, styles.floorNoText]}>
             {item.queue}F
           </Text>
-          <Text style={[TEXT_STYLE.body14R, styles.floorNameText]}>
+          <Text
+            style={[
+              TEXT_STYLE.body14R,
+              { color: getColorByBackgroundColor(item.color) },
+            ]}
+          >
             {item.name}
           </Text>
         </View>

@@ -94,7 +94,7 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
 
   const pickImage = async (callback: (uri: string) => void) => {
     const [result, canUpload] = await getSingleImageFromLibrary({
-      mediaTypes: MediaTypeOptions.All,
+      mediaTypes: MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
     });

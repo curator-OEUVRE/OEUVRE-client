@@ -3,7 +3,7 @@ import { useAuthStore } from '@/states/authStore';
 import { GetNotificationResponseDto } from '@/types/notification';
 import { CheckUpdateResponseDto } from '@/types/picture';
 
-const DEFAULT_SIZE = 10;
+const DEFAULT_SIZE = 21;
 
 interface GetNotificationParams {
   page: number;
