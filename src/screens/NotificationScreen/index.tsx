@@ -6,7 +6,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getNotification } from '@/apis/notification';
 import { followUser, unfollowUser } from '@/apis/user';
 import { Header } from '@/components';
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
 
 const NotificationScreen = () => {
   const navigation = useNavigation<NotificationScreenNP>();
+  const insets = useSafeAreaInsets();
   const [data, setData] = useState<Notification[]>([]);
   const [page, setPage] = useState<number>(0);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
@@ -135,7 +136,7 @@ const NotificationScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <Header headerTitle="알림" hideBackButton />
       <NotificationList
         data={data}

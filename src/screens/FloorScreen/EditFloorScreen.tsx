@@ -101,7 +101,7 @@ const SuccessModal = ({ onPress }: SuccessModalProps) => {
           <Image source={IMAGE.check} style={styles.check} />
           <Text style={[styles.text, TEXT_STYLE.title20M]}>
             축하드려요, {'\n'}
-            <Text style={TEXT_STYLE.title20B}>새로운 플로어가</Text> 오픈했어요!
+            <Text style={TEXT_STYLE.title20B}>새로운 플로어가</Text> 오픈됐어요!
           </Text>
         </BlurView>
       </Pressable>
