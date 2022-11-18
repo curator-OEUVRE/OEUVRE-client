@@ -36,6 +36,14 @@ const styles = StyleSheet.create({
   left: {
     marginRight: 33,
   },
+  /* eslint-disable-next-line react-native/no-color-literals */
+  loadingContainer: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    flex: 1,
+    justifyContent: 'center',
+    position: 'absolute',
+  },
   sharpText: {
     color: COLOR.mono.gray3,
     marginRight: 2,
@@ -219,8 +227,11 @@ const HashtagFloorScreen = () => {
   const onPressProfile = useCallback(
     (userNo: number) => {
       if (myUserNo === userNo) {
-        navigation.navigate(Navigator.ProfileStack, {
-          screen: Screen.MyProfileScreen,
+        navigation.navigate(Navigator.MainTab, {
+          screen: Navigator.ProfileStack,
+          params: {
+            screen: Screen.MyProfileScreen,
+          },
         });
       } else {
         navigation.navigate(Screen.ProfileScreen, { userNo });
@@ -246,7 +257,6 @@ const HashtagFloorScreen = () => {
     [onPressProfile],
   );
 
-  if (loading) return <Spinner />;
   const data = pictures.map((p, idx) => ({
     ...p,
     hashtags: [],
@@ -276,23 +286,30 @@ const HashtagFloorScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
-      <Header
-        headerTitle={headerTitle}
-        backgroundColor="transparent"
-        headerLeft={headerLeft}
-      />
-      <ButtonArea />
-      <View style={styles.wrapList}>
-        <FloorPictureList
-          pictures={data}
-          editable={false}
-          onPressPicture={onPressPicture}
-          renderDescription={renderDescription}
-          onEndReached={fetchMore}
+    <>
+      <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
+        <Header
+          headerTitle={headerTitle}
+          backgroundColor="transparent"
+          headerLeft={headerLeft}
         />
-      </View>
-    </SafeAreaView>
+        <ButtonArea />
+        <View style={styles.wrapList}>
+          <FloorPictureList
+            pictures={data}
+            editable={false}
+            onPressPicture={onPressPicture}
+            renderDescription={renderDescription}
+            onEndReached={fetchMore}
+          />
+        </View>
+      </SafeAreaView>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <Spinner />
+        </View>
+      )}
+    </>
   );
 };
 
