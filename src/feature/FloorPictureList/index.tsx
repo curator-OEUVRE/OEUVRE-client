@@ -50,6 +50,7 @@ interface Props {
   color?: string;
   onEndReached?: () => void;
   renderDescription?: (picture: PictureInfo) => ReactNode;
+  pictureAddable?: boolean;
 }
 
 interface Layout {
@@ -72,6 +73,7 @@ const FloorPictureList = ({
   color,
   onEndReached,
   renderDescription,
+  pictureAddable,
 }: Props) => {
   const { height: windowHeight } = useDimensions();
   const translateY = useRef<SharedValue<number>>();
@@ -115,6 +117,7 @@ const FloorPictureList = ({
         onPressPicture={onPressPicture}
         color={color}
         renderDescription={renderDescription}
+        pictureAddable={pictureAddable}
       />
     ),
     [
@@ -127,6 +130,7 @@ const FloorPictureList = ({
       onPressPicture,
       color,
       renderDescription,
+      pictureAddable,
     ],
   );
 

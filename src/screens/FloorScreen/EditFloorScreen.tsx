@@ -278,6 +278,7 @@ const EditFloorScreen = () => {
           addPictures={addPictures}
           onPressPicture={onPressPicture}
           color={textColorByBackground}
+          pictureAddable={mode !== FloorMode.CREATE}
         />
       </View>
       {modalVisible && (

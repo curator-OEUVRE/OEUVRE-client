@@ -67,6 +67,7 @@ interface FloorPictureProps extends RenderItemParams<PictureInfo> {
   onPressPicture?: (pictureNo: number) => void;
   color?: string;
   renderDescription?: (picture: PictureInfo) => ReactNode;
+  pictureAddable?: boolean;
 }
 
 const FloorPicture = ({
@@ -82,6 +83,7 @@ const FloorPicture = ({
   onPressPicture,
   color = COLOR.mono.gray7,
   renderDescription,
+  pictureAddable = true,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
   const { mode } = useCreateFloorStore();
@@ -133,7 +135,7 @@ const FloorPicture = ({
   const line = (
     <Pressable
       onPress={() => {
-        if (index !== undefined) {
+        if (index !== undefined && pictureAddable) {
           setActiveLine(isLineActive ? -1 : index);
         }
       }}
