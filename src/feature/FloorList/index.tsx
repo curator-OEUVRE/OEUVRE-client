@@ -104,6 +104,7 @@ const FloorList = ({
       maxToRenderPerBatch={5}
       initialNumToRender={5}
       windowSize={5}
+      showsVerticalScrollIndicator={false}
     />
   );
 };

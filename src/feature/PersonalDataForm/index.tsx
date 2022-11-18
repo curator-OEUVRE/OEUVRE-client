@@ -64,23 +64,25 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
             clearTimeout(timer);
           }
 
-          const [isValidated, error] = validateUserId(value);
+          const realValue = value.toLowerCase();
+
+          const [isValidated, error] = validateUserId(realValue);
           if (isValidated) {
-            setUserId({ ...userId, value });
+            setUserId({ ...userId, value: realValue });
 
             const newTimer = setTimeout(async () => {
-              const response = await checkId(value);
+              const response = await checkId(realValue);
               if (response.isSuccess) {
                 if (response.result.result.isPossible) {
                   setUserId({
                     ...userId,
-                    value,
+                    value: realValue,
                     status: FormInputStatus.Valid,
                   });
                 } else {
                   setUserId({
                     ...userId,
-                    value,
+                    value: realValue,
                     status: FormInputStatus.Error,
                     error:
                       '이 사용자 아이디는 이미 다른 사람이 사용하고 있어요',
@@ -92,7 +94,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
           } else {
             setUserId({
               ...userId,
-              value,
+              value: realValue,
               status: FormInputStatus.Error,
               error,
             });
@@ -101,6 +103,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
         status={userId.status}
         message={userId.error}
         isRequired={userId.isRequired}
+        maxLength={15}
       />
       <FormInput
         label="닉네임"
@@ -117,6 +120,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
         status={name.status}
         message={name.error}
         isRequired={name.isRequired}
+        maxLength={10}
       />
       <FormInputDate
         label="생년월일"
