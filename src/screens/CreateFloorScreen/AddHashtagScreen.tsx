@@ -110,17 +110,17 @@ const AddHashtagScreen = () => {
   );
   const maxCount = hashtags.length >= 5;
   const disabled = maxCount || inputText.length === 0;
+  const onPressAdd = useCallback(() => {
+    setInputText((prev) => {
+      if (prev.length === 0) return prev;
+      addHashtag(prev);
+      return '';
+    });
+  }, [addHashtag]);
+
   const AddButton = useCallback(
     () => (
-      <Pressable
-        disabled={disabled}
-        onPress={() => {
-          setInputText((prev) => {
-            addHashtag(prev);
-            return '';
-          });
-        }}
-      >
+      <Pressable disabled={disabled} onPress={onPressAdd}>
         <Text
           style={[
             TEXT_STYLE.body16R,
@@ -131,17 +131,25 @@ const AddHashtagScreen = () => {
         </Text>
       </Pressable>
     ),
-    [addHashtag, disabled],
+    [disabled, onPressAdd],
   );
 
   const placeholder = maxCount
     ? '태그를 더는 입력할 수 없어요. (최대 5개)'
     : '태그를 입력해 주세요. (최대 5개)';
 
+  const onChangeText = (text: string) => {
+    const lastChar = text.slice(-1);
+    if (lastChar === ' ') {
+      onPressAdd();
+      return;
+    }
+    setInputText(text);
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <Header headerTitle="사진 태그 추가" headerRight={ConfirmButton} />
-
       <View style={styles.container}>
         <FormInput
           editable={!maxCount}
@@ -149,7 +157,7 @@ const AddHashtagScreen = () => {
           rightElement={<AddButton />}
           placeholder={placeholder}
           value={inputText}
-          onChangeText={(text) => setInputText(text.replace(/\s/g, ''))}
+          onChangeText={onChangeText}
         />
         <View style={styles.tagsContainer}>
           {hashtags.map((tag, index) => (
