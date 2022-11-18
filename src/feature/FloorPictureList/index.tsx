@@ -81,7 +81,9 @@ const FloorPictureList = ({
   const layoutRef = useSharedValue<Layout | undefined>(undefined);
   const pressableRef = useRef<View>(null);
   const isDragging = useDerivedValue(
-    () => activeIndexAnim.current?.value !== -1,
+    () =>
+      activeIndexAnim.current?.value !== undefined &&
+      activeIndexAnim.current.value !== -1,
   );
   const draggingPictureUrl = useDerivedValue(() => {
     if (!activeIndexAnim.current || activeIndexAnim.current.value < 0)
