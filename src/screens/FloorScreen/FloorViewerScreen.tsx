@@ -177,10 +177,7 @@ const FloorViewerScreen = () => {
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
   const visitProfile = useCallback(() => {
-    navigation.navigate(Navigator.ProfileStack, {
-      screen: Screen.ProfileScreen,
-      params: { userNo },
-    });
+    navigation.navigate(Screen.ProfileScreen, { userNo });
   }, [userNo, navigation]);
 
   const bottomSheetForEditor = [

@@ -223,10 +223,7 @@ const HashtagFloorScreen = () => {
           screen: Screen.MyProfileScreen,
         });
       } else {
-        navigation.navigate(Navigator.ProfileStack, {
-          screen: Screen.ProfileScreen,
-          params: { userNo },
-        });
+        navigation.navigate(Screen.ProfileScreen, { userNo });
       }
     },
     [navigation, myUserNo],

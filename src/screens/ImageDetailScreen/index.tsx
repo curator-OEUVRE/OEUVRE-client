@@ -258,10 +258,7 @@ const ImageDetailScreen = () => {
 
   const visitProfile = useCallback(async () => {
     // await lockAsync(OrientationLock.PORTRAIT_UP);
-    navigation.navigate(Navigator.ProfileStack, {
-      screen: Screen.ProfileScreen,
-      params: { userNo },
-    });
+    navigation.navigate(Screen.ProfileScreen, { userNo });
   }, [userNo, navigation]);
 
   const toggleScrap = useCallback(async () => {

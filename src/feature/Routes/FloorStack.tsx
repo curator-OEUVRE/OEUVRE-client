@@ -23,12 +23,18 @@ import {
   HashtagFloorScreen,
   HashtagFloorScreenParams,
 } from '@/screens/FloorScreen';
+import FollowListScreen, {
+  FollowListScreenParams,
+} from '@/screens/FollowListScreen';
 import GuestBookScreen, {
   GuestBookScreenParams,
 } from '@/screens/GuestBookScreen';
 import ImageDetailScreen, {
   ImageDetailScreenParams,
 } from '@/screens/ImageDetailScreen';
+import ProfileScreen, {
+  type ProfileScreenParams,
+} from '@/screens/ProfileScreen';
 
 export type FloorStackParamsList = {
   [Screen.AddPictureScreen]: AddPictureScreenParams;
@@ -40,7 +46,8 @@ export type FloorStackParamsList = {
   [Screen.EditFloorScreen]: EditFloorScreenParams;
   [Screen.ImageDetailScreen]: ImageDetailScreenParams;
   [Screen.GuestBookScreen]: GuestBookScreenParams;
-  [Navigator.ProfileStack]: NavigatorScreenParams<ProfileStackParamsList>;
+  [Screen.ProfileScreen]: ProfileScreenParams;
+  [Screen.FollowListScreen]: FollowListScreenParams;
   [Screen.EditDescriptionScreen]: EditDescriptionScreenParams;
   [Screen.HashtagFloorScreen]: HashtagFloorScreenParams;
 };
@@ -80,7 +87,9 @@ const FloorStack = () => (
       component={GuestBookScreen}
       getId={({ params }) => `${params.floorNo}`}
     />
-    <Stack.Screen name={Navigator.ProfileStack} component={ProfileStack} />
+    {/* <Stack.Screen name={Navigator.ProfileStack} component={ProfileStack} /> */}
+    <Stack.Screen name={Screen.ProfileScreen} component={ProfileScreen} />
+    <Stack.Screen name={Screen.FollowListScreen} component={FollowListScreen} />
     <Stack.Screen
       name={Screen.EditDescriptionScreen}
       component={EditDescriptionScreen}

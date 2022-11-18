@@ -164,14 +164,14 @@ const GuestBookScreen = () => {
   const visitProfile = useCallback(
     (userNo: number) => {
       if (myUserNo === userNo) {
-        navigation.navigate(Navigator.ProfileStack, {
-          screen: Screen.MyProfileScreen,
+        navigation.navigate(Navigator.MainTab, {
+          screen: Navigator.ProfileStack,
+          params: {
+            screen: Screen.MyProfileScreen,
+          },
         });
       } else {
-        navigation.navigate(Navigator.ProfileStack, {
-          screen: Screen.ProfileScreen,
-          params: { userNo },
-        });
+        navigation.navigate(Screen.ProfileScreen, { userNo });
       }
     },
     [navigation, myUserNo],
