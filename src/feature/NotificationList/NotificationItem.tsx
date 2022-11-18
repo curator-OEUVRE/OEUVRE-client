@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 import { Profile } from '@/components/Profile';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
@@ -10,7 +10,7 @@ interface NotificationItemProps {
   footer: React.ReactNode;
   onPress?: (notification: Notification) => void;
   onPressProfile?: (userNo: number) => void;
-  text: string;
+  text: string | ReactNode;
 }
 
 const styles = StyleSheet.create({
@@ -73,7 +73,11 @@ const NotificationItem = ({
       </View>
       <Pressable style={styles.right} onPress={() => onPress?.(notification)}>
         <View style={styles.content}>
-          <Text style={[TEXT_STYLE.body14M, styles.text]}>{text}</Text>
+          {typeof text === 'string' ? (
+            <Text style={[TEXT_STYLE.body14M, styles.text]}>{text}</Text>
+          ) : (
+            text
+          )}
           {footer}
         </View>
         <View style={styles.wrapDate}>
