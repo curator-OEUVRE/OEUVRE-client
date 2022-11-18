@@ -49,14 +49,17 @@ const BasicText = ({
   onIdPress?: (userNo: number) => void;
 }) => (
   <View style={styles.notiTextWrap}>
-    <Pressable
-      onPress={() => {
-        onIdPress?.(userNo);
-      }}
-    >
-      <Text style={[TEXT_STYLE.body14B, styles.notiText]}>{id}</Text>
-    </Pressable>
-    <Text style={[TEXT_STYLE.body14M, styles.notiText]}>{text}</Text>
+    <Text style={[TEXT_STYLE.body14M, styles.notiText]}>
+      <Text
+        style={[TEXT_STYLE.body14B, styles.notiText]}
+        onPress={() => {
+          onIdPress?.(userNo);
+        }}
+      >
+        {id}
+      </Text>
+      {text}
+    </Text>
   </View>
 );
 

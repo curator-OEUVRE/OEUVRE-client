@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
   comment: {
     color: COLOR.mono.gray7,
     flexShrink: 1,
-    lineHeight: 18,
+    // backgroundColor: '#000000',
+    // lineHeight: 18,
   },
   container: {
     flexDirection: 'row',
@@ -119,9 +120,14 @@ const GustBookItem = ({
           </Pressable>
           <View style={styles.wrapComment}>
             <Text style={[styles.comment, TEXT_STYLE.body14R]}>
-              <Pressable onPress={() => onPressProfile?.(userNo)}>
-                <Text style={TEXT_STYLE.body14B}>{userId} </Text>
-              </Pressable>
+              {/* <Pressable onPress={() => onPressProfile?.(userNo)}> */}
+              <Text
+                onPress={() => onPressProfile?.(userNo)}
+                style={TEXT_STYLE.body14B}
+              >
+                {userId}{' '}
+              </Text>
+              {/* </Pressable> */}
               {comment}
             </Text>
             <Text style={[styles.date, TEXT_STYLE.body12R]}>
