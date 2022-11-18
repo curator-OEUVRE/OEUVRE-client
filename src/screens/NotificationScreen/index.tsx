@@ -5,12 +5,14 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getNotification } from '@/apis/notification';
 import { followUser, unfollowUser } from '@/apis/user';
+import NotificationIcon from '@/assets/icons/Notification';
 import { Header } from '@/components';
 import { Screen, Navigator } from '@/constants/screens';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import NotificationList from '@/feature/NotificationList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
@@ -26,6 +28,15 @@ export type NotificationScreenNP = CompositeNavigationProp<
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  empty: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  text: {
+    color: COLOR.mono.gray4,
+    marginTop: 7,
   },
 });
 
@@ -134,17 +145,32 @@ const NotificationScreen = () => {
     },
     [navigation, onPressProfile],
   );
-
+  const empty = (
+    <View style={styles.empty}>
+      {NotificationIcon({
+        width: 72,
+        height: 72,
+        color: COLOR.mono.gray4,
+      })}
+      <Text style={[styles.text, TEXT_STYLE.body16M]}>
+        아직 온 알림이 없어요
+      </Text>
+    </View>
+  );
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <Header headerTitle="알림" hideBackButton />
-      <NotificationList
-        data={data}
-        onPressFollow={toggleFollowUser}
-        onEndReached={fetchMore}
-        onPressProfile={onPressProfile}
-        onPress={onPressNotification}
-      />
+      {data.length === 0 ? (
+        empty
+      ) : (
+        <NotificationList
+          data={data}
+          onPressFollow={toggleFollowUser}
+          onEndReached={fetchMore}
+          onPressProfile={onPressProfile}
+          onPress={onPressNotification}
+        />
+      )}
     </View>
   );
 };
