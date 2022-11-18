@@ -87,8 +87,6 @@ const NotificationList = ({
               }}
             />
           );
-        case 'LIKES':
-          return undefined;
         case 'COMMENT':
           return (
             <Text style={[styles.text, TEXT_STYLE.body14M]}>{comment}</Text>
@@ -131,8 +129,10 @@ const NotificationList = ({
               userNo={sendUserNo}
             />
           );
-        default:
-          return '';
+      case 'WELCOME':
+        return 'OEUVRE에 오신것을 환영합니다! 플로어를 생성하고 나만의 전시회를 열어보세요.';
+      default:
+        return '';
       }
     },
     [onPressProfile],
