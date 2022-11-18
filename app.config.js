@@ -5,7 +5,7 @@ module.exports = {
     name: 'OEUVRE',
     slug: 'oeuvre',
     owner: 'cmc-curator',
-    version: '1.0.1',
+    version: '1.0.2',
     runtimeVersion: {
       policy: 'nativeVersion',
     },
@@ -38,7 +38,7 @@ module.exports = {
       bundleIdentifier: 'com.curator.oeuvre',
       googleServicesFile: './GoogleService-Info.plist',
       requireFullScreen: true,
-      buildNumber: '4',
+      buildNumber: '5',
     },
     android: {
       adaptiveIcon: {
@@ -47,7 +47,7 @@ module.exports = {
       },
       package: 'com.curator.oeuvre',
       googleServicesFile: './google-services.json',
-      versionCode: 4,
+      versionCode: 5,
     },
     web: {
       favicon: './assets/favicon.png',
