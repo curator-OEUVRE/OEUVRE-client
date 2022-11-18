@@ -36,6 +36,13 @@ const styles = StyleSheet.create({
   left: {
     marginRight: 33,
   },
+  sharpText: {
+    color: COLOR.mono.gray3,
+    marginRight: 2,
+  },
+  titleWrap: {
+    flexDirection: 'row',
+  },
   userId: {
     color: COLOR.mono.gray7,
     marginLeft: 4,
@@ -43,6 +50,7 @@ const styles = StyleSheet.create({
   },
   wrapButtons: {
     alignItems: 'center',
+    alignSelf: 'center',
     flexDirection: 'row',
   },
   wrapList: {
@@ -130,13 +138,26 @@ const HashtagFloorScreen = () => {
         hitSlop={10}
       >
         <ArrowBackIcon color={COLOR.mono.black} />
-        <Text style={{ color: COLOR.mono.black }}>{hashtag}</Text>
       </Pressable>
     ),
-    [navigation, hashtag],
+    [navigation],
   );
 
-  const headertitle = useCallback(
+  const headerTitle = useCallback(
+    () => (
+      <View style={styles.titleWrap}>
+        <Text style={[TEXT_STYLE.body16M, styles.sharpText]}>#</Text>
+        <Text style={TEXT_STYLE.body16M}>
+          {hashtag.length > 0 && hashtag[0] === '#'
+            ? hashtag.slice(1)
+            : hashtag}
+        </Text>
+      </View>
+    ),
+    [hashtag],
+  );
+
+  const ButtonArea = useCallback(
     () => (
       <View style={styles.wrapButtons}>
         <Pressable
@@ -260,10 +281,11 @@ const HashtagFloorScreen = () => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
-        headerTitle={headertitle}
+        headerTitle={headerTitle}
         backgroundColor="transparent"
         headerLeft={headerLeft}
       />
+      <ButtonArea />
       <View style={styles.wrapList}>
         <FloorPictureList
           pictures={data}

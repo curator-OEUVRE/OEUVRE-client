@@ -31,6 +31,7 @@ const PictureDescriptionList = ({ onHashtagPress }: Props) => {
         />
       )}
       style={styles.flatList}
+      showsVerticalScrollIndicator={false}
     />
   );
 };

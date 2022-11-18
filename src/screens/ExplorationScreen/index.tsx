@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   contentContainer: {
+    paddingBottom: 40,
     paddingTop: 16,
   },
   listContainer: {
@@ -91,6 +92,7 @@ const ExplorationScreen = () => {
     (props: ListRenderItemInfo<HashtagInfo>) => (
       <HashtagListItem
         {...props.item}
+        index={props.index}
         // TODO: `onPress` (해시태그 플로어 뷰) 구현
         onPicturePress={(pictureNo) => {
           navigation.navigate(Navigator.FloorStack, {

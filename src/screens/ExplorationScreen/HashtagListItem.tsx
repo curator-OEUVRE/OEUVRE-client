@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import type { PictureByHashtag, HashtagInfo } from '@/apis/hashtag';
+import ArrowBackIcon from '@/assets/icons/ArrowBack';
 import { Profile } from '@/components/Profile';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
@@ -19,8 +20,12 @@ interface PictureListItemProps extends PictureByHashtag {
 }
 
 const styles = StyleSheet.create({
+  arrowIcon: {
+    marginRight: 20,
+    transform: [{ rotate: '180deg' }],
+  },
   container: {
-    marginBottom: 40,
+    marginBottom: 12,
   },
   contentContainer: {
     paddingHorizontal: 20,
@@ -31,7 +36,22 @@ const styles = StyleSheet.create({
   },
   hashtagContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginLeft: 20,
+  },
+  hashtagTextContainer: {
+    flexDirection: 'row',
+  },
+  hashtagTypeText: {
+    color: COLOR.mono.gray4,
+    marginBottom: 4,
+    marginLeft: 20,
+  },
+  lineArea: {
+    borderTopColor: COLOR.mono.gray1,
+    borderTopWidth: 1,
+    marginBottom: 28,
+    marginHorizontal: 20,
   },
   pictureListItemContainer: {
     marginRight: 8,
@@ -90,6 +110,7 @@ const PictureListItem = ({
 };
 
 interface Props extends HashtagInfo {
+  index: number;
   onPress?: (hashtagNo: number, hashtag: string) => void;
   onPicturePress?: (pictureNo: number) => void;
   onProfilePress?: (userNo: number) => void;
@@ -100,7 +121,9 @@ const keyExtractor = (item: PictureByHashtag) => `${item.pictureNo}`;
 const HashtagListItem = ({
   hashtag,
   hashtagNo,
+  isHead,
   pictures,
+  index,
   onPress,
   onPicturePress,
   onProfilePress,
@@ -123,11 +146,26 @@ const HashtagListItem = ({
       }}
       style={styles.container}
     >
-      <View style={styles.hashtagContainer}>
-        <Text style={[TEXT_STYLE.button16M, styles.sharp]}>#</Text>
-        <Text style={[TEXT_STYLE.button16M, styles.hashtag]}>
-          {hashtag[0] === '#' ? hashtag.slice(1) : hashtag}
+      {index !== 0 && <View style={styles.lineArea} />}
+      {isHead && (
+        <Text style={[TEXT_STYLE.body12B, styles.hashtagTypeText]}>
+          OEUVRE 선정 해시태그
         </Text>
+      )}
+
+      <View style={styles.hashtagContainer}>
+        <View style={styles.hashtagTextContainer}>
+          <Text style={[TEXT_STYLE.button16M, styles.sharp]}>#</Text>
+          <Text style={[TEXT_STYLE.button16M, styles.hashtag]}>
+            {hashtag[0] === '#' ? hashtag.slice(1) : hashtag}
+          </Text>
+        </View>
+        <ArrowBackIcon
+          width={26}
+          height={26}
+          color={COLOR.mono.gray3}
+          style={styles.arrowIcon}
+        />
       </View>
 
       <FlatList

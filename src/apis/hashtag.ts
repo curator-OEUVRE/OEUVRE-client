@@ -14,6 +14,7 @@ export interface PictureByHashtag {
 export interface HashtagInfo {
   hashtagNo: number;
   hashtag: string;
+  isHead: boolean;
   pictures: PictureByHashtag[];
 }
 
