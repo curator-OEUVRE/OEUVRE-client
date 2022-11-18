@@ -28,6 +28,7 @@ module.exports = {
         '@react-native-seoul/kakao-login',
         {
           kakaoAppKey: process.env.KAKAO_APP_KEY,
+          kotlinVersion: '1.6.10',
         },
       ],
       '@react-native-google-signin/google-signin',
