@@ -6,7 +6,10 @@ import { ParamListBase, RouteProp } from '@react-navigation/native';
 import { useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { FollowListScreenType } from '../FollowListScreen';
 import AddFloorIcon from '@/assets/icons/AddFloor';
 import AlertIcon from '@/assets/icons/Alert';
@@ -118,16 +121,17 @@ const ProfileTemplate = ({
 }: Props) => {
   const hasBackgroundImage = !!profile.backgroundImageUrl;
   const isMyProfile = !!renderCollection;
+  const { top } = useSafeAreaInsets();
 
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
 
   const dynamicStyle = useMemo(
     () => ({
       profileCard: {
-        marginTop: hasBackgroundImage ? 45 : 8,
+        marginTop: hasBackgroundImage ? 140 - 45 - top : 8,
       },
     }),
-    [hasBackgroundImage],
+    [hasBackgroundImage, top],
   );
 
   const headerRight = ({ iconColor }: { iconColor?: string }) =>
