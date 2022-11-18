@@ -104,7 +104,7 @@ const FloorDropDown = ({ currentIdx, floors, onPress }: FloorDropDownProps) => {
         style={styles.pressable}
         onPress={() => setOpen((prev) => !prev)}
       >
-        <Text style={[styles.title, TEXT_STYLE.title18M]}>
+        <Text style={[styles.title, TEXT_STYLE.body16M]}>
           {currentIdx >= 0 && currentIdx < floors.length
             ? floors[currentIdx].name
             : '플로어'}
