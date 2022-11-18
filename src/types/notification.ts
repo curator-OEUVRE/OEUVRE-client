@@ -11,7 +11,7 @@ export interface Notification {
   pictureNo: number | null;
   profileImageUrl: string;
   sendUserNo: number;
-  type: 'FOLLOWING' | 'LIKES' | 'COMMENT';
+  type: 'FOLLOWING' | 'LIKES' | 'COMMENT' | 'WELCOME';
 }
 
 export interface GetNotificationResponse {
