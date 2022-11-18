@@ -35,9 +35,15 @@ import useAuth from '@/hooks/useAuth';
 import { useUserStore } from '@/states/userStore';
 import type { UserMini } from '@/types/user';
 
+export enum FollowListScreenType {
+  Following = '팔로잉',
+  Follower = '팔로워',
+}
+
 export type FollowListScreenParams = {
   userNo: number;
   exhibitionName: string;
+  type: FollowListScreenType;
 };
 
 export type FollowListScreenRP = RouteProp<
@@ -208,9 +214,18 @@ const FollowListScreen = () => {
         headerTitle={params.exhibitionName}
         iconColor={COLOR.mono.black}
       />
-      <Tab.Navigator screenOptions={screenOptions}>
-        <Tab.Screen name="팔로잉" component={renderFollowingList} />
-        <Tab.Screen name="팔로워" component={renderFollowerList} />
+      <Tab.Navigator
+        screenOptions={screenOptions}
+        initialRouteName={params.type}
+      >
+        <Tab.Screen
+          name={FollowListScreenType.Following}
+          component={renderFollowingList}
+        />
+        <Tab.Screen
+          name={FollowListScreenType.Follower}
+          component={renderFollowerList}
+        />
       </Tab.Navigator>
     </SafeAreaView>
   );

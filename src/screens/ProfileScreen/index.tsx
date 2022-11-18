@@ -6,6 +6,7 @@ import {
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useState, useCallback, useEffect } from 'react';
+import { FollowListScreenType } from '../FollowListScreen';
 import ProfileTemplate from './ProfileTemplate';
 import WrappedFloorList from './WrappedFloorList';
 import { followUser, getProfile, unfollowUser } from '@/apis/user';
@@ -113,10 +114,11 @@ const ProfileScreen = () => {
       isFollower={profile.isFollower}
       isFollowing={profile.isFollowing}
       onFollowPress={toggleFollowUser}
-      onFollowAreaPress={() => {
+      onFollowAreaPress={(type: FollowListScreenType) => {
         navigation.navigate(Screen.FollowListScreen, {
           userNo: route.params.userNo,
           exhibitionName: profile.exhibitionName,
+          type,
         });
       }}
     />

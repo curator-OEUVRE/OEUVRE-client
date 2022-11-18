@@ -16,6 +16,7 @@ import {
   Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { FollowListScreenType } from '../FollowListScreen';
 import { deactiveUser } from '@/apis/user';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
 import { Header } from '@/components/Header';
@@ -144,29 +145,39 @@ const SettingScreen = () => {
     email: false,
   });
 
+  const goToFollowListScreen = (type: FollowListScreenType) => {
+    navigation.navigate(Screen.FollowListScreen, {
+      userNo,
+      exhibitionName,
+      type,
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <Header headerTitle="설정" />
       <ScrollView style={styles.container}>
         <Area title="팔로잉 / 팔로워">
-          <Pressable
-            style={styles.followInfoArea}
-            onPress={() => {
-              navigation.navigate(Screen.FollowListScreen, {
-                userNo,
-                exhibitionName,
-              });
-            }}
-          >
-            <View style={styles.followInfo}>
+          <View style={styles.followInfoArea}>
+            <Pressable
+              style={styles.followInfo}
+              onPress={() => {
+                goToFollowListScreen(FollowListScreenType.Following);
+              }}
+            >
               <Text style={TEXT_STYLE.button16M}>팔로잉</Text>
               <Text style={TEXT_STYLE.title20M}>{followingCount}</Text>
-            </View>
-            <View style={styles.followInfo}>
+            </Pressable>
+            <Pressable
+              style={styles.followInfo}
+              onPress={() => {
+                goToFollowListScreen(FollowListScreenType.Follower);
+              }}
+            >
               <Text style={TEXT_STYLE.button16M}>팔로워</Text>
               <Text style={TEXT_STYLE.title20M}>{followerCount}</Text>
-            </View>
-          </Pressable>
+            </Pressable>
+          </View>
         </Area>
         <Area title="푸시 알림">
           <SettingItem.Toggle

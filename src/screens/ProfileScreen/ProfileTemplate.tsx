@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { FollowListScreenType } from '../FollowListScreen';
 import AddFloorIcon from '@/assets/icons/AddFloor';
 import AlertIcon from '@/assets/icons/Alert';
 import BookmarkFilledIcon from '@/assets/icons/BookmarkFilled';
@@ -100,7 +101,7 @@ interface Props {
   onSettingPress?: () => void;
   onFollowPress?: (isFollowing: boolean) => void;
   onEditPress?: () => void;
-  onFollowAreaPress?: () => void;
+  onFollowAreaPress?: (type: FollowListScreenType) => void;
 }
 
 const ProfileTemplate = ({
@@ -206,19 +207,26 @@ const ProfileTemplate = ({
         onChange={setBottomSheetIndex}
         snapPoints={[260]}
       >
-        <Pressable
-          style={styles.followInfoContainer}
-          onPress={onFollowAreaPress}
-        >
-          <View style={styles.followInfo}>
+        <View style={styles.followInfoContainer}>
+          <Pressable
+            style={styles.followInfo}
+            onPress={() => {
+              onFollowAreaPress?.(FollowListScreenType.Following);
+            }}
+          >
             <Text style={TEXT_STYLE.button16M}>팔로잉</Text>
             <Text style={TEXT_STYLE.title20M}>{profile.followingCount}</Text>
-          </View>
-          <View style={styles.followInfo}>
+          </Pressable>
+          <Pressable
+            style={styles.followInfo}
+            onPress={() => {
+              onFollowAreaPress?.(FollowListScreenType.Follower);
+            }}
+          >
             <Text style={TEXT_STYLE.button16M}>팔로워</Text>
             <Text style={TEXT_STYLE.title20M}>{profile.followerCount}</Text>
-          </View>
-        </Pressable>
+          </Pressable>
+        </View>
         <BottomSheetItemGroup>
           <BottomSheetItem
             label={isFollowing ? '팔로우 취소하기' : '팔로우하기'}

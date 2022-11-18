@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -64,6 +64,12 @@ const FollowerListItem = ({
       }
     : styles.button;
 
+  const text = useMemo(() => {
+    if (user.isFollowing) return '팔로잉';
+    if (user.isFollower) return '맞팔로우';
+    return '팔로우';
+  }, [user.isFollowing, user.isFollower]);
+
   return (
     <Pressable
       style={styles.container}
@@ -78,21 +84,23 @@ const FollowerListItem = ({
           <Text style={TEXT_STYLE.body14M}>{user.name}</Text>
         </View>
       </View>
-      <Pressable
-        style={buttonStyle}
-        onPress={() => {
-          onFollowPress?.(user.isFollowing, user.userNo);
-        }}
-      >
-        <Text
-          style={[
-            TEXT_STYLE.body12M,
-            { color: user.isFollowing ? COLOR.mono.gray4 : COLOR.mono.white },
-          ]}
+      {!user.isMe && (
+        <Pressable
+          style={buttonStyle}
+          onPress={() => {
+            onFollowPress?.(user.isFollowing, user.userNo);
+          }}
         >
-          {user.isFollowing ? '팔로잉' : '맞팔로우'}
-        </Text>
-      </Pressable>
+          <Text
+            style={[
+              TEXT_STYLE.body12M,
+              { color: user.isFollowing ? COLOR.mono.gray4 : COLOR.mono.white },
+            ]}
+          >
+            {text}
+          </Text>
+        </Pressable>
+      )}
     </Pressable>
   );
 };
