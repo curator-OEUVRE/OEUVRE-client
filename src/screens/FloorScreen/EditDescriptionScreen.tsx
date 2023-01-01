@@ -26,8 +26,7 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
-import { PictureDetail, PictureInfo } from '@/types/picture';
+import { useFloorStore } from '@/states/floorStore';
 
 export type EditDescriptionScreenParams = {
   pictureNo: number;
@@ -93,46 +92,28 @@ const EditDescriptionScreen = () => {
 
   const { params } = useRoute<EditDescriptionScreenRP>();
   const { pictureNo } = params;
+  const { pictureDetail, setPictureDetail, changeDescription } =
+    useFloorStore();
 
-  const {
-    pictures,
-    onChangeDescriptionByIdx,
-    pictureDetail,
-    mode,
-    setPictureDetail,
-  } = useCreateFloorStore();
-  let picture: PictureDetail | PictureInfo = pictureDetail;
-  const idx = pictures.findIndex((p) => p.pictureNo === pictureNo);
-  if (idx >= 0) {
-    picture = pictures[idx];
-  }
-
-  const setDescription = idx >= 0 ? onChangeDescriptionByIdx(idx) : undefined;
-  const defaultText = picture?.description || '';
+  const defaultText = pictureDetail?.description || '';
   const [text, setText] = useState(defaultText);
   const onPress = useCallback(async () => {
-    if (mode === FloorMode.VIEWER) {
-      if (!picture) return;
-      const { hashtags } = idx >= 0 ? picture : pictureDetail;
-      await patchPicture({
-        description: text,
-        hashtags,
-        pictureNo,
-      });
-      setPictureDetail({ ...pictureDetail, description: text });
-    }
-    setDescription?.(text);
+    const { hashtags } = pictureDetail;
+    await patchPicture({
+      description: text,
+      hashtags,
+      pictureNo,
+    });
+    setPictureDetail({ ...pictureDetail, description: text });
+    changeDescription(pictureNo, text);
     navigation.goBack();
   }, [
-    setDescription,
     text,
     navigation,
-    mode,
     pictureDetail,
     setPictureDetail,
-    picture,
     pictureNo,
-    idx,
+    changeDescription,
   ]);
 
   const headerRight = () => (
@@ -140,18 +121,18 @@ const EditDescriptionScreen = () => {
       <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>완료</Text>
     </Pressable>
   );
-  const { hashtags } = idx >= 0 ? picture : pictureDetail;
+
   const hashtagArea = (
     <View style={styles.hashtagArea}>
       <Pressable
         onPress={() => {
-          navigation.navigate(Screen.AddHashtagScreen, { id: idx });
+          navigation.navigate(Screen.AddHashtagScreen, { pictureNo });
         }}
       >
         <Hashtag />
       </Pressable>
       <View style={styles.tagsContainer}>
-        {hashtags.map((tag) => (
+        {pictureDetail.hashtags.map((tag) => (
           <Text key={tag} style={[TEXT_STYLE.body12R, styles.tag]}>
             {tag}
           </Text>
@@ -169,7 +150,7 @@ const EditDescriptionScreen = () => {
             <Image
               style={styles.image}
               source={{
-                uri: picture?.imageUrl,
+                uri: pictureDetail.imageUrl,
               }}
               resizeMode="contain"
             />
@@ -179,9 +160,6 @@ const EditDescriptionScreen = () => {
                 value={text}
                 onChangeText={(newText) => {
                   setText(newText);
-                }}
-                onBlur={() => {
-                  setDescription?.(text);
                 }}
                 placeholder="작품의 설명을 입력해 주세요. (총 50자)"
                 placeholderTextColor={COLOR.mono.gray4}

@@ -5,27 +5,40 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { BlurView } from 'expo-blur';
 import { MediaTypeOptions } from 'expo-image-picker';
 import { useCallback, useEffect, useState } from 'react';
-import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  BackHandler,
+  Image,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
 import { Spinner } from '@/components/Spinner';
-import { Screen } from '@/constants/screens';
+import { IMAGE } from '@/constants/images';
+import { Navigator, Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
-import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import {
   createDefaultPictureInfo,
   getImagesFromLibrary,
 } from '@/services/common/image';
-import { useFloorStore } from '@/states/floorStore';
+import { useCreateFloorStore } from '@/states/createFloorStore';
 
 const styles = StyleSheet.create({
+  check: {
+    height: 100,
+    width: 100,
+  },
   confirmText: {
     color: COLOR.system.blue,
   },
@@ -33,35 +46,70 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.mono.white,
     flex: 1,
   },
-  title: {
-    marginRight: 17,
+  pressable: {
+    flex: 1,
+  },
+  text: {
+    color: COLOR.mono.black,
+    textAlign: 'center',
   },
   wrapList: {
     flex: 1,
   },
-  wrapTitle: {
+  wrapModal: {
     alignItems: 'center',
-    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
 export type EditFloorScreenParams = undefined;
 export type EditFloorScreenNP = CompositeNavigationProp<
-  StackNavigationProp<FloorStackParamsList, Screen.EditFloorScreen>,
+  StackNavigationProp<CreateFloorStackParamsList, Screen.EditFloorScreen>,
   StackNavigationProp<RootStackParamsList>
 >;
 
 export type EditFloorScreenRP = RouteProp<
-  FloorStackParamsList,
+  CreateFloorStackParamsList,
   Screen.EditFloorScreen
 >;
 
+interface SuccessModalProps {
+  onPress: () => void;
+}
+
+const SuccessModal = ({ onPress }: SuccessModalProps) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onPress();
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [onPress]);
+  return (
+    <Modal transparent animationType="fade">
+      <Pressable onPress={() => onPress()} style={styles.pressable}>
+        <BlurView intensity={100} tint="light" style={styles.wrapModal}>
+          <Image source={IMAGE.check} style={styles.check} />
+          <Text style={[styles.text, TEXT_STYLE.title20M]}>
+            축하드려요, {'\n'}
+            <Text style={TEXT_STYLE.title20B}>새로운 플로어가</Text> 오픈됐어요!
+          </Text>
+        </BlurView>
+      </Pressable>
+    </Modal>
+  );
+};
+
 const EditFloorScreen = () => {
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [newFloorNo, setNewFloorNo] = useState<number>();
   const [loading, setLoading] = useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
-  const { floor, setPictures, editFloor, fetchPictureDetail } = useFloorStore();
-  const { pictures, color, name, floorNo } = floor;
+  const { pictures, setPictures, color, name, createFloor } =
+    useCreateFloorStore();
 
   useEffect(() => {
     const backAction = () => {
@@ -76,45 +124,28 @@ const EditFloorScreen = () => {
   }, [navigation]);
 
   const onConfirm = useCallback(async () => {
-    if (!floorNo) return;
-    const newImages = pictures.filter((picture) => picture.pictureNo === 0);
-    const images = newImages.map((picture) => picture.imageUrl);
+    const images = pictures.map((picture) => picture.imageUrl);
     setLoading(true);
     const urls = await uploadImages(images, name);
-    let idx = 0;
-    const newPictures = pictures.map((picture, i) => {
-      if (picture.pictureNo > 0)
-        return {
-          ...picture,
-          queue: i + 1,
-        };
-      return {
-        ...picture,
-        // eslint-disable-next-line no-plusplus
-        imageUrl: urls[idx++],
-        queue: i + 1,
-      };
-    });
+    const newPictures = pictures.map((picture, idx) => ({
+      ...picture,
+      imageUrl: urls[idx],
+      queue: idx + 1,
+    }));
     setPictures(newPictures);
-    await editFloor(floorNo);
+    const result = await createFloor();
     setLoading(false);
-    // eslint-disable-next-line no-console
-    navigation.navigate(Screen.FloorViewerScreen, {
-      floorNo,
-    });
-  }, [
-    name,
-    pictures,
-    setPictures,
-    uploadImages,
-    editFloor,
-    navigation,
-    floorNo,
-  ]);
+    if (result.isSuccess) {
+      setNewFloorNo(result.result.result.floorNo);
+      setModalVisible(true);
+    }
+  }, [createFloor, name, pictures, setPictures, uploadImages]);
+
   const iconColorByBackground = getColorByBackgroundColor(color);
   const textColorByBackground = getColorByBackgroundColor(color, {
     dark: COLOR.mono.gray5,
   });
+
   const ConfirmButton = useCallback(
     () => (
       <Pressable onPress={onConfirm}>
@@ -123,25 +154,7 @@ const EditFloorScreen = () => {
     ),
     [onConfirm],
   );
-  const headerTitle = () => (
-    <Pressable
-      style={styles.wrapTitle}
-      onPress={async () => {
-        navigation.navigate(Screen.FloorInfoFormScreen);
-      }}
-    >
-      <Text
-        style={[
-          styles.title,
-          TEXT_STYLE.body16M,
-          { color: iconColorByBackground },
-        ]}
-      >
-        {name}
-      </Text>
-      <PencilIcon color={iconColorByBackground} />
-    </Pressable>
-  );
+
   const addPictures = useCallback(
     async (index: number) => {
       const [result, canUpload] = await getImagesFromLibrary({
@@ -164,17 +177,10 @@ const EditFloorScreen = () => {
     [navigation, pictures, setPictures],
   );
 
-  const onPressPicture = async (pictureNo: number) => {
-    const picture = pictures.find((p) => p.pictureNo === pictureNo);
-    if (!picture) return;
-    await fetchPictureDetail(pictureNo);
-    navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
-  };
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
-        headerTitle={headerTitle}
+        headerTitle="플로어 추가"
         headerRight={ConfirmButton}
         backgroundColor="transparent"
         iconColor={iconColorByBackground}
@@ -185,11 +191,22 @@ const EditFloorScreen = () => {
           editable
           setPictures={setPictures}
           addPictures={addPictures}
-          onPressPicture={onPressPicture}
           color={textColorByBackground}
-          pictureAddable
         />
       </View>
+      {modalVisible && (
+        <SuccessModal
+          onPress={() => {
+            if (!newFloorNo) return;
+            navigation.navigate(Navigator.FloorStack, {
+              screen: Screen.FloorViewerScreen,
+              params: {
+                floorNo: newFloorNo,
+              },
+            });
+          }}
+        />
+      )}
       {loading && <Spinner />}
     </SafeAreaView>
   );

@@ -1,12 +1,21 @@
 import AddHashtagScreen, { AddHashtagScreenParams } from './AddHashtagScreen';
-import AddPictureScreen, { AddPictureScreenParams } from './AddPictureScreen';
+import EditFloorScreen, { EditFloorScreenParams } from './EditFloorScreen';
+import FloorInfoFormScreen, {
+  FloorInfoFormScreenParams,
+} from './FloorInfoFormScreen';
 import PictureDescriptionScreen, {
   PictureDescriptionScreenParams,
 } from './PictureDescriptionScreen';
 
-export { AddPictureScreen, PictureDescriptionScreen, AddHashtagScreen };
+export {
+  PictureDescriptionScreen,
+  AddHashtagScreen,
+  FloorInfoFormScreen,
+  EditFloorScreen,
+};
 export type {
-  AddPictureScreenParams,
   PictureDescriptionScreenParams,
   AddHashtagScreenParams,
+  FloorInfoFormScreenParams,
+  EditFloorScreenParams,
 };

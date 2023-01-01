@@ -2,26 +2,27 @@ import { ResponseDto } from './common';
 import { PictureInfo } from './picture';
 
 export interface FloorInfo {
-  color: string;
-  isCommentAvailable: boolean;
-  isPublic: boolean;
   name: string;
+  color: string;
+  isPublic: boolean;
+  isCommentAvailable: boolean;
+}
+
+export interface Floor extends FloorInfo {
   pictures: PictureInfo[];
   texture: number;
   userId?: string;
   userNo?: number;
   hasNewComment?: boolean;
+  floorNo?: number;
+  isMine?: boolean;
 }
 
 export interface CreateFloorResponse {
   floorNo: number;
 }
 
-export interface GetFloorResponse extends FloorInfo {
-  floorNo: number;
-  isMine: boolean;
-  userNo: number;
-}
+export interface GetFloorResponse extends Floor {}
 
 export type CreateFloorResponseDto = ResponseDto<CreateFloorResponse>;
 export type GetFloorResponseDto = ResponseDto<GetFloorResponse>;

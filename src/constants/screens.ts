@@ -6,6 +6,7 @@ export enum Navigator {
   HomeStack = 'HomeStack',
   ExplorationStack = 'ExplorationStack',
   NotificationStack = 'NotificationStack',
+  CreateFloorStack = 'CreateFloorStack',
 }
 
 export enum Screen {
@@ -14,7 +15,6 @@ export enum Screen {
   PersonalDataFormScreen = 'PersonalDataFormScreen',
   UserProfileFormScreen = 'UserProfileFormScreen',
   WelcomeScreen = 'WelcomeScreen',
-  AddPictureScreen = 'AddPictureScreen',
   PictureDescriptionScreen = 'PictureDescriptionScreen',
   HomeScreen = 'HomeScreen',
   SearchScreen = 'SearchScreen',

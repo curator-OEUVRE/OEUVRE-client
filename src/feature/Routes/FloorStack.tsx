@@ -3,17 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ProfileStack, { type ProfileStackParamsList } from './ProfileStack';
 import { Navigator, Screen } from '@/constants/screens';
 import {
-  AddPictureScreen,
-  AddPictureScreenParams,
-  PictureDescriptionScreen,
-  PictureDescriptionScreenParams,
-  AddHashtagScreen,
-  AddHashtagScreenParams,
-} from '@/screens/CreateFloorScreen';
-import FloorInfoFormScreen, {
-  FloorInfoFormScreenParams,
-} from '@/screens/CreateFloorScreen/FloorInfoFormScreen';
-import {
   EditFloorScreen,
   EditFloorScreenParams,
   FloorViewerScreen,
@@ -22,6 +11,12 @@ import {
   EditDescriptionScreenParams,
   HashtagFloorScreen,
   HashtagFloorScreenParams,
+  PictureDescriptionScreen,
+  PictureDescriptionScreenParams,
+  AddHashtagScreen,
+  AddHashtagScreenParams,
+  FloorInfoFormScreen,
+  FloorInfoFormScreenParams,
 } from '@/screens/FloorScreen';
 import FollowListScreen, {
   FollowListScreenParams,
@@ -37,7 +32,6 @@ import ProfileScreen, {
 } from '@/screens/ProfileScreen';
 
 export type FloorStackParamsList = {
-  [Screen.AddPictureScreen]: AddPictureScreenParams;
   [Screen.PictureDescriptionScreen]: PictureDescriptionScreenParams;
   [Screen.AddHashtagScreen]: AddHashtagScreenParams;
   [Screen.FloorInfoFormScreen]: FloorInfoFormScreenParams;
@@ -56,12 +50,10 @@ const Stack = createStackNavigator<FloorStackParamsList>();
 
 const FloorStack = () => (
   <Stack.Navigator
-    initialRouteName={Screen.AddPictureScreen}
     screenOptions={{
       headerShown: false,
     }}
   >
-    <Stack.Screen name={Screen.AddPictureScreen} component={AddPictureScreen} />
     <Stack.Screen
       name={Screen.PictureDescriptionScreen}
       component={PictureDescriptionScreen}

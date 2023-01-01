@@ -8,16 +8,14 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, Pressable, StyleSheet, View, BackHandler } from 'react-native';
+import { Alert, BackHandler, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AlertIcon from '@/assets/icons/Alert';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
 import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
-import ShareIcon from '@/assets/icons/Share';
 import TextBubbleIcon from '@/assets/icons/TextBubble';
 import {
   BottomSheet,
@@ -26,13 +24,13 @@ import {
   Spinner,
 } from '@/components';
 import { Header } from '@/components/Header';
-import { Navigator, Screen } from '@/constants/screens';
+import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { getColorByBackgroundColor } from '@/services/common/color';
-import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
+import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
 
 const styles = StyleSheet.create({
@@ -78,18 +76,9 @@ const FloorViewerScreen = () => {
   const { params } = useRoute<FloorViewerScreenRP>();
 
   const navigation = useNavigation<FloorViewerScreenNP>();
-  const {
-    setFloorMode,
-    fetchFloor,
-    isMine,
-    color,
-    userNo,
-    userId,
-    name,
-    pictures,
-    clearCreateFloorStore,
-    hasNewComment,
-  } = useCreateFloorStore();
+  const { floor, fetchFloor } = useFloorStore();
+  const { isMine, color, userNo, userId, name, pictures, hasNewComment } =
+    floor;
 
   const { deleteFloor } = useUserStore();
   const { floorNo } = params;
@@ -101,14 +90,8 @@ const FloorViewerScreen = () => {
     dark: COLOR.mono.gray5,
   });
 
-  const onGoBack = useCallback(async () => {
-    clearCreateFloorStore();
-    // await lockAsync(OrientationLock.PORTRAIT_UP);
-  }, [clearCreateFloorStore]);
-
   useEffect(() => {
     const backAction = () => {
-      onGoBack();
       navigation.goBack();
       return true;
     };
@@ -117,16 +100,8 @@ const FloorViewerScreen = () => {
       backAction,
     );
     return () => backHandler.remove();
-  }, [onGoBack, navigation]);
+  }, [navigation]);
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const lockOrientation = async () => {
-  //       await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
-  //     };
-  //     lockOrientation();
-  //   }, []),
-  // );
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
@@ -166,7 +141,6 @@ const FloorViewerScreen = () => {
   );
 
   const onEditFloor = () => {
-    setFloorMode({ mode: FloorMode.EDIT });
     navigation.navigate(Screen.EditFloorScreen, { floorNo });
   };
 
@@ -177,6 +151,7 @@ const FloorViewerScreen = () => {
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
   const visitProfile = useCallback(() => {
+    if (!userNo) return;
     navigation.navigate(Screen.ProfileScreen, { userNo });
   }, [userNo, navigation]);
 
@@ -204,6 +179,7 @@ const FloorViewerScreen = () => {
       />
     </BottomSheetItemGroup>,
   ];
+
   const bottomSheetForVisiter = (
     <BottomSheetItemGroup>
       <BottomSheetItem
@@ -250,11 +226,10 @@ const FloorViewerScreen = () => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
-        headerTitle={name.value}
+        headerTitle={name}
         headerRight={ConfirmButton}
         backgroundColor="transparent"
         iconColor={iconColorByBackground}
-        onGoBack={onGoBack}
       />
       <View style={styles.wrapList}>
         <FloorPictureList

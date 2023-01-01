@@ -11,8 +11,8 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import PictureDescriptionForm from '@/feature/PictureDescriptionForm';
 import { RootStackParamsList } from '@/feature/Routes';
-import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { useFloorStore } from '@/states/floorStore';
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -26,28 +26,28 @@ const styles = StyleSheet.create({
 
 export type PictureDescriptionScreenParams = undefined;
 export type PictureDescriptionScreenNP = CompositeNavigationProp<
-  StackNavigationProp<
-    CreateFloorStackParamsList,
-    Screen.PictureDescriptionScreen
-  >,
+  StackNavigationProp<FloorStackParamsList, Screen.PictureDescriptionScreen>,
   StackNavigationProp<RootStackParamsList>
 >;
 
 const PictureDescriptionScreen = () => {
   const navigation = useNavigation<PictureDescriptionScreenNP>();
-  const { pictures, changeDescriptionByIdx } = useCreateFloorStore();
-  const headerRight = () => (
-    <Pressable
-      onPress={() => {
-        navigation.navigate(Screen.FloorInfoFormScreen);
-      }}
-    >
-      <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>다음</Text>
-    </Pressable>
+  const { floor, changeDescriptionByIdx } = useFloorStore();
+  const pictures = floor?.pictures ?? [];
+  const onPressComplete = useCallback(() => {
+    navigation.navigate(Screen.EditFloorScreen);
+  }, [navigation]);
+  const headerRight = useCallback(
+    () => (
+      <Pressable onPress={onPressComplete}>
+        <Text style={[styles.buttonText, TEXT_STYLE.body16M]}>완료</Text>
+      </Pressable>
+    ),
+    [onPressComplete],
   );
   const onHashtagPress = useCallback(
-    (idx: number) => {
-      navigation.navigate(Screen.AddHashtagScreen, { idx });
+    (pictureNo: number) => {
+      navigation.navigate(Screen.AddHashtagScreen, { pictureNo });
     },
     [navigation],
   );

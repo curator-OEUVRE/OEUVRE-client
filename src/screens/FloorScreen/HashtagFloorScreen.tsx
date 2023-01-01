@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-raw-text */
 import {
   CompositeNavigationProp,
   RouteProp,
@@ -7,7 +6,6 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -102,14 +100,6 @@ const HashtagFloorScreen = () => {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
   const [page, setPage] = useState<number>(0);
   const { userNo: myUserNo } = useUserStore();
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const lockOrientation = async () => {
-  //       await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
-  //     };
-  //     lockOrientation();
-  //   }, []),
-  // );
 
   useFocusEffect(
     useCallback(() => {
@@ -246,7 +236,6 @@ const HashtagFloorScreen = () => {
         style={styles.wrapProfile}
         onPress={async () => {
           if (!userNo) return;
-          // await lockAsync(OrientationLock.PORTRAIT_UP);
           onPressProfile(userNo);
         }}
       >

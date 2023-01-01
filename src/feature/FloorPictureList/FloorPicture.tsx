@@ -1,19 +1,17 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   RenderItemParams,
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 import FastImage from 'react-native-fast-image';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Gesture } from 'react-native-gesture-handler';
 import Animated, {
   FadeIn,
   FadeOut,
-  runOnJS,
   SharedValue,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
@@ -22,7 +20,6 @@ import AddCircleIcon from '@/assets/icons/AddCircle';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
 import type { PictureInfo } from '@/types/picture';
 
 // @ts-ignore
@@ -86,7 +83,6 @@ const FloorPicture = ({
   pictureAddable = true,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
-  const { mode } = useCreateFloorStore();
   const BASE_SIZE = height > width ? width : height;
   const imageWidth = useMemo(
     () => BASE_SIZE * item.width,
@@ -212,7 +208,7 @@ const FloorPicture = ({
               source={{ uri: item.imageUrl }}
               style={imageAnimStyle}
             />
-            {mode === FloorMode.EDIT && renderEditLayer()}
+            {onPressPicture && editable && renderEditLayer()}
           </Shadow>
         </Pressable>
         {renderDescription ? (

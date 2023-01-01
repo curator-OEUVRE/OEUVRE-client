@@ -3,6 +3,7 @@ import {
   type CompositeNavigationProp,
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { MediaTypeOptions } from 'expo-image-picker';
 import { useCallback, useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import ProfileTemplate from './ProfileTemplate';
@@ -16,7 +17,8 @@ import type { RootStackParamsList } from '@/feature/Routes';
 import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import { ProfileStackParamsList } from '@/feature/Routes/ProfileStack';
 import useAuth from '@/hooks/useAuth';
-import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
+import { getImagesFromLibrary } from '@/services/common/image';
+import { useCreateFloorStore } from '@/states/createFloorStore';
 import { useUserStore } from '@/states/userStore';
 import type { FloorMini } from '@/types/floor';
 import type { UserProfile } from '@/types/user';
@@ -141,6 +143,7 @@ const MyCollection = () => {
 
 const MyProfileScreen = () => {
   const navigation = useNavigation<MyProfileScreenNP>();
+  const { createPictures } = useCreateFloorStore();
 
   const profile = useUserStore<UserProfile>(
     (state) => ({
@@ -155,7 +158,24 @@ const MyProfileScreen = () => {
     }),
     shallow,
   );
-  const { setFloorMode } = useCreateFloorStore();
+
+  const onAddFloorPress = useCallback(async () => {
+    const [result, canUpload] = await getImagesFromLibrary({
+      mediaTypes: MediaTypeOptions.Images,
+    });
+    if (result && canUpload) {
+      const imageUrls = result?.map((imageInfo) => ({
+        imageUrl: imageInfo.uri,
+        width: (imageInfo.width * 0.5) / imageInfo.height,
+        height: 0.5,
+      }));
+      console.log(imageUrls);
+      createPictures(imageUrls);
+      navigation.navigate(Navigator.CreateFloorStack, {
+        screen: Screen.PictureDescriptionScreen,
+      });
+    }
+  }, [createPictures, navigation]);
 
   return (
     <ProfileTemplate
@@ -168,12 +188,7 @@ const MyProfileScreen = () => {
       onSettingPress={() => {
         navigation.navigate(Screen.SettingScreen);
       }}
-      onAddFloorPress={() => {
-        setFloorMode({ mode: FloorMode.CREATE });
-        navigation.navigate(Navigator.FloorStack, {
-          screen: Screen.AddPictureScreen,
-        });
-      }}
+      onAddFloorPress={onAddFloorPress}
     />
   );
 };
