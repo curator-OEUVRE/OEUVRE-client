@@ -5,7 +5,7 @@ import {
   CreateFloorResponseDto,
   DeleteFloorResponseDto,
   EditFloorResponseDto,
-  FloorInfo,
+  Floor,
   GetFloorResponseDto,
 } from '@/types/floor';
 import type { FloorMini } from '@/types/floor';
@@ -16,11 +16,11 @@ interface GetFloorParams {
 
 interface EditFloorParams {
   floorNo: number;
-  floor: FloorInfo;
+  floor: Floor;
 }
 
-export const createFloor = async (floor: FloorInfo) => {
-  const response = await postAsync<CreateFloorResponseDto, FloorInfo>(
+export const createFloor = async (floor: Floor) => {
+  const response = await postAsync<CreateFloorResponseDto, Floor>(
     `/floors`,
     floor,
     {
@@ -45,7 +45,7 @@ export const getFloor = async ({ floorNo }: GetFloorParams) => {
 };
 
 export const editFloor = async ({ floor, floorNo }: EditFloorParams) => {
-  const response = await patchAsync<EditFloorResponseDto, FloorInfo>(
+  const response = await patchAsync<EditFloorResponseDto, Floor>(
     `/floors/${floorNo}`,
     floor,
     {

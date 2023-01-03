@@ -1,9 +1,12 @@
+import { useCallback } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import PictureDescriptionItem from './PictureDescriptionItem';
-import { FloorMode, useCreateFloorStore } from '@/states/createFloorStore';
+import { PictureInfo } from '@/types/picture';
 
 interface Props {
   onHashtagPress: (id: number) => void;
+  data: PictureInfo[];
+  changeDescriptionByIdx: (idx: number, description: string) => void;
 }
 
 const styles = StyleSheet.create({
@@ -12,10 +15,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const PictureDescriptionList = ({ onHashtagPress }: Props) => {
-  const { pictures, onChangeDescriptionByIdx, tempPictures, mode } =
-    useCreateFloorStore();
-  const data = mode === FloorMode.ADD_PICTURES ? tempPictures : pictures;
+const PictureDescriptionList = ({
+  onHashtagPress,
+  data,
+  changeDescriptionByIdx,
+}: Props) => {
+  const createOnChangeDescription = useCallback(
+    (idx: number) => (description: string) =>
+      changeDescriptionByIdx(idx, description),
+    [changeDescriptionByIdx],
+  );
   return (
     <FlatList
       data={data}
@@ -23,7 +32,7 @@ const PictureDescriptionList = ({ onHashtagPress }: Props) => {
       renderItem={({ item, index }) => (
         <PictureDescriptionItem
           {...item}
-          onChangeDescription={onChangeDescriptionByIdx(index)}
+          onChangeDescription={createOnChangeDescription(index)}
           onHashtagPress={() => {
             // TODO: DB 상의 id로 바꿔야 함
             onHashtagPress(index);

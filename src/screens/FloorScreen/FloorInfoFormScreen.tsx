@@ -8,28 +8,28 @@ import { BackHandler, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Screen } from '@/constants/screens';
 import FloorInfoForm from '@/feature/FloorInfoForm';
 import { RootStackParamsList } from '@/feature/Routes';
-import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { useFloorStore } from '@/states/floorStore';
 import { FloorInfo } from '@/types/floor';
 
 export type FloorInfoFormScreenParams = undefined;
 export type FloorInfoFormScreenNP = CompositeNavigationProp<
-  StackNavigationProp<CreateFloorStackParamsList, Screen.FloorInfoFormScreen>,
+  StackNavigationProp<FloorStackParamsList, Screen.FloorInfoFormScreen>,
   StackNavigationProp<RootStackParamsList>
 >;
 
 const FloorInfoFormScreen = () => {
-  const {
-    name,
-    color,
-    // texture,
-    // setTexture,
-    isPublic,
-    isCommentAvailable,
-    setFloorInfo,
-  } = useCreateFloorStore();
+  const { floor, setFloorInfo } = useFloorStore();
+  const { color, name, isCommentAvailable, isPublic } = floor;
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
+  const onConfirm = useCallback(
+    (floorInfo: FloorInfo) => {
+      setFloorInfo(floorInfo);
+      navigation.navigate(Screen.EditFloorScreen);
+    },
+    [setFloorInfo, navigation],
+  );
 
   useEffect(() => {
     const backAction = () => {
@@ -43,13 +43,6 @@ const FloorInfoFormScreen = () => {
     return () => backHandler.remove();
   }, [navigation]);
 
-  const onConfirm = useCallback(
-    (floorInfo: FloorInfo) => {
-      setFloorInfo(floorInfo);
-      navigation.navigate(Screen.EditFloorScreen);
-    },
-    [setFloorInfo, navigation],
-  );
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <FloorInfoForm
@@ -59,8 +52,8 @@ const FloorInfoFormScreen = () => {
           isCommentAvailable,
           isPublic,
           onConfirm,
-          title: '플로어 추가',
-          confirmText: '다음',
+          title: '플로어 편집',
+          confirmText: '완료',
         }}
       />
     </TouchableWithoutFeedback>

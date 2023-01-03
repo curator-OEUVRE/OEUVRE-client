@@ -14,18 +14,18 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import AddHashtagForm from '@/feature/AddHashtagForm';
 import { RootStackParamsList } from '@/feature/Routes';
-import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { useFloorStore } from '@/states/floorStore';
 
 export type AddHashtagScreenParams = {
-  idx: number;
+  pictureNo: number;
 };
 export type AddHashtagScreenNP = CompositeNavigationProp<
-  StackNavigationProp<CreateFloorStackParamsList, Screen.AddHashtagScreen>,
+  StackNavigationProp<FloorStackParamsList, Screen.AddHashtagScreen>,
   StackNavigationProp<RootStackParamsList>
 >;
 export type AddHashtagScreenRP = RouteProp<
-  CreateFloorStackParamsList,
+  FloorStackParamsList,
   Screen.AddHashtagScreen
 >;
 
@@ -43,15 +43,17 @@ const AddHashtagScreen = () => {
   const route = useRoute<AddHashtagScreenRP>();
   const navigation = useNavigation<AddHashtagScreenNP>();
 
-  const { hashtags, setHashtag } = useCreateFloorStore(
-    (state) => ({
-      hashtags: state.pictures[route.params.idx].hashtags,
+  const { hashtags, setHashtag } = useFloorStore((state) => {
+    const picture = state.floor.pictures.find(
+      (p) => p.pictureNo === route.params.pictureNo,
+    );
+    return {
+      hashtags: picture ? picture.hashtags : [],
       setHashtag: (tags: string[]) => {
-        state.setHashtag(route.params.idx, tags);
+        state.setHashtag(route.params.pictureNo, tags);
       },
-    }),
-    shallow,
-  );
+    };
+  }, shallow);
 
   const ConfirmButton = useCallback(
     () => (
@@ -61,7 +63,6 @@ const AddHashtagScreen = () => {
     ),
     [navigation.goBack],
   );
-
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <Header headerTitle="사진 태그 추가" headerRight={ConfirmButton} />

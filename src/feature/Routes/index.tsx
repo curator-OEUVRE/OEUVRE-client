@@ -6,6 +6,9 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
 import AuthStack, { AuthStackParamsList } from './AuthStack';
+import CreateFloorStack, {
+  CreateFloorStackParamsList,
+} from './CreateFloorStack';
 import FloorStack, { FloorStackParamsList } from './FloorStack';
 import MainTabNavigator, { MainTabParamsList } from './MainTabNavigator';
 import { getMyProfile } from '@/apis/user';
@@ -20,6 +23,7 @@ export type RootStackParamsList = {
   [Navigator.FloorStack]: NavigatorScreenParams<FloorStackParamsList>;
   [Screen.WelcomeScreen]: WelcomeScreenParams;
   [Navigator.MainTab]: NavigatorScreenParams<MainTabParamsList>;
+  [Navigator.CreateFloorStack]: NavigatorScreenParams<CreateFloorStackParamsList>;
 };
 
 const Stack = createStackNavigator<RootStackParamsList>();
@@ -64,6 +68,10 @@ export const Routes = () => {
         )}
         <Stack.Screen name={Screen.WelcomeScreen} component={WelcomeScreen} />
         <Stack.Screen name={Navigator.FloorStack} component={FloorStack} />
+        <Stack.Screen
+          name={Navigator.CreateFloorStack}
+          component={CreateFloorStack}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

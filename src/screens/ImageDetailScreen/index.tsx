@@ -6,7 +6,6 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
@@ -19,8 +18,8 @@ import {
 import FastImage from 'react-native-fast-image';
 import {
   Gesture,
-  TapGestureHandler,
   GestureDetector,
+  TapGestureHandler,
 } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -42,7 +41,6 @@ import FavoriteOutlineIcon from '@/assets/icons/FavoriteOutline';
 import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
 import PhotoIcon from '@/assets/icons/Photo';
-import ShareIcon from '@/assets/icons/Share';
 import { Header } from '@/components/Header';
 import {
   BottomSheet,
@@ -51,14 +49,14 @@ import {
   Spinner,
 } from '@/components/index';
 import { IMAGE } from '@/constants/images';
-import { Screen, Navigator } from '@/constants/screens';
+import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import UserProfileList from '@/feature/UserProfileList';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
-import { useCreateFloorStore } from '@/states/createFloorStore';
+import { useFloorStore } from '@/states/floorStore';
 import { LikeUser } from '@/types/picture';
 
 enum OrientationType {
@@ -158,7 +156,7 @@ const ImageDetailScreen = () => {
     dark: COLOR.mono.gray5,
   });
   const { pictureDetail, setPictureDetail, fetchPictureDetail } =
-    useCreateFloorStore();
+    useFloorStore();
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
   const [isEditMode, setEditMode] = useState<boolean>(true);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
