@@ -2,6 +2,7 @@ import { Asset } from 'expo-media-library';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, Text } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import ImageBrowser from './ImageBrowser';
 import { Header } from '@/components/Header';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
@@ -75,13 +76,21 @@ const ImagePickerModal = ({
 
   return (
     <Modal animationType="slide" visible={visible}>
-      <Header
-        headerTitle={headerTitle}
-        onGoBack={hideModal}
-        defaultBackAction={false}
-        headerRight={headerRight}
-      />
-      <ImageBrowser selectedImages={selectedImages} selectImage={selectImage} />
+      <SafeAreaProvider>
+        <SafeAreaView>
+          <Header
+            backgroundColor="transparent"
+            headerTitle={headerTitle}
+            onGoBack={hideModal}
+            defaultBackAction={false}
+            headerRight={headerRight}
+          />
+          <ImageBrowser
+            selectedImages={selectedImages}
+            selectImage={selectImage}
+          />
+        </SafeAreaView>
+      </SafeAreaProvider>
     </Modal>
   );
 };
