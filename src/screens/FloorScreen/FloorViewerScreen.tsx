@@ -9,13 +9,21 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, BackHandler, Pressable, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  View,
+  BackHandler,
+  Share,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AlertIcon from '@/assets/icons/Alert';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
 import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
+import ShareIcon from '@/assets/icons/Share';
 import TextBubbleIcon from '@/assets/icons/TextBubble';
 import {
   BottomSheet,
@@ -24,12 +32,14 @@ import {
   Spinner,
 } from '@/components';
 import { Header } from '@/components/Header';
+import { DynamicLinkType } from '@/constants/dynamicLinks';
 import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { getColorByBackgroundColor } from '@/services/common/color';
+import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
 
@@ -155,8 +165,21 @@ const FloorViewerScreen = () => {
     navigation.navigate(Screen.ProfileScreen, { userNo });
   }, [userNo, navigation]);
 
+  const share = useCallback(async () => {
+    const url = await buildDynamicLink({
+      type: DynamicLinkType.FLOOR,
+      id: floorNo,
+    });
+    Share.share({ url });
+  }, [floorNo]);
+
   const bottomSheetForEditor = [
     <BottomSheetItemGroup key="edit">
+      <BottomSheetItem
+        label="플로어 공유하기"
+        icon={<ShareIcon />}
+        onPress={share}
+      />
       <BottomSheetItem
         label="플로어 수정하기"
         icon={<EditIcon />}
@@ -187,7 +210,11 @@ const FloorViewerScreen = () => {
         icon={<PersonIcon color={COLOR.mono.black} />}
         onPress={visitProfile}
       />
-      {/* <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} /> */}
+      <BottomSheetItem
+        label="플로어 공유하기"
+        icon={<ShareIcon />}
+        onPress={share}
+      />
       <BottomSheetItem
         label="플로어 신고하기"
         icon={<AlertIcon color={COLOR.system.red} />}

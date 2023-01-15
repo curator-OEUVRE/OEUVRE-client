@@ -14,6 +14,7 @@ import {
   Text,
   useWindowDimensions,
   View,
+  Share,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
@@ -41,6 +42,7 @@ import FavoriteOutlineIcon from '@/assets/icons/FavoriteOutline';
 import MoreIcon from '@/assets/icons/More';
 import PersonIcon from '@/assets/icons/Person';
 import PhotoIcon from '@/assets/icons/Photo';
+import ShareIcon from '@/assets/icons/Share';
 import { Header } from '@/components/Header';
 import {
   BottomSheet,
@@ -48,6 +50,7 @@ import {
   BottomSheetItemGroup,
   Spinner,
 } from '@/components/index';
+import { DynamicLinkType } from '@/constants/dynamicLinks';
 import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
@@ -56,6 +59,7 @@ import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import UserProfileList from '@/feature/UserProfileList';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import throttle from '@/services/common/throttle';
+import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
 import { LikeUser } from '@/types/picture';
 
@@ -366,6 +370,14 @@ const ImageDetailScreen = () => {
       </View>
     );
 
+  const share = useCallback(async () => {
+    const link = await buildDynamicLink({
+      type: DynamicLinkType.IMAGE,
+      id: pictureNo,
+    });
+    Share.share({ url: link });
+  }, [pictureNo]);
+
   const bottomSheetForEditor = useMemo(
     () => (
       <BottomSheet
@@ -380,11 +392,11 @@ const ImageDetailScreen = () => {
             icon={<PhotoIcon color={COLOR.mono.black} width={26} height={26} />}
             onPress={visitFloor}
           />
-          {/* <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />}
-          onPress={() => {
-            Share.share()
-          }}
-          /> */}
+          <BottomSheetItem
+            label="사진 공유하기"
+            icon={<ShareIcon />}
+            onPress={share}
+          />
         </BottomSheetItemGroup>
         <BottomSheetItemGroup>
           <BottomSheetItem
@@ -410,7 +422,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, visitFloor, deletePicture, editDescription],
+    [bottomSheetIndex, visitFloor, deletePicture, editDescription, share],
   );
 
   const bottomSheetForVisiter = useMemo(
@@ -432,7 +444,11 @@ const ImageDetailScreen = () => {
             icon={<PhotoIcon color={COLOR.mono.black} width={26} height={26} />}
             onPress={visitFloor}
           />
-          {/* <BottomSheetItem label="사진 공유하기" icon={<ShareIcon />} /> */}
+          <BottomSheetItem
+            label="사진 공유하기"
+            icon={<ShareIcon />}
+            onPress={share}
+          />
           <BottomSheetItem
             label="사진 신고하기"
             icon={<AlertIcon color={COLOR.system.red} />}
@@ -444,7 +460,7 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, visitFloor, userId, visitProfile],
+    [bottomSheetIndex, visitFloor, userId, visitProfile, share],
   );
 
   const renderBottomSheet = () =>
