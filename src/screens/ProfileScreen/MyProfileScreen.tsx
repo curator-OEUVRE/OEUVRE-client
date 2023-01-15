@@ -172,7 +172,7 @@ const MyProfileScreen = () => {
       console.log(imageUrls);
       createPictures(imageUrls);
       navigation.navigate(Navigator.CreateFloorStack, {
-        screen: Screen.PictureDescriptionScreen,
+        screen: Screen.EditFloorScreen,
       });
     },
     [createPictures, navigation],
