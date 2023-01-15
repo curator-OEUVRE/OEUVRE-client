@@ -35,6 +35,7 @@
     "expo-font": "~10.2.0",
     "expo-image-picker": "~13.3.1",
     "expo-linear-gradient": "~11.4.0",
+    "expo-media-library": "~14.2.0",
     "expo-random": "12.3.0",
     "expo-screen-orientation": "~4.3.0",
     "expo-splash-screen": "~0.16.2",

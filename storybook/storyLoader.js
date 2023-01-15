@@ -22,6 +22,7 @@ function loadStories() {
   require('../src/feature/SearchInput/SearchInput.stories');
   require('../src/feature/TermsForm/TermsForm.stories');
   require('../src/feature/NotificationList/NotificationItem.stories');
+  require('../src/feature/ImagePickerModal/ImagePickerModal.stories');
 }
 
 const stories = [
@@ -43,6 +44,7 @@ const stories = [
   '../src/feature/SearchInput/SearchInput.stories',
   '../src/feature/TermsForm/TermsForm.stories',
   '../src/feature/NotificationList/NotificationItem.stories',
+  '../src/feature/ImagePickerModal/ImagePickerModal.stories',
 ];
 
 module.exports = {

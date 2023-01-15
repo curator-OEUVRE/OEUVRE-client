@@ -4,6 +4,7 @@ import {
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { MediaTypeOptions } from 'expo-image-picker';
+import { Asset } from 'expo-media-library';
 import { useCallback, useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import ProfileTemplate from './ProfileTemplate';
@@ -13,6 +14,7 @@ import { getCollection } from '@/apis/user';
 import { Screen, Navigator } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import Collection from '@/feature/Collection';
+import ImagePickerModal from '@/feature/ImagePickerModal';
 import type { RootStackParamsList } from '@/feature/Routes';
 import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import { ProfileStackParamsList } from '@/feature/Routes/ProfileStack';
@@ -144,6 +146,7 @@ const MyCollection = () => {
 const MyProfileScreen = () => {
   const navigation = useNavigation<MyProfileScreenNP>();
   const { createPictures } = useCreateFloorStore();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const profile = useUserStore<UserProfile>(
     (state) => ({
@@ -159,14 +162,11 @@ const MyProfileScreen = () => {
     shallow,
   );
 
-  const onAddFloorPress = useCallback(async () => {
-    const [result, canUpload] = await getImagesFromLibrary({
-      mediaTypes: MediaTypeOptions.Images,
-    });
-    if (result && canUpload) {
-      const imageUrls = result?.map((imageInfo) => ({
-        imageUrl: imageInfo.uri,
-        width: (imageInfo.width * 0.5) / imageInfo.height,
+  const onPickImagesComplete = useCallback(
+    (images: Asset[]) => {
+      const imageUrls = images.map((image) => ({
+        imageUrl: image.uri,
+        width: (image.width * 0.5) / image.height,
         height: 0.5,
       }));
       console.log(imageUrls);
@@ -174,22 +174,36 @@ const MyProfileScreen = () => {
       navigation.navigate(Navigator.CreateFloorStack, {
         screen: Screen.PictureDescriptionScreen,
       });
-    }
-  }, [createPictures, navigation]);
+    },
+    [createPictures, navigation],
+  );
+
+  const onAddFloorPress = useCallback(async () => {
+    setModalVisible(true);
+  }, []);
 
   return (
-    <ProfileTemplate
-      profile={profile}
-      renderFloorList={MyFloorList}
-      renderCollection={MyCollection}
-      onEditPress={() => {
-        navigation.navigate(Screen.EditProfileScreen);
-      }}
-      onSettingPress={() => {
-        navigation.navigate(Screen.SettingScreen);
-      }}
-      onAddFloorPress={onAddFloorPress}
-    />
+    <>
+      <ImagePickerModal
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        headerRightText="다음"
+        headerTitle="플로어 추가"
+        onComplete={onPickImagesComplete}
+      />
+      <ProfileTemplate
+        profile={profile}
+        renderFloorList={MyFloorList}
+        renderCollection={MyCollection}
+        onEditPress={() => {
+          navigation.navigate(Screen.EditProfileScreen);
+        }}
+        onSettingPress={() => {
+          navigation.navigate(Screen.SettingScreen);
+        }}
+        onAddFloorPress={onAddFloorPress}
+      />
+    </>
   );
 };
 

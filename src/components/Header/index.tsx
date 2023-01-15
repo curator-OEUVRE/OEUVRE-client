@@ -20,6 +20,7 @@ interface HeaderProps {
   iconColor?: string;
   onGoBack?: () => void;
   hideBackButton?: boolean;
+  defaultBackAction?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -62,6 +63,7 @@ const Header = ({
   backgroundColor = COLOR.mono.white,
   iconColor = COLOR.mono.black,
   hideBackButton = false,
+  defaultBackAction = true,
 }: HeaderProps) => {
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
@@ -79,7 +81,9 @@ const Header = ({
                   if (onGoBack) {
                     onGoBack();
                   }
-                  navigation.goBack();
+                  if (defaultBackAction) {
+                    navigation.goBack();
+                  }
                 }}
                 hitSlop={10}
               >
