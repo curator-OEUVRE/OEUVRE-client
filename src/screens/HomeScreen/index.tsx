@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { getHomeFeed, type HomeFloor } from '@/apis/floor';
 import PhotoIcon from '@/assets/icons/Photo';
 import { Header } from '@/components/Header';
+import { DynamicLinkType } from '@/constants/dynamicLinks';
 import { Navigator, Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorTicket from '@/feature/FloorTicket';
@@ -22,6 +23,7 @@ import type { RootStackParamsList } from '@/feature/Routes';
 import type { HomeStackParamsList } from '@/feature/Routes/HomeStack';
 import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import useAuth from '@/hooks/useAuth';
+import useDynamicLinks, { OnDynamicLink } from '@/hooks/useDynamicLinks';
 import { useUserStore } from '@/states/userStore';
 
 export type HomeScreenParams = undefined;
@@ -78,6 +80,32 @@ const HomeScreen = () => {
   const { fetchWithToken } = useAuth();
   const { userNo: myUserNo } = useUserStore();
   const navigation = useNavigation<HomeScreenNP>();
+
+  const handleDynamicLink: OnDynamicLink = useCallback(
+    (params) => {
+      switch (params.type) {
+        case DynamicLinkType.FLOOR: {
+          navigation.navigate(Navigator.FloorStack, {
+            screen: Screen.FloorViewerScreen,
+            params: { floorNo: Number(params.id) },
+          });
+          break;
+        }
+        case DynamicLinkType.IMAGE: {
+          navigation.navigate(Navigator.FloorStack, {
+            screen: Screen.ImageDetailScreen,
+            params: { pictureNo: Number(params.id) },
+          });
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    },
+    [navigation],
+  );
+  useDynamicLinks(handleDynamicLink);
 
   const [data, setData] = useState<HomeFloor[]>([]);
   const [refreshing, setRefreshing] = useState(false);

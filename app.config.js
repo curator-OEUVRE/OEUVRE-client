@@ -32,6 +32,16 @@ module.exports = {
         },
       ],
       '@react-native-google-signin/google-signin',
+      '@react-native-firebase/app',
+      [
+        'expo-build-properties',
+        {
+          ios: {
+            useFrameworks: 'static',
+          },
+        },
+      ],
+      '@react-native-firebase/dynamic-links',
     ],
     ios: {
       supportsTablet: false,
@@ -39,6 +49,7 @@ module.exports = {
       googleServicesFile: './GoogleService-Info.plist',
       requireFullScreen: true,
       buildNumber: '5',
+      associatedDomains: ['applinks:oeuvre.page.link'],
     },
     android: {
       adaptiveIcon: {
@@ -48,6 +59,19 @@ module.exports = {
       package: 'com.curator.oeuvre',
       googleServicesFile: './google-services.json',
       versionCode: 5,
+      intentFilters: [
+        {
+          action: 'VIEW',
+          autoVerify: true,
+          data: [
+            {
+              scheme: 'https',
+              host: 'oeuvre.page.link',
+            },
+          ],
+          category: ['BROWSABLE', 'DEFAULT'],
+        },
+      ],
     },
     web: {
       favicon: './assets/favicon.png',
