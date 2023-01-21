@@ -6703,6 +6703,13 @@ expo-manifests@~0.3.0:
   dependencies:
     expo-json-utils "~0.3.0"
 
+expo-media-library@~14.2.0:
+  version "14.2.0"
+  resolved "https://registry.npmjs.org/expo-media-library/-/expo-media-library-14.2.0.tgz#d793ba91a21661920f2f894290670a142d160143"
+  integrity sha512-Z7PFo742oCUDBXkSkz7yqveiRxYxAuxeYOWS6khnEJg0wMghJg1NeSyObFKkfOLEqItbFUJ8r6wi+B97ZGmiFA==
+  dependencies:
+    "@expo/config-plugins" "~5.0.0"
+
 expo-modules-autolinking@0.10.3:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.10.3.tgz#31bfcf3e4b613a7c3949fb1f1e9c23eea4c14caf"

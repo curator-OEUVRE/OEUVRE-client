@@ -3,7 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Alert } from 'react-native';
 import { PictureInfo } from '@/types/picture';
 
-const checkFileSize = async (uris: string[]) => {
+export const checkFileSize = async (uris: string[]) => {
   const fileSizes = await Promise.all(
     uris.map((uri) => FileSystem.getInfoAsync(uri)),
   );
