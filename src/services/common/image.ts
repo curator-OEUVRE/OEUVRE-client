@@ -68,6 +68,10 @@ export const createDefaultPictureInfo = (
 ): PictureInfo => ({
   imageUrl: '',
   description: '',
+  title: '',
+  productionYear: '',
+  materials: '',
+  size: '',
   hashtags: [],
   width: 0.5,
   height: 0.5,

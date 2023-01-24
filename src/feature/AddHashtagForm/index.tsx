@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 24,
-    paddingHorizontal: 20,
   },
   prefix: {
     marginRight: 4,
@@ -84,7 +83,6 @@ const AddHashtagForm = ({ hashtags, setHashtag }: AddHashtagFormProps) => {
     },
     [onPressAdd],
   );
-
   const deleteHashtag = useCallback(
     (index: number) => {
       setHashtag(hashtags.slice(0, index).concat(hashtags.slice(index + 1)));
@@ -96,8 +94,7 @@ const AddHashtagForm = ({ hashtags, setHashtag }: AddHashtagFormProps) => {
     <View style={styles.container}>
       <FormInput
         editable={editable}
-        leftElement={<Prefix />}
-        rightElement={<AddButton />}
+        label="Tag"
         placeholder={placeholder}
         value={inputText}
         onChangeText={onChangeText}

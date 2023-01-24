@@ -13,3 +13,4 @@ export * from './WithKeyboardAvoidingView';
 export * from './SettingItem';
 export * from './Spinner';
 export * from './Tag';
+export * from './Accordian';
