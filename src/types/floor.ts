@@ -1,11 +1,19 @@
 import { ResponseDto } from './common';
 import { PictureInfo } from './picture';
 
+export enum FloorAlignment {
+  CENTER = 'CENTER',
+  TOP = 'TOP',
+  BOTTOM = 'BOTTOM',
+}
+
 export interface FloorInfo {
   name: string;
   color: string;
   isPublic: boolean;
   isCommentAvailable: boolean;
+  alignment?: FloorAlignment;
+  isFramed?: boolean;
 }
 
 export interface Floor extends FloorInfo {

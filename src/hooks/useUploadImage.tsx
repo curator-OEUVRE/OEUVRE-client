@@ -5,16 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { firebase } from '@/services/firebase';
 
 const makeBlob = async (imageUri: string): Promise<Blob> => {
-  let realUri = imageUri;
-
-  // https://github.com/facebook/react-native/issues/27099#issuecomment-907069335
-  if (Platform.OS === 'ios') {
-    const prevPath = imageUri;
-    const realPath = `${prevPath}.toUpload`;
-    await copyAsync({ from: prevPath, to: realPath });
-    realUri = realPath;
-  }
-  const response = await fetch(realUri);
+  const response = await fetch(imageUri);
   const image = await response.blob();
   return image;
 };

@@ -1,7 +1,8 @@
 import { Asset } from 'expo-media-library';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Modal, Pressable, Text } from 'react-native';
+import { Modal, Platform, Pressable, Text } from 'react-native';
+import RNFS from 'react-native-fs';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import ImageBrowser from './ImageBrowser';
 import { Header } from '@/components/Header';
@@ -29,8 +30,26 @@ const ImagePickerModal = ({
     lockAsync(OrientationLock.PORTRAIT_UP);
   }, []);
 
+  const phPathToFilePath = useCallback(async (uri: string) => {
+    let fileURI = encodeURI(uri);
+
+    if (uri.startsWith('ph://')) {
+      const copyPath = `${
+        RNFS.DocumentDirectoryPath
+      }/${new Date().toISOString()}.jpg`.replace(/:/g, '-');
+
+      fileURI = await RNFS.copyAssetsFileIOS(uri, copyPath, 360, 360);
+    }
+
+    return fileURI;
+  }, []);
+
   const selectImage = useCallback(
-    (image: Asset) => {
+    async (image: Asset) => {
+      if (Platform.OS === 'ios') {
+        // eslint-disable-next-line no-param-reassign
+        image.uri = await phPathToFilePath(image.uri);
+      }
       const selectedItemIdx = selectedImages.findIndex(
         (img) => img.uri === image.uri,
       );
@@ -42,7 +61,7 @@ const ImagePickerModal = ({
         setSelectedImages((prev) => [...prev, image]);
       }
     },
-    [selectedImages],
+    [selectedImages, phPathToFilePath],
   );
 
   const hideModal = useCallback(() => {

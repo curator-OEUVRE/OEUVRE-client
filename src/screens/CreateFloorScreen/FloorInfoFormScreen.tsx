@@ -93,6 +93,7 @@ const FloorInfoFormScreen = () => {
         {modalVisible && (
           <SuccessModal
             onPress={() => {
+              setModalVisible(false);
               if (!newFloorNo) return;
               navigation.navigate(Navigator.FloorStack, {
                 screen: Screen.FloorViewerScreen,
