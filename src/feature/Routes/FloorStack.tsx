@@ -11,8 +11,6 @@ import {
   EditDescriptionScreenParams,
   HashtagFloorScreen,
   HashtagFloorScreenParams,
-  PictureDescriptionScreen,
-  PictureDescriptionScreenParams,
   AddHashtagScreen,
   AddHashtagScreenParams,
   FloorInfoFormScreen,
@@ -32,7 +30,6 @@ import ProfileScreen, {
 } from '@/screens/ProfileScreen';
 
 export type FloorStackParamsList = {
-  [Screen.PictureDescriptionScreen]: PictureDescriptionScreenParams;
   [Screen.AddHashtagScreen]: AddHashtagScreenParams;
   [Screen.FloorInfoFormScreen]: FloorInfoFormScreenParams;
   [Screen.FloorViewerScreen]: FloorViewerScreenParams;
@@ -54,10 +51,6 @@ const FloorStack = () => (
       headerShown: false,
     }}
   >
-    <Stack.Screen
-      name={Screen.PictureDescriptionScreen}
-      component={PictureDescriptionScreen}
-    />
     <Stack.Screen name={Screen.AddHashtagScreen} component={AddHashtagScreen} />
     <Stack.Screen
       name={Screen.FloorInfoFormScreen}

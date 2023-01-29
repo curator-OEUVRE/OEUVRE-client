@@ -15,6 +15,9 @@ import { Spinner } from '@/components/Spinner';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
+import PictureInfoModal, {
+  PictureInfoModalValue,
+} from '@/feature/PictureInfoModal';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
@@ -59,6 +62,9 @@ export type EditFloorScreenRP = RouteProp<
 
 const EditFloorScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedPicture, selectPicture] = useState<PictureInfo>();
+  const [pictureInfoModalVisible, setPictureInfoModalVisible] =
+    useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
   const { floor, setPictures, editFloor, fetchPictureDetail } = useFloorStore();
@@ -159,18 +165,30 @@ const EditFloorScreen = () => {
           ...imageUrls.map((info) => createDefaultPictureInfo(info)),
           ...pictures.slice(index),
         ]);
-        navigation.navigate(Screen.PictureDescriptionScreen);
       }
     },
-    [navigation, pictures, setPictures],
+    [pictures, setPictures],
   );
 
-  const onPressPicture = async (picture: PictureInfo) => {
-    await fetchPictureDetail(picture.pictureNo);
-    navigation.navigate(Screen.EditDescriptionScreen, {
-      pictureNo: picture.pictureNo,
-    });
-  };
+  const onPressPicture = useCallback((picture: PictureInfo) => {
+    selectPicture(picture);
+    setPictureInfoModalVisible(true);
+  }, []);
+
+  const onPictureInfoComplete = useCallback(
+    (value: PictureInfoModalValue) => {
+      const newPictures = pictures.map((picture) => {
+        if (picture.imageUrl !== selectedPicture?.imageUrl) return picture;
+        return { ...picture, ...value };
+      });
+      setPictures(newPictures);
+    },
+    [pictures, selectedPicture, setPictures],
+  );
+
+  const onGoBack = useCallback(() => {
+    selectPicture(undefined);
+  }, []);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
@@ -192,6 +210,17 @@ const EditFloorScreen = () => {
         />
       </View>
       {loading && <Spinner />}
+      {selectedPicture && (
+        <PictureInfoModal
+          visible={pictureInfoModalVisible}
+          headerTitle="작품 설명 추가"
+          headerRightText="완료"
+          setVisible={setPictureInfoModalVisible}
+          onComplete={onPictureInfoComplete}
+          onGoBack={onGoBack}
+          {...selectedPicture}
+        />
+      )}
     </SafeAreaView>
   );
 };

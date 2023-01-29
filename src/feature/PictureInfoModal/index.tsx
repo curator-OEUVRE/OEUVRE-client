@@ -120,11 +120,13 @@ const PictureInfoModal = ({
 }: PictureInfoModalProps) => {
   const [title, setTitle] = useState<string>(info.title);
   const [productionYear, setProductionYear] = useState<string>(
-    info.productionYear,
+    info.productionYear || '',
   );
-  const [materials, setMaterials] = useState<string>(info.materials);
-  const [size, setSize] = useState<string>(info.size);
-  const [description, setDescription] = useState<string>(info.description);
+  const [materials, setMaterials] = useState<string>(info.materials || '');
+  const [size, setSize] = useState<string>(info.size || '');
+  const [description, setDescription] = useState<string>(
+    info.description || '',
+  );
   const [hashtags, setHashtag] = useState<string[]>([]);
   useEffect(() => {
     lockAsync(OrientationLock.PORTRAIT_UP);

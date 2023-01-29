@@ -3,8 +3,6 @@ import { Screen } from '@/constants/screens';
 import {
   AddHashtagScreen,
   AddHashtagScreenParams,
-  PictureDescriptionScreen,
-  PictureDescriptionScreenParams,
   FloorInfoFormScreen,
   FloorInfoFormScreenParams,
   EditFloorScreen,
@@ -12,7 +10,6 @@ import {
 } from '@/screens/CreateFloorScreen';
 
 export type CreateFloorStackParamsList = {
-  [Screen.PictureDescriptionScreen]: PictureDescriptionScreenParams;
   [Screen.AddHashtagScreen]: AddHashtagScreenParams;
   [Screen.FloorInfoFormScreen]: FloorInfoFormScreenParams;
   [Screen.EditFloorScreen]: EditFloorScreenParams;
@@ -26,10 +23,6 @@ const CreateFloorStack = () => (
       headerShown: false,
     }}
   >
-    <Stack.Screen
-      name={Screen.PictureDescriptionScreen}
-      component={PictureDescriptionScreen}
-    />
     <Stack.Screen name={Screen.AddHashtagScreen} component={AddHashtagScreen} />
     <Stack.Screen
       name={Screen.FloorInfoFormScreen}

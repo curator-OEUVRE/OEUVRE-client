@@ -12,9 +12,6 @@ import FloorViewerScreen, {
 import HashtagFloorScreen, {
   HashtagFloorScreenParams,
 } from './HashtagFloorScreen';
-import PictureDescriptionScreen, {
-  PictureDescriptionScreenParams,
-} from './PictureDescriptionScreen';
 
 export {
   FloorViewerScreen,
@@ -22,7 +19,6 @@ export {
   EditDescriptionScreen,
   HashtagFloorScreen,
   AddHashtagScreen,
-  PictureDescriptionScreen,
   FloorInfoFormScreen,
 };
 export type {
@@ -31,6 +27,5 @@ export type {
   EditDescriptionScreenParams,
   HashtagFloorScreenParams,
   AddHashtagScreenParams,
-  PictureDescriptionScreenParams,
   FloorInfoFormScreenParams,
 };
