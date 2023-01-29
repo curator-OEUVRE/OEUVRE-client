@@ -71,7 +71,7 @@ const EditFloorScreen = () => {
   }, [navigation]);
 
   const onConfirm = useCallback(() => {
-    navigation.navigate(Screen.PictureDescriptionScreen);
+    navigation.navigate(Screen.FloorInfoFormScreen);
   }, [navigation]);
 
   const iconColorByBackground = getColorByBackgroundColor(color);
@@ -122,6 +122,10 @@ const EditFloorScreen = () => {
     [pictures, selectedPicture, setPictures],
   );
 
+  const onGoBack = useCallback(() => {
+    selectPicture(undefined);
+  }, []);
+
   const onPressPicture = useCallback((picture: PictureInfo) => {
     selectPicture(picture);
     setPictureInfoModalVisible(true);
@@ -159,6 +163,7 @@ const EditFloorScreen = () => {
           headerRightText="완료"
           setVisible={setPictureInfoModalVisible}
           onComplete={onPictureInfoComplete}
+          onGoBack={onGoBack}
           {...selectedPicture}
         />
       )}

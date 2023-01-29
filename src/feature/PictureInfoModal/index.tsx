@@ -36,6 +36,7 @@ interface PictureInfoModalProps extends PictureInfoModalValue {
   visible: boolean;
   setVisible: (visible: boolean) => void;
   onComplete?: (value: PictureInfoModalValue) => void;
+  onGoBack?: () => void;
   headerTitle?: string;
   headerRightText?: string;
   imageUrl: string;
@@ -114,6 +115,7 @@ const PictureInfoModal = ({
   headerTitle,
   headerRightText,
   imageUrl,
+  onGoBack,
   ...info
 }: PictureInfoModalProps) => {
   const [title, setTitle] = useState<string>(info.title);
@@ -130,7 +132,8 @@ const PictureInfoModal = ({
 
   const hideModal = useCallback(() => {
     setVisible(false);
-  }, [setVisible]);
+    onGoBack?.();
+  }, [setVisible, onGoBack]);
 
   const onPressComplete = useCallback(async () => {
     hideModal();
@@ -212,6 +215,7 @@ const PictureInfoModal = ({
               headerTitle={headerTitle}
               onGoBack={hideModal}
               headerRight={headerRight}
+              defaultBackAction={false}
             />
             <ScrollView>
               <View style={styles.up}>
