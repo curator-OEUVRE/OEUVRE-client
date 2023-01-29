@@ -127,7 +127,7 @@ const PictureInfoModal = ({
   const [description, setDescription] = useState<string>(
     info.description || '',
   );
-  const [hashtags, setHashtag] = useState<string[]>([]);
+  const [hashtags, setHashtag] = useState<string[]>(info.hashtags || []);
   useEffect(() => {
     lockAsync(OrientationLock.PORTRAIT_UP);
   }, []);
