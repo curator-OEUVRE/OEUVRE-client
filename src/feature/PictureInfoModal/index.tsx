@@ -118,7 +118,7 @@ const PictureInfoModal = ({
   onGoBack,
   ...info
 }: PictureInfoModalProps) => {
-  const [title, setTitle] = useState<string>(info.title);
+  const [title, setTitle] = useState<string>(info.title || '');
   const [productionYear, setProductionYear] = useState<string>(
     info.productionYear || '',
   );
@@ -225,7 +225,7 @@ const PictureInfoModal = ({
                   <Image
                     source={{ uri: imageUrl }}
                     style={styles.image}
-                    resizeMode="center"
+                    resizeMode="contain"
                   />
                 </View>
                 <View style={styles.wrapInput}>
