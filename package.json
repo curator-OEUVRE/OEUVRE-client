@@ -41,6 +41,7 @@
     "expo-linear-gradient": "~11.4.0",
     "expo-linking": "~3.2.4",
     "expo-media-library": "~14.2.0",
+    "expo-notifications": "~0.16.1",
     "expo-random": "12.3.0",
     "expo-screen-orientation": "~4.3.0",
     "expo-splash-screen": "~0.16.2",

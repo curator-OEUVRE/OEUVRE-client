@@ -4,6 +4,7 @@ import {
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as Notifications from 'expo-notifications';
 import React, { useEffect } from 'react';
 import AuthStack, { AuthStackParamsList } from './AuthStack';
 import CreateFloorStack, {
@@ -11,7 +12,7 @@ import CreateFloorStack, {
 } from './CreateFloorStack';
 import FloorStack, { FloorStackParamsList } from './FloorStack';
 import MainTabNavigator, { MainTabParamsList } from './MainTabNavigator';
-import { getMyProfile } from '@/apis/user';
+import { getMyProfile, updatePushToken } from '@/apis/user';
 import { Navigator, Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import useAuth from '@/hooks/useAuth';
@@ -51,7 +52,24 @@ export const Routes = () => {
       }
     }
 
-    if (accessToken) refreshProfile();
+    async function refreshPushToken() {
+      try {
+        const token = await Notifications.getDevicePushTokenAsync();
+
+        if (token.type === 'android' || token.type === 'ios') {
+          await fetchWithToken(updatePushToken, {
+            token: token.data,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (accessToken) {
+      refreshProfile();
+      refreshPushToken();
+    }
   }, [fetchWithToken, setUser, accessToken]);
 
   return (
