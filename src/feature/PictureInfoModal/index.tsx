@@ -38,7 +38,7 @@ interface PictureInfoModalProps extends PictureInfoModalValue {
   onComplete?: (value: PictureInfoModalValue) => void;
   headerTitle?: string;
   headerRightText?: string;
-  imageUri: string;
+  imageUrl: string;
 }
 
 const styles = StyleSheet.create({
@@ -113,7 +113,7 @@ const PictureInfoModal = ({
   onComplete,
   headerTitle,
   headerRightText,
-  imageUri,
+  imageUrl,
   ...info
 }: PictureInfoModalProps) => {
   const [title, setTitle] = useState<string>(info.title);
@@ -217,7 +217,7 @@ const PictureInfoModal = ({
               <View style={styles.up}>
                 <View style={styles.wrapImage}>
                   <Image
-                    source={{ uri: imageUri }}
+                    source={{ uri: imageUrl }}
                     style={styles.image}
                     resizeMode="center"
                   />

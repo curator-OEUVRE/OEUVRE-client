@@ -46,7 +46,7 @@ interface Props {
   editable?: boolean;
   setPictures?: (newData: PictureInfo[]) => void;
   addPictures?: (index: number) => void;
-  onPressPicture?: (pictureNo: number) => void;
+  onPressPicture?: (picture: PictureInfo) => void;
   color?: string;
   onEndReached?: () => void;
   renderDescription?: (picture: PictureInfo) => ReactNode;

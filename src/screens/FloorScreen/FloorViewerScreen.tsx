@@ -42,6 +42,7 @@ import { getColorByBackgroundColor } from '@/services/common/color';
 import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
+import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   container: {
@@ -141,9 +142,9 @@ const FloorViewerScreen = () => {
   );
 
   const onPressPicture = useCallback(
-    (pictureNo: number) => {
+    (picture: PictureInfo) => {
       navigation.navigate(Screen.ImageDetailScreen, {
-        pictureNo,
+        pictureNo: picture.pictureNo,
         color,
       });
     },
@@ -151,7 +152,7 @@ const FloorViewerScreen = () => {
   );
 
   const onEditFloor = () => {
-    navigation.navigate(Screen.EditFloorScreen, { floorNo });
+    navigation.navigate(Screen.EditFloorScreen);
   };
 
   const onDeleteFloor = useCallback(async () => {

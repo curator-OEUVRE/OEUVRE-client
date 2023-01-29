@@ -24,6 +24,7 @@ import {
   getImagesFromLibrary,
 } from '@/services/common/image';
 import { useFloorStore } from '@/states/floorStore';
+import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   confirmText: {
@@ -164,11 +165,11 @@ const EditFloorScreen = () => {
     [navigation, pictures, setPictures],
   );
 
-  const onPressPicture = async (pictureNo: number) => {
-    const picture = pictures.find((p) => p.pictureNo === pictureNo);
-    if (!picture) return;
-    await fetchPictureDetail(pictureNo);
-    navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
+  const onPressPicture = async (picture: PictureInfo) => {
+    await fetchPictureDetail(picture.pictureNo);
+    navigation.navigate(Screen.EditDescriptionScreen, {
+      pictureNo: picture.pictureNo,
+    });
   };
 
   return (
