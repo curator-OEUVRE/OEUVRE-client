@@ -1,6 +1,4 @@
-import { copyAsync } from 'expo-file-system';
 import { useState } from 'react';
-import { Platform } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
 import { firebase } from '@/services/firebase';
 
