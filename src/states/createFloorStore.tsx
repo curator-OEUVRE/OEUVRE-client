@@ -4,7 +4,12 @@ import * as FloorAPI from '@/apis/floor';
 import { FormInputStatus } from '@/components';
 import { COLOR } from '@/constants/styles';
 import { createDefaultPictureInfo } from '@/services/common/image';
-import { CreateFloorResponseDto, Floor, FloorInfo } from '@/types/floor';
+import {
+  CreateFloorResponseDto,
+  Floor,
+  FloorAlignment,
+  FloorInfo,
+} from '@/types/floor';
 import { PictureInfo } from '@/types/picture';
 
 export interface FormInfo<T> {
@@ -16,6 +21,8 @@ export interface FormInfo<T> {
 
 interface CreateFloorStore {
   pictures: PictureInfo[];
+  alignment: FloorAlignment;
+  isFramed: boolean;
   tempPictures: PictureInfo[];
   name: string;
   color: string;
@@ -66,6 +73,8 @@ const defaultValues = {
   userNo: 0,
   userId: '',
   startIndex: -1,
+  alignment: FloorAlignment.CENTER,
+  isFramed: false,
 };
 
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
@@ -116,8 +125,16 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   setIsPublic: (isPublic) => set((state) => ({ ...state, isPublic })),
   setTexture: (texture) => set((state) => ({ ...state, texture })),
   createFloor: async () => {
-    const { color, isCommentAvailable, isPublic, name, pictures, texture } =
-      get();
+    const {
+      color,
+      isCommentAvailable,
+      isPublic,
+      name,
+      pictures,
+      texture,
+      isFramed,
+      alignment,
+    } = get();
     const result = await FloorAPI.createFloor({
       color,
       isCommentAvailable,
@@ -125,6 +142,8 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       name,
       pictures,
       texture,
+      isFramed,
+      alignment,
     });
     const { clearCreateFloorStore } = get();
     clearCreateFloorStore();

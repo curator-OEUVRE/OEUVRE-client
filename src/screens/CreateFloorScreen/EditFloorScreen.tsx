@@ -14,11 +14,15 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import ImagePickerModal from '@/feature/ImagePickerModal';
+import PictureInfoModal, {
+  PictureInfoModalValue,
+} from '@/feature/PictureInfoModal';
 import { RootStackParamsList } from '@/feature/Routes';
 import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import { createDefaultPictureInfo } from '@/services/common/image';
 import { useCreateFloorStore } from '@/states/createFloorStore';
+import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
   confirmText: {
@@ -47,8 +51,12 @@ export type EditFloorScreenRP = RouteProp<
 const EditFloorScreen = () => {
   const navigation = useNavigation<EditFloorScreenNP>();
   const { pictures, setPictures, color } = useCreateFloorStore();
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [imagePickerModalVisible, setImagePickerModalVisible] =
+    useState<boolean>(false);
+  const [pictureInfoModalVisible, setPictureInfoModalVisible] =
+    useState<boolean>(false);
   const addPoint = useRef<number>(-1);
+  const [selectedPicture, selectPicture] = useState<PictureInfo>();
 
   useEffect(() => {
     const backAction = () => {
@@ -63,7 +71,7 @@ const EditFloorScreen = () => {
   }, [navigation]);
 
   const onConfirm = useCallback(() => {
-    navigation.navigate(Screen.PictureDescriptionScreen);
+    navigation.navigate(Screen.FloorInfoFormScreen);
   }, [navigation]);
 
   const iconColorByBackground = getColorByBackgroundColor(color);
@@ -81,7 +89,7 @@ const EditFloorScreen = () => {
   );
 
   const addPictures = useCallback((index: number) => {
-    setModalVisible(true);
+    setImagePickerModalVisible(true);
     addPoint.current = index;
   }, []);
 
@@ -103,6 +111,26 @@ const EditFloorScreen = () => {
     [pictures, setPictures],
   );
 
+  const onPictureInfoComplete = useCallback(
+    (value: PictureInfoModalValue) => {
+      const newPictures = pictures.map((picture) => {
+        if (picture.imageUrl !== selectedPicture?.imageUrl) return picture;
+        return { ...picture, ...value };
+      });
+      setPictures(newPictures);
+    },
+    [pictures, selectedPicture, setPictures],
+  );
+
+  const onGoBack = useCallback(() => {
+    selectPicture(undefined);
+  }, []);
+
+  const onPressPicture = useCallback((picture: PictureInfo) => {
+    selectPicture(picture);
+    setPictureInfoModalVisible(true);
+  }, []);
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <Header
@@ -118,15 +146,27 @@ const EditFloorScreen = () => {
           setPictures={setPictures}
           addPictures={addPictures}
           color={textColorByBackground}
+          onPressPicture={onPressPicture}
         />
       </View>
       <ImagePickerModal
-        visible={modalVisible}
-        setVisible={setModalVisible}
+        visible={imagePickerModalVisible}
+        setVisible={setImagePickerModalVisible}
         headerRightText="다음"
         headerTitle="플로어 추가"
         onComplete={onPickImagesComplete}
       />
+      {selectedPicture && (
+        <PictureInfoModal
+          visible={pictureInfoModalVisible}
+          headerTitle="작품 설명 추가"
+          headerRightText="완료"
+          setVisible={setPictureInfoModalVisible}
+          onComplete={onPictureInfoComplete}
+          onGoBack={onGoBack}
+          {...selectedPicture}
+        />
+      )}
     </SafeAreaView>
   );
 };

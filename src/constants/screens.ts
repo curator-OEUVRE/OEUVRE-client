@@ -15,7 +15,6 @@ export enum Screen {
   PersonalDataFormScreen = 'PersonalDataFormScreen',
   UserProfileFormScreen = 'UserProfileFormScreen',
   WelcomeScreen = 'WelcomeScreen',
-  PictureDescriptionScreen = 'PictureDescriptionScreen',
   HomeScreen = 'HomeScreen',
   SearchScreen = 'SearchScreen',
   GroupFeedScreen = 'GroupFeedScreen',

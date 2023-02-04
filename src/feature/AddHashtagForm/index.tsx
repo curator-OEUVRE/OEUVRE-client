@@ -7,10 +7,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 24,
-    paddingHorizontal: 20,
-  },
-  prefix: {
-    marginRight: 4,
   },
   tag: {
     marginBottom: 4,
@@ -28,7 +24,6 @@ interface AddHashtagFormProps {
   setHashtag: (tags: string[]) => void;
 }
 
-const Prefix = () => <Text style={[styles.prefix, TEXT_STYLE.body16R]}>#</Text>;
 const MAX_COUNT = 5;
 
 const AddHashtagForm = ({ hashtags, setHashtag }: AddHashtagFormProps) => {
@@ -41,7 +36,7 @@ const AddHashtagForm = ({ hashtags, setHashtag }: AddHashtagFormProps) => {
   const addHashtag = useCallback(
     (newTag: string) => {
       if (hashtags.findIndex((v) => v === newTag) === -1) {
-        setHashtag([...hashtags, `#${newTag}`]);
+        setHashtag([...hashtags, newTag]);
       } else {
         setInputText('');
       }
@@ -84,7 +79,6 @@ const AddHashtagForm = ({ hashtags, setHashtag }: AddHashtagFormProps) => {
     },
     [onPressAdd],
   );
-
   const deleteHashtag = useCallback(
     (index: number) => {
       setHashtag(hashtags.slice(0, index).concat(hashtags.slice(index + 1)));
@@ -96,8 +90,7 @@ const AddHashtagForm = ({ hashtags, setHashtag }: AddHashtagFormProps) => {
     <View style={styles.container}>
       <FormInput
         editable={editable}
-        leftElement={<Prefix />}
-        rightElement={<AddButton />}
+        label="Tag"
         placeholder={placeholder}
         value={inputText}
         onChangeText={onChangeText}
@@ -107,10 +100,8 @@ const AddHashtagForm = ({ hashtags, setHashtag }: AddHashtagFormProps) => {
           <Tag
             key={tag}
             text={tag}
-            onDeletePress={() => {
-              deleteHashtag(index);
-            }}
             style={styles.tag}
+            onPressTag={() => deleteHashtag(index)}
           />
         ))}
       </View>

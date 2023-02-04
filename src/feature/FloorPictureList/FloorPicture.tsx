@@ -61,7 +61,7 @@ interface FloorPictureProps extends RenderItemParams<PictureInfo> {
   activeIndexAnim?: SharedValue<number>;
   setActiveLine: (line: number) => void;
   addPictures?: (index: number) => void;
-  onPressPicture?: (pictureNo: number) => void;
+  onPressPicture?: (picture: PictureInfo) => void;
   color?: string;
   renderDescription?: (picture: PictureInfo) => ReactNode;
   pictureAddable?: boolean;
@@ -194,7 +194,7 @@ const FloorPicture = ({
         <Pressable
           onLongPress={editable ? drag : undefined}
           onPress={() => {
-            onPressPicture?.(item.pictureNo);
+            onPressPicture?.(item);
           }}
         >
           <Shadow

@@ -205,9 +205,9 @@ const HashtagFloorScreen = () => {
   );
 
   const onPressPicture = useCallback(
-    (pictureNo: number) => {
+    (picture: PictureInfo) => {
       navigation.navigate(Screen.ImageDetailScreen, {
-        pictureNo,
+        pictureNo: picture.pictureNo,
         color,
       });
     },
@@ -252,6 +252,10 @@ const HashtagFloorScreen = () => {
     location: 0,
     queue: idx,
     description: '',
+    title: '',
+    materials: '',
+    productionYear: '',
+    size: '',
   }));
 
   const fetchMore = async () => {

@@ -24,6 +24,10 @@ export interface PictureInfo extends Picture {
   queue: number;
   userNo?: number;
   id?: string;
+  title: string;
+  productionYear: string;
+  materials: string;
+  size: string;
   profileImageUrl?: string;
 }
 

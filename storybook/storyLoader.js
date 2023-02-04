@@ -23,6 +23,8 @@ function loadStories() {
   require('../src/feature/TermsForm/TermsForm.stories');
   require('../src/feature/NotificationList/NotificationItem.stories');
   require('../src/feature/ImagePickerModal/ImagePickerModal.stories');
+  require('../src/feature/PictureInfoModal/PictureInfoModal.stories');
+  require('../src/components/Accordian/Accordian.stories');
 }
 
 const stories = [
@@ -45,6 +47,8 @@ const stories = [
   '../src/feature/TermsForm/TermsForm.stories',
   '../src/feature/NotificationList/NotificationItem.stories',
   '../src/feature/ImagePickerModal/ImagePickerModal.stories',
+  '../src/feature/PictureInfoModal/PictureInfoModal.stories',
+  '../src/components/Accordian/Accordian.stories',
 ];
 
 module.exports = {
