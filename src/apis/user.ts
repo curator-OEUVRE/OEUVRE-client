@@ -255,3 +255,31 @@ export async function searchUsers(
 
   return response;
 }
+
+interface PatchFcmTokenRequestDto {
+  token: string;
+}
+
+interface PatchFcmTokenResponseDto {
+  code: number;
+  isSuccess: boolean;
+  message: string;
+  result: string;
+  timestamp: string;
+}
+
+export async function updatePushToken(
+  accessToken: string,
+  { token }: PatchFcmTokenRequestDto,
+) {
+  const response = await patchAsync<
+    PatchFcmTokenResponseDto,
+    PatchFcmTokenRequestDto
+  >(
+    '/users/fcm_token',
+    { token },
+    { headers: { 'X-AUTH-TOKEN': accessToken } },
+  );
+
+  return response;
+}
