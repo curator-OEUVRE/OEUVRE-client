@@ -20,11 +20,11 @@ export type FloorInfoFormScreenNP = CompositeNavigationProp<
 
 const FloorInfoFormScreen = () => {
   const { floor, setFloorInfo } = useFloorStore();
-  const { description, name, isCommentAvailable, isPublic } = floor;
+  const { color, description, name, isCommentAvailable, isPublic } = floor;
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
   const onConfirm = useCallback(
-    (floorInfo: FloorInfo) => {
+    (floorInfo: Partial<FloorInfo>) => {
       setFloorInfo(floorInfo);
       navigation.navigate(Screen.EditFloorScreen);
     },
@@ -49,6 +49,7 @@ const FloorInfoFormScreen = () => {
         {...{
           name,
           description,
+          color,
           isCommentAvailable,
           isPublic,
           onConfirm,

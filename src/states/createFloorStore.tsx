@@ -37,7 +37,7 @@ interface CreateFloorStore {
   floorNo?: number;
   startIndex: number;
   hasNewComment?: boolean;
-  setFloorInfo: (floorInfo: FloorInfo) => void;
+  setFloorInfo: (floorInfo: Partial<FloorInfo>) => void;
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],
   ) => void;

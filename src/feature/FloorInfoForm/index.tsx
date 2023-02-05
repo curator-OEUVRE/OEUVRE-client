@@ -37,7 +37,7 @@ interface FloorInfoFormProps extends FloorInfo {
   title: string;
   confirmText: string;
   onGoBack?: () => void;
-  onConfirm?: (floorInfo: FloorInfo) => void;
+  onConfirm?: (floorInfo: Partial<FloorInfo>) => void;
 }
 
 const FloorInfoForm = ({

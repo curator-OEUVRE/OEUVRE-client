@@ -24,6 +24,7 @@ export type FloorInfoFormScreenNP = CompositeNavigationProp<
 const FloorInfoFormScreen = () => {
   const {
     name,
+    color,
     description,
     // texture,
     // setTexture,
@@ -55,7 +56,7 @@ const FloorInfoFormScreen = () => {
   const { uploadImages } = useUploadImage();
 
   const onConfirm = useCallback(
-    async (floorInfo: FloorInfo) => {
+    async (floorInfo: Partial<FloorInfo>) => {
       setFloorInfo(floorInfo);
       const images = pictures.map((picture) => picture.imageUrl);
       setLoading(true);
@@ -82,6 +83,7 @@ const FloorInfoFormScreen = () => {
         <FloorInfoForm
           {...{
             name,
+            color,
             description,
             isCommentAvailable,
             isPublic,
