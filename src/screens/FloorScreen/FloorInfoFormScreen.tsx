@@ -20,7 +20,7 @@ export type FloorInfoFormScreenNP = CompositeNavigationProp<
 
 const FloorInfoFormScreen = () => {
   const { floor, setFloorInfo } = useFloorStore();
-  const { color, name, isCommentAvailable, isPublic } = floor;
+  const { description, name, isCommentAvailable, isPublic } = floor;
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
   const onConfirm = useCallback(
@@ -47,8 +47,8 @@ const FloorInfoFormScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <FloorInfoForm
         {...{
-          color,
           name,
+          description,
           isCommentAvailable,
           isPublic,
           onConfirm,

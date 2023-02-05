@@ -17,6 +17,9 @@ export const CREATE_FLOOR_CONFIG = {
   floorName: {
     limit: [1, 10],
   },
+  floorDescription: {
+    limit: [0, 50],
+  },
 };
 
 export const ERROR_MESSAGE = {

@@ -24,7 +24,7 @@ export type FloorInfoFormScreenNP = CompositeNavigationProp<
 const FloorInfoFormScreen = () => {
   const {
     name,
-    color,
+    description,
     // texture,
     // setTexture,
     isPublic,
@@ -81,8 +81,8 @@ const FloorInfoFormScreen = () => {
       <>
         <FloorInfoForm
           {...{
-            color,
             name,
+            description,
             isCommentAvailable,
             isPublic,
             onConfirm,

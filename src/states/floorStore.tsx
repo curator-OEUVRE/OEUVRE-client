@@ -30,7 +30,7 @@ const defaultFloor = {
   texture: 0,
 };
 
-const initialPicture = {
+const initialPicture: PictureDetail = {
   description: '...',
   floorNo: 1,
   height: 0.5,

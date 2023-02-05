@@ -9,11 +9,12 @@ export enum FloorAlignment {
 
 export interface FloorInfo {
   name: string;
-  color: string;
+  color?: string;
   isPublic: boolean;
   isCommentAvailable: boolean;
   alignment?: FloorAlignment;
   isFramed?: boolean;
+  description?: string;
 }
 
 export interface Floor extends FloorInfo {
