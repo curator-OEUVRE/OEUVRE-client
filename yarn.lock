@@ -11646,6 +11646,11 @@ react-native-swipe-gestures@^1.0.4:
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
 
+react-native-swiper-flatlist@^3.0.18:
+  version "3.0.18"
+  resolved "https://registry.npmjs.org/react-native-swiper-flatlist/-/react-native-swiper-flatlist-3.0.18.tgz#3a3c579925782d30cf00d70af9c3013429df8508"
+  integrity sha512-GHo54SS72sJWWGjnS18AeVievOeSMkTJaLSSS99/kHcnB1Wo3MJKYggtPjFVmc7eFaHcOIwqtGvyNEPxN2MsSA==
+
 react-native-tab-view@^3.3.0:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.3.4.tgz#856d4527f3bbf05e2649302ec80abe9f2f004666"

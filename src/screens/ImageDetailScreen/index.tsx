@@ -5,6 +5,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -15,6 +16,7 @@ import {
   useWindowDimensions,
   View,
   Share,
+  Dimensions,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
@@ -30,6 +32,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as PictureAPI from '@/apis/picture';
 import { getLikeUsers } from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
@@ -144,6 +147,9 @@ const styles = StyleSheet.create({
   wrapImage: {
     flex: 1,
   },
+  item: {
+    flex: 1,
+  },
 });
 
 const ImageDetailScreen = () => {
@@ -159,8 +165,12 @@ const ImageDetailScreen = () => {
   const textColorByBackground = getColorByBackgroundColor(color, {
     dark: COLOR.mono.gray5,
   });
-  const { pictureDetail, setPictureDetail, fetchPictureDetail } =
-    useFloorStore();
+  const {
+    pictureDetail,
+    setPictureDetail,
+    fetchPictureDetail,
+    floor: { pictures },
+  } = useFloorStore();
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
   const [isEditMode, setEditMode] = useState<boolean>(true);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
@@ -209,6 +219,8 @@ const ImageDetailScreen = () => {
   const onSingleTap = useCallback(() => {
     setEditMode((prev) => !prev);
   }, []);
+
+  const { width } = Dimensions.get('window');
 
   const scaleImage = useCallback(() => {
     onAnimation.value = true;
@@ -532,10 +544,20 @@ const ImageDetailScreen = () => {
             onActivated={toggleLike}
           >
             <Animated.View style={[styles.wrapImage, mainImageStyle]}>
-              <FastImage
-                source={{ uri: imageUrl }}
-                style={[styles.imageBackground, isEditMode && styles.shadow]}
-                resizeMode="contain"
+              <SwiperFlatList
+                data={pictures}
+                renderItem={({ item }) => (
+                  <View style={[styles.item, { width }]}>
+                    <FastImage
+                      source={{ uri: item.imageUrl }}
+                      style={[
+                        styles.imageBackground,
+                        isEditMode && styles.shadow,
+                      ]}
+                      resizeMode="contain"
+                    />
+                  </View>
+                )}
               />
             </Animated.View>
           </TapGestureHandler>
