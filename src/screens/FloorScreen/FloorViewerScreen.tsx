@@ -230,7 +230,7 @@ const FloorViewerScreen = () => {
       ref={bottomSheetRef}
       index={bottomSheetIndex}
       onChange={(index) => setBottomSheetIndex(index)}
-      snapPoints={isMine ? [140] : [192]}
+      snapPoints={isMine ? [204] : [192]}
     >
       {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
     </BottomSheet>
