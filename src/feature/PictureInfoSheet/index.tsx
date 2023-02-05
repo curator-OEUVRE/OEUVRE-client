@@ -1,6 +1,7 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Handle from './Handle';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 interface ImageInfoSheetProps {
@@ -78,6 +79,7 @@ const PictureInfoSheet = React.forwardRef(
         style={styles.sheet}
         index={index}
         onChange={setIndex}
+        handleComponent={Handle}
       >
         <BottomSheetView style={styles.container}>
           <View style={styles.info}>
