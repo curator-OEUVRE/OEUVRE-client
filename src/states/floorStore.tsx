@@ -13,7 +13,7 @@ interface FloorStore {
   changeDescriptionByIdx: (idx: number, description: string) => void;
   changeDescription: (pictureNo: number, description: string) => void;
   setHashtag: (pictureNo: number, hashtags: string[]) => void;
-  setFloorInfo: (floorInfo: FloorInfo) => void;
+  setFloorInfo: (floorInfo: Partial<FloorInfo>) => void;
   setPictures: (pictures: PictureInfo[]) => void;
   editFloor: (floorNo: number) => ApiResult<EditFloorResponseDto>;
   fetchFloor: (floorNo: number) => void;
@@ -30,7 +30,7 @@ const defaultFloor = {
   texture: 0,
 };
 
-const initialPicture = {
+const initialPicture: PictureDetail = {
   description: '...',
   floorNo: 1,
   height: 0.5,

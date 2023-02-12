@@ -21,6 +21,7 @@ export interface FormInfo<T> {
 
 interface CreateFloorStore {
   pictures: PictureInfo[];
+  description: string;
   alignment: FloorAlignment;
   isFramed: boolean;
   tempPictures: PictureInfo[];
@@ -36,7 +37,7 @@ interface CreateFloorStore {
   floorNo?: number;
   startIndex: number;
   hasNewComment?: boolean;
-  setFloorInfo: (floorInfo: FloorInfo) => void;
+  setFloorInfo: (floorInfo: Partial<FloorInfo>) => void;
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],
   ) => void;
@@ -75,6 +76,7 @@ const defaultValues = {
   startIndex: -1,
   alignment: FloorAlignment.CENTER,
   isFramed: false,
+  description: '',
 };
 
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
@@ -134,6 +136,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       texture,
       isFramed,
       alignment,
+      description,
     } = get();
     const result = await FloorAPI.createFloor({
       color,
@@ -144,6 +147,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       texture,
       isFramed,
       alignment,
+      description,
     });
     const { clearCreateFloorStore } = get();
     clearCreateFloorStore();

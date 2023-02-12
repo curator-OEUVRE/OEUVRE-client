@@ -384,7 +384,7 @@ const ImageDetailScreen = () => {
         ref={bottomSheetRef}
         index={bottomSheetIndex}
         onChange={(index) => setBottomSheetIndex(index)}
-        snapPoints={[95, 200]}
+        snapPoints={[125, 250]}
       >
         <BottomSheetItemGroup>
           <BottomSheetItem

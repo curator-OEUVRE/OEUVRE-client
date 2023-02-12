@@ -25,6 +25,7 @@ const FloorInfoFormScreen = () => {
   const {
     name,
     color,
+    description,
     // texture,
     // setTexture,
     isPublic,
@@ -55,7 +56,7 @@ const FloorInfoFormScreen = () => {
   const { uploadImages } = useUploadImage();
 
   const onConfirm = useCallback(
-    async (floorInfo: FloorInfo) => {
+    async (floorInfo: Partial<FloorInfo>) => {
       setFloorInfo(floorInfo);
       const images = pictures.map((picture) => picture.imageUrl);
       setLoading(true);
@@ -81,8 +82,9 @@ const FloorInfoFormScreen = () => {
       <>
         <FloorInfoForm
           {...{
-            color,
             name,
+            color,
+            description,
             isCommentAvailable,
             isPublic,
             onConfirm,

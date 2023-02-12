@@ -14,6 +14,7 @@ export interface FloorInfo {
   isCommentAvailable: boolean;
   alignment?: FloorAlignment;
   isFramed?: boolean;
+  description?: string;
 }
 
 export interface Floor extends FloorInfo {
