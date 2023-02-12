@@ -4,6 +4,7 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
+  require('../src/components/Accordian/Accordian.stories');
   require('../src/components/Checkbox/Checkbox.stories');
   require('../src/components/FormInput/FormInput.stories');
   require('../src/components/SettingItem/SettingItem.stories');
@@ -17,17 +18,18 @@ function loadStories() {
   require('../src/feature/GuestBookInput/GuestBookInput.stories');
   require('../src/feature/GuestBookList/GuestBookItem.stories');
   require('../src/feature/GuestBookList/GuestBookList.stories');
+  require('../src/feature/ImagePickerModal/ImagePickerModal.stories');
   require('../src/feature/KakaoLogin/KakaoLogin.stories');
+  require('../src/feature/NotificationList/NotificationItem.stories');
+  require('../src/feature/PictureInfoModal/PictureInfoModal.stories');
+  require('../src/feature/PictureInfoSheet/PictureInfoSheet.stories');
   require('../src/feature/ProfileCard/ProfileCard.stories');
   require('../src/feature/SearchInput/SearchInput.stories');
   require('../src/feature/TermsForm/TermsForm.stories');
-  require('../src/feature/NotificationList/NotificationItem.stories');
-  require('../src/feature/ImagePickerModal/ImagePickerModal.stories');
-  require('../src/feature/PictureInfoModal/PictureInfoModal.stories');
-  require('../src/components/Accordian/Accordian.stories');
 }
 
 const stories = [
+  '../src/components/Accordian/Accordian.stories',
   '../src/components/Checkbox/Checkbox.stories',
   '../src/components/FormInput/FormInput.stories',
   '../src/components/SettingItem/SettingItem.stories',
@@ -41,14 +43,14 @@ const stories = [
   '../src/feature/GuestBookInput/GuestBookInput.stories',
   '../src/feature/GuestBookList/GuestBookItem.stories',
   '../src/feature/GuestBookList/GuestBookList.stories',
+  '../src/feature/ImagePickerModal/ImagePickerModal.stories',
   '../src/feature/KakaoLogin/KakaoLogin.stories',
+  '../src/feature/NotificationList/NotificationItem.stories',
+  '../src/feature/PictureInfoModal/PictureInfoModal.stories',
+  '../src/feature/PictureInfoSheet/PictureInfoSheet.stories',
   '../src/feature/ProfileCard/ProfileCard.stories',
   '../src/feature/SearchInput/SearchInput.stories',
   '../src/feature/TermsForm/TermsForm.stories',
-  '../src/feature/NotificationList/NotificationItem.stories',
-  '../src/feature/ImagePickerModal/ImagePickerModal.stories',
-  '../src/feature/PictureInfoModal/PictureInfoModal.stories',
-  '../src/components/Accordian/Accordian.stories',
 ];
 
 module.exports = {
