@@ -17,6 +17,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
 import { HashtagPicture, Picture } from '@/types/picture';
 
@@ -100,6 +101,7 @@ const HashtagFloorScreen = () => {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
   const [page, setPage] = useState<number>(0);
   const { userNo: myUserNo } = useUserStore();
+  const { fetchFloor, setSwiperIndex } = useFloorStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -206,11 +208,17 @@ const HashtagFloorScreen = () => {
 
   const onPressPicture = useCallback(
     (picture: Picture) => {
+      const idx = pictures.findIndex(
+        ({ pictureNo }) => picture.pictureNo === pictureNo,
+      );
+      if (idx === -1) return;
+      setPictures(pictures);
+      setSwiperIndex(idx);
       navigation.navigate(Screen.ImageDetailScreen, {
         color,
       });
     },
-    [navigation],
+    [navigation, pictures, setSwiperIndex],
   );
 
   const onPressProfile = useCallback(

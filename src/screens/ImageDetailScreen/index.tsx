@@ -173,7 +173,6 @@ const ImageDetailScreen = () => {
 
   const {
     description,
-    imageUrl,
     isLiked,
     isScraped,
     isMine,
