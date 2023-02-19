@@ -1,5 +1,5 @@
 import { ResponseDto } from './common';
-import { PictureInfo } from './picture';
+import { Picture } from '@/types/picture';
 
 export enum FloorAlignment {
   CENTER = 'CENTER',
@@ -18,7 +18,7 @@ export interface FloorInfo {
 }
 
 export interface Floor extends FloorInfo {
-  pictures: PictureInfo[];
+  pictures: Picture[];
   texture: number;
   userId?: string;
   userNo?: number;

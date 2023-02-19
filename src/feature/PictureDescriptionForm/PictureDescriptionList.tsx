@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import PictureDescriptionItem from './PictureDescriptionItem';
-import { PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 interface Props {
   onHashtagPress: (id: number) => void;
-  data: PictureInfo[];
+  data: Picture[];
   changeDescriptionByIdx: (idx: number, description: string) => void;
 }
 

@@ -2,32 +2,24 @@ import { ResponseDto } from './common';
 
 export interface Picture {
   description: string;
+  floorNo: number;
+  hashtags: string[];
   height: number;
   width: number;
-  pictureNo: number;
   imageUrl: string;
-}
-
-export interface PictureDetail extends Picture {
-  floorNo: number;
   isLiked: boolean;
   isMine: boolean;
   isScraped: boolean;
+  manufactureYear: string;
+  materials: string;
+  scale: string;
+  pictureNo: number;
+  queue: number;
+  title: string;
   userNo: number;
   userId: string;
-  hashtags: string[];
-}
-
-export interface PictureInfo extends Picture {
-  hashtags: string[];
   location: number;
-  queue: number;
-  userNo?: number;
   id?: string;
-  title: string;
-  productionYear: string;
-  materials: string;
-  size: string;
   profileImageUrl?: string;
 }
 
@@ -49,7 +41,7 @@ export interface GetPicturesByHashtagResponse {
   isLastPage: boolean;
 }
 
-export type GetPictureDetailResponseDto = ResponseDto<PictureDetail>;
+export type GetPictureDetailResponseDto = ResponseDto<Picture>;
 export type PatchPictureResponseDto = ResponseDto<string>;
 export type PatchPictureRequestDto = {
   description: string;

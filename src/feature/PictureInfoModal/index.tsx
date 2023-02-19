@@ -25,9 +25,9 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 export interface PictureInfoModalValue {
   title: string;
-  productionYear: string;
+  manufactureYear: string;
   materials: string;
-  size: string;
+  scale: string;
   description: string;
   hashtags: string[];
 }
@@ -119,11 +119,11 @@ const PictureInfoModal = ({
   ...info
 }: PictureInfoModalProps) => {
   const [title, setTitle] = useState<string>(info.title || '');
-  const [productionYear, setProductionYear] = useState<string>(
-    info.productionYear || '',
+  const [manufactureYear, setManufactureYear] = useState<string>(
+    info.manufactureYear || '',
   );
   const [materials, setMaterials] = useState<string>(info.materials || '');
-  const [size, setSize] = useState<string>(info.size || '');
+  const [scale, setScale] = useState<string>(info.scale || '');
   const [description, setDescription] = useState<string>(
     info.description || '',
   );
@@ -141,9 +141,9 @@ const PictureInfoModal = ({
     hideModal();
     onComplete?.({
       title,
-      productionYear,
+      manufactureYear,
       materials,
-      size,
+      scale,
       description,
       hashtags,
     });
@@ -151,9 +151,9 @@ const PictureInfoModal = ({
     hideModal,
     onComplete,
     title,
-    productionYear,
+    manufactureYear,
     materials,
-    size,
+    scale,
     description,
     hashtags,
   ]);
@@ -183,8 +183,8 @@ const PictureInfoModal = ({
       <View>
         <InputWithIcon
           icon={<CalendarIcon />}
-          value={productionYear}
-          onChangeText={setProductionYear}
+          value={manufactureYear}
+          onChangeText={setManufactureYear}
           placeholder="제작년도"
           keyboardType="numeric"
         />
@@ -197,14 +197,14 @@ const PictureInfoModal = ({
         />
         <InputWithIcon
           icon={<RulerIcon />}
-          onChangeText={setSize}
-          value={size}
+          onChangeText={setScale}
+          value={scale}
           placeholder="작품 크기 (총15자)"
-          rightElement={restLength(15, size.length)}
+          rightElement={restLength(15, scale.length)}
         />
       </View>
     ),
-    [materials, productionYear, size, restLength],
+    [materials, manufactureYear, scale, restLength],
   );
 
   return (

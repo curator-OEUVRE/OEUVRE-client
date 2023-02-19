@@ -42,7 +42,7 @@ import { getColorByBackgroundColor } from '@/services/common/color';
 import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
-import { PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   container: {
@@ -87,7 +87,7 @@ const FloorViewerScreen = () => {
   const { params } = useRoute<FloorViewerScreenRP>();
 
   const navigation = useNavigation<FloorViewerScreenNP>();
-  const { floor, fetchFloor } = useFloorStore();
+  const { floor, fetchFloor, setSwiperIndex } = useFloorStore();
   const { isMine, color, userNo, userId, name, pictures, hasNewComment } =
     floor;
 
@@ -142,13 +142,17 @@ const FloorViewerScreen = () => {
   );
 
   const onPressPicture = useCallback(
-    (picture: PictureInfo) => {
+    (picture: Picture) => {
+      const idx = pictures.findIndex(
+        ({ pictureNo }) => picture.pictureNo === pictureNo,
+      );
+      if (idx === -1) return;
+      setSwiperIndex(idx);
       navigation.navigate(Screen.ImageDetailScreen, {
-        pictureNo: picture.pictureNo,
         color,
       });
     },
-    [navigation, color],
+    [navigation, color, pictures, setSwiperIndex],
   );
 
   const onEditFloor = () => {

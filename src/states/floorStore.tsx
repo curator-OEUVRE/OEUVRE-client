@@ -4,21 +4,20 @@ import * as FloorAPI from '@/apis/floor';
 import * as PictureAPI from '@/apis/picture';
 import { COLOR } from '@/constants/styles/colors';
 import { EditFloorResponseDto, Floor, FloorInfo } from '@/types/floor';
-import { PictureDetail, PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 interface FloorStore {
   floor: Floor;
-  pictureDetail: PictureDetail;
+  swiperIndex: number;
   setFloor: (floor: Floor) => void;
   changeDescriptionByIdx: (idx: number, description: string) => void;
   changeDescription: (pictureNo: number, description: string) => void;
   setHashtag: (pictureNo: number, hashtags: string[]) => void;
   setFloorInfo: (floorInfo: Partial<FloorInfo>) => void;
-  setPictures: (pictures: PictureInfo[]) => void;
+  setPictures: (pictures: Picture[]) => void;
   editFloor: (floorNo: number) => ApiResult<EditFloorResponseDto>;
   fetchFloor: (floorNo: number) => void;
-  setPictureDetail: (picture: PictureDetail) => void;
-  fetchPictureDetail: (pictureNo: number) => void;
+  setSwiperIndex: (idx: number) => void;
 }
 
 const defaultFloor = {
@@ -30,24 +29,9 @@ const defaultFloor = {
   texture: 0,
 };
 
-const initialPicture: PictureDetail = {
-  description: '...',
-  floorNo: 1,
-  height: 0.5,
-  imageUrl: '',
-  isLiked: false,
-  isMine: false,
-  isScraped: false,
-  pictureNo: 1,
-  width: 0.5,
-  userNo: 0,
-  userId: '',
-  hashtags: [],
-};
-
 export const useFloorStore = create<FloorStore>()((set, get) => ({
   floor: defaultFloor,
-  pictureDetail: initialPicture,
+  swiperIndex: 0,
   setFloor: (floor) =>
     set((state) => ({
       ...state,
@@ -130,16 +114,11 @@ export const useFloorStore = create<FloorStore>()((set, get) => ({
       console.log(response.result.errorMessage);
     }
   },
-  setPictureDetail: (pictureDetail) =>
-    set((state) => ({ ...state, pictureDetail })),
-  fetchPictureDetail: async (pictureNo) => {
-    const { setPictureDetail } = get();
-    const response = await PictureAPI.getPictureDetail({ pictureNo });
-    if (response.isSuccess) {
-      const { result } = response.result;
-      setPictureDetail(result);
-    } else {
-      console.log(response.result.errorMessage);
-    }
+  setSwiperIndex: (idx) => {
+    console.log(idx);
+    set((state) => ({
+      ...state,
+      swiperIndex: idx,
+    }));
   },
 }));

@@ -18,7 +18,7 @@ import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { useUserStore } from '@/states/userStore';
-import { HashtagPicture, PictureInfo } from '@/types/picture';
+import { HashtagPicture, Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   arrowLeft: {
@@ -205,9 +205,8 @@ const HashtagFloorScreen = () => {
   );
 
   const onPressPicture = useCallback(
-    (picture: PictureInfo) => {
+    (picture: Picture) => {
       navigation.navigate(Screen.ImageDetailScreen, {
-        pictureNo: picture.pictureNo,
         color,
       });
     },
@@ -231,7 +230,7 @@ const HashtagFloorScreen = () => {
   );
 
   const renderDescription = useCallback(
-    ({ id, profileImageUrl, userNo }: PictureInfo) => (
+    ({ id, profileImageUrl, userNo }: Picture) => (
       <Pressable
         style={styles.wrapProfile}
         onPress={async () => {

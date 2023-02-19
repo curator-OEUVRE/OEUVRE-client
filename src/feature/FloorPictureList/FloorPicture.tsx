@@ -20,7 +20,7 @@ import AddCircleIcon from '@/assets/icons/AddCircle';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import type { PictureInfo } from '@/types/picture';
+import type { Picture } from '@/types/picture';
 
 // @ts-ignore
 const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
@@ -54,16 +54,16 @@ const styles = StyleSheet.create({
   },
 });
 
-interface FloorPictureProps extends RenderItemParams<PictureInfo> {
+interface FloorPictureProps extends RenderItemParams<Picture> {
   isDragging: SharedValue<boolean>;
   editable?: boolean;
   activeLine: number;
   activeIndexAnim?: SharedValue<number>;
   setActiveLine: (line: number) => void;
   addPictures?: (index: number) => void;
-  onPressPicture?: (picture: PictureInfo) => void;
+  onPressPicture?: (picture: Picture) => void;
   color?: string;
-  renderDescription?: (picture: PictureInfo) => ReactNode;
+  renderDescription?: (picture: Picture) => ReactNode;
   pictureAddable?: boolean;
 }
 
