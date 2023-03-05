@@ -6,15 +6,17 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MediaTypeOptions } from 'expo-image-picker';
-import { useCallback, useEffect, useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
 import { Spinner } from '@/components/Spinner';
 import { Screen } from '@/constants/screens';
-import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import { COLOR, TEXT_STYLE, GRADIENT_COLOR_MAP } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
+import FloorSettingButtonList from '@/feature/FloorSettingButtonList';
 import PictureInfoModal, {
   PictureInfoModalValue,
 } from '@/feature/PictureInfoModal';
@@ -27,6 +29,7 @@ import {
   getImagesFromLibrary,
 } from '@/services/common/image';
 import { useFloorStore } from '@/states/floorStore';
+import { FloorAlignment, FloorGradient } from '@/types/floor';
 import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
@@ -34,8 +37,14 @@ const styles = StyleSheet.create({
     color: COLOR.system.blue,
   },
   container: {
-    backgroundColor: COLOR.mono.white,
     flex: 1,
+  },
+  footer: {
+    alignItems: 'center',
+    height: 40,
+    justifyContent: 'center',
+    marginBottom: 21,
+    width: '100%',
   },
   title: {
     marginRight: 17,
@@ -67,8 +76,8 @@ const EditFloorScreen = () => {
     useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
-  const { floor, setPictures, editFloor, fetchPictureDetail } = useFloorStore();
-  const { pictures, color, name, floorNo } = floor;
+  const { floor, setPictures, editFloor, setFloor } = useFloorStore();
+  const { pictures, color, name, floorNo, alignment, gradient } = floor;
 
   useEffect(() => {
     const backAction = () => {
@@ -190,38 +199,61 @@ const EditFloorScreen = () => {
     selectPicture(undefined);
   }, []);
 
+  const backgroundColorsByGradient = useMemo(() => {
+    if (gradient === FloorGradient.FULL) return [color, color];
+    if (gradient === FloorGradient.BOTTOM)
+      return [color, GRADIENT_COLOR_MAP[color]];
+    return [GRADIENT_COLOR_MAP[color], color];
+  }, [color, gradient]);
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
-      <Header
-        headerTitle={headerTitle}
-        headerRight={ConfirmButton}
-        backgroundColor="transparent"
-        iconColor={iconColorByBackground}
-      />
-      <View style={styles.wrapList}>
-        <FloorPictureList
-          pictures={pictures}
-          editable
-          setPictures={setPictures}
-          addPictures={addPictures}
-          onPressPicture={onPressPicture}
-          color={textColorByBackground}
-          pictureAddable
+    <LinearGradient
+      style={styles.container}
+      colors={backgroundColorsByGradient}
+    >
+      <SafeAreaView style={styles.container}>
+        <Header
+          headerTitle={headerTitle}
+          headerRight={ConfirmButton}
+          backgroundColor="transparent"
+          iconColor={iconColorByBackground}
         />
-      </View>
-      {loading && <Spinner />}
-      {selectedPicture && (
-        <PictureInfoModal
-          visible={pictureInfoModalVisible}
-          headerTitle="작품 설명 추가"
-          headerRightText="완료"
-          setVisible={setPictureInfoModalVisible}
-          onComplete={onPictureInfoComplete}
-          onGoBack={onGoBack}
-          {...selectedPicture}
-        />
-      )}
-    </SafeAreaView>
+        <View style={styles.wrapList}>
+          <FloorPictureList
+            pictures={pictures}
+            editable
+            setPictures={setPictures}
+            addPictures={addPictures}
+            onPressPicture={onPressPicture}
+            color={textColorByBackground}
+            pictureAddable
+          />
+        </View>
+        <View style={styles.footer}>
+          <FloorSettingButtonList
+            color={color}
+            isFramed={false}
+            gradient={gradient}
+            alignment={alignment}
+            onChange={(setting) => {
+              setFloor({ ...floor, ...setting });
+            }}
+          />
+        </View>
+        {loading && <Spinner />}
+        {selectedPicture && (
+          <PictureInfoModal
+            visible={pictureInfoModalVisible}
+            headerTitle="작품 설명 추가"
+            headerRightText="완료"
+            setVisible={setPictureInfoModalVisible}
+            onComplete={onPictureInfoComplete}
+            onGoBack={onGoBack}
+            {...selectedPicture}
+          />
+        )}
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 

@@ -21,7 +21,7 @@ import TopGradientIcon from '@/assets/icons/gradient/Top';
 import { IconButton } from '@/components';
 import { IMAGE } from '@/constants/images';
 import { COLOR } from '@/constants/styles';
-import { FLOOR_BACKGROUND_COLORS } from '@/states/createFloorStore';
+import { FLOOR_BACKGROUND_COLORS } from '@/constants/styles/colors';
 import { FloorAlignment, FloorGradient, FloorSetting } from '@/types/floor';
 
 interface FloorSettingButtonListProps extends FloorSetting {

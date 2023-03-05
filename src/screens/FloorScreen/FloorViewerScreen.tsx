@@ -152,6 +152,7 @@ const FloorViewerScreen = () => {
   );
 
   const onEditFloor = () => {
+    bottomSheetRef.current?.close();
     navigation.navigate(Screen.EditFloorScreen);
   };
 
@@ -162,11 +163,13 @@ const FloorViewerScreen = () => {
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
   const visitProfile = useCallback(() => {
+    bottomSheetRef.current?.close();
     if (!userNo) return;
     navigation.navigate(Screen.ProfileScreen, { userNo });
   }, [userNo, navigation]);
 
   const share = useCallback(async () => {
+    bottomSheetRef.current?.close();
     const url = await buildDynamicLink({
       type: DynamicLinkType.FLOOR,
       id: floorNo,

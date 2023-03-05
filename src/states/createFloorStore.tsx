@@ -2,12 +2,13 @@ import create from 'zustand';
 import { ApiResult } from '@/apis/common';
 import * as FloorAPI from '@/apis/floor';
 import { FormInputStatus } from '@/components';
-import { COLOR } from '@/constants/styles';
+import { FLOOR_BACKGROUND_COLORS } from '@/constants/styles';
 import { createDefaultPictureInfo } from '@/services/common/image';
 import {
   CreateFloorResponseDto,
   Floor,
   FloorAlignment,
+  FloorGradient,
   FloorInfo,
 } from '@/types/floor';
 import { PictureInfo } from '@/types/picture';
@@ -23,10 +24,11 @@ interface CreateFloorStore {
   pictures: PictureInfo[];
   description: string;
   alignment: FloorAlignment;
+  gradient: FloorGradient;
   isFramed: boolean;
   tempPictures: PictureInfo[];
   name: string;
-  color: string;
+  color: typeof FLOOR_BACKGROUND_COLORS[number];
   isCommentAvailable: boolean;
   isPublic: boolean;
   // TODO: enum으로 대체
@@ -46,7 +48,7 @@ interface CreateFloorStore {
   changeDescriptionByIdx: (idx: number, description: string) => void;
   setHashtag: (imageIndex: number, hashtags: string[]) => void;
   setName: (name: string) => void;
-  setColor: (color: string) => void;
+  setColor: (color: typeof FLOOR_BACKGROUND_COLORS[number]) => void;
   setIsCommentAvailable: (isCommentAvailable: boolean) => void;
   setIsPublic: (isPublic: boolean) => void;
   setTexture: (texture: number) => void;
@@ -55,18 +57,13 @@ interface CreateFloorStore {
   clearCreateFloorStore: () => void;
 }
 
-export const FLOOR_BACKGROUND_COLORS = [
-  [COLOR.mono.white, COLOR.mono.gray1, COLOR.mono.gray5, COLOR.mono.gray7],
-  [COLOR.floor.blue, COLOR.oeuvre.blue1, COLOR.floor.yellow, COLOR.floor.red],
-];
-
 export const FLOOR_TEXTURES = [[0]];
 
 const defaultValues = {
   pictures: [],
   tempPictures: [],
   name: '',
-  color: FLOOR_BACKGROUND_COLORS[0][0],
+  color: FLOOR_BACKGROUND_COLORS[0],
   isCommentAvailable: true,
   isPublic: true,
   texture: FLOOR_TEXTURES[0][0],
@@ -77,6 +74,7 @@ const defaultValues = {
   alignment: FloorAlignment.CENTER,
   isFramed: false,
   description: '',
+  gradient: FloorGradient.TOP,
 };
 
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
@@ -137,6 +135,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       isFramed,
       alignment,
       description,
+      gradient,
     } = get();
     const result = await FloorAPI.createFloor({
       color,
@@ -148,6 +147,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       isFramed,
       alignment,
       description,
+      gradient,
     });
     const { clearCreateFloorStore } = get();
     clearCreateFloorStore();
