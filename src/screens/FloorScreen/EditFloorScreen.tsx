@@ -7,14 +7,14 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MediaTypeOptions } from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
 import { Spinner } from '@/components/Spinner';
 import { Screen } from '@/constants/screens';
-import { COLOR, TEXT_STYLE, GRADIENT_COLOR_MAP } from '@/constants/styles';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import FloorSettingButtonList from '@/feature/FloorSettingButtonList';
 import PictureInfoModal, {
@@ -23,13 +23,15 @@ import PictureInfoModal, {
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
-import { getColorByBackgroundColor } from '@/services/common/color';
+import {
+  getBackgroundColorsByGradient,
+  getColorByBackgroundColor,
+} from '@/services/common/color';
 import {
   createDefaultPictureInfo,
   getImagesFromLibrary,
 } from '@/services/common/image';
 import { useFloorStore } from '@/states/floorStore';
-import { FloorAlignment, FloorGradient } from '@/types/floor';
 import { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
@@ -199,17 +201,10 @@ const EditFloorScreen = () => {
     selectPicture(undefined);
   }, []);
 
-  const backgroundColorsByGradient = useMemo(() => {
-    if (gradient === FloorGradient.FULL) return [color, color];
-    if (gradient === FloorGradient.BOTTOM)
-      return [color, GRADIENT_COLOR_MAP[color]];
-    return [GRADIENT_COLOR_MAP[color], color];
-  }, [color, gradient]);
-
   return (
     <LinearGradient
       style={styles.container}
-      colors={backgroundColorsByGradient}
+      colors={getBackgroundColorsByGradient({ color, gradient })}
     >
       <SafeAreaView style={styles.container}>
         <Header

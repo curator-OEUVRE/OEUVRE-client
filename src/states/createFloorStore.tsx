@@ -5,6 +5,7 @@ import { FormInputStatus } from '@/components';
 import { FLOOR_BACKGROUND_COLORS } from '@/constants/styles';
 import { createDefaultPictureInfo } from '@/services/common/image';
 import {
+  FloorBackgroundColor,
   CreateFloorResponseDto,
   Floor,
   FloorAlignment,
@@ -28,7 +29,7 @@ interface CreateFloorStore {
   isFramed: boolean;
   tempPictures: PictureInfo[];
   name: string;
-  color: typeof FLOOR_BACKGROUND_COLORS[number];
+  color: FloorBackgroundColor;
   isCommentAvailable: boolean;
   isPublic: boolean;
   // TODO: enum으로 대체
@@ -48,7 +49,7 @@ interface CreateFloorStore {
   changeDescriptionByIdx: (idx: number, description: string) => void;
   setHashtag: (imageIndex: number, hashtags: string[]) => void;
   setName: (name: string) => void;
-  setColor: (color: typeof FLOOR_BACKGROUND_COLORS[number]) => void;
+  setColor: (color: FloorBackgroundColor) => void;
   setIsCommentAvailable: (isCommentAvailable: boolean) => void;
   setIsPublic: (isPublic: boolean) => void;
   setTexture: (texture: number) => void;

@@ -13,17 +13,18 @@ export enum FloorGradient {
   TOP = 'TOP',
   BOTTOM = 'BOTTOM',
 }
+export type FloorBackgroundColor = typeof FLOOR_BACKGROUND_COLORS[number];
 
 export interface FloorSetting {
   isFramed: boolean;
   alignment: FloorAlignment;
   gradient: FloorGradient;
-  color: typeof FLOOR_BACKGROUND_COLORS[number];
+  color: FloorBackgroundColor;
 }
 
 export interface FloorInfo {
   name: string;
-  color: typeof FLOOR_BACKGROUND_COLORS[number];
+  color: FloorBackgroundColor;
   isPublic: boolean;
   isCommentAvailable: boolean;
   alignment: FloorAlignment;
