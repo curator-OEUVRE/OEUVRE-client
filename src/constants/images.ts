@@ -24,5 +24,6 @@ export const IMAGE = {
     [COLOR.floor.yellow]: require('@/assets/images/paint/yellow.png'),
     [COLOR.floor.red]: require('@/assets/images/paint/red.png'),
     [COLOR.floor.orange]: require('@/assets/images/paint/orange.png'),
+    [COLOR.floor.purple]: require('@/assets/images/paint/purple.png'),
   },
 } as const;
