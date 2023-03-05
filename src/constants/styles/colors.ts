@@ -17,11 +17,11 @@ export const COLOR = {
     blue4: '#6FA1A7',
   },
   floor: {
-    red: '#F9F2F2',
-    orange: '#F9F5F2',
-    yellow: '#F9F7F2',
-    blue: '#F2F6F9',
-    purple: '#F4F2F9',
+    red: '#F9E2E2',
+    orange: '#F4E2D8',
+    yellow: '#FFF5DB',
+    purple: '#DED8F3',
+    blue: '#E3EBFB',
   },
   system: {
     blue: '#5AB5BF',
