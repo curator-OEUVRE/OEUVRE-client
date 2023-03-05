@@ -329,21 +329,22 @@ const ImageDetailScreen = () => {
       </Pressable>
     </View>
   );
-  const renderHeader = () =>
-    isEditMode && (
-      <View
-        style={[
-          orientation === OrientationType.portrait && styles.wrapHeaderPortrait,
-          { paddingTop: insets.top },
-        ]}
-      >
+  const renderHeader = () => (
+    <View
+      style={[
+        orientation === OrientationType.portrait && styles.wrapHeaderPortrait,
+        { paddingTop: insets.top },
+      ]}
+    >
+      {isEditMode && (
         <Header
           iconColor={iconColorByBackground}
           backgroundColor="transparent"
           headerRight={headerRight}
         />
-      </View>
-    );
+      )}
+    </View>
+  );
   const renderFooter = () =>
     isEditMode && (
       <PictureInfoSheet
