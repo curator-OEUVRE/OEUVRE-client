@@ -101,7 +101,11 @@ const HashtagFloorScreen = () => {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
   const [page, setPage] = useState<number>(0);
   const { userNo: myUserNo } = useUserStore();
-  const { fetchFloor, setSwiperIndex } = useFloorStore();
+  const {
+    fetchFloor,
+    setSwiperIndex,
+    setPictures: setFloorPictures,
+  } = useFloorStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -211,14 +215,15 @@ const HashtagFloorScreen = () => {
       const idx = pictures.findIndex(
         ({ pictureNo }) => picture.pictureNo === pictureNo,
       );
+
       if (idx === -1) return;
-      setPictures(pictures);
+      setFloorPictures(pictures);
       setSwiperIndex(idx);
       navigation.navigate(Screen.ImageDetailScreen, {
         color,
       });
     },
-    [navigation, pictures, setSwiperIndex],
+    [navigation, pictures, setSwiperIndex, setFloorPictures],
   );
 
   const onPressProfile = useCallback(
