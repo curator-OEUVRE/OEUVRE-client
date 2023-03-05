@@ -32,6 +32,6 @@ export const getBackgroundColorsByGradient = ({
 }) => {
   if (gradient === FloorGradient.FULL) return [color, color];
   if (gradient === FloorGradient.BOTTOM)
-    return [color, GRADIENT_COLOR_MAP[color]];
-  return [GRADIENT_COLOR_MAP[color], color];
+    return [GRADIENT_COLOR_MAP[color], color];
+  return [color, GRADIENT_COLOR_MAP[color]];
 };
