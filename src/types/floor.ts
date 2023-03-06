@@ -1,5 +1,6 @@
 import { ResponseDto } from './common';
 import { PictureInfo } from './picture';
+import { FLOOR_BACKGROUND_COLORS } from '@/constants/styles/colors';
 
 export enum FloorAlignment {
   CENTER = 'CENTER',
@@ -7,12 +8,27 @@ export enum FloorAlignment {
   BOTTOM = 'BOTTOM',
 }
 
+export enum FloorGradient {
+  FULL = 'FULL',
+  TOP = 'TOP',
+  BOTTOM = 'BOTTOM',
+}
+export type FloorBackgroundColor = typeof FLOOR_BACKGROUND_COLORS[number];
+
+export interface FloorSetting {
+  isFramed: boolean;
+  alignment: FloorAlignment;
+  gradient: FloorGradient;
+  color: FloorBackgroundColor;
+}
+
 export interface FloorInfo {
   name: string;
-  color: string;
+  color: FloorBackgroundColor;
   isPublic: boolean;
   isCommentAvailable: boolean;
-  alignment?: FloorAlignment;
+  alignment: FloorAlignment;
+  gradient: FloorGradient;
   isFramed?: boolean;
   description?: string;
 }

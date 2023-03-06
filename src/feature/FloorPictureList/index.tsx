@@ -18,26 +18,8 @@ import useDimensions from '@/hooks/useDimensions';
 import type { PictureInfo } from '@/types/picture';
 
 const styles = StyleSheet.create({
-  bottom: {
-    alignItems: 'center',
-    bottom: 10,
-    height: 60,
-    justifyContent: 'center',
-    left: 0,
-    position: 'absolute',
-    right: 0,
-  },
   flatList: {
     height: '100%',
-  },
-  pressable: {
-    alignItems: 'center',
-    backgroundColor: COLOR.mono.gray1,
-    borderRadius: 20,
-    height: 40,
-    justifyContent: 'center',
-    width: 40,
-    zIndex: 100,
   },
 });
 
@@ -198,19 +180,6 @@ const FloorPictureList = ({
         onEndReachedThreshold={0.1}
         showsHorizontalScrollIndicator={false}
       />
-      {editable && (
-        <View style={styles.bottom}>
-          <AnimatedPressable
-            style={animatedPressableStyles}
-            onLayout={measureLayout}
-            ref={pressableRef}
-          >
-            <Shadow startColor="#A7A9AB05" style={styles.pressable}>
-              <TrashIcon color={COLOR.mono.black} />
-            </Shadow>
-          </AnimatedPressable>
-        </View>
-      )}
     </View>
   );
 };

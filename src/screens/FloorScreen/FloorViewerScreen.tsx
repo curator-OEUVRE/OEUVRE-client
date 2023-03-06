@@ -8,6 +8,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
@@ -38,7 +39,10 @@ import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
-import { getColorByBackgroundColor } from '@/services/common/color';
+import {
+  getBackgroundColorsByGradient,
+  getColorByBackgroundColor,
+} from '@/services/common/color';
 import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
@@ -88,8 +92,16 @@ const FloorViewerScreen = () => {
 
   const navigation = useNavigation<FloorViewerScreenNP>();
   const { floor, fetchFloor } = useFloorStore();
-  const { isMine, color, userNo, userId, name, pictures, hasNewComment } =
-    floor;
+  const {
+    isMine,
+    color,
+    userNo,
+    userId,
+    name,
+    pictures,
+    hasNewComment,
+    gradient,
+  } = floor;
 
   const { deleteFloor } = useUserStore();
   const { floorNo } = params;
@@ -152,6 +164,7 @@ const FloorViewerScreen = () => {
   );
 
   const onEditFloor = () => {
+    bottomSheetRef.current?.close();
     navigation.navigate(Screen.EditFloorScreen);
   };
 
@@ -162,11 +175,13 @@ const FloorViewerScreen = () => {
     navigation.goBack();
   }, [floorNo, navigation, deleteFloor]);
   const visitProfile = useCallback(() => {
+    bottomSheetRef.current?.close();
     if (!userNo) return;
     navigation.navigate(Screen.ProfileScreen, { userNo });
   }, [userNo, navigation]);
 
   const share = useCallback(async () => {
+    bottomSheetRef.current?.close();
     const url = await buildDynamicLink({
       type: DynamicLinkType.FLOOR,
       id: floorNo,
@@ -252,24 +267,29 @@ const FloorViewerScreen = () => {
 
   if (loading) return <Spinner />;
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
-      <Header
-        headerTitle={name}
-        headerRight={ConfirmButton}
-        backgroundColor="transparent"
-        iconColor={iconColorByBackground}
-      />
-      <View style={styles.wrapList}>
-        <FloorPictureList
-          pictures={pictures}
-          editable={false}
-          onPressPicture={onPressPicture}
-          color={textColorByBackground}
+    <LinearGradient
+      style={styles.container}
+      colors={getBackgroundColorsByGradient({ color, gradient })}
+    >
+      <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
+        <Header
+          headerTitle={name}
+          headerRight={ConfirmButton}
+          backgroundColor="transparent"
+          iconColor={iconColorByBackground}
         />
-      </View>
-      {guestBookButton}
-      {renderBottomSheet()}
-    </SafeAreaView>
+        <View style={styles.wrapList}>
+          <FloorPictureList
+            pictures={pictures}
+            editable={false}
+            onPressPicture={onPressPicture}
+            color={textColorByBackground}
+          />
+        </View>
+        {guestBookButton}
+        {renderBottomSheet()}
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 

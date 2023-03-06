@@ -1,5 +1,5 @@
-import { COLOR } from '@/constants/styles';
-
+import { COLOR, GRADIENT_COLOR_MAP } from '@/constants/styles';
+import { FloorGradient, FloorBackgroundColor } from '@/types/floor';
 /* eslint-disable no-bitwise */
 
 interface Options {
@@ -21,4 +21,17 @@ export const getColorByBackgroundColor = (
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
   // 색상 선택
   return luma < 127.5 ? light : dark; // 글자색이
+};
+
+export const getBackgroundColorsByGradient = ({
+  color,
+  gradient,
+}: {
+  color: FloorBackgroundColor;
+  gradient: FloorGradient;
+}) => {
+  if (gradient === FloorGradient.FULL) return [color, color];
+  if (gradient === FloorGradient.BOTTOM)
+    return [GRADIENT_COLOR_MAP[color], color];
+  return [color, GRADIENT_COLOR_MAP[color]];
 };

@@ -6,6 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import { IconButton } from './IconButton';
 
 interface ButtonProps extends PressableProps {
   icon?: React.ReactNode;
@@ -66,4 +67,4 @@ const Button = ({
   </Pressable>
 );
 
-export { Button };
+export { Button, IconButton };
