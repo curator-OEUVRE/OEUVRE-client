@@ -3,7 +3,13 @@ import { ApiResult } from '@/apis/common';
 import * as FloorAPI from '@/apis/floor';
 import * as PictureAPI from '@/apis/picture';
 import { COLOR } from '@/constants/styles/colors';
-import { EditFloorResponseDto, Floor, FloorInfo } from '@/types/floor';
+import {
+  EditFloorResponseDto,
+  Floor,
+  FloorAlignment,
+  FloorGradient,
+  FloorInfo,
+} from '@/types/floor';
 import { Picture } from '@/types/picture';
 
 interface FloorStore {
@@ -27,6 +33,8 @@ const defaultFloor = {
   name: '',
   pictures: [],
   texture: 0,
+  gradient: FloorGradient.FULL,
+  alignment: FloorAlignment.TOP,
 };
 
 export const useFloorStore = create<FloorStore>()((set, get) => ({
@@ -35,7 +43,7 @@ export const useFloorStore = create<FloorStore>()((set, get) => ({
   setFloor: (floor) =>
     set((state) => ({
       ...state,
-      floor,
+      floor: { ...defaultFloor, ...floor },
     })),
   changeDescriptionByIdx: (idx, description) =>
     set((state) => ({

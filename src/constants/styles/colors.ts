@@ -17,14 +17,40 @@ export const COLOR = {
     blue4: '#6FA1A7',
   },
   floor: {
-    red: '#F9F2F2',
-    orange: '#F9F5F2',
-    yellow: '#F9F7F2',
-    blue: '#F2F6F9',
-    purple: '#F4F2F9',
+    red: '#F9E2E2',
+    orange: '#F4E2D8',
+    yellow: '#FFF5DB',
+    purple: '#EDECF1',
+    blue: '#E3EBFB',
   },
   system: {
     blue: '#5AB5BF',
     red: '#EE5A5A',
   },
 } as const;
+
+export const FLOOR_BACKGROUND_COLORS = [
+  COLOR.mono.white,
+  COLOR.mono.gray1,
+  COLOR.mono.gray5,
+  COLOR.mono.gray7,
+  COLOR.floor.blue,
+  COLOR.oeuvre.blue1,
+  COLOR.floor.purple,
+  COLOR.floor.yellow,
+  COLOR.floor.red,
+  COLOR.floor.orange,
+];
+
+export const GRADIENT_COLOR_MAP = {
+  [COLOR.mono.white]: COLOR.mono.white,
+  [COLOR.mono.gray1]: COLOR.mono.white,
+  [COLOR.mono.gray5]: COLOR.mono.gray3,
+  [COLOR.mono.gray7]: COLOR.mono.gray5,
+  [COLOR.floor.blue]: COLOR.mono.white,
+  [COLOR.oeuvre.blue1]: COLOR.mono.white,
+  [COLOR.floor.purple]: COLOR.mono.white,
+  [COLOR.floor.yellow]: COLOR.mono.white,
+  [COLOR.floor.red]: COLOR.mono.white,
+  [COLOR.floor.orange]: COLOR.mono.white,
+};
