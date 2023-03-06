@@ -15,7 +15,7 @@ import FloorPicture from './FloorPicture';
 import TrashIcon from '@/assets/icons/Trash';
 import { COLOR } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
-import type { PictureInfo } from '@/types/picture';
+import type { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   flatList: {
@@ -24,14 +24,14 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  pictures: PictureInfo[];
+  pictures: Picture[];
   editable?: boolean;
-  setPictures?: (newData: PictureInfo[]) => void;
+  setPictures?: (newData: Picture[]) => void;
   addPictures?: (index: number) => void;
-  onPressPicture?: (picture: PictureInfo) => void;
+  onPressPicture?: (picture: Picture) => void;
   color?: string;
   onEndReached?: () => void;
-  renderDescription?: (picture: PictureInfo) => ReactNode;
+  renderDescription?: (picture: Picture) => ReactNode;
   pictureAddable?: boolean;
 }
 
@@ -42,7 +42,7 @@ interface Layout {
   pageY: number;
 }
 
-const keyExtractor = (item: PictureInfo, index: number): string =>
+const keyExtractor = (item: Picture, index: number): string =>
   `item_${index}_${item.pictureNo}`;
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -87,7 +87,7 @@ const FloorPictureList = ({
     );
   });
   const renderItem = useCallback(
-    (props: RenderItemParams<PictureInfo>) => (
+    (props: RenderItemParams<Picture>) => (
       <FloorPicture
         {...props}
         addPictures={addPictures}
@@ -120,7 +120,7 @@ const FloorPictureList = ({
     transform: [{ scale: onEnter.value ? 1.5 : 1 }],
   }));
 
-  const onDragEnd = (newData: PictureInfo[]) => {
+  const onDragEnd = (newData: Picture[]) => {
     if (onEnter.value && activeIndexAnim.current) {
       setPictures?.(
         newData.filter(
@@ -161,7 +161,7 @@ const FloorPictureList = ({
               : // 순서가 바뀌면 y축 변화 무시
                 picture,
           );
-          onDragEnd(newPictures);
+          onDragEnd(newData);
         }}
         onAnimValInit={(animVals) => {
           absoluteX.current = animVals.absoluteX;

@@ -12,7 +12,7 @@ import {
   FloorGradient,
   FloorInfo,
 } from '@/types/floor';
-import { PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 export interface FormInfo<T> {
   status: FormInputStatus;
@@ -22,12 +22,12 @@ export interface FormInfo<T> {
 }
 
 interface CreateFloorStore {
-  pictures: PictureInfo[];
+  pictures: Picture[];
   description: string;
   alignment: FloorAlignment;
   gradient: FloorGradient;
   isFramed: boolean;
-  tempPictures: PictureInfo[];
+  tempPictures: Picture[];
   name: string;
   color: FloorBackgroundColor;
   isCommentAvailable: boolean;
@@ -44,7 +44,7 @@ interface CreateFloorStore {
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],
   ) => void;
-  setPictures: (pictures: PictureInfo[]) => void;
+  setPictures: (pictures: Picture[]) => void;
   clearTempPictures: () => void;
   changeDescriptionByIdx: (idx: number, description: string) => void;
   setHashtag: (imageIndex: number, hashtags: string[]) => void;

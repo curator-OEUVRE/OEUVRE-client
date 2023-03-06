@@ -32,7 +32,7 @@ import {
   getImagesFromLibrary,
 } from '@/services/common/image';
 import { useFloorStore } from '@/states/floorStore';
-import { PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   confirmText: {
@@ -73,7 +73,7 @@ export type EditFloorScreenRP = RouteProp<
 
 const EditFloorScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedPicture, selectPicture] = useState<PictureInfo>();
+  const [selectedPicture, selectPicture] = useState<Picture>();
   const [pictureInfoModalVisible, setPictureInfoModalVisible] =
     useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
@@ -181,7 +181,7 @@ const EditFloorScreen = () => {
     [pictures, setPictures],
   );
 
-  const onPressPicture = useCallback((picture: PictureInfo) => {
+  const onPressPicture = useCallback((picture: Picture) => {
     selectPicture(picture);
     setPictureInfoModalVisible(true);
   }, []);

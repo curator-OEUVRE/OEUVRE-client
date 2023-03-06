@@ -57,7 +57,8 @@ interface Props {
   onHashtagPress?: (hashtagNo: number, hashtag: string) => void;
 }
 
-const keyExtractor = (item: HashtagResult) => `${item.hashtagNo}`;
+const keyExtractor = (item: HashtagResult, index: number) =>
+  `search_${index}_${item.hashtagNo}`;
 
 const HashtagSearchResult = ({ keyword, onHashtagPress }: Props) => {
   const renderItem = useCallback(

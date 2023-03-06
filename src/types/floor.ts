@@ -1,5 +1,5 @@
 import { ResponseDto } from './common';
-import { PictureInfo } from './picture';
+import { Picture } from '@/types/picture';
 import { FLOOR_BACKGROUND_COLORS } from '@/constants/styles/colors';
 
 export enum FloorAlignment {
@@ -34,7 +34,7 @@ export interface FloorInfo {
 }
 
 export interface Floor extends FloorInfo {
-  pictures: PictureInfo[];
+  pictures: Picture[];
   texture: number;
   userId?: string;
   userNo?: number;

@@ -92,29 +92,24 @@ const EditDescriptionScreen = () => {
 
   const { params } = useRoute<EditDescriptionScreenRP>();
   const { pictureNo } = params;
-  const { pictureDetail, setPictureDetail, changeDescription } =
-    useFloorStore();
-
-  const defaultText = pictureDetail?.description || '';
+  const {
+    floor: { pictures },
+    swiperIndex,
+    changeDescription,
+  } = useFloorStore();
+  const picture = pictures[swiperIndex];
+  const defaultText = picture.description || '';
   const [text, setText] = useState(defaultText);
   const onPress = useCallback(async () => {
-    const { hashtags } = pictureDetail;
+    const { hashtags } = picture;
     await patchPicture({
       description: text,
       hashtags,
       pictureNo,
     });
-    setPictureDetail({ ...pictureDetail, description: text });
     changeDescription(pictureNo, text);
     navigation.goBack();
-  }, [
-    text,
-    navigation,
-    pictureDetail,
-    setPictureDetail,
-    pictureNo,
-    changeDescription,
-  ]);
+  }, [text, navigation, pictureNo, changeDescription, picture]);
 
   const headerRight = () => (
     <Pressable onPress={onPress}>
@@ -132,7 +127,7 @@ const EditDescriptionScreen = () => {
         <Hashtag />
       </Pressable>
       <View style={styles.tagsContainer}>
-        {pictureDetail.hashtags.map((tag) => (
+        {picture.hashtags.map((tag) => (
           <Text key={tag} style={[TEXT_STYLE.body12R, styles.tag]}>
             {tag}
           </Text>
@@ -150,7 +145,7 @@ const EditDescriptionScreen = () => {
             <Image
               style={styles.image}
               source={{
-                uri: pictureDetail.imageUrl,
+                uri: picture.imageUrl,
               }}
               resizeMode="contain"
             />

@@ -22,7 +22,7 @@ import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
 import { getColorByBackgroundColor } from '@/services/common/color';
 import { createDefaultPictureInfo } from '@/services/common/image';
 import { useCreateFloorStore } from '@/states/createFloorStore';
-import { PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   confirmText: {
@@ -56,7 +56,7 @@ const EditFloorScreen = () => {
   const [pictureInfoModalVisible, setPictureInfoModalVisible] =
     useState<boolean>(false);
   const addPoint = useRef<number>(-1);
-  const [selectedPicture, selectPicture] = useState<PictureInfo>();
+  const [selectedPicture, selectPicture] = useState<Picture>();
 
   useEffect(() => {
     const backAction = () => {
@@ -126,7 +126,7 @@ const EditFloorScreen = () => {
     selectPicture(undefined);
   }, []);
 
-  const onPressPicture = useCallback((picture: PictureInfo) => {
+  const onPressPicture = useCallback((picture: Picture) => {
     selectPicture(picture);
     setPictureInfoModalVisible(true);
   }, []);

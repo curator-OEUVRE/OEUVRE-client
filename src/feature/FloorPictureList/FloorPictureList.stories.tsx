@@ -2,9 +2,10 @@ import { boolean, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react-native';
 import { useState } from 'react';
 import FloorPictureList from '.';
-import type { PictureInfo } from '@/types/picture';
+import { createDefaultPictureInfo } from '@/services/common/image';
+import type { Picture } from '@/types/picture';
 
-const PICTURES: PictureInfo[] = [
+const PICTURES: Picture[] = [
   {
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
@@ -49,7 +50,7 @@ const PICTURES: PictureInfo[] = [
     queue: 4,
     pictureNo: 0,
   },
-];
+].map(createDefaultPictureInfo);
 
 const Component = () => {
   const [data, setData] = useState(PICTURES);

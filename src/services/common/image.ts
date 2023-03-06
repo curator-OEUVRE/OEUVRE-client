@@ -1,7 +1,7 @@
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert } from 'react-native';
-import { PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 export const checkFileSize = async (uris: string[]) => {
   const fileSizes = await Promise.all(
@@ -63,20 +63,24 @@ export const getImagesFromLibrary = async <
   return [undefined, false] as const;
 };
 
-export const createDefaultPictureInfo = (
-  info: Partial<PictureInfo>,
-): PictureInfo => ({
+export const createDefaultPictureInfo = (info: Partial<Picture>): Picture => ({
   imageUrl: '',
+  floorNo: 0,
   description: '',
   title: '',
-  productionYear: '',
+  manufactureYear: '',
   materials: '',
-  size: '',
+  scale: '',
   hashtags: [],
   width: 0.5,
   height: 0.5,
   location: 0,
   queue: 1,
   pictureNo: 0,
+  isMine: true,
+  isScraped: false,
+  isLiked: false,
+  userId: '',
+  userNo: 0,
   ...info,
 });

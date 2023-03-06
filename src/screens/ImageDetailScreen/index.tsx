@@ -5,8 +5,9 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   Pressable,
@@ -15,6 +16,7 @@ import {
   useWindowDimensions,
   View,
   Share,
+  Dimensions,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
@@ -30,6 +32,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as PictureAPI from '@/apis/picture';
 import { getLikeUsers } from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
@@ -54,6 +57,7 @@ import { DynamicLinkType } from '@/constants/dynamicLinks';
 import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import PictureInfoSheet from '@/feature/PictureInfoSheet';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import UserProfileList from '@/feature/UserProfileList';
@@ -69,7 +73,6 @@ enum OrientationType {
 }
 
 export interface ImageDetailScreenParams {
-  pictureNo: number;
   color?: string;
 }
 
@@ -98,6 +101,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  item: {
+    flex: 1,
+  },
   likeTitle: {
     color: COLOR.mono.black,
     height: 56,
@@ -116,24 +122,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
   },
-  text: {
-    textAlign: 'center',
-  },
   wrapButton: {
     marginRight: 9,
-  },
-  wrapFooter: {
-    lineHeight: 21,
-    paddingHorizontal: 20,
-    width: '100%',
-  },
-  wrapFooterLandscape: {
-    height: 55,
-    paddingTop: 11,
-  },
-  wrapFooterPortrait: {
-    height: 120,
-    paddingTop: 17,
   },
   wrapHeaderPortrait: {
     marginBottom: 26,
@@ -153,14 +143,17 @@ const ImageDetailScreen = () => {
   const insets = useSafeAreaInsets();
 
   const { params } = useRoute<ImageDetailScreenRP>();
-  const { pictureNo } = params;
   const color = params.color || COLOR.mono.white;
   const iconColorByBackground = getColorByBackgroundColor(color);
   const textColorByBackground = getColorByBackgroundColor(color, {
     dark: COLOR.mono.gray5,
   });
-  const { pictureDetail, setPictureDetail, fetchPictureDetail } =
-    useFloorStore();
+  const {
+    swiperIndex,
+    floor: { pictures },
+    setPictures,
+    setSwiperIndex,
+  } = useFloorStore();
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
   const [isEditMode, setEditMode] = useState<boolean>(true);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
@@ -177,25 +170,21 @@ const ImageDetailScreen = () => {
   //     lockOrientation();
   //   }, []),
   // );
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await fetchPictureDetail(pictureNo);
-      setLoading(false);
-    };
-    fetchData();
-  }, [pictureNo, fetchPictureDetail]);
 
   const {
     description,
-    imageUrl,
     isLiked,
     isScraped,
     isMine,
     floorNo,
     userId,
     userNo,
-  } = pictureDetail;
+    title,
+    manufactureYear,
+    scale: pictureScale,
+    materials,
+    pictureNo,
+  } = pictures[swiperIndex];
   const scale = useSharedValue(0);
 
   const imageScale = useSharedValue(1);
@@ -209,6 +198,8 @@ const ImageDetailScreen = () => {
   const onSingleTap = useCallback(() => {
     setEditMode((prev) => !prev);
   }, []);
+
+  const { width } = Dimensions.get('window');
 
   const scaleImage = useCallback(() => {
     onAnimation.value = true;
@@ -240,18 +231,21 @@ const ImageDetailScreen = () => {
       scaleImage();
     }
     await API({ pictureNo });
-    setPictureDetail({
-      ...pictureDetail,
-      isLiked: !isLiked,
+    const newPictures = pictures.map((picture) => {
+      if (picture.pictureNo === pictureNo) {
+        return { ...picture, isLiked: !picture.isLiked };
+      }
+      return picture;
     });
+    setPictures(newPictures);
   }, [
     isEditMode,
     isLikeAnimation,
     isLiked,
     pictureNo,
     scaleImage,
-    pictureDetail,
-    setPictureDetail,
+    setPictures,
+    pictures,
   ]);
 
   const visitFloor = useCallback(() => {
@@ -271,17 +265,20 @@ const ImageDetailScreen = () => {
     }
     bottomSheetRef.current?.close();
     await API({ pictureNo });
-    setPictureDetail({
-      ...pictureDetail,
-      isScraped: !isScraped,
+    const newPictures = pictures.map((picture) => {
+      if (picture.pictureNo === pictureNo) {
+        return { ...picture, isScraped: !picture.isScraped };
+      }
+      return picture;
     });
+    setPictures(newPictures);
   }, [
     isScraped,
     scaleImage,
     pictureNo,
     isLikeAnimation,
-    pictureDetail,
-    setPictureDetail,
+    pictures,
+    setPictures,
   ]);
 
   const deletePicture = useCallback(async () => {
@@ -332,42 +329,34 @@ const ImageDetailScreen = () => {
       </Pressable>
     </View>
   );
-  const renderHeader = () =>
-    isEditMode && (
-      <View
-        style={[
-          orientation === OrientationType.portrait && styles.wrapHeaderPortrait,
-          { paddingTop: insets.top },
-        ]}
-      >
+  const renderHeader = () => (
+    <View
+      style={[
+        orientation === OrientationType.portrait && styles.wrapHeaderPortrait,
+        { paddingTop: insets.top },
+      ]}
+    >
+      {isEditMode && (
         <Header
           iconColor={iconColorByBackground}
           backgroundColor="transparent"
           headerRight={headerRight}
         />
-      </View>
-    );
+      )}
+    </View>
+  );
   const renderFooter = () =>
     isEditMode && (
-      <View
-        style={[
-          styles.wrapFooter,
-          orientation === OrientationType.landscape
-            ? styles.wrapFooterLandscape
-            : styles.wrapFooterPortrait,
-          { paddingBottom: insets.bottom },
-        ]}
-      >
-        <Text
-          style={[
-            styles.text,
-            TEXT_STYLE.body14R,
-            { color: textColorByBackground },
-          ]}
-        >
-          {description}
-        </Text>
-      </View>
+      <PictureInfoSheet
+        {...{
+          description,
+          title,
+          manufactureYear,
+          materials,
+          userId,
+          scale: pictureScale,
+        }}
+      />
     );
 
   const share = useCallback(async () => {
@@ -515,10 +504,12 @@ const ImageDetailScreen = () => {
       <View
         style={[
           styles.container,
+          // eslint-disable-next-line react-native/no-inline-styles
           {
             paddingLeft: insets.left,
             paddingRight: insets.right,
             backgroundColor: color,
+            paddingBottom: orientation === OrientationType.landscape ? 55 : 120,
           },
         ]}
       >
@@ -532,10 +523,22 @@ const ImageDetailScreen = () => {
             onActivated={toggleLike}
           >
             <Animated.View style={[styles.wrapImage, mainImageStyle]}>
-              <FastImage
-                source={{ uri: imageUrl }}
-                style={[styles.imageBackground, isEditMode && styles.shadow]}
-                resizeMode="contain"
+              <SwiperFlatList
+                data={pictures}
+                index={swiperIndex}
+                renderItem={({ item }) => (
+                  <View style={[styles.item, { width }]}>
+                    <FastImage
+                      source={{ uri: item.imageUrl }}
+                      style={[
+                        styles.imageBackground,
+                        isEditMode && styles.shadow,
+                      ]}
+                      resizeMode="contain"
+                    />
+                  </View>
+                )}
+                onChangeIndex={({ index }) => setSwiperIndex(index)}
               />
             </Animated.View>
           </TapGestureHandler>

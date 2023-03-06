@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Hashtag from '@/assets/icons/Hashtag';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
-import { PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface PictureDescriptionItemProps extends PictureInfo {
+export interface PictureDescriptionItemProps extends Picture {
   onChangeDescription?: (Description: string) => void;
   onHashtagPress?: () => void;
 }

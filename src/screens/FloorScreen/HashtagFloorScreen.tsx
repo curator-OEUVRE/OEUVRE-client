@@ -17,8 +17,9 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
-import { HashtagPicture, PictureInfo } from '@/types/picture';
+import { HashtagPicture, Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   arrowLeft: {
@@ -100,6 +101,11 @@ const HashtagFloorScreen = () => {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
   const [page, setPage] = useState<number>(0);
   const { userNo: myUserNo } = useUserStore();
+  const {
+    fetchFloor,
+    setSwiperIndex,
+    setPictures: setFloorPictures,
+  } = useFloorStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -205,13 +211,19 @@ const HashtagFloorScreen = () => {
   );
 
   const onPressPicture = useCallback(
-    (picture: PictureInfo) => {
+    (picture: Picture) => {
+      const idx = pictures.findIndex(
+        ({ pictureNo }) => picture.pictureNo === pictureNo,
+      );
+
+      if (idx === -1) return;
+      setFloorPictures(pictures);
+      setSwiperIndex(idx);
       navigation.navigate(Screen.ImageDetailScreen, {
-        pictureNo: picture.pictureNo,
         color,
       });
     },
-    [navigation],
+    [navigation, pictures, setSwiperIndex, setFloorPictures],
   );
 
   const onPressProfile = useCallback(
@@ -231,7 +243,7 @@ const HashtagFloorScreen = () => {
   );
 
   const renderDescription = useCallback(
-    ({ id, profileImageUrl, userNo }: PictureInfo) => (
+    ({ id, profileImageUrl, userNo }: Picture) => (
       <Pressable
         style={styles.wrapProfile}
         onPress={async () => {

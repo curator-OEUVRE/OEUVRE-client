@@ -4,7 +4,7 @@ import { Keyboard, StyleSheet, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PictureDescriptionList from './PictureDescriptionList';
 import { WithKeyboardAvoidingView } from '@/components';
-import { PictureInfo } from '@/types/picture';
+import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   content: {
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 
 interface PictureDescriptionFormProps {
   onHashtagPress: (id: number) => void;
-  data: PictureInfo[];
+  data: Picture[];
   changeDescriptionByIdx: (idx: number, description: string) => void;
 }
 
