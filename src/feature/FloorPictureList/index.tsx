@@ -34,6 +34,7 @@ interface Props {
   renderDescription?: (picture: Picture) => ReactNode;
   pictureAddable?: boolean;
   onPressDelete?: (picture: Picture) => void;
+  onPinchEnd?: (index: number, scale: number) => void;
 }
 
 interface Layout {
@@ -58,6 +59,7 @@ const FloorPictureList = ({
   renderDescription,
   pictureAddable,
   onPressDelete,
+  onPinchEnd,
 }: Props) => {
   const { height: windowHeight } = useDimensions();
   const translateY = useRef<SharedValue<number>>();
@@ -88,6 +90,7 @@ const FloorPictureList = ({
       pageX <= cx && cx <= pageX + width && pageY <= cy && cy <= pageY + height
     );
   });
+
   const renderItem = useCallback(
     (props: RenderItemParams<Picture>) => (
       <FloorPicture
@@ -103,6 +106,7 @@ const FloorPictureList = ({
         color={color}
         renderDescription={renderDescription}
         pictureAddable={pictureAddable}
+        onPinchEnd={onPinchEnd}
       />
     ),
     [
@@ -117,6 +121,7 @@ const FloorPictureList = ({
       renderDescription,
       pictureAddable,
       onPressDelete,
+      onPinchEnd,
     ],
   );
 

@@ -6,10 +6,11 @@ import {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 import FastImage from 'react-native-fast-image';
-import { Gesture } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   FadeIn,
   FadeOut,
+  runOnJS,
   SharedValue,
   useAnimatedStyle,
   useSharedValue,
@@ -73,6 +74,7 @@ interface FloorPictureProps extends RenderItemParams<Picture> {
   color?: string;
   renderDescription?: (picture: Picture) => ReactNode;
   pictureAddable?: boolean;
+  onPinchEnd?: (index: number, scale: number) => void;
 }
 
 const FloorPicture = ({
@@ -90,6 +92,7 @@ const FloorPicture = ({
   renderDescription,
   onPressDelete,
   pictureAddable = true,
+  onPinchEnd,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
   const BASE_SIZE = height > width ? width : height;
@@ -102,7 +105,6 @@ const FloorPicture = ({
     [item.height, BASE_SIZE],
   );
   const scale = useSharedValue(1);
-  const tmpScale = useSharedValue(1);
 
   const index = getIndex();
   const isLineActive = useMemo(() => activeLine === index, [activeLine, index]);
@@ -121,19 +123,21 @@ const FloorPicture = ({
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
       if (editable) {
-        tmpScale.value = e.scale;
+        scale.value = e.scale;
       }
     })
-    .onEnd((e) => {
+    .onEnd(() => {
       if (editable) {
-        scale.value *= e.scale;
-        tmpScale.value = 1;
+        if (onPinchEnd && index !== undefined) {
+          runOnJS(onPinchEnd)(index, scale.value);
+          scale.value = 1;
+        }
       }
     });
 
   const imageAnimStyle = useAnimatedStyle(() => ({
-    width: imageWidth * scale.value * tmpScale.value,
-    height: imageHeight * scale.value * tmpScale.value,
+    width: imageWidth * scale.value,
+    height: imageHeight * scale.value,
     opacity: isDragging.value && activeIndexAnim?.value === index ? 0.5 : 1,
   }));
 
@@ -190,50 +194,53 @@ const FloorPicture = ({
     </LinearGradient>
   );
   return (
-    <ScaleDecorator>
-      <View
-        style={[
-          /* eslint-disable-next-line react-native/no-inline-styles */
-          {
-            transform: [
-              {
-                translateY: item.location * BASE_SIZE,
-              },
-            ],
-          },
-          styles.item,
-        ]}
-      >
-        <Pressable
-          onLongPress={editable ? drag : undefined}
-          onPress={() => {
-            onPressPicture?.(item);
-          }}
+    <GestureDetector gesture={pinchGesture}>
+      <ScaleDecorator>
+        <View
+          style={[
+            /* eslint-disable-next-line react-native/no-inline-styles */
+            {
+              marginHorizontal: editable ? 24 : 16,
+              transform: [
+                {
+                  translateY: item.location * BASE_SIZE,
+                },
+              ],
+            },
+            styles.item,
+          ]}
         >
-          <Shadow
-            distance={5}
-            offset={[2, 2]}
-            startColor="#00000030"
-            endColor="#00000000"
-            paintInside
+          <Pressable
+            onLongPress={editable ? drag : undefined}
+            onPress={() => {
+              onPressPicture?.(item);
+            }}
           >
-            <AnimatedFastImage
-              source={{ uri: item.imageUrl }}
-              style={imageAnimStyle}
-            />
-            {onPressPicture && editable && renderEditLayer()}
-          </Shadow>
-        </Pressable>
-        {renderDescription ? (
-          renderDescription(item)
-        ) : (
-          <Text style={[styles.text, TEXT_STYLE.body12R, { color }]}>
-            {description}
-          </Text>
-        )}
-      </View>
-      {editable && line}
-    </ScaleDecorator>
+            <Shadow
+              distance={5}
+              offset={[2, 2]}
+              startColor="#00000030"
+              endColor="#00000000"
+              paintInside
+            >
+              <AnimatedFastImage
+                source={{ uri: item.imageUrl }}
+                style={imageAnimStyle}
+              />
+              {onPressPicture && editable && renderEditLayer()}
+            </Shadow>
+          </Pressable>
+          {renderDescription ? (
+            renderDescription(item)
+          ) : (
+            <Text style={[styles.text, TEXT_STYLE.body12R, { color }]}>
+              {description}
+            </Text>
+          )}
+        </View>
+        {editable && line}
+      </ScaleDecorator>
+    </GestureDetector>
   );
 };
 

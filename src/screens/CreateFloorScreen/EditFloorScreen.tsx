@@ -150,6 +150,23 @@ const EditFloorScreen = () => {
     [setPictures, pictures],
   );
 
+  const onPinchEnd = useCallback(
+    (index: number, scale: number) => {
+      setPictures((prev) =>
+        prev.map((picture, idx) =>
+          index === idx
+            ? {
+                ...picture,
+                width: picture.width * scale,
+                height: picture.height * scale,
+              }
+            : picture,
+        ),
+      );
+    },
+    [setPictures],
+  );
+
   return (
     <LinearGradient
       style={styles.container}
@@ -171,6 +188,7 @@ const EditFloorScreen = () => {
             color={textColorByBackground}
             onPressPicture={onPressPicture}
             onPressDelete={onPressDelete}
+            onPinchEnd={onPinchEnd}
           />
         </View>
         <ImagePickerModal

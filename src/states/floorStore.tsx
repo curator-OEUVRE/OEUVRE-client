@@ -20,7 +20,7 @@ interface FloorStore {
   changeDescription: (pictureNo: number, description: string) => void;
   setHashtag: (pictureNo: number, hashtags: string[]) => void;
   setFloorInfo: (floorInfo: Partial<FloorInfo>) => void;
-  setPictures: (pictures: Picture[]) => void;
+  setPictures: (pictures: Picture[] | ((prev: Picture[]) => Picture[])) => void;
   editFloor: (floorNo: number) => ApiResult<EditFloorResponseDto>;
   fetchFloor: (floorNo: number) => void;
   fetchPicture: (pictureNo: number) => void;
@@ -101,7 +101,10 @@ export const useFloorStore = create<FloorStore>()((set, get) => ({
       ...state,
       floor: {
         ...state.floor,
-        pictures,
+        pictures:
+          typeof pictures === 'function'
+            ? pictures(state.floor.pictures)
+            : pictures,
       },
     }));
   },

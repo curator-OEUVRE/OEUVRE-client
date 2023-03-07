@@ -44,7 +44,7 @@ interface CreateFloorStore {
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],
   ) => void;
-  setPictures: (pictures: Picture[]) => void;
+  setPictures: (pictures: Picture[] | ((prev: Picture[]) => Picture[])) => void;
   clearTempPictures: () => void;
   changeDescriptionByIdx: (idx: number, description: string) => void;
   setHashtag: (imageIndex: number, hashtags: string[]) => void;
@@ -98,7 +98,12 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       tempPictures: [],
     }));
   },
-  setPictures: (pictures) => set((state) => ({ ...state, pictures })),
+  setPictures: (pictures) =>
+    set((state) => ({
+      ...state,
+      pictures:
+        typeof pictures === 'function' ? pictures(state.pictures) : pictures,
+    })),
   changeDescriptionByIdx: (idx, description) =>
     set((state) => ({
       ...state,
