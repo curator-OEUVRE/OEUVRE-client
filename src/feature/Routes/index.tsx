@@ -54,6 +54,11 @@ export const Routes = () => {
 
     async function refreshPushToken() {
       try {
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status !== 'granted') {
+          await Notifications.requestPermissionsAsync();
+        }
+
         const token = await Notifications.getExpoPushTokenAsync();
         await fetchWithToken(updatePushToken, {
           token: token.data,
