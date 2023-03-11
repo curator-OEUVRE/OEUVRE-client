@@ -1,4 +1,10 @@
-import { getAssetsAsync, usePermissions, Asset } from 'expo-media-library';
+import {
+  getAssetsAsync,
+  usePermissions,
+  Asset,
+  SortBy,
+  AssetsOptions,
+} from 'expo-media-library';
 import { useCallback, useEffect, useState } from 'react';
 import { Image, ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
@@ -20,6 +26,10 @@ const styles = StyleSheet.create({
   },
 });
 
+const defaultOptions: AssetsOptions = {
+  sortBy: [[SortBy.creationTime, false]],
+};
+
 const ImageBrowser = ({ selectImage, selectedImages }: ImageBrowserProps) => {
   const [permissionResponse, requestPermission] = usePermissions();
   const [imageUris, setimageUris] = useState<Asset[]>([]);
@@ -33,7 +43,7 @@ const ImageBrowser = ({ selectImage, selectedImages }: ImageBrowserProps) => {
   }, [permissionResponse, requestPermission]);
 
   const getAssets = useCallback(async () => {
-    const data = await getAssetsAsync();
+    const data = await getAssetsAsync(defaultOptions);
     if (data.totalCount) {
       setimageUris(data.assets);
       setAfter(data.endCursor);
@@ -43,7 +53,10 @@ const ImageBrowser = ({ selectImage, selectedImages }: ImageBrowserProps) => {
 
   const onEndReached = useCallback(async () => {
     if (!hasNextPage) return;
-    const data = await getAssetsAsync(after ? { after } : undefined);
+    const data = await getAssetsAsync({
+      ...defaultOptions,
+      after: after || undefined,
+    });
     if (data.totalCount) {
       if (after === data.endCursor) return;
       setimageUris((prev) => [...prev, ...data.assets]);
