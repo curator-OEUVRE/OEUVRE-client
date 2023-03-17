@@ -64,6 +64,10 @@ const ImagePickerModal = ({
     [selectedImages, phPathToFilePath],
   );
 
+  const resetSelectedImages = useCallback(() => {
+    setSelectedImages([]);
+  }, []);
+
   const hideModal = useCallback(() => {
     setSelectedImages([]);
     setVisible(false);
@@ -107,6 +111,7 @@ const ImagePickerModal = ({
           <ImageBrowser
             selectedImages={selectedImages}
             selectImage={selectImage}
+            resetSelectedImages={resetSelectedImages}
           />
         </SafeAreaView>
       </SafeAreaProvider>
