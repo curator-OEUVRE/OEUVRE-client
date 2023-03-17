@@ -45,7 +45,11 @@ const Accordian = ({ children, label }: AccordianProps) => {
       <View style={styles.labelArea}>
         <Text style={[TEXT_STYLE.body14B, styles.label]}>{label}</Text>
         <Pressable onPress={onPress}>
-          {expanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
+          {expanded ? (
+            <ArrowUpIcon />
+          ) : (
+            <ArrowDownIcon color={COLOR.mono.gray3} />
+          )}
         </Pressable>
       </View>
       {expanded && <View>{children}</View>}
