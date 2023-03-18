@@ -31,7 +31,7 @@ interface ImageBrowserProps {
 const styles = StyleSheet.create({
   thumbImage: {
     height: 282,
-    width: 282,
+    width: '100%',
   },
   thumbWrapper: {
     alignItems: 'center',
@@ -146,7 +146,11 @@ const ImageBrowser = ({
     }
     return (
       <View style={styles.thumbWrapper}>
-        <Image source={{ uri }} style={styles.thumbImage} />
+        <Image
+          source={{ uri }}
+          style={styles.thumbImage}
+          resizeMode="contain"
+        />
       </View>
     );
   }, [imageUris, selectedImages]);
