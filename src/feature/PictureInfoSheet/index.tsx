@@ -71,7 +71,9 @@ const PictureInfoSheet = React.forwardRef(
   ) => {
     const [index, setIndex] = useState<number>(0);
     const snapPoints = useMemo(() => [92, 160], []);
-    const summary = [manufactureYear, materials, scale].join(', ');
+    const summary = [manufactureYear, materials, scale]
+      .filter((value) => value && value.length > 0)
+      .join(', ');
     return (
       <BottomSheet
         ref={ref}
@@ -87,7 +89,11 @@ const PictureInfoSheet = React.forwardRef(
               {title || '무제'}
             </Text>
             <Text style={[styles.userId, TEXT_STYLE.body12R]}>{userId}</Text>
-            <Text style={[styles.summary, TEXT_STYLE.body12R]}>{summary}</Text>
+            {summary && (
+              <Text style={[styles.summary, TEXT_STYLE.body12R]}>
+                {summary}
+              </Text>
+            )}
           </View>
           {index > 0 && (
             <View style={styles.wrapDescription}>
