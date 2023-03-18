@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   },
   item: {
     alignSelf: 'center',
+    marginHorizontal: 36,
   },
   line: {
     alignItems: 'center',
@@ -181,7 +182,6 @@ const FloorPicture = ({
         style={[
           /* eslint-disable-next-line react-native/no-inline-styles */
           {
-            marginHorizontal: editable ? 24 : 16,
             transform: [
               {
                 translateY: item.location * BASE_SIZE,
