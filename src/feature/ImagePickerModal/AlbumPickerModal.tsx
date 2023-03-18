@@ -51,15 +51,27 @@ const AlbumPickerModal = ({
     [onComplete, hideModal],
   );
 
-  const renderAlbumItem = ({ item }: ListRenderItemInfo<Album>) => (
-    <Pressable
-      style={({ pressed }) =>
-        pressed ? [styles.item, styles.pressed] : styles.item
-      }
-      onPress={() => onPressItem(item)}
-    >
-      <Text>{item.title}</Text>
-    </Pressable>
+  const renderAlbumItem = ({ item, index }: ListRenderItemInfo<Album>) => (
+    <>
+      {index === 0 && (
+        <Pressable
+          style={({ pressed }) =>
+            pressed ? [styles.item, styles.pressed] : styles.item
+          }
+          onPress={() => onPressItem()}
+        >
+          <Text>All</Text>
+        </Pressable>
+      )}
+      <Pressable
+        style={({ pressed }) =>
+          pressed ? [styles.item, styles.pressed] : styles.item
+        }
+        onPress={() => onPressItem(item)}
+      >
+        <Text>{item.title}</Text>
+      </Pressable>
+    </>
   );
 
   const keyExtractor = useCallback(
@@ -76,14 +88,6 @@ const AlbumPickerModal = ({
             onGoBack={hideModal}
             defaultBackAction={false}
           />
-          <Pressable
-            style={({ pressed }) =>
-              pressed ? [styles.item, styles.pressed] : styles.item
-            }
-            onPress={() => onPressItem()}
-          >
-            <Text>All</Text>
-          </Pressable>
           <FlatList
             data={albums}
             renderItem={renderAlbumItem}
