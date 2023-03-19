@@ -34,7 +34,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as PictureAPI from '@/apis/picture';
-import { getLikeUsers } from '@/apis/picture';
+import { getLikeUsers, patchPicture } from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
 import BookmarkIcon from '@/assets/icons/Bookmark';
 import BookmarkFilledIcon from '@/assets/icons/BookmarkFilled';
@@ -57,6 +57,9 @@ import { DynamicLinkType } from '@/constants/dynamicLinks';
 import { IMAGE } from '@/constants/images';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import PictureInfoModal, {
+  PictureInfoModalValue,
+} from '@/feature/PictureInfoModal';
 import PictureInfoSheet from '@/feature/PictureInfoSheet';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
@@ -158,6 +161,8 @@ const ImageDetailScreen = () => {
   const [isEditMode, setEditMode] = useState<boolean>(true);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [likeUserSheetIndex, setLikeUserSheetIndex] = useState<number>(-1);
+  const [pictureInfoModalVisible, setPictureInfoModalVisible] =
+    useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const bottomSheetRef = useRef<Sheet>(null);
@@ -288,9 +293,8 @@ const ImageDetailScreen = () => {
   }, [pictureNo, navigation]);
 
   const editDescription = useCallback(async () => {
-    // await lockAsync(OrientationLock.PORTRAIT_UP);
-    navigation.navigate(Screen.EditDescriptionScreen, { pictureNo });
-  }, [navigation, pictureNo]);
+    setPictureInfoModalVisible(true);
+  }, []);
 
   const orientation =
     windowWidth >= windowHeight
@@ -480,6 +484,18 @@ const ImageDetailScreen = () => {
       imageTranslationY.value = withTiming(0);
     });
 
+  const onPictureInfoComplete = useCallback(
+    (value: PictureInfoModalValue) => {
+      const newPictures = pictures.map((picture) => {
+        if (picture.imageUrl !== pictures[swiperIndex].imageUrl) return picture;
+        return { ...picture, ...value };
+      });
+      setPictures(newPictures);
+      patchPicture({ pictureNo: pictures[swiperIndex].pictureNo, ...value });
+    },
+    [pictures, setPictures, swiperIndex],
+  );
+
   if (loading) return <Spinner />;
 
   const renderLikeUsersSheet = () => (
@@ -558,6 +574,14 @@ const ImageDetailScreen = () => {
               marginTop: (SIZE / 2) * -1,
             },
           ]}
+        />
+        <PictureInfoModal
+          visible={pictureInfoModalVisible}
+          headerTitle="작품 설명 추가"
+          headerRightText="완료"
+          setVisible={setPictureInfoModalVisible}
+          onComplete={onPictureInfoComplete}
+          {...pictures[swiperIndex]}
         />
       </View>
     </GestureDetector>

@@ -1,7 +1,4 @@
 import AddHashtagScreen, { AddHashtagScreenParams } from './AddHashtagScreen';
-import EditDescriptionScreen, {
-  EditDescriptionScreenParams,
-} from './EditDescriptionScreen';
 import EditFloorScreen, { EditFloorScreenParams } from './EditFloorScreen';
 import FloorInfoFormScreen, {
   FloorInfoFormScreenParams,
@@ -16,7 +13,6 @@ import HashtagFloorScreen, {
 export {
   FloorViewerScreen,
   EditFloorScreen,
-  EditDescriptionScreen,
   HashtagFloorScreen,
   AddHashtagScreen,
   FloorInfoFormScreen,
@@ -24,7 +20,6 @@ export {
 export type {
   FloorViewerScreenParams,
   EditFloorScreenParams,
-  EditDescriptionScreenParams,
   HashtagFloorScreenParams,
   AddHashtagScreenParams,
   FloorInfoFormScreenParams,
