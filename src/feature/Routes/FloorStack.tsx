@@ -64,7 +64,6 @@ const FloorStack = () => (
     <Stack.Screen
       name={Screen.ImageDetailScreen}
       component={ImageDetailScreen}
-      getId={({ params }) => `${params.pictureNo}`}
     />
     <Stack.Screen name={Screen.EditFloorScreen} component={EditFloorScreen} />
     <Stack.Screen
