@@ -22,17 +22,17 @@ const styles = StyleSheet.create({
   },
   indicator: {
     backgroundColor: COLOR.mono.gray3,
-    height: 2,
+    height: 1,
     position: 'absolute',
-    width: 10,
+    width: 8,
   },
   leftIndicator: {
-    borderBottomStartRadius: 2,
-    borderTopStartRadius: 2,
+    borderBottomStartRadius: 1,
+    borderTopStartRadius: 1,
   },
   rightIndicator: {
-    borderBottomEndRadius: 2,
-    borderTopEndRadius: 2,
+    borderBottomEndRadius: 1,
+    borderTopEndRadius: 1,
   },
 });
 
@@ -63,7 +63,7 @@ const Handle: React.FC<HandleProps> = ({ style, animatedIndex }) => {
     const borderTopRadius = interpolate(
       animatedIndex.value,
       [1, 2],
-      [20, 0],
+      [16, 0],
       Extrapolate.CLAMP,
     );
     return {
@@ -92,7 +92,7 @@ const Handle: React.FC<HandleProps> = ({ style, animatedIndex }) => {
           rotate: `${leftIndicatorRotate}rad`,
         },
         {
-          translateX: -5,
+          translateX: -4,
         },
       ),
     };
@@ -118,7 +118,7 @@ const Handle: React.FC<HandleProps> = ({ style, animatedIndex }) => {
           rotate: `${rightIndicatorRotate}rad`,
         },
         {
-          translateX: 5,
+          translateX: 4,
         },
       ),
     };
