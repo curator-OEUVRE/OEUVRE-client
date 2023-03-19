@@ -34,6 +34,8 @@ const FloorInfoFormScreen = () => {
     setPictures,
     createFloor,
     pictures,
+    gradient,
+    alignment,
   } = useCreateFloorStore();
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
@@ -88,6 +90,8 @@ const FloorInfoFormScreen = () => {
             isCommentAvailable,
             isPublic,
             onConfirm,
+            gradient,
+            alignment,
             title: '플로어 추가',
             confirmText: '완료',
           }}

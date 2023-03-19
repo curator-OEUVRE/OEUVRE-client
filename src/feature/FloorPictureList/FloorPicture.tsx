@@ -17,6 +17,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Shadow } from 'react-native-shadow-2';
 import AddCircleIcon from '@/assets/icons/AddCircle';
+import CloseUnfilledIcon from '@/assets/icons/CloseUnfilled';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
@@ -28,6 +29,11 @@ const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 const LINE_BUTTON_SIZE = 40;
 
 const styles = StyleSheet.create({
+  delete: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
   editLayer: {
     alignItems: 'center',
     bottom: 0,
@@ -63,6 +69,7 @@ interface FloorPictureProps extends RenderItemParams<Picture> {
   setActiveLine: (line: number) => void;
   addPictures?: (index: number) => void;
   onPressPicture?: (picture: Picture) => void;
+  onPressDelete?: (picture: Picture) => void;
   color?: string;
   renderDescription?: (picture: Picture) => ReactNode;
   pictureAddable?: boolean;
@@ -81,6 +88,7 @@ const FloorPicture = ({
   onPressPicture,
   color = COLOR.mono.gray7,
   renderDescription,
+  onPressDelete,
   pictureAddable = true,
 }: FloorPictureProps) => {
   const { height, width } = useDimensions();
@@ -173,6 +181,11 @@ const FloorPicture = ({
       style={styles.editLayer}
       colors={['rgba(34, 41, 46, 0.2)', 'rgba(34, 41, 46, 0.2)']}
     >
+      {onPressDelete && (
+        <Pressable style={styles.delete} onPress={() => onPressDelete?.(item)}>
+          <CloseUnfilledIcon width={26} height={26} color={COLOR.mono.white} />
+        </Pressable>
+      )}
       <PencilIcon color={COLOR.mono.white} width={40} height={40} />
     </LinearGradient>
   );

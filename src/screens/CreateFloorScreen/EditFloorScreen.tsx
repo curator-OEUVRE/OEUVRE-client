@@ -143,6 +143,13 @@ const EditFloorScreen = () => {
     setPictureInfoModalVisible(true);
   }, []);
 
+  const onPressDelete = useCallback(
+    (picture: Picture) => {
+      setPictures(pictures.filter((p) => picture.imageUrl !== p.imageUrl));
+    },
+    [setPictures, pictures],
+  );
+
   return (
     <LinearGradient
       style={styles.container}
@@ -163,6 +170,7 @@ const EditFloorScreen = () => {
             addPictures={addPictures}
             color={textColorByBackground}
             onPressPicture={onPressPicture}
+            onPressDelete={onPressDelete}
           />
         </View>
         <ImagePickerModal

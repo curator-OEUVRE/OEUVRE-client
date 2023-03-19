@@ -186,6 +186,13 @@ const EditFloorScreen = () => {
     setPictureInfoModalVisible(true);
   }, []);
 
+  const onPressDelete = useCallback(
+    (picture: Picture) => {
+      setPictures(pictures.filter((p) => picture.pictureNo !== p.pictureNo));
+    },
+    [setPictures, pictures],
+  );
+
   const onPictureInfoComplete = useCallback(
     (value: PictureInfoModalValue) => {
       const newPictures = pictures.map((picture) => {
@@ -221,6 +228,7 @@ const EditFloorScreen = () => {
             addPictures={addPictures}
             onPressPicture={onPressPicture}
             color={textColorByBackground}
+            onPressDelete={onPressDelete}
             pictureAddable
           />
         </View>
