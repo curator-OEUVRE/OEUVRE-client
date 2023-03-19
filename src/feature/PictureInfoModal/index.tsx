@@ -129,7 +129,7 @@ const PictureInfoModal = ({
   );
   const [hashtags, setHashtag] = useState<string[]>(info.hashtags || []);
   useEffect(() => {
-    lockAsync(OrientationLock.PORTRAIT_UP);
+    // lockAsync(OrientationLock.PORTRAIT_UP);
   }, []);
 
   const hideModal = useCallback(() => {

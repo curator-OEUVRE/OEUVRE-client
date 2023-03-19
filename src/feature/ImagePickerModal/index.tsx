@@ -27,7 +27,7 @@ const ImagePickerModal = ({
   const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
 
   useEffect(() => {
-    lockAsync(OrientationLock.PORTRAIT_UP);
+    // lockAsync(OrientationLock.PORTRAIT_UP);
   }, []);
 
   const phPathToFilePath = useCallback(async (uri: string) => {
