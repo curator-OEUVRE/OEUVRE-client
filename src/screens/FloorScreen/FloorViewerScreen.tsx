@@ -50,7 +50,6 @@ import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLOR.mono.white,
     flex: 1,
   },
   new: {
@@ -275,7 +274,7 @@ const FloorViewerScreen = () => {
       style={styles.container}
       colors={getBackgroundColorsByGradient({ color, gradient })}
     >
-      <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
+      <SafeAreaView style={styles.container}>
         <Header
           headerTitle={name}
           headerRight={ConfirmButton}
