@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
+    paddingHorizontal: 40,
   },
   likeTitle: {
     color: COLOR.mono.black,
