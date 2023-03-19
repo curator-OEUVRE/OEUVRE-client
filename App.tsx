@@ -1,14 +1,20 @@
 /* eslint-disable global-require */
 import { loadAsync } from 'expo-font';
-import { lockAsync, OrientationLock } from 'expo-screen-orientation';
+import {
+  lockAsync,
+  OrientationLock,
+  getOrientationLockAsync,
+} from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
 import * as Updates from 'expo-updates';
 import { useCallback, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StorybookUIRoot from './storybook';
 import { checkUpdate } from '@/apis/notification';
+import RotateIcon from '@/assets/icons/Rotate';
+import { COLOR } from '@/constants/styles';
 import { Routes } from '@/feature/Routes';
 import useIntervalAsync from '@/hooks/useIntervalAsync';
 import useSplash from '@/hooks/useSplash';
@@ -24,6 +30,17 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: white,
     flex: 1,
+  },
+  rotate: {
+    alignItems: 'center',
+    backgroundColor: COLOR.mono.white,
+    borderRadius: 35,
+    bottom: 100,
+    height: 70,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 10,
+    width: 70,
   },
 });
 
@@ -68,6 +85,15 @@ const App = () => {
 
   const { setIsUpdated } = useGlobalStore();
 
+  const rotateDevice = useCallback(async () => {
+    const orientation = await getOrientationLockAsync();
+    if (orientation === OrientationLock.LANDSCAPE_RIGHT) {
+      await lockAsync(OrientationLock.PORTRAIT_UP);
+    } else {
+      await lockAsync(OrientationLock.LANDSCAPE_RIGHT);
+    }
+  }, []);
+
   const fetchIsUpdated = useCallback(async () => {
     const response = await checkUpdate();
     if (response.isSuccess) {
@@ -88,6 +114,9 @@ const App = () => {
     <SafeAreaProvider>
       <GestureHandlerRootView style={styles.container} onLayout={onLayout}>
         <EntryApp />
+        <Pressable style={styles.rotate} onPress={rotateDevice}>
+          <RotateIcon />
+        </Pressable>
         <StatusBar style="auto" />
       </GestureHandlerRootView>
     </SafeAreaProvider>
