@@ -23,6 +23,7 @@ interface FloorStore {
   setPictures: (pictures: Picture[]) => void;
   editFloor: (floorNo: number) => ApiResult<EditFloorResponseDto>;
   fetchFloor: (floorNo: number) => void;
+  fetchPicture: (pictureNo: number) => void;
   setSwiperIndex: (idx: number) => void;
 }
 
@@ -118,6 +119,17 @@ export const useFloorStore = create<FloorStore>()((set, get) => ({
     if (response.isSuccess) {
       const { result } = response.result;
       setFloor(result);
+    } else {
+      console.log(response.result.errorMessage);
+    }
+  },
+  fetchPicture: async (pictureNo: number) => {
+    const { setPictures, setSwiperIndex } = get();
+    const response = await PictureAPI.getPictureDetail({ pictureNo });
+    if (response.isSuccess) {
+      const { result } = response.result;
+      setPictures([result]);
+      setSwiperIndex(0);
     } else {
       console.log(response.result.errorMessage);
     }

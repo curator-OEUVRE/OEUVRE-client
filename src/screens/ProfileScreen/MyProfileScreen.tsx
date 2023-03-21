@@ -21,6 +21,7 @@ import { ProfileStackParamsList } from '@/feature/Routes/ProfileStack';
 import useAuth from '@/hooks/useAuth';
 import { getImagesFromLibrary } from '@/services/common/image';
 import { useCreateFloorStore } from '@/states/createFloorStore';
+import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
 import type { FloorMini } from '@/types/floor';
 import type { UserProfile } from '@/types/user';
@@ -82,6 +83,7 @@ const MyCollection = () => {
 
   const { collection, setCollection } = useUserStore();
   const { fetchWithToken } = useAuth();
+  const { fetchPicture } = useFloorStore();
 
   const [page, setPage] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
@@ -120,12 +122,13 @@ const MyCollection = () => {
 
   const goToPicture = useCallback(
     (pictureNo: number) => {
+      fetchPicture(pictureNo);
       navigation.navigate(Navigator.FloorStack, {
         screen: Screen.ImageDetailScreen,
-        params: { pictureNo, color: COLOR.mono.white },
+        params: { color: COLOR.mono.white },
       });
     },
-    [navigation],
+    [navigation, fetchPicture],
   );
 
   useEffect(() => {

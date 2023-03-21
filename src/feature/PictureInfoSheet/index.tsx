@@ -14,6 +14,9 @@ interface ImageInfoSheetProps {
 }
 
 const styles = StyleSheet.create({
+  background: {
+    borderRadius: 5,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 20,
@@ -27,6 +30,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   sheet: {
+    borderRadius: 0,
     elevation: 5,
     flex: 1,
     marginHorizontal: 20,
@@ -70,8 +74,10 @@ const PictureInfoSheet = React.forwardRef(
     ref: React.ForwardedRef<BottomSheet>,
   ) => {
     const [index, setIndex] = useState<number>(0);
-    const snapPoints = useMemo(() => [92, 160], []);
-    const summary = [manufactureYear, materials, scale].join(', ');
+    const snapPoints = useMemo(() => [121, 164], []);
+    const summary = [manufactureYear, materials, scale]
+      .filter((value) => value && value.length > 0)
+      .join(', ');
     return (
       <BottomSheet
         ref={ref}
@@ -80,14 +86,19 @@ const PictureInfoSheet = React.forwardRef(
         index={index}
         onChange={setIndex}
         handleComponent={Handle}
+        backgroundStyle={styles.background}
       >
         <BottomSheetView style={styles.container}>
           <View style={styles.info}>
-            <Text style={[styles.title, TEXT_STYLE.body14M]}>
-              {title || '무제'}
+            <Text style={[styles.title, TEXT_STYLE.body16M]}>
+              {title || 'Untitled'}
             </Text>
-            <Text style={[styles.userId, TEXT_STYLE.body12R]}>{userId}</Text>
-            <Text style={[styles.summary, TEXT_STYLE.body12R]}>{summary}</Text>
+            <Text style={[styles.userId, TEXT_STYLE.body14R]}>{userId}</Text>
+            {summary && (
+              <Text style={[styles.summary, TEXT_STYLE.body12R]}>
+                {summary}
+              </Text>
+            )}
           </View>
           {index > 0 && (
             <View style={styles.wrapDescription}>

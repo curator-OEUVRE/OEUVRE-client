@@ -1,4 +1,5 @@
 import { deleteAsync, getAsync, patchAsync, postAsync } from './common';
+import { PictureInfoModalValue } from '@/feature/PictureInfoModal';
 import { useAuthStore } from '@/states/authStore';
 import {
   GetPictureDetailResponseDto,
@@ -19,9 +20,7 @@ interface GetLikeUsersParams {
   pictureNo: number;
 }
 
-interface PatchPictureParams {
-  description: string;
-  hashtags: string[];
+interface PatchPictureParams extends PictureInfoModalValue {
   pictureNo: number;
 }
 
@@ -64,13 +63,17 @@ export const patchPicture = async ({
   description,
   hashtags,
   pictureNo,
+  manufactureYear,
+  materials,
+  scale,
+  title,
 }: PatchPictureParams) => {
   const response = await patchAsync<
     PatchPictureResponseDto,
     PatchPictureRequestDto
   >(
     `/pictures/${pictureNo}`,
-    { description, hashtags },
+    { description, hashtags, manufactureYear, materials, scale, title },
     {
       headers: {
         'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,

@@ -1,4 +1,5 @@
 import { ResponseDto } from './common';
+import { PictureInfoModalValue } from '@/feature/PictureInfoModal';
 
 export interface Picture {
   description: string;
@@ -43,10 +44,7 @@ export interface GetPicturesByHashtagResponse {
 
 export type GetPictureDetailResponseDto = ResponseDto<Picture>;
 export type PatchPictureResponseDto = ResponseDto<string>;
-export type PatchPictureRequestDto = {
-  description: string;
-  hashtags: string[];
-};
+export type PatchPictureRequestDto = PictureInfoModalValue;
 export type LikePictureResponseDto = ResponseDto<string>;
 export type ScrapPictureResponseDto = ResponseDto<string>;
 export type GetLikeUsersResponseDto = ResponseDto<LikeUser[]>;

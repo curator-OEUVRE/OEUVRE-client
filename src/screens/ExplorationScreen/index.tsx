@@ -23,6 +23,7 @@ import type { ExplorationStackParamsList } from '@/feature/Routes/ExplorationSta
 import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import SearchInput from '@/feature/SearchInput';
 import useAuth from '@/hooks/useAuth';
+import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
 
 export type ExplorationScreenParams = undefined;
@@ -58,6 +59,7 @@ const styles = StyleSheet.create({
 
 const ExplorationScreen = () => {
   const navigation = useNavigation<ExplorationScreenNP>();
+  const { fetchPicture } = useFloorStore();
   const { fetchWithToken } = useAuth();
   const { userNo: myUserNo } = useUserStore();
 
@@ -95,9 +97,10 @@ const ExplorationScreen = () => {
         index={props.index}
         // TODO: `onPress` (해시태그 플로어 뷰) 구현
         onPicturePress={(pictureNo) => {
+          fetchPicture(pictureNo);
           navigation.navigate(Navigator.FloorStack, {
             screen: Screen.ImageDetailScreen,
-            params: { pictureNo, color: COLOR.mono.white },
+            params: { color: COLOR.mono.white },
           });
         }}
         onProfilePress={(userNo) => {
@@ -117,7 +120,7 @@ const ExplorationScreen = () => {
         }}
       />
     ),
-    [navigation, myUserNo],
+    [navigation, myUserNo, fetchPicture],
   );
 
   return (

@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
 const FloorSettingButtonList = ({
   isFramed,
   alignment,
-  color,
   gradient,
   onChange,
 }: FloorSettingButtonListProps) => {
@@ -125,14 +124,17 @@ const FloorSettingButtonList = ({
           width > height ? styles.selectorLandScape : styles.selectorPortrait,
         ]}
       >
-        <Shadow distance={2} startColor="#00000020" endColor="#00000000">
+        <Shadow
+          distance={1}
+          offset={[1, 1]}
+          startColor="#00000020"
+          endColor="#00000000"
+        >
           <View style={styles.inner}>{renderPaint()}</View>
         </Shadow>
       </View>
     </Modal>
   );
-  console.log(alignment, gradient);
-  console.log(NextAlignmentMap[alignment]);
   return (
     <View style={styles.container}>
       {SelectModal}
@@ -142,7 +144,7 @@ const FloorSettingButtonList = ({
         onPress={() => onChange?.({ alignment: NextAlignmentMap[alignment] })}
       />
       <IconButton
-        icon={<PaletteIcon color={color as unknown as string} />}
+        icon={<PaletteIcon color={COLOR.mono.gray5} />}
         style={styles.marginRight}
         onPress={() => setVisible(true)}
       />

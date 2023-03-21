@@ -24,6 +24,7 @@ import type { HomeStackParamsList } from '@/feature/Routes/HomeStack';
 import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import useAuth from '@/hooks/useAuth';
 import useDynamicLinks, { OnDynamicLink } from '@/hooks/useDynamicLinks';
+import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
 
 export type HomeScreenParams = undefined;
@@ -80,7 +81,7 @@ const HomeScreen = () => {
   const { fetchWithToken } = useAuth();
   const { userNo: myUserNo } = useUserStore();
   const navigation = useNavigation<HomeScreenNP>();
-
+  const { fetchPicture } = useFloorStore();
   const handleDynamicLink: OnDynamicLink = useCallback(
     (params) => {
       switch (params.type) {
@@ -92,9 +93,10 @@ const HomeScreen = () => {
           break;
         }
         case DynamicLinkType.IMAGE: {
+          fetchPicture(Number(params.id));
           navigation.navigate(Navigator.FloorStack, {
             screen: Screen.ImageDetailScreen,
-            params: { pictureNo: Number(params.id) },
+            params: { color: COLOR.mono.white },
           });
           break;
         }
@@ -103,7 +105,7 @@ const HomeScreen = () => {
         }
       }
     },
-    [navigation],
+    [navigation, fetchPicture],
   );
   useDynamicLinks(handleDynamicLink);
 

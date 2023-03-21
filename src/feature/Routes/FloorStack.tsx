@@ -7,8 +7,6 @@ import {
   EditFloorScreenParams,
   FloorViewerScreen,
   FloorViewerScreenParams,
-  EditDescriptionScreen,
-  EditDescriptionScreenParams,
   HashtagFloorScreen,
   HashtagFloorScreenParams,
   AddHashtagScreen,
@@ -39,7 +37,6 @@ export type FloorStackParamsList = {
   [Screen.GuestBookScreen]: GuestBookScreenParams;
   [Screen.ProfileScreen]: ProfileScreenParams;
   [Screen.FollowListScreen]: FollowListScreenParams;
-  [Screen.EditDescriptionScreen]: EditDescriptionScreenParams;
   [Screen.HashtagFloorScreen]: HashtagFloorScreenParams;
 };
 
@@ -64,7 +61,6 @@ const FloorStack = () => (
     <Stack.Screen
       name={Screen.ImageDetailScreen}
       component={ImageDetailScreen}
-      getId={({ params }) => `${params.pictureNo}`}
     />
     <Stack.Screen name={Screen.EditFloorScreen} component={EditFloorScreen} />
     <Stack.Screen
@@ -75,10 +71,6 @@ const FloorStack = () => (
     {/* <Stack.Screen name={Navigator.ProfileStack} component={ProfileStack} /> */}
     <Stack.Screen name={Screen.ProfileScreen} component={ProfileScreen} />
     <Stack.Screen name={Screen.FollowListScreen} component={FollowListScreen} />
-    <Stack.Screen
-      name={Screen.EditDescriptionScreen}
-      component={EditDescriptionScreen}
-    />
     <Stack.Screen
       name={Screen.HashtagFloorScreen}
       component={HashtagFloorScreen}

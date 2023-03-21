@@ -4,7 +4,6 @@ import TermItem from './TermItem';
 import Line from '@/assets/icons/Line';
 import { UserInputLayout, Button } from '@/components';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
-import { styles } from '@/screens/FloorScreen/EditDescriptionScreen';
 import { useSignUpStore } from '@/states/signUpStore';
 
 const extraStyles = StyleSheet.create({

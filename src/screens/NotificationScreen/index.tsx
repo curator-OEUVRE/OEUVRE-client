@@ -17,6 +17,7 @@ import NotificationList from '@/feature/NotificationList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import useAuth from '@/hooks/useAuth';
+import { useFloorStore } from '@/states/floorStore';
 import { useGlobalStore } from '@/states/globalStore';
 import { Notification } from '@/types/notification';
 
@@ -48,6 +49,7 @@ const NotificationScreen = () => {
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const { fetchWithToken } = useAuth();
   const { setIsUpdated } = useGlobalStore();
+  const { fetchPicture } = useFloorStore();
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
@@ -134,16 +136,17 @@ const NotificationScreen = () => {
           break;
         case 'LIKES':
           if (!pictureNo) return;
+          fetchPicture(pictureNo);
           navigation.navigate(Navigator.FloorStack, {
             screen: Screen.ImageDetailScreen,
-            params: { pictureNo },
+            params: { color: COLOR.mono.white },
           });
           break;
         default:
           break;
       }
     },
-    [navigation, onPressProfile],
+    [navigation, onPressProfile, fetchPicture],
   );
   const empty = (
     <View style={styles.empty}>

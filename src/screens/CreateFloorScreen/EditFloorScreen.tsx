@@ -5,6 +5,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Asset } from 'expo-media-library';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -13,13 +14,17 @@ import { Header } from '@/components/Header';
 import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
+import FloorSettingButtonList from '@/feature/FloorSettingButtonList';
 import ImagePickerModal from '@/feature/ImagePickerModal';
 import PictureInfoModal, {
   PictureInfoModalValue,
 } from '@/feature/PictureInfoModal';
 import { RootStackParamsList } from '@/feature/Routes';
 import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
-import { getColorByBackgroundColor } from '@/services/common/color';
+import {
+  getBackgroundColorsByGradient,
+  getColorByBackgroundColor,
+} from '@/services/common/color';
 import { createDefaultPictureInfo } from '@/services/common/image';
 import { useCreateFloorStore } from '@/states/createFloorStore';
 import { Picture } from '@/types/picture';
@@ -29,8 +34,14 @@ const styles = StyleSheet.create({
     color: COLOR.system.blue,
   },
   container: {
-    backgroundColor: COLOR.mono.white,
     flex: 1,
+  },
+  footer: {
+    alignItems: 'center',
+    height: 40,
+    justifyContent: 'center',
+    marginBottom: 21,
+    width: '100%',
   },
   wrapList: {
     flex: 1,
@@ -50,7 +61,8 @@ export type EditFloorScreenRP = RouteProp<
 
 const EditFloorScreen = () => {
   const navigation = useNavigation<EditFloorScreenNP>();
-  const { pictures, setPictures, color } = useCreateFloorStore();
+  const { pictures, setPictures, color, gradient, alignment, setFloorInfo } =
+    useCreateFloorStore();
   const [imagePickerModalVisible, setImagePickerModalVisible] =
     useState<boolean>(false);
   const [pictureInfoModalVisible, setPictureInfoModalVisible] =
@@ -131,43 +143,67 @@ const EditFloorScreen = () => {
     setPictureInfoModalVisible(true);
   }, []);
 
+  const onPressDelete = useCallback(
+    (picture: Picture) => {
+      setPictures(pictures.filter((p) => picture.imageUrl !== p.imageUrl));
+    },
+    [setPictures, pictures],
+  );
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
-      <Header
-        headerTitle="플로어 추가"
-        headerRight={ConfirmButton}
-        backgroundColor="transparent"
-        iconColor={iconColorByBackground}
-      />
-      <View style={styles.wrapList}>
-        <FloorPictureList
-          pictures={pictures}
-          editable
-          setPictures={setPictures}
-          addPictures={addPictures}
-          color={textColorByBackground}
-          onPressPicture={onPressPicture}
+    <LinearGradient
+      style={styles.container}
+      colors={getBackgroundColorsByGradient({ color, gradient })}
+    >
+      <SafeAreaView style={styles.container}>
+        <Header
+          headerTitle="플로어 추가"
+          headerRight={ConfirmButton}
+          backgroundColor="transparent"
+          iconColor={iconColorByBackground}
         />
-      </View>
-      <ImagePickerModal
-        visible={imagePickerModalVisible}
-        setVisible={setImagePickerModalVisible}
-        headerRightText="다음"
-        headerTitle="플로어 추가"
-        onComplete={onPickImagesComplete}
-      />
-      {selectedPicture && (
-        <PictureInfoModal
-          visible={pictureInfoModalVisible}
-          headerTitle="작품 설명 추가"
-          headerRightText="완료"
-          setVisible={setPictureInfoModalVisible}
-          onComplete={onPictureInfoComplete}
-          onGoBack={onGoBack}
-          {...selectedPicture}
+        <View style={styles.wrapList}>
+          <FloorPictureList
+            pictures={pictures}
+            editable
+            setPictures={setPictures}
+            addPictures={addPictures}
+            color={textColorByBackground}
+            onPressPicture={onPressPicture}
+            onPressDelete={onPressDelete}
+          />
+        </View>
+        <ImagePickerModal
+          visible={imagePickerModalVisible}
+          setVisible={setImagePickerModalVisible}
+          headerRightText="다음"
+          headerTitle="플로어 추가"
+          onComplete={onPickImagesComplete}
         />
-      )}
-    </SafeAreaView>
+        <View style={styles.footer}>
+          <FloorSettingButtonList
+            color={color}
+            isFramed={false}
+            gradient={gradient}
+            alignment={alignment}
+            onChange={(setting) => {
+              setFloorInfo({ ...setting });
+            }}
+          />
+        </View>
+        {selectedPicture && (
+          <PictureInfoModal
+            visible={pictureInfoModalVisible}
+            headerTitle="작품 설명 추가"
+            headerRightText="완료"
+            setVisible={setPictureInfoModalVisible}
+            onComplete={onPictureInfoComplete}
+            onGoBack={onGoBack}
+            {...selectedPicture}
+          />
+        )}
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
