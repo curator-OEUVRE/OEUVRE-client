@@ -28,6 +28,8 @@ function loadStories() {
   require('../src/feature/TermsForm/TermsForm.stories');
   require('../src/components/Button/IconButton.stories');
   require('../src/feature/FloorSettingButtonList/FloorSettingButtonList.stories');
+  require('../src/feature/Ticket/Ticket.stories');
+  require('../src/feature/TicketCarousel/TicketCarousel.stories');
 }
 
 const stories = [
@@ -55,6 +57,8 @@ const stories = [
   '../src/feature/TermsForm/TermsForm.stories',
   '../src/components/Button/IconButton.stories',
   '../src/feature/FloorSettingButtonList/FloorSettingButtonList.stories',
+  '../src/feature/Ticket/Ticket.stories',
+  '../src/feature/TicketCarousel/TicketCarousel.stories',
 ];
 
 module.exports = {

@@ -4,13 +4,13 @@ const MIN = 60 * 1000;
 const HOUR = MIN * 60;
 const DAY = HOUR * 12;
 
-export const formatDate = (date: Date) => {
+export const formatDate = (date: Date, delimiter = '-') => {
   const dateMoment = moment(date);
   const year = dateMoment.year();
   const month = dateMoment.month() + 1;
   const day = dateMoment.date();
 
-  return `${year}-${month < 10 ? `0${month}` : month}-${
+  return `${year}${delimiter}${month < 10 ? `0${month}` : month}${delimiter}${
     day < 10 ? `0${day}` : day
   }`;
 };
