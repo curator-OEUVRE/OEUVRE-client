@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   },
   wrapList: {
     flex: 1,
+    justifyContent: 'center',
   },
 });
 
@@ -287,6 +288,7 @@ const FloorViewerScreen = () => {
             editable={false}
             onPressPicture={onPressPicture}
             color={textColorByBackground}
+            alignment={floor.alignment}
           />
         </View>
         {guestBookButton}

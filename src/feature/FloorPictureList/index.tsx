@@ -15,11 +15,14 @@ import FloorPicture from './FloorPicture';
 import TrashIcon from '@/assets/icons/Trash';
 import { COLOR } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
+import { FloorAlignment } from '@/types/floor';
 import type { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
   flatList: {
-    height: '100%',
+    // backgroundColor: '#000000',
+    // height: '50%',
+    // alignSelf: 'center',
   },
 });
 
@@ -35,6 +38,7 @@ interface Props {
   pictureAddable?: boolean;
   onPressDelete?: (picture: Picture) => void;
   onPinchEnd?: (index: number, scale: number) => void;
+  alignment?: FloorAlignment;
 }
 
 interface Layout {
@@ -60,6 +64,7 @@ const FloorPictureList = ({
   pictureAddable,
   onPressDelete,
   onPinchEnd,
+  alignment,
 }: Props) => {
   const { height: windowHeight } = useDimensions();
   const translateY = useRef<SharedValue<number>>();
@@ -107,6 +112,7 @@ const FloorPictureList = ({
         renderDescription={renderDescription}
         pictureAddable={pictureAddable}
         onPinchEnd={onPinchEnd}
+        alignment={alignment}
       />
     ),
     [
@@ -122,6 +128,7 @@ const FloorPictureList = ({
       pictureAddable,
       onPressDelete,
       onPinchEnd,
+      alignment,
     ],
   );
 
@@ -180,7 +187,9 @@ const FloorPictureList = ({
         }}
         style={styles.flatList}
         /* eslint-disable-next-line react-native/no-inline-styles */
-        contentContainerStyle={{ paddingHorizontal: editable ? 36 : 44 }}
+        contentContainerStyle={{
+          paddingHorizontal: editable ? 36 : 44,
+        }}
         allowAnotherDirection
         maxToRenderPerBatch={7}
         initialNumToRender={7}

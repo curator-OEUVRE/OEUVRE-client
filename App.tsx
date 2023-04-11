@@ -1,6 +1,11 @@
 /* eslint-disable global-require */
 import { loadAsync } from 'expo-font';
-import { lockAsync, OrientationLock } from 'expo-screen-orientation';
+import {
+  lockAsync,
+  OrientationLock,
+  addOrientationChangeListener,
+  removeOrientationChangeListener,
+} from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
 import * as Updates from 'expo-updates';
 import { useCallback, useEffect } from 'react';
@@ -12,6 +17,7 @@ import { checkUpdate } from '@/apis/notification';
 import { Routes } from '@/feature/Routes';
 import useIntervalAsync from '@/hooks/useIntervalAsync';
 import useSplash from '@/hooks/useSplash';
+import { useDeviceStore } from '@/states/deviceStore';
 import { useGlobalStore } from '@/states/globalStore';
 
 const isStorybookEnabled = process.env.STORYBOOK_ENABLED === 'true';
@@ -38,6 +44,7 @@ const loadFonts = async () => {
 const App = () => {
   const EntryApp = isStorybookEnabled ? StorybookUIRoot : Routes;
   const { isReady, setIsReady, onLayout } = useSplash();
+  const { setOrientation } = useDeviceStore();
   useEffect(() => {
     const initialFetch = async () => {
       const start = new Date().getTime();
@@ -64,7 +71,14 @@ const App = () => {
       }
     };
     initialFetch();
-  }, [setIsReady]);
+    const subscription = addOrientationChangeListener((e) => {
+      setOrientation(e.orientationInfo.orientation);
+    });
+
+    return () => {
+      removeOrientationChangeListener(subscription);
+    };
+  }, [setIsReady, setOrientation]);
 
   const { setIsUpdated } = useGlobalStore();
 

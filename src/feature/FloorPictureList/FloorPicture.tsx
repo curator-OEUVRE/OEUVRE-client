@@ -22,6 +22,7 @@ import CloseUnfilledIcon from '@/assets/icons/CloseUnfilled';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
+import { FloorAlignment } from '@/types/floor';
 import type { Picture } from '@/types/picture';
 
 // @ts-ignore
@@ -45,16 +46,18 @@ const styles = StyleSheet.create({
     top: 0,
   },
   item: {
-    alignSelf: 'center',
+    // alignSelf: 'center',
     marginHorizontal: 36,
   },
   line: {
     alignItems: 'center',
     backgroundColor: COLOR.mono.gray3,
+    height: '100%',
     justifyContent: 'center',
   },
   lineContainer: {
     alignSelf: 'center',
+    flex: 1,
   },
   text: {
     marginTop: 5,
@@ -75,7 +78,14 @@ interface FloorPictureProps extends RenderItemParams<Picture> {
   renderDescription?: (picture: Picture) => ReactNode;
   pictureAddable?: boolean;
   onPinchEnd?: (index: number, scale: number) => void;
+  alignment?: FloorAlignment;
 }
+
+const ALIGNMENT = {
+  [FloorAlignment.TOP]: 'flex-start',
+  [FloorAlignment.CENTER]: 'center',
+  [FloorAlignment.BOTTOM]: 'flex-end',
+} as const;
 
 const FloorPicture = ({
   item,
@@ -93,9 +103,10 @@ const FloorPicture = ({
   onPressDelete,
   pictureAddable = true,
   onPinchEnd,
+  alignment,
 }: FloorPictureProps) => {
-  const { height, width } = useDimensions();
-  const BASE_SIZE = height > width ? width : height;
+  const { height } = useDimensions();
+  const BASE_SIZE = height;
   const imageWidth = useMemo(
     () => BASE_SIZE * item.width,
     [item.width, BASE_SIZE],
@@ -122,7 +133,7 @@ const FloorPicture = ({
 
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
-      if (editable) {
+      if (editable && e.scale * imageWidth <= BASE_SIZE) {
         scale.value = e.scale;
       }
     })
@@ -151,16 +162,8 @@ const FloorPicture = ({
       style={styles.item}
       hitSlop={32}
     >
-      <Animated.View
-        style={[
-          styles.lineContainer,
-          containerAnimStyle,
-          { height: BASE_SIZE * 0.5 },
-        ]}
-      >
-        <Animated.View
-          style={[styles.line, animStyle, { height: BASE_SIZE * 0.5 }]}
-        >
+      <Animated.View style={[styles.lineContainer, containerAnimStyle]}>
+        <Animated.View style={[styles.line, animStyle]}>
           {isLineActive && (
             <Pressable onPress={() => addPictures?.(index ?? -1)}>
               <Animated.View entering={FadeIn} exiting={FadeOut}>
@@ -206,6 +209,7 @@ const FloorPicture = ({
                   translateY: item.location * BASE_SIZE,
                 },
               ],
+              alignSelf: alignment ? ALIGNMENT[alignment] : 'center',
             },
             styles.item,
           ]}

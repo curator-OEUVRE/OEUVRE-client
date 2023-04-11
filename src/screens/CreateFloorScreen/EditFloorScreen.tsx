@@ -27,6 +27,7 @@ import {
 } from '@/services/common/color';
 import { createDefaultPictureInfo } from '@/services/common/image';
 import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorAlignment } from '@/types/floor';
 import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
   },
   wrapList: {
     flex: 1,
+    justifyContent: 'center',
   },
 });
 
@@ -189,6 +191,7 @@ const EditFloorScreen = () => {
             onPressPicture={onPressPicture}
             onPressDelete={onPressDelete}
             onPinchEnd={onPinchEnd}
+            alignment={alignment}
           />
         </View>
         <ImagePickerModal
