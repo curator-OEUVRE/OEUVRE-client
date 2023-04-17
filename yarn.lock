@@ -11580,6 +11580,11 @@ react-native-progress@^5.0.0:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-reanimated-carousel@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npmjs.org/react-native-reanimated-carousel/-/react-native-reanimated-carousel-3.3.0.tgz#e71e9441ee6aaae401c5a023b27bf48a54565d16"
+  integrity sha512-rprUl+LqWoXyH/8OvHv+m9Kol2YORHEnz7tvRum+o4ciCUCcYnafQBbSqG44RMllOCqm3WOAcuEX5p8a7W3ZZw==
+
 react-native-reanimated@~2.9.1:
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz#d9a932e312c13c05b4f919e43ebbf76d996e0bc1"

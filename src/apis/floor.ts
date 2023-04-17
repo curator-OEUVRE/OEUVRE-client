@@ -143,6 +143,7 @@ export interface HomeFloor {
   updatedAt: string;
   userNo: number;
   width: number;
+  floorDescription: string;
 }
 
 interface GetHomeFeedResponseDto {
