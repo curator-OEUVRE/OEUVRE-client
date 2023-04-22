@@ -50,6 +50,7 @@ module.exports = {
       requireFullScreen: true,
       buildNumber: '5',
       associatedDomains: ['applinks:oeuvre.page.link'],
+      bitcode: 'Debug',
     },
     android: {
       adaptiveIcon: {

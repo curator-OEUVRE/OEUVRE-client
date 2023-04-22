@@ -27,6 +27,7 @@ import {
 } from '@/services/common/color';
 import { createDefaultPictureInfo } from '@/services/common/image';
 import { useCreateFloorStore } from '@/states/createFloorStore';
+import { FloorAlignment } from '@/types/floor';
 import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
   },
   wrapList: {
     flex: 1,
+    justifyContent: 'center',
   },
 });
 
@@ -150,6 +152,23 @@ const EditFloorScreen = () => {
     [setPictures, pictures],
   );
 
+  const onPinchEnd = useCallback(
+    (index: number, scale: number) => {
+      setPictures((prev) =>
+        prev.map((picture, idx) =>
+          index === idx
+            ? {
+                ...picture,
+                width: picture.width * scale,
+                height: picture.height * scale,
+              }
+            : picture,
+        ),
+      );
+    },
+    [setPictures],
+  );
+
   return (
     <LinearGradient
       style={styles.container}
@@ -171,6 +190,8 @@ const EditFloorScreen = () => {
             color={textColorByBackground}
             onPressPicture={onPressPicture}
             onPressDelete={onPressDelete}
+            onPinchEnd={onPinchEnd}
+            alignment={alignment}
           />
         </View>
         <ImagePickerModal

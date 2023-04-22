@@ -208,6 +208,23 @@ const EditFloorScreen = () => {
     selectPicture(undefined);
   }, []);
 
+  const onPinchEnd = useCallback(
+    (index: number, scale: number) => {
+      setPictures((prev) =>
+        prev.map((picture, idx) =>
+          index === idx
+            ? {
+                ...picture,
+                width: picture.width * scale,
+                height: picture.height * scale,
+              }
+            : picture,
+        ),
+      );
+    },
+    [setPictures],
+  );
+
   return (
     <LinearGradient
       style={styles.container}
@@ -230,6 +247,7 @@ const EditFloorScreen = () => {
             color={textColorByBackground}
             onPressDelete={onPressDelete}
             pictureAddable
+            onPinchEnd={onPinchEnd}
           />
         </View>
         <View style={styles.footer}>

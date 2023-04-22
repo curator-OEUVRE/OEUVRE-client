@@ -54,13 +54,15 @@ export const Routes = () => {
 
     async function refreshPushToken() {
       try {
-        const token = await Notifications.getDevicePushTokenAsync();
-
-        if (token.type === 'android' || token.type === 'ios') {
-          await fetchWithToken(updatePushToken, {
-            token: token.data,
-          });
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status !== 'granted') {
+          await Notifications.requestPermissionsAsync();
         }
+
+        const token = await Notifications.getExpoPushTokenAsync();
+        await fetchWithToken(updatePushToken, {
+          token: token.data,
+        });
       } catch (error) {
         console.error(error);
       }

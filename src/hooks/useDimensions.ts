@@ -1,41 +1,28 @@
-import { Dimensions, Platform, useWindowDimensions } from 'react-native';
+import { Orientation } from 'expo-screen-orientation';
+import { Dimensions } from 'react-native';
+import { useDeviceStore } from '@/states/deviceStore';
 
 interface Dimension {
   width: number;
   height: number;
 }
 
+const WIDTH = Dimensions.get('screen').width;
+const HEIGHT = Dimensions.get('screen').height;
+
+/**
+ * width, height은 항상 보이는 그대로의 가로/세로를 지칭.
+ * 예를 들어 디바이스가 세로에서 가로로 바뀌면, 세로값이 가로값으로 바뀜
+ */
 export const useDimensions = (): Dimension => {
-  const { width, height } = useWindowDimensions();
+  const { orientation } = useDeviceStore();
 
-  if (Platform.OS === 'android') {
-    const windowWidth = Math.min(width, height);
-    const windowHeight = Math.max(width, height);
+  const isLandscape =
+    orientation === Orientation.LANDSCAPE_LEFT ||
+    orientation === Orientation.LANDSCAPE_RIGHT;
 
-    const screenWidth = Math.min(
-      Dimensions.get('screen').width,
-      Dimensions.get('screen').height,
-    );
-
-    const screenHeight = Math.max(
-      Dimensions.get('screen').width,
-      Dimensions.get('screen').height,
-    );
-
-    const isNormal = Math.abs(windowHeight - screenHeight) < 100;
-    let calHeight = 0;
-
-    if (isNormal) {
-      calHeight = windowHeight;
-    } else {
-      calHeight = Math.max(windowHeight, screenHeight);
-    }
-
-    return {
-      width: Math.min(windowWidth, screenWidth),
-      height: calHeight,
-    };
-  }
+  const width = isLandscape ? HEIGHT : WIDTH;
+  const height = isLandscape ? WIDTH : HEIGHT;
 
   return {
     width,
