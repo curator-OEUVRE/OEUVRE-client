@@ -1,30 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { useCallback, useRef, useState, ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import Animated, {
+import {
   SharedValue,
-  useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
-import { Shadow } from 'react-native-shadow-2';
 import FloorPicture from './FloorPicture';
-import TrashIcon from '@/assets/icons/Trash';
-import { COLOR } from '@/constants/styles';
-import useDimensions from '@/hooks/useDimensions';
 import { FloorAlignment } from '@/types/floor';
 import type { Picture } from '@/types/picture';
-
-const styles = StyleSheet.create({
-  flatList: {
-    // backgroundColor: '#000000',
-    // height: '50%',
-    // alignSelf: 'center',
-  },
-});
 
 interface Props {
   pictures: Picture[];
@@ -50,7 +37,6 @@ interface Layout {
 
 const keyExtractor = (item: Picture, index: number): string =>
   `item_${index}_${item.pictureNo}`;
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const FloorPictureList = ({
   pictures,
@@ -66,13 +52,11 @@ const FloorPictureList = ({
   onPinchEnd,
   alignment,
 }: Props) => {
-  const { height: windowHeight } = useDimensions();
   const translateY = useRef<SharedValue<number>>();
   const absoluteX = useRef<SharedValue<number>>();
   const absoluteY = useRef<SharedValue<number>>();
   const activeIndexAnim = useRef<SharedValue<number>>();
   const layoutRef = useSharedValue<Layout | undefined>(undefined);
-  const pressableRef = useRef<View>(null);
   const isDragging = useDerivedValue(
     () =>
       activeIndexAnim.current?.value !== undefined &&
@@ -132,10 +116,6 @@ const FloorPictureList = ({
     ],
   );
 
-  const animatedPressableStyles = useAnimatedStyle(() => ({
-    transform: [{ scale: onEnter.value ? 1.5 : 1 }],
-  }));
-
   const onDragEnd = (newData: Picture[]) => {
     if (onEnter.value && activeIndexAnim.current) {
       setPictures?.(
@@ -147,14 +127,6 @@ const FloorPictureList = ({
       setPictures?.(newData);
     }
   };
-  const measureLayout = () => {
-    setTimeout(() => {
-      if (!pressableRef.current) return;
-      pressableRef.current.measure((x, y, width, height, pageX, pageY) => {
-        layoutRef.value = { pageX, pageY, width, height };
-      });
-    }, 1000);
-  };
 
   return (
     <View>
@@ -163,20 +135,7 @@ const FloorPictureList = ({
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         horizontal
-        onDragEnd={({ data: newData, from, to }) => {
-          const newPictures = newData.map((picture, index) =>
-            // 순서를 바꾸지 않고 움직이기만 하면 y축 위치 변경
-            index === to &&
-            from === to &&
-            translateY.current?.value !== undefined
-              ? {
-                  ...picture,
-                  location:
-                    picture.location + translateY.current.value / windowHeight,
-                }
-              : // 순서가 바뀌면 y축 변화 무시
-                picture,
-          );
+        onDragEnd={({ data: newData }) => {
           onDragEnd(newData);
         }}
         onAnimValInit={(animVals) => {
@@ -185,7 +144,6 @@ const FloorPictureList = ({
           translateY.current = animVals.translateY;
           activeIndexAnim.current = animVals.activeIndexAnim;
         }}
-        style={styles.flatList}
         /* eslint-disable-next-line react-native/no-inline-styles */
         contentContainerStyle={{
           paddingHorizontal: editable ? 36 : 44,
