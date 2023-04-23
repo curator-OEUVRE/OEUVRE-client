@@ -17,7 +17,7 @@ const data: Notification[] = [
     pictureNo: null,
     commentNo: null,
     comment: null,
-    isRead: true,
+    isRead: false,
     createdAt: '2022-11-14 18:55:02.216',
   },
 ];

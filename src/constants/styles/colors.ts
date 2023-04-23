@@ -27,6 +27,9 @@ export const COLOR = {
     blue: '#5AB5BF',
     red: '#EE5A5A',
   },
+  notification: {
+    blue: '#EAFAFF',
+  },
 } as const;
 
 export const FLOOR_BACKGROUND_COLORS = [
