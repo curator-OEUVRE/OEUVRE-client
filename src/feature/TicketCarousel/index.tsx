@@ -59,7 +59,12 @@ const TicketCarousel = ({
         style={[styles.carousel, { width: PAGE_WIDTH }]}
         data={data}
         renderItem={({ index }) => (
-          <Ticket {...data[index]} key={`ticket_${index}`} />
+          <Ticket
+            {...data[index]}
+            key={`ticket_${index}`}
+            onPress={onPress}
+            onProfilePress={onProfilePress}
+          />
         )}
         loop={false}
         customAnimation={animationStyle}
@@ -69,14 +74,6 @@ const TicketCarousel = ({
           }
         }}
       />
-      {data.map((ticket) => (
-        <Ticket
-          key={ticket.floorNo}
-          {...ticket}
-          onPress={onPress}
-          onProfilePress={onProfilePress}
-        />
-      ))}
     </View>
   );
 };
