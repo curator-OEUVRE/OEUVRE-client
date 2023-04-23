@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Shadow } from 'react-native-shadow-2';
-import ArrowUpIcon from '@/assets/icons/ArrowUp';
+import ArrowUpIcon from '@/assets/icons/ArrowUpSmall';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { OtherFloor } from '@/types/guestbook';
 

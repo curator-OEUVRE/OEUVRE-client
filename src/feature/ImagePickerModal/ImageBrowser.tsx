@@ -19,7 +19,7 @@ import {
 import { FlatList } from 'react-native-gesture-handler';
 import AlbumPickerModal from './AlbumPickerModal';
 import ImageTile from './ImageTile';
-import ArrowDownIcon from '@/assets/icons/ArrowDown';
+import ArrowDownIcon from '@/assets/icons/ArrowDownSmall';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 interface ImageBrowserProps {
