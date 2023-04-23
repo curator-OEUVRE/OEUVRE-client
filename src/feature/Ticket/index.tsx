@@ -9,6 +9,7 @@ import {
   Pressable,
   Text,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -148,12 +149,13 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
 
   const renderFront = () => (
     <Animated.View style={[styles.front, frontAnimatedStyle]}>
-      <ImageBackground
-        source={{
-          uri: floor.thumbnailUrl,
-        }}
-        style={styles.container}
-      >
+      <View style={styles.container}>
+        <FastImage
+          source={{
+            uri: floor.thumbnailUrl,
+          }}
+          style={styles.wrap_back}
+        />
         <LinearGradient
           style={styles.wrap_back}
           colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.8)']}
@@ -195,7 +197,7 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
             </Text>
           </View>
         )}
-      </ImageBackground>
+      </View>
       <Pressable style={styles.flip} onPress={toggle}>
         <FlipIcon />
       </Pressable>
