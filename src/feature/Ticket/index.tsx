@@ -167,10 +167,10 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
         />
         <View style={styles.wrap_front}>
           <Text style={[TEXT_STYLE.body16M, styles.exhibition_name]}>
-            {floor.exhibitionName}
+            {floor.floorName}
           </Text>
           <Text style={[TEXT_STYLE.body12R, styles.floor_name]}>
-            {floor.floorName}
+            {floor.exhibitionName}
           </Text>
           <View style={styles.bottom}>
             <Pressable style={styles.wrap_profile} onPress={handleProfilePress}>
