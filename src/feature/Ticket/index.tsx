@@ -157,7 +157,7 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
         <LinearGradient
           style={styles.wrap_back}
           colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.8)']}
-          start={{ x: 0, y: 0.65 }}
+          start={{ x: 0.5, y: 0.65 }}
         />
         <Image
           source={require('@/assets/images/ticket.png')}
@@ -212,7 +212,11 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
       >
         <LinearGradient
           style={styles.wrap_back}
-          colors={['rgba(255, 255, 255, 0.4)', 'rgba(255, 255, 255, 0.4)']}
+          colors={['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.8)']}
+        />
+        <LinearGradient
+          style={styles.wrap_back}
+          colors={['rgba(0, 0, 0, 0.4)', 'rgba(0, 0, 0, 0.3)']}
         />
         <Image
           source={require('@/assets/images/ticket.png')}
