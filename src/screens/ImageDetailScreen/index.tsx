@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
-    paddingHorizontal: 40,
   },
   likeTitle: {
     color: COLOR.mono.black,
@@ -304,6 +303,8 @@ const ImageDetailScreen = () => {
   const SIZE = 150;
   const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
   const Bookmark = isScraped ? BookmarkFilledIcon : BookmarkIcon;
+  const headerOpacity = isEditMode ? 1 : 0;
+  const itemPadding = isEditMode ? 40 : 0;
 
   const showLikesPeople = async () => {
     const response = await getLikeUsers({ pictureNo });
@@ -338,16 +339,14 @@ const ImageDetailScreen = () => {
     <View
       style={[
         orientation === OrientationType.portrait && styles.wrapHeaderPortrait,
-        { paddingTop: insets.top },
+        { paddingTop: insets.top, opacity: headerOpacity },
       ]}
     >
-      {isEditMode && (
-        <Header
-          iconColor={iconColorByBackground}
-          backgroundColor="transparent"
-          headerRight={headerRight}
-        />
-      )}
+      <Header
+        iconColor={iconColorByBackground}
+        backgroundColor="transparent"
+        headerRight={headerRight}
+      />
     </View>
   );
   const renderFooter = () =>
@@ -544,7 +543,12 @@ const ImageDetailScreen = () => {
                 data={pictures}
                 index={swiperIndex}
                 renderItem={({ item }) => (
-                  <View style={[styles.item, { width }]}>
+                  <View
+                    style={[
+                      styles.item,
+                      { width, paddingHorizontal: itemPadding },
+                    ]}
+                  >
                     <FastImage
                       source={{ uri: item.imageUrl }}
                       style={[
