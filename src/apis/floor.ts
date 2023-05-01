@@ -10,6 +10,11 @@ import {
 } from '@/types/floor';
 import type { FloorMini } from '@/types/floor';
 
+export enum HomeFloorFilter {
+  FOLLOWING = 'following',
+  LATEST = 'latest',
+}
+
 interface GetFloorParams {
   floorNo: number;
 }
@@ -125,6 +130,7 @@ export async function editFloorsOrder(
 interface GetHomeFeedParams {
   page: number;
   size: number;
+  view: HomeFloorFilter;
 }
 
 export interface HomeFloor {
@@ -159,11 +165,11 @@ interface GetHomeFeedResponseDto {
 
 export async function getHomeFeed(
   accessToken: string,
-  { page, size }: GetHomeFeedParams,
+  { page, size, view }: GetHomeFeedParams,
 ) {
   const response = await getAsync<GetHomeFeedResponseDto, GetHomeFeedParams>(
     '/floors/home',
-    { headers: { 'X-AUTH-TOKEN': accessToken }, params: { page, size } },
+    { headers: { 'X-AUTH-TOKEN': accessToken }, params: { page, size, view } },
   );
 
   return response;
