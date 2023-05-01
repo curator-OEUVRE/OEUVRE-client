@@ -7,6 +7,7 @@ import {
 } from '@react-navigation/native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Alert,
@@ -64,7 +65,10 @@ import PictureInfoSheet from '@/feature/PictureInfoSheet';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import UserProfileList from '@/feature/UserProfileList';
-import { getColorByBackgroundColor } from '@/services/common/color';
+import {
+  getBackgroundColorsByGradient,
+  getColorByBackgroundColor,
+} from '@/services/common/color';
 import throttle from '@/services/common/throttle';
 import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
@@ -144,19 +148,18 @@ const ImageDetailScreen = () => {
 
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const {
+    swiperIndex,
+    floor: { pictures, gradient, color },
+    setPictures,
+    setSwiperIndex,
+  } = useFloorStore();
 
   const { params } = useRoute<ImageDetailScreenRP>();
-  const color = params.color || COLOR.mono.white;
   const iconColorByBackground = getColorByBackgroundColor(color);
   const textColorByBackground = getColorByBackgroundColor(color, {
     dark: COLOR.mono.gray5,
   });
-  const {
-    swiperIndex,
-    floor: { pictures },
-    setPictures,
-    setSwiperIndex,
-  } = useFloorStore();
   const [likeUsers, setLikeUser] = useState<LikeUser[]>([]);
   const [isEditMode, setEditMode] = useState<boolean>(true);
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
@@ -514,20 +517,23 @@ const ImageDetailScreen = () => {
       </>
     </BottomSheet>
   );
-
   return (
     <GestureDetector gesture={pinchGesture}>
-      <View
+      <LinearGradient
         style={[
           styles.container,
           // eslint-disable-next-line react-native/no-inline-styles
           {
             paddingLeft: insets.left,
             paddingRight: insets.right,
-            backgroundColor: color,
             paddingBottom: orientation === OrientationType.landscape ? 55 : 120,
           },
         ]}
+        colors={
+          isEditMode
+            ? getBackgroundColorsByGradient({ color, gradient })
+            : [COLOR.mono.black]
+        }
       >
         {renderHeader()}
 
@@ -588,7 +594,7 @@ const ImageDetailScreen = () => {
           onComplete={onPictureInfoComplete}
           {...pictures[swiperIndex]}
         />
-      </View>
+      </LinearGradient>
     </GestureDetector>
   );
 };
