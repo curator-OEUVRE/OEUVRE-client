@@ -1,27 +1,22 @@
 import {
-  type CompositeNavigationProp,
   useNavigation,
+  type CompositeNavigationProp,
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { useEffect, useState, useCallback } from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  type ListRenderItemInfo,
-  View,
-  Text,
-} from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getHomeFeed, type HomeFloor } from '@/apis/floor';
+import { getHomeFeed, HomeFloorFilter, type HomeFloor } from '@/apis/floor';
 import PhotoIcon from '@/assets/icons/Photo';
-import { Header } from '@/components/Header';
+import { Header, Radio } from '@/components';
 import { DynamicLinkType } from '@/constants/dynamicLinks';
 import { Navigator, Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
-import FloorTicket from '@/feature/FloorTicket';
 import type { RootStackParamsList } from '@/feature/Routes';
 import type { HomeStackParamsList } from '@/feature/Routes/HomeStack';
 import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
+import TicketCarousel from '@/feature/TicketCarousel';
 import useAuth from '@/hooks/useAuth';
 import useDynamicLinks, { OnDynamicLink } from '@/hooks/useDynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
@@ -41,13 +36,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  contentContainer: {
-    marginLeft: 20,
-    marginTop: 24,
-  },
   emptyContainer: {
     alignItems: 'center',
-    height: '100%',
     justifyContent: 'center',
     marginRight: 20,
   },
@@ -59,8 +49,9 @@ const styles = StyleSheet.create({
     color: COLOR.mono.gray4,
     marginTop: 8,
   },
-  ticket: {
-    marginBottom: 32,
+  wrapRadio: {
+    marginBottom: 60,
+    marginTop: 40,
   },
 });
 
@@ -75,7 +66,13 @@ const ListEmptyComponent = () => (
   </View>
 );
 
-const keyExtractor = (item: HomeFloor) => `${item.floorNo}`;
+const FilterOptions = [
+  {
+    label: '팔로잉',
+    value: HomeFloorFilter.FOLLOWING,
+  },
+  { label: '최신순', value: HomeFloorFilter.LATEST },
+];
 
 const HomeScreen = () => {
   const { fetchWithToken } = useAuth();
@@ -112,36 +109,42 @@ const HomeScreen = () => {
   const [data, setData] = useState<HomeFloor[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
+  const [filter, setFilter] = useState<HomeFloorFilter>(
+    HomeFloorFilter.FOLLOWING,
+  );
+  const carouselRef = useRef<ICarouselInstance>(null);
 
-  const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<HomeFloor>) => (
-      <FloorTicket
-        {...item}
-        containerStyle={styles.ticket}
-        onPress={(floorNo) => {
-          navigation.navigate(Navigator.FloorStack, {
-            screen: Screen.FloorViewerScreen,
-            params: { floorNo },
-          });
-        }}
-        onProfilePress={(userNo) => {
-          if (userNo === myUserNo) {
-            navigation.navigate(Navigator.ProfileStack, {
-              screen: Screen.MyProfileScreen,
-            });
-          } else {
-            navigation.navigate(Screen.ProfileScreen, { userNo });
-          }
-        }}
-      />
-    ),
+  const onPress = useCallback(
+    (floorNo: number) => {
+      navigation.navigate(Navigator.FloorStack, {
+        screen: Screen.FloorViewerScreen,
+        params: { floorNo },
+      });
+    },
+    [navigation],
+  );
+
+  const onProfilePress = useCallback(
+    (userNo: number) => {
+      if (userNo === myUserNo) {
+        navigation.navigate(Navigator.ProfileStack, {
+          screen: Screen.MyProfileScreen,
+        });
+      } else {
+        navigation.navigate(Screen.ProfileScreen, { userNo });
+      }
+    },
     [navigation, myUserNo],
   );
 
   const refresh = async () => {
     setRefreshing(true);
 
-    const response = await fetchWithToken(getHomeFeed, { page: 0, size: 10 });
+    const response = await fetchWithToken(getHomeFeed, {
+      page: 0,
+      size: 10,
+      view: filter,
+    });
     if (response.isSuccess) {
       setPage(0);
       setData(response.result.result.contents);
@@ -156,6 +159,7 @@ const HomeScreen = () => {
     const response = await fetchWithToken(getHomeFeed, {
       page: page + 1,
       size: 10,
+      view: filter,
     });
     if (response.isSuccess) {
       setData((prev) => [...prev, ...response.result.result.contents]);
@@ -167,30 +171,27 @@ const HomeScreen = () => {
 
   useEffect(() => {
     refresh();
-    // 최초 1회만 실행해야 함
+    carouselRef?.current?.scrollTo({ index: 0, animated: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filter]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <Header hideBackButton headerTitle="피드" />
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        refreshing={refreshing}
-        onRefresh={refresh}
-        onEndReached={loadMoreFloors}
-        onEndReachedThreshold={0.5}
-        keyExtractor={keyExtractor}
-        contentContainerStyle={[
-          styles.contentContainer,
-          data.length === 0 ? styles.container : {},
-        ]}
-        ListEmptyComponent={ListEmptyComponent}
-        maxToRenderPerBatch={5}
-        initialNumToRender={5}
-        windowSize={5}
-      />
+      <View style={styles.wrapRadio}>
+        <Radio value={filter} onChange={setFilter} data={FilterOptions} />
+      </View>
+      {data.length > 0 ? (
+        <TicketCarousel
+          ref={carouselRef}
+          data={data}
+          onEndReached={loadMoreFloors}
+          onPress={onPress}
+          onProfilePress={onProfilePress}
+        />
+      ) : (
+        <ListEmptyComponent />
+      )}
     </SafeAreaView>
   );
 };

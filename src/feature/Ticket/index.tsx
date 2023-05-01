@@ -9,6 +9,7 @@ import {
   Pressable,
   Text,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -148,16 +149,17 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
 
   const renderFront = () => (
     <Animated.View style={[styles.front, frontAnimatedStyle]}>
-      <ImageBackground
-        source={{
-          uri: floor.thumbnailUrl,
-        }}
-        style={styles.container}
-      >
+      <View style={styles.container}>
+        <FastImage
+          source={{
+            uri: floor.thumbnailUrl,
+          }}
+          style={styles.wrap_back}
+        />
         <LinearGradient
           style={styles.wrap_back}
           colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.8)']}
-          start={{ x: 0, y: 0.65 }}
+          start={{ x: 0.5, y: 0.65 }}
         />
         <Image
           source={require('@/assets/images/ticket.png')}
@@ -165,10 +167,10 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
         />
         <View style={styles.wrap_front}>
           <Text style={[TEXT_STYLE.body16M, styles.exhibition_name]}>
-            {floor.exhibitionName}
+            {floor.floorName}
           </Text>
           <Text style={[TEXT_STYLE.body12R, styles.floor_name]}>
-            {floor.floorName}
+            {floor.exhibitionName}
           </Text>
           <View style={styles.bottom}>
             <Pressable style={styles.wrap_profile} onPress={handleProfilePress}>
@@ -195,7 +197,7 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
             </Text>
           </View>
         )}
-      </ImageBackground>
+      </View>
       <Pressable style={styles.flip} onPress={toggle}>
         <FlipIcon />
       </Pressable>
@@ -212,7 +214,11 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
       >
         <LinearGradient
           style={styles.wrap_back}
-          colors={['rgba(255, 255, 255, 0.4)', 'rgba(255, 255, 255, 0.4)']}
+          colors={['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.8)']}
+        />
+        <LinearGradient
+          style={styles.wrap_back}
+          colors={['rgba(0, 0, 0, 0.4)', 'rgba(0, 0, 0, 0.3)']}
         />
         <Image
           source={require('@/assets/images/ticket.png')}
