@@ -162,11 +162,9 @@ const FloorViewerScreen = () => {
       );
       if (idx === -1) return;
       setSwiperIndex(idx);
-      navigation.navigate(Screen.ImageDetailScreen, {
-        color,
-      });
+      navigation.navigate(Screen.ImageDetailScreen);
     },
-    [navigation, color, pictures, setSwiperIndex],
+    [navigation, pictures, setSwiperIndex],
   );
 
   const onEditFloor = () => {

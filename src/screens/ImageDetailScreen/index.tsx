@@ -79,18 +79,11 @@ enum OrientationType {
   landscape,
 }
 
-export interface ImageDetailScreenParams {
-  color?: string;
-}
+export type ImageDetailScreenParams = undefined;
 
 export type ImageDetailScreenNP = CompositeNavigationProp<
   StackNavigationProp<FloorStackParamsList, Screen.ImageDetailScreen>,
   StackNavigationProp<RootStackParamsList>
->;
-
-export type ImageDetailScreenRP = RouteProp<
-  FloorStackParamsList,
-  Screen.ImageDetailScreen
 >;
 
 // @ts-ignore
@@ -155,7 +148,6 @@ const ImageDetailScreen = () => {
     setSwiperIndex,
   } = useFloorStore();
 
-  const { params } = useRoute<ImageDetailScreenRP>();
   const iconColorByBackground = getColorByBackgroundColor(color);
   const textColorByBackground = getColorByBackgroundColor(color, {
     dark: COLOR.mono.gray5,
