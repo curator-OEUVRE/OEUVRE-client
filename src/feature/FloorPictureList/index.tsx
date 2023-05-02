@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { useCallback, useRef, useState, ReactNode } from 'react';
-import { View } from 'react-native';
+import { ScrollViewProps, View } from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
@@ -13,7 +13,7 @@ import FloorPicture from './FloorPicture';
 import { FloorAlignment } from '@/types/floor';
 import type { Picture } from '@/types/picture';
 
-interface Props {
+interface Props extends ScrollViewProps {
   pictures: Picture[];
   editable?: boolean;
   setPictures?: (newData: Picture[]) => void;
@@ -51,6 +51,7 @@ const FloorPictureList = ({
   onPressDelete,
   onPinchEnd,
   alignment,
+  ...scrollViewProps
 }: Props) => {
   const translateY = useRef<SharedValue<number>>();
   const absoluteX = useRef<SharedValue<number>>();
@@ -155,6 +156,7 @@ const FloorPictureList = ({
         onEndReached={onEndReached}
         onEndReachedThreshold={0.1}
         showsHorizontalScrollIndicator={false}
+        {...scrollViewProps}
       />
     </View>
   );

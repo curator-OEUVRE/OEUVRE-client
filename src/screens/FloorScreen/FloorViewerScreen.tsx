@@ -107,6 +107,8 @@ const FloorViewerScreen = () => {
   const { floorNo } = params;
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
+  const [onScroll, setOnScroll] = useState<boolean>(false);
+  const [viewingMode, setViewingMode] = useState<boolean>(false);
   const bottomSheetRef = useRef<Sheet>(null);
   const iconColorByBackground = getColorByBackgroundColor(color);
   const textColorByBackground = getColorByBackgroundColor(color, {
@@ -160,11 +162,9 @@ const FloorViewerScreen = () => {
       );
       if (idx === -1) return;
       setSwiperIndex(idx);
-      navigation.navigate(Screen.ImageDetailScreen, {
-        color,
-      });
+      navigation.navigate(Screen.ImageDetailScreen);
     },
-    [navigation, color, pictures, setSwiperIndex],
+    [navigation, pictures, setSwiperIndex],
   );
 
   const onEditFloor = () => {
@@ -269,32 +269,52 @@ const FloorViewerScreen = () => {
     </Pressable>
   );
 
+  const onScrollBeginDrag = () => {
+    setViewingMode(true);
+    setOnScroll(true);
+  };
+
+  const onScrollEndDrag = () => {
+    setOnScroll(false);
+  };
+
+  const onPressBackground = useCallback(() => {
+    setViewingMode(false);
+  }, []);
+
   if (loading) return <Spinner />;
+  const headerOpacity = viewingMode ? 0 : 1;
   return (
-    <LinearGradient
-      style={styles.container}
-      colors={getBackgroundColorsByGradient({ color, gradient })}
-    >
-      <SafeAreaView style={styles.container}>
-        <Header
-          headerTitle={name}
-          headerRight={ConfirmButton}
-          backgroundColor="transparent"
-          iconColor={iconColorByBackground}
-        />
-        <View style={styles.wrapList}>
-          <FloorPictureList
-            pictures={pictures}
-            editable={false}
-            onPressPicture={onPressPicture}
-            color={textColorByBackground}
-            alignment={floor.alignment}
-          />
-        </View>
-        {guestBookButton}
-        {renderBottomSheet()}
-      </SafeAreaView>
-    </LinearGradient>
+    <Pressable onPress={onPressBackground} style={styles.container}>
+      <LinearGradient
+        style={styles.container}
+        colors={getBackgroundColorsByGradient({ color, gradient })}
+      >
+        <SafeAreaView style={styles.container}>
+          <View style={{ opacity: headerOpacity }}>
+            <Header
+              headerTitle={name}
+              headerRight={ConfirmButton}
+              backgroundColor="transparent"
+              iconColor={iconColorByBackground}
+            />
+          </View>
+          <View style={styles.wrapList}>
+            <FloorPictureList
+              pictures={pictures}
+              editable={false}
+              onPressPicture={onPressPicture}
+              color={textColorByBackground}
+              alignment={floor.alignment}
+              onScrollBeginDrag={onScrollBeginDrag}
+              onScrollEndDrag={onScrollEndDrag}
+            />
+          </View>
+          {!viewingMode && guestBookButton}
+          {renderBottomSheet()}
+        </SafeAreaView>
+      </LinearGradient>
+    </Pressable>
   );
 };
 

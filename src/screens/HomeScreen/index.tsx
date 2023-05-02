@@ -93,7 +93,6 @@ const HomeScreen = () => {
           fetchPicture(Number(params.id));
           navigation.navigate(Navigator.FloorStack, {
             screen: Screen.ImageDetailScreen,
-            params: { color: COLOR.mono.white },
           });
           break;
         }

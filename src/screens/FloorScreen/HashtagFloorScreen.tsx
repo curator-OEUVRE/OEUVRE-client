@@ -219,9 +219,7 @@ const HashtagFloorScreen = () => {
       if (idx === -1) return;
       setFloorPictures(pictures);
       setSwiperIndex(idx);
-      navigation.navigate(Screen.ImageDetailScreen, {
-        color,
-      });
+      navigation.navigate(Screen.ImageDetailScreen);
     },
     [navigation, pictures, setSwiperIndex, setFloorPictures],
   );

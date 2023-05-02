@@ -127,10 +127,11 @@ export const useFloorStore = create<FloorStore>()((set, get) => ({
     }
   },
   fetchPicture: async (pictureNo: number) => {
-    const { setPictures, setSwiperIndex } = get();
+    const { setPictures, setSwiperIndex, setFloorInfo } = get();
     const response = await PictureAPI.getPictureDetail({ pictureNo });
     if (response.isSuccess) {
       const { result } = response.result;
+      setFloorInfo({ color: COLOR.mono.white, gradient: FloorGradient.FULL });
       setPictures([result]);
       setSwiperIndex(0);
     } else {

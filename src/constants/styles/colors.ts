@@ -27,6 +27,9 @@ export const COLOR = {
     blue: '#5AB5BF',
     red: '#EE5A5A',
   },
+  notification: {
+    blue: '#EAFAFF',
+  },
 } as const;
 
 export const FLOOR_BACKGROUND_COLORS = [
@@ -43,7 +46,7 @@ export const FLOOR_BACKGROUND_COLORS = [
 ];
 
 export const GRADIENT_COLOR_MAP = {
-  [COLOR.mono.white]: COLOR.mono.white,
+  [COLOR.mono.white]: COLOR.mono.gray6,
   [COLOR.mono.gray1]: COLOR.mono.white,
   [COLOR.mono.gray5]: COLOR.mono.gray3,
   [COLOR.mono.gray7]: COLOR.mono.gray5,

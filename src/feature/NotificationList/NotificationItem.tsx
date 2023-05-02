@@ -16,8 +16,8 @@ interface NotificationItemProps {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 56,
-    marginTop: 24,
+    height: 80,
+    paddingVertical: 12,
     width: '100%',
   },
   content: {
@@ -30,14 +30,7 @@ const styles = StyleSheet.create({
     color: COLOR.mono.gray5,
   },
   new: {
-    backgroundColor: COLOR.system.red,
-    borderRadius: 6,
-    height: 12,
-    left: 1,
-    position: 'absolute',
-    top: 1,
-    width: 12,
-    zIndex: 10,
+    backgroundColor: COLOR.notification.blue,
   },
   right: {
     flexDirection: 'row',
@@ -62,15 +55,11 @@ const NotificationItem = ({
   text,
 }: NotificationItemProps) => {
   const { profileImageUrl, sendUserNo, createdAt, isRead } = notification;
-  const newIcon = <View style={styles.new} />;
   return (
-    <View style={styles.container}>
-      <View>
-        {!isRead && newIcon}
-        <Pressable onPress={() => onPressProfile?.(sendUserNo)}>
-          <Profile imageUrl={profileImageUrl} size={56} />
-        </Pressable>
-      </View>
+    <View style={[styles.container, !isRead && styles.new]}>
+      <Pressable onPress={() => onPressProfile?.(sendUserNo)}>
+        <Profile imageUrl={profileImageUrl} size={56} />
+      </Pressable>
       <Pressable style={styles.right} onPress={() => onPress?.(notification)}>
         <View style={styles.content}>
           {typeof text === 'string' ? (

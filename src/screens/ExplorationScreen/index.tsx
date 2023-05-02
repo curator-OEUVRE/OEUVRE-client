@@ -100,7 +100,6 @@ const ExplorationScreen = () => {
           fetchPicture(pictureNo);
           navigation.navigate(Navigator.FloorStack, {
             screen: Screen.ImageDetailScreen,
-            params: { color: COLOR.mono.white },
           });
         }}
         onProfilePress={(userNo) => {
