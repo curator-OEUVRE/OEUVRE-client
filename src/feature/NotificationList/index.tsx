@@ -21,9 +21,6 @@ interface NotificationListProps {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-  },
   notiText: {
     color: COLOR.mono.black,
     lineHeight: 18,
@@ -129,10 +126,10 @@ const NotificationList = ({
               userNo={sendUserNo}
             />
           );
-      case 'WELCOME':
-        return 'OEUVRE에 오신것을 환영합니다! 플로어를 생성하고 나만의 전시회를 열어보세요.';
-      default:
-        return '';
+        case 'WELCOME':
+          return 'OEUVRE에 오신것을 환영합니다! 플로어를 생성하고 나만의 전시회를 열어보세요.';
+        default:
+          return '';
       }
     },
     [onPressProfile],
@@ -151,7 +148,6 @@ const NotificationList = ({
   );
   return (
     <FlatList
-      style={styles.container}
       renderItem={renderItem}
       data={data}
       onEndReachedThreshold={0.2}
