@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   },
   key: {
     color: COLOR.mono.gray1,
+    opacity: 0.3,
   },
   user_id: {
     color: COLOR.mono.white,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   value: {
-    color: COLOR.mono.black,
+    color: COLOR.mono.white,
     marginBottom: 12,
   },
   wrap_back: {
