@@ -178,10 +178,6 @@ const FloorPicture = ({
       </Animated.View>
     </Pressable>
   );
-  const description =
-    item.description.length > 20
-      ? `${item.description.substring(0, 20)}...`
-      : item.description;
   const renderEditLayer = () => (
     <LinearGradient
       style={styles.editLayer}
@@ -237,7 +233,7 @@ const FloorPicture = ({
             renderDescription(item)
           ) : (
             <Text style={[styles.text, TEXT_STYLE.body12R, { color }]}>
-              {description}
+              {item.title}
             </Text>
           )}
         </View>
