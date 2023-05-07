@@ -227,11 +227,11 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
         <View style={styles.wrap_back}>
           <Text style={[TEXT_STYLE.body12R, styles.key]}>Floor</Text>
           <Text style={[TEXT_STYLE.body16M, styles.value]}>
-            {floor.exhibitionName}
+            {floor.floorName}
           </Text>
           <Text style={[TEXT_STYLE.body12R, styles.key]}>Exhibition</Text>
           <Text style={[TEXT_STYLE.body12R, styles.value]}>
-            {floor.floorName}
+            {floor.exhibitionName}
           </Text>
           <Text style={[TEXT_STYLE.body12R, styles.key]}>Artist</Text>
           <Text style={[TEXT_STYLE.body12R, styles.value]}>{floor.id}</Text>
