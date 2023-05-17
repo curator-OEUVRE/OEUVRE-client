@@ -109,7 +109,6 @@ const FloorViewerScreen = () => {
   const { floorNo } = params;
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
-  const [onScroll, setOnScroll] = useState<boolean>(false);
   const [viewingMode, setViewingMode] = useState<boolean>(false);
   const bottomSheetRef = useRef<Sheet>(null);
   const iconColorByBackground = getColorByBackgroundColor(color);
@@ -277,11 +276,6 @@ const FloorViewerScreen = () => {
 
   const onScrollBeginDrag = () => {
     setViewingMode(true);
-    setOnScroll(true);
-  };
-
-  const onScrollEndDrag = () => {
-    setOnScroll(false);
   };
 
   const onPressBackground = useCallback(() => {
@@ -313,7 +307,6 @@ const FloorViewerScreen = () => {
               color={textColorByBackground}
               alignment={floor.alignment}
               onScrollBeginDrag={onScrollBeginDrag}
-              onScrollEndDrag={onScrollEndDrag}
             />
           </View>
           {!viewingMode && guestBookButton}
