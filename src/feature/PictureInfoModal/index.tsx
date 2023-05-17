@@ -1,13 +1,12 @@
-import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
+  Image,
   Modal,
   Pressable,
-  Text,
-  View,
-  Image,
   StyleSheet,
+  Text,
   TextInputProps,
+  View,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -16,10 +15,10 @@ import BrushIcon from '@/assets/icons/Brush';
 import CalendarIcon from '@/assets/icons/Calendar';
 import RulerIcon from '@/assets/icons/Ruler';
 import {
-  FormInput,
   Accordian,
-  WithKeyboardAvoidingView,
+  FormInput,
   Header,
+  WithKeyboardAvoidingView,
 } from '@/components';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
@@ -128,10 +127,6 @@ const PictureInfoModal = ({
     info.description || '',
   );
   const [hashtags, setHashtag] = useState<string[]>(info.hashtags || []);
-  useEffect(() => {
-    lockAsync(OrientationLock.PORTRAIT_UP);
-  }, []);
-
   const hideModal = useCallback(() => {
     setVisible(false);
     onGoBack?.();
@@ -208,7 +203,11 @@ const PictureInfoModal = ({
   );
 
   return (
-    <Modal animationType="slide" visible={visible}>
+    <Modal
+      animationType="slide"
+      visible={visible}
+      supportedOrientations={['portrait', 'landscape']}
+    >
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <WithKeyboardAvoidingView>

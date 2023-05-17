@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
+import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
@@ -37,6 +38,7 @@ import { DynamicLinkType } from '@/constants/dynamicLinks';
 import { Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
+import RotateButton from '@/feature/RotateButton';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import {
@@ -136,6 +138,10 @@ const FloorViewerScreen = () => {
       };
       fetchData();
     }, [fetchFloor, floorNo]),
+  );
+
+  useFocusEffect(
+    useCallback(() => () => lockAsync(OrientationLock.PORTRAIT_UP), []),
   );
 
   const onReport = useCallback(() => {
@@ -312,6 +318,7 @@ const FloorViewerScreen = () => {
           </View>
           {!viewingMode && guestBookButton}
           {renderBottomSheet()}
+          <RotateButton />
         </SafeAreaView>
       </LinearGradient>
     </Pressable>

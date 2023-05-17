@@ -6,6 +6,7 @@ import { COLOR } from '@/constants/styles';
 interface IconButtonProps extends PressableProps {
   icon?: React.ReactNode;
   style?: ViewStyle;
+  containerStyle?: ViewStyle;
 }
 
 const styles = StyleSheet.create({
@@ -19,7 +20,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const IconButton = ({ icon, style, ...defaultProps }: IconButtonProps) => (
+const IconButton = ({
+  icon,
+  style,
+  containerStyle,
+  ...defaultProps
+}: IconButtonProps) => (
   <Shadow distance={2} startColor="#00000020" endColor="#00000000">
     <Pressable {...defaultProps} style={[styles.container, style]}>
       {icon}
