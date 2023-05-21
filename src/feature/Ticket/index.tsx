@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useCallback } from 'react';
 import {
@@ -221,11 +222,7 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
           style={styles.wrap_back}
           colors={['rgba(0, 0, 0, 0.4)', 'rgba(0, 0, 0, 0.3)']}
         />
-        <Image
-          source={require('@/assets/images/ticket.png')}
-          style={styles.img}
-        />
-        <View style={styles.wrap_back}>
+        <BlurView style={styles.wrap_back} intensity={30} tint="light">
           <Text style={[TEXT_STYLE.body12R, styles.key]}>Floor</Text>
           <Text style={[TEXT_STYLE.body16M, styles.value]}>
             {floor.floorName}
@@ -244,7 +241,11 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
           <Text style={[TEXT_STYLE.body12R, styles.value]}>
             {formatDate(new Date(floor.updatedAt), '.')}
           </Text>
-        </View>
+        </BlurView>
+        <Image
+          source={require('@/assets/images/ticket.png')}
+          style={styles.img}
+        />
       </ImageBackground>
       <Pressable style={styles.flip} onPress={toggle}>
         <FlipBackIcon />
