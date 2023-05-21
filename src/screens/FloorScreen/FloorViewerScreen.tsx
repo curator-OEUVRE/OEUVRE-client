@@ -249,16 +249,17 @@ const FloorViewerScreen = () => {
     </BottomSheetItemGroup>
   );
 
-  const renderBottomSheet = () => (
-    <BottomSheet
-      ref={bottomSheetRef}
-      index={bottomSheetIndex}
-      onChange={(index) => setBottomSheetIndex(index)}
-      snapPoints={isMine ? [204] : [192]}
-    >
-      {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
-    </BottomSheet>
-  );
+  const renderBottomSheet = () =>
+    bottomSheetIndex === -1 ? null : (
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={bottomSheetIndex}
+        onChange={(index) => setBottomSheetIndex(index)}
+        snapPoints={isMine ? [204] : [192]}
+      >
+        {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
+      </BottomSheet>
+    );
   const newIcon = <View style={styles.new} />;
 
   const guestBookButton = (
