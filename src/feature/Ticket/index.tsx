@@ -222,7 +222,7 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
           style={styles.wrap_back}
           colors={['rgba(0, 0, 0, 0.4)', 'rgba(0, 0, 0, 0.3)']}
         />
-        <BlurView style={styles.wrap_back} intensity={30} tint="light">
+        <BlurView style={styles.wrap_back} intensity={10} tint="light">
           <Text style={[TEXT_STYLE.body12R, styles.key]}>Floor</Text>
           <Text style={[TEXT_STYLE.body16M, styles.value]}>
             {floor.floorName}
