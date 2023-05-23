@@ -8,8 +8,8 @@ import {
   LayoutAnimation,
   Platform,
 } from 'react-native';
-import ArrowDownIcon from '@/assets/icons/ArrowDown';
-import ArrowUpIcon from '@/assets/icons/ArrowUp';
+import ArrowDownIcon from '@/assets/icons/ArrowDownSmall';
+import ArrowUpIcon from '@/assets/icons/ArrowUpSmall';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 
 interface AccordianProps {

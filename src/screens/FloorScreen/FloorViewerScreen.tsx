@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
+import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
@@ -17,8 +18,10 @@ import {
   View,
   BackHandler,
   Share,
+  Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Shadow } from 'react-native-shadow-2';
 import AlertIcon from '@/assets/icons/Alert';
 import DeleteIcon from '@/assets/icons/Delete';
 import EditIcon from '@/assets/icons/Edit';
@@ -35,8 +38,9 @@ import {
 import { Header } from '@/components/Header';
 import { DynamicLinkType } from '@/constants/dynamicLinks';
 import { Screen } from '@/constants/screens';
-import { COLOR } from '@/constants/styles';
+import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
+import RotateButton from '@/feature/RotateButton';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import {
@@ -49,6 +53,18 @@ import { useUserStore } from '@/states/userStore';
 import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
+  comment: {
+    alignItems: 'center',
+    borderRadius: 12,
+    flexDirection: 'row',
+    height: 25,
+    justifyContent: 'center',
+    width: 130,
+  },
+  commentText: {
+    color: COLOR.mono.gray5,
+    marginLeft: 9,
+  },
   container: {
     flex: 1,
   },
@@ -62,10 +78,12 @@ const styles = StyleSheet.create({
     width: 7,
     zIndex: 10,
   },
-  textBubble: {
-    bottom: '7%',
+  wrapComment: {
+    alignItems: 'center',
+    bottom: 58,
+    left: 0,
     position: 'absolute',
-    right: '7%',
+    right: 0,
   },
   wrapList: {
     flex: 1,
@@ -107,7 +125,6 @@ const FloorViewerScreen = () => {
   const { floorNo } = params;
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
-  const [onScroll, setOnScroll] = useState<boolean>(false);
   const [viewingMode, setViewingMode] = useState<boolean>(false);
   const bottomSheetRef = useRef<Sheet>(null);
   const iconColorByBackground = getColorByBackgroundColor(color);
@@ -136,6 +153,10 @@ const FloorViewerScreen = () => {
       };
       fetchData();
     }, [fetchFloor, floorNo]),
+  );
+
+  useFocusEffect(
+    useCallback(() => () => lockAsync(OrientationLock.PORTRAIT_UP), []),
   );
 
   const onReport = useCallback(() => {
@@ -244,38 +265,44 @@ const FloorViewerScreen = () => {
     </BottomSheetItemGroup>
   );
 
-  const renderBottomSheet = () => (
-    <BottomSheet
-      ref={bottomSheetRef}
-      index={bottomSheetIndex}
-      onChange={(index) => setBottomSheetIndex(index)}
-      snapPoints={isMine ? [204] : [192]}
-    >
-      {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
-    </BottomSheet>
-  );
+  const renderBottomSheet = () =>
+    bottomSheetIndex === -1 ? null : (
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={bottomSheetIndex}
+        onChange={(index) => setBottomSheetIndex(index)}
+        snapPoints={isMine ? [204] : [192]}
+      >
+        {isMine ? bottomSheetForEditor : bottomSheetForVisiter}
+      </BottomSheet>
+    );
   const newIcon = <View style={styles.new} />;
 
   const guestBookButton = (
     <Pressable
-      style={styles.textBubble}
+      style={styles.wrapComment}
       onPress={async () => {
         // await lockAsync(OrientationLock.PORTRAIT_UP);
         navigation.navigate(Screen.GuestBookScreen, { floorNo });
       }}
     >
-      {hasNewComment && newIcon}
-      <TextBubbleIcon color={iconColorByBackground} />
+      {/* {hasNewComment && newIcon} */}
+      <Shadow
+        distance={2}
+        startColor="#00000020"
+        endColor="#00000000"
+        style={styles.comment}
+      >
+        <TextBubbleIcon color={iconColorByBackground} />
+        <Text style={[TEXT_STYLE.body12M, styles.commentText]}>
+          방명록 작성하기
+        </Text>
+      </Shadow>
     </Pressable>
   );
 
   const onScrollBeginDrag = () => {
     setViewingMode(true);
-    setOnScroll(true);
-  };
-
-  const onScrollEndDrag = () => {
-    setOnScroll(false);
   };
 
   const onPressBackground = useCallback(() => {
@@ -307,11 +334,11 @@ const FloorViewerScreen = () => {
               color={textColorByBackground}
               alignment={floor.alignment}
               onScrollBeginDrag={onScrollBeginDrag}
-              onScrollEndDrag={onScrollEndDrag}
             />
           </View>
           {!viewingMode && guestBookButton}
           {renderBottomSheet()}
+          <RotateButton />
         </SafeAreaView>
       </LinearGradient>
     </Pressable>

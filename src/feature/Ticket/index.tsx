@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useCallback } from 'react';
 import {
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
   },
   key: {
     color: COLOR.mono.gray1,
+    opacity: 0.3,
   },
   user_id: {
     color: COLOR.mono.white,
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   value: {
-    color: COLOR.mono.black,
+    color: COLOR.mono.white,
     marginBottom: 12,
   },
   wrap_back: {
@@ -170,7 +172,7 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
             {floor.floorName}
           </Text>
           <Text style={[TEXT_STYLE.body12R, styles.floor_name]}>
-            {floor.exhibitionName}
+            {floor.queue}F {floor.exhibitionName}
           </Text>
           <View style={styles.bottom}>
             <Pressable style={styles.wrap_profile} onPress={handleProfilePress}>
@@ -220,18 +222,14 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
           style={styles.wrap_back}
           colors={['rgba(0, 0, 0, 0.4)', 'rgba(0, 0, 0, 0.3)']}
         />
-        <Image
-          source={require('@/assets/images/ticket.png')}
-          style={styles.img}
-        />
-        <View style={styles.wrap_back}>
+        <BlurView style={styles.wrap_back} intensity={10} tint="light">
           <Text style={[TEXT_STYLE.body12R, styles.key]}>Floor</Text>
           <Text style={[TEXT_STYLE.body16M, styles.value]}>
-            {floor.exhibitionName}
+            {floor.floorName}
           </Text>
           <Text style={[TEXT_STYLE.body12R, styles.key]}>Exhibition</Text>
           <Text style={[TEXT_STYLE.body12R, styles.value]}>
-            {floor.floorName}
+            {floor.exhibitionName}
           </Text>
           <Text style={[TEXT_STYLE.body12R, styles.key]}>Artist</Text>
           <Text style={[TEXT_STYLE.body12R, styles.value]}>{floor.id}</Text>
@@ -243,7 +241,11 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
           <Text style={[TEXT_STYLE.body12R, styles.value]}>
             {formatDate(new Date(floor.updatedAt), '.')}
           </Text>
-        </View>
+        </BlurView>
+        <Image
+          source={require('@/assets/images/ticket.png')}
+          style={styles.img}
+        />
       </ImageBackground>
       <Pressable style={styles.flip} onPress={toggle}>
         <FlipBackIcon />

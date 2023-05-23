@@ -2,11 +2,13 @@
 import {
   CompositeNavigationProp,
   RouteProp,
+  useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Asset } from 'expo-media-library';
+import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,6 +21,7 @@ import ImagePickerModal from '@/feature/ImagePickerModal';
 import PictureInfoModal, {
   PictureInfoModalValue,
 } from '@/feature/PictureInfoModal';
+import RotateButton from '@/feature/RotateButton';
 import { RootStackParamsList } from '@/feature/Routes';
 import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
 import {
@@ -83,6 +86,10 @@ const EditFloorScreen = () => {
     );
     return () => backHandler.remove();
   }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => () => lockAsync(OrientationLock.PORTRAIT_UP), []),
+  );
 
   const onConfirm = useCallback(() => {
     navigation.navigate(Screen.FloorInfoFormScreen);
@@ -223,6 +230,7 @@ const EditFloorScreen = () => {
             {...selectedPicture}
           />
         )}
+        <RotateButton />
       </SafeAreaView>
     </LinearGradient>
   );

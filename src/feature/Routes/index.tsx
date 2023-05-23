@@ -2,6 +2,7 @@ import {
   DefaultTheme,
   NavigationContainer,
   NavigatorScreenParams,
+  useNavigationState,
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Notifications from 'expo-notifications';

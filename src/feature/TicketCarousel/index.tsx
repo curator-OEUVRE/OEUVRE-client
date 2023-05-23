@@ -37,13 +37,14 @@ const TicketCarousel = React.forwardRef(
         const itemGap = interpolate(value, [-1, 0, 1], [-70, 0, 70]);
         const zIndex = interpolate(value, [-1, 0, 1], [10, 20, 30]);
         const rotateZ = `${interpolate(value, [-1, 0, 1], [-10, 0, 10])}deg`;
+        const translateY = interpolate(value, [-1, 0, 1], [-15, 0, -15]);
         const translateX =
           interpolate(value, [-1, 0, 1], [-ITEM_SIZE, 0, ITEM_SIZE]) +
           centerOffset +
           itemGap;
 
         return {
-          transform: [{ rotateZ }, { translateX }],
+          transform: [{ rotateZ }, { translateX }, { translateY }],
           zIndex,
         };
       },

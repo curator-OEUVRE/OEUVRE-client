@@ -6,6 +6,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,6 +16,7 @@ import { Header, Profile, Spinner } from '@/components';
 import { Navigator, Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
+import RotateButton from '@/feature/RotateButton';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { useFloorStore } from '@/states/floorStore';
@@ -106,6 +108,10 @@ const HashtagFloorScreen = () => {
     setSwiperIndex,
     setPictures: setFloorPictures,
   } = useFloorStore();
+
+  useFocusEffect(
+    useCallback(() => () => lockAsync(OrientationLock.PORTRAIT_UP), []),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -312,6 +318,7 @@ const HashtagFloorScreen = () => {
           <Spinner />
         </View>
       )}
+      <RotateButton />
     </>
   );
 };

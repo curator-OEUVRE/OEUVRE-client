@@ -2,11 +2,13 @@
 import {
   CompositeNavigationProp,
   RouteProp,
+  useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MediaTypeOptions } from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,6 +22,7 @@ import FloorSettingButtonList from '@/feature/FloorSettingButtonList';
 import PictureInfoModal, {
   PictureInfoModalValue,
 } from '@/feature/PictureInfoModal';
+import RotateButton from '@/feature/RotateButton';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import useUploadImage from '@/hooks/useUploadImage';
@@ -92,6 +95,10 @@ const EditFloorScreen = () => {
     );
     return () => backHandler.remove();
   }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => () => lockAsync(OrientationLock.PORTRAIT_UP), []),
+  );
 
   const onConfirm = useCallback(async () => {
     if (!floorNo) return;
@@ -261,6 +268,7 @@ const EditFloorScreen = () => {
             }}
           />
         </View>
+        <RotateButton />
         {loading && <Spinner />}
         {selectedPicture && (
           <PictureInfoModal
