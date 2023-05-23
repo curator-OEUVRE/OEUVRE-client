@@ -1,5 +1,7 @@
+/* eslint-disable global-require */
+
+import LottieView from 'lottie-react-native';
 import { View, StyleSheet } from 'react-native';
-import { Circle } from 'react-native-progress';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,11 +13,18 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
+  lottie: {
+    width: 200,
+  },
 });
 
 const Spinner = () => (
   <View style={styles.container}>
-    <Circle size={80} indeterminate color="#5AB5BF" borderWidth={8} />
+    <LottieView
+      style={styles.lottie}
+      autoPlay
+      source={require('@/assets/lottie/loading.json')}
+    />
   </View>
 );
 
