@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   },
   wrapList: {
     flex: 1,
+    justifyContent: 'center',
   },
   wrapTitle: {
     alignItems: 'center',
@@ -255,6 +256,7 @@ const EditFloorScreen = () => {
             onPressDelete={onPressDelete}
             pictureAddable
             onPinchEnd={onPinchEnd}
+            alignment={alignment}
           />
         </View>
         <View style={styles.footer}>
