@@ -182,7 +182,7 @@ const ImageDetailScreen = () => {
     title,
     manufactureYear,
     scale: pictureScale,
-    materials,
+    material,
     pictureNo,
   } = pictures[swiperIndex];
   const scale = useSharedValue(0);
@@ -351,7 +351,7 @@ const ImageDetailScreen = () => {
           description,
           title,
           manufactureYear,
-          materials,
+          material,
           userId,
           scale: pictureScale,
         }}

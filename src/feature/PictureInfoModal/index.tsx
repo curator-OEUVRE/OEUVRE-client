@@ -25,7 +25,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 export interface PictureInfoModalValue {
   title: string;
   manufactureYear: string;
-  materials: string;
+  material: string;
   scale: string;
   description: string;
   hashtags: string[];
@@ -121,7 +121,7 @@ const PictureInfoModal = ({
   const [manufactureYear, setManufactureYear] = useState<string>(
     info.manufactureYear || '',
   );
-  const [materials, setMaterials] = useState<string>(info.materials || '');
+  const [material, setMaterial] = useState<string>(info.material || '');
   const [scale, setScale] = useState<string>(info.scale || '');
   const [description, setDescription] = useState<string>(
     info.description || '',
@@ -137,7 +137,7 @@ const PictureInfoModal = ({
     onComplete?.({
       title,
       manufactureYear,
-      materials,
+      material,
       scale,
       description,
       hashtags,
@@ -147,7 +147,7 @@ const PictureInfoModal = ({
     onComplete,
     title,
     manufactureYear,
-    materials,
+    material,
     scale,
     description,
     hashtags,
@@ -185,10 +185,10 @@ const PictureInfoModal = ({
         />
         <InputWithIcon
           icon={<BrushIcon />}
-          onChangeText={setMaterials}
-          value={materials}
+          onChangeText={setMaterial}
+          value={material}
           placeholder="재료 (총 20자)"
-          rightElement={restLength(20, materials.length)}
+          rightElement={restLength(20, material.length)}
         />
         <InputWithIcon
           icon={<RulerIcon />}
@@ -199,7 +199,7 @@ const PictureInfoModal = ({
         />
       </View>
     ),
-    [materials, manufactureYear, scale, restLength],
+    [material, manufactureYear, scale, restLength],
   );
 
   return (

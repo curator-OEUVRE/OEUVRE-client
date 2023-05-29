@@ -35,7 +35,7 @@ const Component = () => {
       headerTitle="플로어 추가"
       title=""
       manufactureYear=""
-      materials=""
+      material=""
       scale=""
       description=""
       hashtags={[]}

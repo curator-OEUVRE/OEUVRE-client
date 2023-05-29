@@ -64,7 +64,7 @@ export const patchPicture = async ({
   hashtags,
   pictureNo,
   manufactureYear,
-  materials,
+  material,
   scale,
   title,
 }: PatchPictureParams) => {
@@ -73,7 +73,7 @@ export const patchPicture = async ({
     PatchPictureRequestDto
   >(
     `/pictures/${pictureNo}`,
-    { description, hashtags, manufactureYear, materials, scale, title },
+    { description, hashtags, manufactureYear, material, scale, title },
     {
       headers: {
         'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
