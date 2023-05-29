@@ -149,7 +149,7 @@ const MainImageSelectModal = ({
               <Image
                 source={{ uri: selectedPicture.imageUrl }}
                 style={styles.thumbImage}
-                resizeMode="stretch"
+                resizeMode="cover"
               />
             </View>
           </View>
