@@ -31,6 +31,7 @@ function loadStories() {
   require('../src/feature/Ticket/Ticket.stories');
   require('../src/feature/TicketCarousel/TicketCarousel.stories');
   require('../src/components/Radio/Radio.stories');
+  require('../src/feature/MainImageSelectModal/MainImageSelectModal.stories');
 }
 
 const stories = [
@@ -61,6 +62,7 @@ const stories = [
   '../src/feature/Ticket/Ticket.stories',
   '../src/feature/TicketCarousel/TicketCarousel.stories',
   '../src/components/Radio/Radio.stories',
+  '../src/feature/MainImageSelectModal/MainImageSelectModal.stories',
 ];
 
 module.exports = {
