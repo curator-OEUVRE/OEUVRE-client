@@ -43,6 +43,7 @@ const FloorInfoFormScreen = () => {
     pictures,
     gradient,
     alignment,
+    thumbnailNo,
   } = floor;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [info, setInfo] = useState<Partial<FloorInfo>>();
@@ -56,6 +57,9 @@ const FloorInfoFormScreen = () => {
     },
     [setFloorInfo, navigation, info, setThumbnailNo],
   );
+
+  const thumbnail = pictures.find((p) => p.pictureNo === thumbnailNo);
+
   // for edit mode
   const onPressNext = useCallback((floorInfo: Partial<FloorInfo>) => {
     setModalVisible(true);
@@ -98,6 +102,7 @@ const FloorInfoFormScreen = () => {
           onComplete={onComplete}
           headerTitle="대표 작품 선택"
           headerRightText="완료"
+          initialPicture={thumbnail}
         />
       </View>
     </TouchableWithoutFeedback>

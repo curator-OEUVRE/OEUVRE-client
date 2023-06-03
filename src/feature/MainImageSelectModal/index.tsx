@@ -23,6 +23,7 @@ interface MainImageSelectModalProps {
   onComplete?: (picture: Picture) => void;
   pictures: Picture[];
   onGoBack?: () => void;
+  initialPicture?: Picture;
 }
 
 const LIST_ITEM_HEIGHT = 74;
@@ -64,10 +65,13 @@ const MainImageSelectModal = ({
   onComplete,
   pictures,
   onGoBack,
+  initialPicture,
 }: MainImageSelectModalProps) => {
   const { width: size } = useWindowDimensions();
 
-  const [selectedPicture, setSelectedPicture] = useState<Picture>(pictures[0]);
+  const [selectedPicture, setSelectedPicture] = useState<Picture>(
+    initialPicture ?? pictures[0],
+  );
 
   const hideModal = useCallback(() => {
     setVisible(false);
