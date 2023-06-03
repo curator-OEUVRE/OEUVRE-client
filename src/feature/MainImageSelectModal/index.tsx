@@ -43,11 +43,19 @@ const styles = StyleSheet.create({
   },
   listImage: {
     height: LIST_ITEM_HEIGHT,
-    marginRight: 16,
   },
   main: {
     backgroundColor: COLOR.mono.gray1,
     flex: 1,
+  },
+  pressable: {
+    height: LIST_ITEM_HEIGHT + 4,
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  selected: {
+    borderColor: COLOR.system.blue,
+    borderWidth: 2,
   },
   thumbImage: {
     flex: 1,
@@ -102,7 +110,13 @@ const MainImageSelectModal = ({
 
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<Picture>) => (
-      <Pressable onPress={() => setSelectedPicture(item)}>
+      <Pressable
+        onPress={() => setSelectedPicture(item)}
+        style={[
+          styles.pressable,
+          selectedPicture.imageUrl === item.imageUrl && styles.selected,
+        ]}
+      >
         <Image
           source={{ uri: item.imageUrl }}
           style={[
@@ -115,7 +129,7 @@ const MainImageSelectModal = ({
         />
       </Pressable>
     ),
-    [],
+    [selectedPicture],
   );
 
   const footer = (
