@@ -40,6 +40,7 @@ interface CreateFloorStore {
   floorNo?: number;
   startIndex: number;
   hasNewComment?: boolean;
+  thumbnailQueue: number;
   setFloorInfo: (floorInfo: Partial<FloorInfo>) => void;
   createPictures: (
     images: { imageUrl: string; width: number; height: number }[],
@@ -56,6 +57,7 @@ interface CreateFloorStore {
   createFloor: () => ApiResult<CreateFloorResponseDto>;
   setFloor: (floor: Floor) => void;
   clearCreateFloorStore: () => void;
+  setThumbnailIndex: (index: number) => void;
 }
 
 export const FLOOR_TEXTURES = [[0]];
@@ -76,6 +78,7 @@ const defaultValues = {
   isFramed: false,
   description: '',
   gradient: FloorGradient.TOP,
+  thumbnailQueue: 0,
 };
 
 export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
@@ -142,6 +145,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       alignment,
       description,
       gradient,
+      thumbnailQueue,
     } = get();
     const result = await FloorAPI.createFloor({
       color,
@@ -154,6 +158,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
       alignment,
       description,
       gradient,
+      thumbnailQueue,
     });
     const { clearCreateFloorStore } = get();
     clearCreateFloorStore();
@@ -168,5 +173,11 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   clearCreateFloorStore: () => {
     const state = get();
     set({ ...state, ...defaultValues });
+  },
+  setThumbnailIndex: (index: number) => {
+    set((state) => ({
+      ...state,
+      thumbnailQueue: index,
+    }));
   },
 }));

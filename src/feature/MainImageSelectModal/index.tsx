@@ -84,13 +84,13 @@ const MainImageSelectModal = ({
 
   const headerRight = useCallback(
     () => (
-      <Pressable onPress={() => onPressComplete}>
+      <Pressable onPress={() => onPressComplete?.(selectedPicture)}>
         <Text style={[TEXT_STYLE.body16M, { color: COLOR.system.blue }]}>
           {headerRightText}
         </Text>
       </Pressable>
     ),
-    [onPressComplete, headerRightText],
+    [onPressComplete, headerRightText, selectedPicture],
   );
 
   const keyExtractor = (item: Picture, index: number) =>

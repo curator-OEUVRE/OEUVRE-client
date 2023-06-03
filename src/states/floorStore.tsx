@@ -25,6 +25,7 @@ interface FloorStore {
   fetchFloor: (floorNo: number) => void;
   fetchPicture: (pictureNo: number) => void;
   setSwiperIndex: (idx: number) => void;
+  setThumbnailNo: (pictureNo: number) => void;
 }
 
 const defaultFloor = {
@@ -36,6 +37,7 @@ const defaultFloor = {
   texture: 0,
   gradient: FloorGradient.FULL,
   alignment: FloorAlignment.TOP,
+  thumbnailNo: -1,
 };
 
 export const useFloorStore = create<FloorStore>()((set, get) => ({
@@ -139,10 +141,18 @@ export const useFloorStore = create<FloorStore>()((set, get) => ({
     }
   },
   setSwiperIndex: (idx) => {
-    console.log(idx);
     set((state) => ({
       ...state,
       swiperIndex: idx,
+    }));
+  },
+  setThumbnailNo: (pictureNo) => {
+    set((state) => ({
+      ...state,
+      floor: {
+        ...state.floor,
+        thumbnailNo: pictureNo,
+      },
     }));
   },
 }));

@@ -24,16 +24,21 @@ interface EditFloorParams {
   floor: Floor;
 }
 
-export const createFloor = async (floor: Floor) => {
-  const response = await postAsync<CreateFloorResponseDto, Floor>(
-    `/floors`,
-    floor,
-    {
-      headers: {
-        'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
-      },
+type CreateFloorsRequestDto =
+  | Floor
+  | {
+      thumbnailQueue: number;
+    };
+
+export const createFloor = async (floor: CreateFloorsRequestDto) => {
+  const response = await postAsync<
+    CreateFloorResponseDto,
+    CreateFloorsRequestDto
+  >(`/floors`, floor, {
+    headers: {
+      'X-AUTH-TOKEN': useAuthStore.getState().accessToken as string,
     },
-  );
+  });
   return response;
 };
 

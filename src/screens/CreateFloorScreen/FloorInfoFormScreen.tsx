@@ -8,12 +8,14 @@ import { BackHandler, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Spinner } from '@/components/Spinner';
 import { Navigator, Screen } from '@/constants/screens';
 import FloorInfoForm from '@/feature/FloorInfoForm';
+import MainImageSelectModal from '@/feature/MainImageSelectModal';
 import { RootStackParamsList } from '@/feature/Routes';
 import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
 import SuccessModal from '@/feature/SuccessModal';
 import useUploadImage from '@/hooks/useUploadImage';
 import { useCreateFloorStore } from '@/states/createFloorStore';
 import { FloorInfo } from '@/types/floor';
+import { Picture } from '@/types/picture';
 
 export type FloorInfoFormScreenParams = undefined;
 export type FloorInfoFormScreenNP = CompositeNavigationProp<
@@ -36,6 +38,7 @@ const FloorInfoFormScreen = () => {
     pictures,
     gradient,
     alignment,
+    setThumbnailIndex,
   } = useCreateFloorStore();
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
@@ -52,14 +55,22 @@ const FloorInfoFormScreen = () => {
     return () => backHandler.remove();
   }, [navigation]);
 
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [successModalVisible, setSuccessModalVisible] =
+    useState<boolean>(false);
+  const [selectModalVisible, setSelectModalVisible] = useState<boolean>(false);
+  const [info, setInfo] = useState<Partial<FloorInfo>>();
+
   const [newFloorNo, setNewFloorNo] = useState<number>();
   const [loading, setLoading] = useState<boolean>(false);
   const { uploadImages } = useUploadImage();
 
-  const onConfirm = useCallback(
-    async (floorInfo: Partial<FloorInfo>) => {
-      setFloorInfo(floorInfo);
+  const onComplete = useCallback(
+    async (thumbPicture: Picture) => {
+      if (info) setFloorInfo(info);
+      const selectedIndex = pictures.findIndex(
+        (picture) => picture.imageUrl === thumbPicture.imageUrl,
+      );
+      if (selectedIndex >= 0) setThumbnailIndex(selectedIndex);
       const images = pictures.map((picture) => picture.imageUrl);
       setLoading(true);
       const urls = await uploadImages(images, name);
@@ -73,11 +84,27 @@ const FloorInfoFormScreen = () => {
       setLoading(false);
       if (result.isSuccess) {
         setNewFloorNo(result.result.result.floorNo);
-        setModalVisible(true);
+        setSuccessModalVisible(true);
+      } else {
+        console.log(result.result.errorMessage);
       }
     },
-    [createFloor, name, pictures, setPictures, uploadImages, setFloorInfo],
+    [
+      createFloor,
+      name,
+      pictures,
+      setPictures,
+      uploadImages,
+      setFloorInfo,
+      info,
+      setThumbnailIndex,
+    ],
   );
+
+  const onPressNext = useCallback(async (floorInfo: Partial<FloorInfo>) => {
+    setSelectModalVisible(true);
+    setInfo(floorInfo);
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -89,17 +116,25 @@ const FloorInfoFormScreen = () => {
             description,
             isCommentAvailable,
             isPublic,
-            onConfirm,
             gradient,
             alignment,
+            onConfirm: onPressNext,
             title: '플로어 추가',
-            confirmText: '완료',
+            confirmText: '다음',
           }}
         />
-        {modalVisible && (
+        <MainImageSelectModal
+          visible={selectModalVisible}
+          setVisible={setSelectModalVisible}
+          pictures={pictures}
+          onComplete={onComplete}
+          headerTitle="플로어 추가"
+          headerRightText="완료"
+        />
+        {successModalVisible && (
           <SuccessModal
             onPress={() => {
-              setModalVisible(false);
+              setSuccessModalVisible(false);
               if (!newFloorNo) return;
               navigation.replace(Navigator.FloorStack, {
                 screen: Screen.FloorViewerScreen,
