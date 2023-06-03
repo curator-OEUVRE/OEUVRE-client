@@ -177,7 +177,7 @@ export const useCreateFloorStore = create<CreateFloorStore>()((set, get) => ({
   setThumbnailIndex: (index: number) => {
     set((state) => ({
       ...state,
-      thumbnailQueue: index,
+      thumbnailQueue: index + 1,
     }));
   },
 }));
