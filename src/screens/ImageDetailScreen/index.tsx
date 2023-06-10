@@ -546,8 +546,6 @@ const ImageDetailScreen = () => {
     [changeSwiperIndex],
   );
 
-  console.log('ImageDetailScreen');
-
   return (
     <>
       <GestureDetector gesture={pinchGesture}>
