@@ -7,7 +7,7 @@ import { COLOR, TEXT_STYLE } from '@/constants/styles';
 interface ImageInfoSheetProps {
   title: string;
   manufactureYear: string;
-  materials: string;
+  material: string;
   scale: string;
   description: string;
   userId: string;
@@ -66,7 +66,7 @@ const PictureInfoSheet = React.forwardRef(
     {
       title,
       manufactureYear,
-      materials,
+      material,
       scale,
       userId,
       description,
@@ -75,7 +75,7 @@ const PictureInfoSheet = React.forwardRef(
   ) => {
     const [index, setIndex] = useState<number>(0);
     const snapPoints = useMemo(() => [121, 164], []);
-    const summary = [manufactureYear, materials, scale]
+    const summary = [manufactureYear, material, scale]
       .filter((value) => value && value.length > 0)
       .join(', ');
     return (

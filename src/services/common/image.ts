@@ -69,7 +69,7 @@ export const createDefaultPictureInfo = (info: Partial<Picture>): Picture => ({
   description: '',
   title: '',
   manufactureYear: '',
-  materials: '',
+  material: '',
   scale: '',
   hashtags: [],
   width: 0.5,

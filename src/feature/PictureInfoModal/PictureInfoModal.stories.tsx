@@ -34,12 +34,12 @@ const Component = () => {
       headerRightText="다음"
       headerTitle="플로어 추가"
       title=""
-      productionYear=""
-      materials=""
-      size=""
+      manufactureYear=""
+      material=""
+      scale=""
       description=""
       hashtags={[]}
-      imageUri="https://cdn.crowdpic.net/detail-thumb/thumb_d_1F5AF0BCBB2F43EF3C5B79DA763D3CFB.jpg"
+      imageUrl="https://cdn.crowdpic.net/detail-thumb/thumb_d_1F5AF0BCBB2F43EF3C5B79DA763D3CFB.jpg"
     />
   );
 };

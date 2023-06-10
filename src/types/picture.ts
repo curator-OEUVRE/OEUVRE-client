@@ -12,7 +12,7 @@ export interface Picture {
   isMine: boolean;
   isScraped: boolean;
   manufactureYear: string;
-  materials: string;
+  material: string;
   scale: string;
   pictureNo: number;
   queue: number;

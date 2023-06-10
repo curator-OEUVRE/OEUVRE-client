@@ -270,7 +270,7 @@ const HashtagFloorScreen = () => {
     queue: idx,
     description: '',
     title: '',
-    materials: '',
+    material: '',
     productionYear: '',
     size: '',
   }));

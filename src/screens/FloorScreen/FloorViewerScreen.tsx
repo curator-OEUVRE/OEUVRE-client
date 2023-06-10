@@ -337,8 +337,8 @@ const FloorViewerScreen = () => {
             />
           </View>
           {!viewingMode && guestBookButton}
-          {renderBottomSheet()}
           <RotateButton />
+          {renderBottomSheet()}
         </SafeAreaView>
       </LinearGradient>
     </Pressable>

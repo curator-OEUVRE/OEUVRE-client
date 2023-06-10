@@ -1,6 +1,6 @@
 import { ResponseDto } from './common';
-import { Picture } from '@/types/picture';
 import { FLOOR_BACKGROUND_COLORS } from '@/constants/styles/colors';
+import { Picture } from '@/types/picture';
 
 export enum FloorAlignment {
   CENTER = 'CENTER',
@@ -41,6 +41,7 @@ export interface Floor extends FloorInfo {
   hasNewComment?: boolean;
   floorNo?: number;
   isMine?: boolean;
+  thumbnailNo: number;
 }
 
 export interface CreateFloorResponse {
