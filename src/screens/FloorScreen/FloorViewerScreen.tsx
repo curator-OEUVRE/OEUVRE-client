@@ -346,28 +346,31 @@ const FloorViewerScreen = () => {
 
   if (loading) return <Spinner />;
   return (
-    <Pressable onPress={onPressBackground} style={styles.container}>
-      <LinearGradient
-        style={styles.container}
-        colors={getBackgroundColorsByGradient({ color, gradient })}
-      >
-        <SafeAreaView style={styles.container} edges={['top']}>
-          {!viewingMode && header}
-          <View style={styles.wrapList}>
-            <FloorPictureList
-              pictures={pictures}
-              editable={false}
-              onPressPicture={onPressPicture}
-              color={textColorByBackground}
-              alignment={floor.alignment}
-              onScrollBeginDrag={onScrollBeginDrag}
-            />
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
-      {!viewingMode && footer}
-      {renderBottomSheet()}
-    </Pressable>
+    <>
+      <Pressable onPress={onPressBackground} style={styles.container}>
+        <LinearGradient
+          style={styles.container}
+          colors={getBackgroundColorsByGradient({ color, gradient })}
+        >
+          <SafeAreaView style={styles.container} edges={['top']}>
+            {!viewingMode && header}
+            <View style={styles.wrapList}>
+              <FloorPictureList
+                pictures={pictures}
+                editable={false}
+                onPressPicture={onPressPicture}
+                color={textColorByBackground}
+                alignment={floor.alignment}
+                onScrollBeginDrag={onScrollBeginDrag}
+              />
+            </View>
+          </SafeAreaView>
+        </LinearGradient>
+        {!viewingMode && footer}
+        {renderBottomSheet()}
+      </Pressable>
+      {loading && <Spinner />}
+    </>
   );
 };
 

@@ -18,6 +18,8 @@ import {
   View,
   Share,
   Dimensions,
+  ListRenderItem,
+  ListRenderItemInfo,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
@@ -34,6 +36,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import { SharedElement } from 'react-navigation-shared-element';
 import * as PictureAPI from '@/apis/picture';
 import { getLikeUsers, patchPicture } from '@/apis/picture';
 import AlertIcon from '@/assets/icons/Alert';
@@ -72,7 +75,7 @@ import {
 import throttle from '@/services/common/throttle';
 import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
-import { LikeUser } from '@/types/picture';
+import { LikeUser, Picture } from '@/types/picture';
 
 enum OrientationType {
   portrait,
@@ -88,6 +91,8 @@ export type ImageDetailScreenNP = CompositeNavigationProp<
 
 // @ts-ignore
 const AnimatedImage = Animated.createAnimatedComponent(FastImage);
+const AnimatedSharedElement = Animated.createAnimatedComponent(SharedElement);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -111,17 +116,17 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   // eslint-disable-next-line react-native/no-color-literals
-  shadow: {
-    elevation: 20,
-    overflow: 'visible',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-  },
+  // shadow: {
+  //   elevation: 20,
+  //   overflow: 'visible',
+  //   shadowColor: '#000',
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 3,
+  //   },
+  //   shadowOpacity: 0.27,
+  //   shadowRadius: 4.65,
+  // },
   wrapButton: {
     marginRight: 9,
   },
@@ -135,6 +140,30 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+interface ImageItemProps extends ListRenderItemInfo<Picture> {
+  isEditMode: boolean;
+}
+
+const ImageItem = ({ isEditMode, item, index }: ImageItemProps) => {
+  const imageItemAnimStyle = useAnimatedStyle(() => ({
+    paddingHorizontal: isEditMode ? withTiming(40) : withTiming(0),
+  }));
+  const { width } = Dimensions.get('window');
+
+  return (
+    <AnimatedSharedElement
+      id={`picture.${index}`}
+      style={[styles.item, { width }, imageItemAnimStyle]}
+    >
+      <FastImage
+        source={{ uri: item.imageUrl }}
+        style={styles.imageBackground}
+        resizeMode="contain"
+      />
+    </AnimatedSharedElement>
+  );
+};
 
 const ImageDetailScreen = () => {
   const navigation = useNavigation<ImageDetailScreenNP>();
@@ -171,20 +200,15 @@ const ImageDetailScreen = () => {
   //   }, []),
   // );
 
-  const {
-    description,
-    isLiked,
-    isScraped,
-    isMine,
-    floorNo,
-    userId,
-    userNo,
-    title,
-    manufactureYear,
-    scale: pictureScale,
-    material,
-    pictureNo,
-  } = pictures[swiperIndex];
+  const swiperIndexRef = useRef<number>(swiperIndex);
+  const changeSwiperIndex = useCallback(
+    (newSwiperIndex: number) => {
+      setSwiperIndex(newSwiperIndex);
+      swiperIndexRef.current = newSwiperIndex;
+    },
+    [setSwiperIndex],
+  );
+
   const scale = useSharedValue(0);
 
   const imageScale = useSharedValue(1);
@@ -198,8 +222,6 @@ const ImageDetailScreen = () => {
   const onSingleTap = useCallback(() => {
     setEditMode((prev) => !prev);
   }, []);
-
-  const { width } = Dimensions.get('window');
 
   const scaleImage = useCallback(() => {
     onAnimation.value = true;
@@ -225,6 +247,7 @@ const ImageDetailScreen = () => {
 
   const toggleLike = useCallback(async () => {
     if (!isEditMode) return;
+    const { isLiked, pictureNo } = pictures[swiperIndexRef.current];
     const API = isLiked ? PictureAPI.unlikePicture : PictureAPI.likePicture;
     if (!isLiked) {
       isLikeAnimation.value = true;
@@ -238,26 +261,21 @@ const ImageDetailScreen = () => {
       return picture;
     });
     setPictures(newPictures);
-  }, [
-    isEditMode,
-    isLikeAnimation,
-    isLiked,
-    pictureNo,
-    scaleImage,
-    setPictures,
-    pictures,
-  ]);
+  }, [isEditMode, isLikeAnimation, scaleImage, setPictures, pictures]);
 
   const visitFloor = useCallback(() => {
+    const { floorNo } = pictures[swiperIndexRef.current];
     navigation.navigate(Screen.FloorViewerScreen, { floorNo });
-  }, [floorNo, navigation]);
+  }, [pictures, navigation]);
 
   const visitProfile = useCallback(async () => {
     // await lockAsync(OrientationLock.PORTRAIT_UP);
+    const { userNo } = pictures[swiperIndexRef.current];
     navigation.navigate(Screen.ProfileScreen, { userNo });
-  }, [userNo, navigation]);
+  }, [pictures, navigation]);
 
   const toggleScrap = useCallback(async () => {
+    const { isScraped, pictureNo } = pictures[swiperIndexRef.current];
     const API = isScraped ? PictureAPI.unscrapPicture : PictureAPI.scrapPicture;
     if (!isScraped) {
       isLikeAnimation.value = false;
@@ -272,20 +290,14 @@ const ImageDetailScreen = () => {
       return picture;
     });
     setPictures(newPictures);
-  }, [
-    isScraped,
-    scaleImage,
-    pictureNo,
-    isLikeAnimation,
-    pictures,
-    setPictures,
-  ]);
+  }, [scaleImage, isLikeAnimation, pictures, setPictures]);
 
   const deletePicture = useCallback(async () => {
+    const { pictureNo } = pictures[swiperIndexRef.current];
     bottomSheetRef.current?.close();
     await PictureAPI.deletePicture({ pictureNo });
     navigation.goBack();
-  }, [pictureNo, navigation]);
+  }, [pictures, navigation]);
 
   const editDescription = useCallback(async () => {
     setPictureInfoModalVisible(true);
@@ -296,12 +308,17 @@ const ImageDetailScreen = () => {
       ? OrientationType.landscape
       : OrientationType.portrait;
   const SIZE = 150;
-  const Favorite = isLiked ? FavoriteIcon : FavoriteOutlineIcon;
-  const Bookmark = isScraped ? BookmarkFilledIcon : BookmarkIcon;
+  const Favorite = pictures[swiperIndex].isLiked
+    ? FavoriteIcon
+    : FavoriteOutlineIcon;
+  const Bookmark = pictures[swiperIndex].isScraped
+    ? BookmarkFilledIcon
+    : BookmarkIcon;
   const headerOpacity = isEditMode ? 1 : 0;
-  const itemPadding = isEditMode ? 40 : 0;
+  // const itemPadding = isEditMode ? 40 : 0;
 
   const showLikesPeople = async () => {
+    const { pictureNo } = pictures[swiperIndexRef.current];
     const response = await getLikeUsers({ pictureNo });
     if (response.isSuccess) {
       const { result } = response.result;
@@ -325,7 +342,11 @@ const ImageDetailScreen = () => {
       <Pressable onPress={throttle(toggleScrap)} style={styles.wrapButton}>
         <Bookmark color={iconColorByBackground} width={26} height={26} />
       </Pressable>
-      <Pressable onPress={() => setBottomSheetIndex(isMine ? 1 : 0)}>
+      <Pressable
+        onPress={() =>
+          setBottomSheetIndex(pictures[swiperIndex].isMine ? 1 : 0)
+        }
+      >
         <MoreIcon color={iconColorByBackground} />
       </Pressable>
     </View>
@@ -348,23 +369,24 @@ const ImageDetailScreen = () => {
     isEditMode && (
       <PictureInfoSheet
         {...{
-          description,
-          title,
-          manufactureYear,
-          material,
-          userId,
-          scale: pictureScale,
+          description: pictures[swiperIndex].description,
+          title: pictures[swiperIndex].title,
+          manufactureYear: pictures[swiperIndex].manufactureYear,
+          material: pictures[swiperIndex].material,
+          userId: pictures[swiperIndex].userId,
+          scale: pictures[swiperIndex].scale,
         }}
       />
     );
 
   const share = useCallback(async () => {
+    const { pictureNo } = pictures[swiperIndexRef.current];
     const link = await buildDynamicLink({
       type: DynamicLinkType.IMAGE,
       id: pictureNo,
     });
     Share.share({ url: link });
-  }, [pictureNo]);
+  }, [pictures]);
 
   const bottomSheetForEditor = useMemo(
     () => (
@@ -423,7 +445,7 @@ const ImageDetailScreen = () => {
       >
         <BottomSheetItemGroup>
           <BottomSheetItem
-            label={`${userId} 프로필 보기`}
+            label={`${pictures[swiperIndex].userId} 프로필 보기`}
             icon={<PersonIcon color={COLOR.mono.black} />}
             onPress={visitProfile}
           />
@@ -448,11 +470,11 @@ const ImageDetailScreen = () => {
         </BottomSheetItemGroup>
       </BottomSheet>
     ),
-    [bottomSheetIndex, visitFloor, userId, visitProfile, share],
+    [bottomSheetIndex, visitFloor, pictures, visitProfile, share, swiperIndex],
   );
 
   const renderBottomSheet = () =>
-    isMine ? bottomSheetForEditor : bottomSheetForVisiter;
+    pictures[swiperIndex].isMine ? bottomSheetForEditor : bottomSheetForVisiter;
 
   const mainImageStyle = useAnimatedStyle(() => ({
     transform: [
@@ -482,16 +504,18 @@ const ImageDetailScreen = () => {
   const onPictureInfoComplete = useCallback(
     (value: PictureInfoModalValue) => {
       const newPictures = pictures.map((picture) => {
-        if (picture.imageUrl !== pictures[swiperIndex].imageUrl) return picture;
+        if (picture.imageUrl !== pictures[swiperIndexRef.current].imageUrl)
+          return picture;
         return { ...picture, ...value };
       });
       setPictures(newPictures);
-      patchPicture({ pictureNo: pictures[swiperIndex].pictureNo, ...value });
+      patchPicture({
+        pictureNo: pictures[swiperIndexRef.current].pictureNo,
+        ...value,
+      });
     },
-    [pictures, setPictures, swiperIndex],
+    [pictures, setPictures],
   );
-
-  if (loading) return <Spinner />;
 
   const renderLikeUsersSheet = () => (
     <BottomSheet
@@ -509,85 +533,88 @@ const ImageDetailScreen = () => {
       </>
     </BottomSheet>
   );
+
+  const renderImageItem: ListRenderItem<Picture> = useCallback(
+    (props) => <ImageItem {...props} isEditMode={isEditMode} />,
+    [isEditMode],
+  );
+
+  const onChangeIndex = useCallback(
+    ({ index }: { index: number }) => {
+      changeSwiperIndex(index);
+    },
+    [changeSwiperIndex],
+  );
+
+  console.log('ImageDetailScreen');
+
   return (
-    <GestureDetector gesture={pinchGesture}>
-      <LinearGradient
-        style={[
-          styles.container,
-          // eslint-disable-next-line react-native/no-inline-styles
-          {
-            paddingLeft: insets.left,
-            paddingRight: insets.right,
-            paddingBottom: orientation === OrientationType.landscape ? 55 : 120,
-          },
-        ]}
-        colors={
-          isEditMode
-            ? getBackgroundColorsByGradient({ color, gradient })
-            : [COLOR.mono.black]
-        }
-      >
-        {renderHeader()}
-
-        <TapGestureHandler waitFor={doubleTapRef} onActivated={onSingleTap}>
-          <TapGestureHandler
-            maxDelayMs={250}
-            ref={doubleTapRef}
-            numberOfTaps={2}
-            onActivated={toggleLike}
-          >
-            <Animated.View style={[styles.wrapImage, mainImageStyle]}>
-              <SwiperFlatList
-                data={pictures}
-                index={swiperIndex}
-                renderItem={({ item }) => (
-                  <View
-                    style={[
-                      styles.item,
-                      { width, paddingHorizontal: itemPadding },
-                    ]}
-                  >
-                    <FastImage
-                      source={{ uri: item.imageUrl }}
-                      style={[
-                        styles.imageBackground,
-                        isEditMode && styles.shadow,
-                      ]}
-                      resizeMode="contain"
-                    />
-                  </View>
-                )}
-                onChangeIndex={({ index }) => setSwiperIndex(index)}
-              />
-            </Animated.View>
-          </TapGestureHandler>
-        </TapGestureHandler>
-
-        {renderFooter()}
-        {renderBottomSheet()}
-        {renderLikeUsersSheet()}
-        <AnimatedImage
-          source={isLikeAnimation.value ? IMAGE.heart : IMAGE.bookmark}
+    <>
+      <GestureDetector gesture={pinchGesture}>
+        <LinearGradient
           style={[
-            styles.image,
-            imageStyle,
+            styles.container,
+            // eslint-disable-next-line react-native/no-inline-styles
             {
-              height: SIZE,
-              width: SIZE,
-              marginTop: (SIZE / 2) * -1,
+              paddingLeft: insets.left,
+              paddingRight: insets.right,
+              paddingBottom:
+                orientation === OrientationType.landscape ? 55 : 120,
             },
           ]}
-        />
-        <PictureInfoModal
-          visible={pictureInfoModalVisible}
-          headerTitle="작품 설명 추가"
-          headerRightText="완료"
-          setVisible={setPictureInfoModalVisible}
-          onComplete={onPictureInfoComplete}
-          {...pictures[swiperIndex]}
-        />
-      </LinearGradient>
-    </GestureDetector>
+          colors={
+            isEditMode
+              ? getBackgroundColorsByGradient({ color, gradient })
+              : [COLOR.mono.black]
+          }
+        >
+          {renderHeader()}
+
+          <TapGestureHandler waitFor={doubleTapRef} onActivated={onSingleTap}>
+            <TapGestureHandler
+              maxDelayMs={250}
+              ref={doubleTapRef}
+              numberOfTaps={2}
+              onActivated={toggleLike}
+            >
+              <Animated.View style={[styles.wrapImage, mainImageStyle]}>
+                <SwiperFlatList
+                  data={pictures}
+                  index={swiperIndex}
+                  renderItem={renderImageItem}
+                  onChangeIndex={onChangeIndex}
+                />
+              </Animated.View>
+            </TapGestureHandler>
+          </TapGestureHandler>
+
+          {renderFooter()}
+          {renderBottomSheet()}
+          {renderLikeUsersSheet()}
+          <AnimatedImage
+            source={isLikeAnimation.value ? IMAGE.heart : IMAGE.bookmark}
+            style={[
+              styles.image,
+              imageStyle,
+              {
+                height: SIZE,
+                width: SIZE,
+                marginTop: (SIZE / 2) * -1,
+              },
+            ]}
+          />
+          <PictureInfoModal
+            visible={pictureInfoModalVisible}
+            headerTitle="작품 설명 추가"
+            headerRightText="완료"
+            setVisible={setPictureInfoModalVisible}
+            onComplete={onPictureInfoComplete}
+            {...pictures[swiperIndex]}
+          />
+        </LinearGradient>
+      </GestureDetector>
+      {loading && <Spinner />}
+    </>
   );
 };
 

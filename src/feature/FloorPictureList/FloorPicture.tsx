@@ -16,6 +16,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { Shadow } from 'react-native-shadow-2';
+import { SharedElement } from 'react-navigation-shared-element';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import CloseFilledIcon from '@/assets/icons/CloseFilled';
 import PencilIcon from '@/assets/icons/Pencil';
@@ -231,11 +233,21 @@ const FloorPicture = ({
             }}
             style={styles.shadow}
           >
-            <AnimatedFastImage
-              source={{ uri: item.imageUrl }}
-              style={imageAnimStyle}
-            />
-            {onPressPicture && editable && renderEditLayer()}
+            <Shadow
+              distance={5}
+              offset={[2, 2]}
+              startColor="#00000030"
+              endColor="#00000000"
+              paintInside
+            >
+              <SharedElement id={`picture.${index}`}>
+                <AnimatedFastImage
+                  source={{ uri: item.imageUrl }}
+                  style={imageAnimStyle}
+                />
+              </SharedElement>
+              {onPressPicture && editable && renderEditLayer()}
+            </Shadow>
           </Pressable>
           {renderDescription ? (
             renderDescription(item)
