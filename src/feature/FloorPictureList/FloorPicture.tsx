@@ -104,8 +104,8 @@ const FloorPicture = ({
   onPinchEnd,
   alignment,
 }: FloorPictureProps) => {
-  const { height } = useDimensions();
-  const BASE_SIZE = height;
+  const { heightOfSafeArea } = useDimensions();
+  const BASE_SIZE = heightOfSafeArea - 45;
   const imageWidth = useMemo(
     () => BASE_SIZE * item.width,
     [item.width, BASE_SIZE],
@@ -114,6 +114,7 @@ const FloorPicture = ({
     () => BASE_SIZE * item.height,
     [item.height, BASE_SIZE],
   );
+
   const scale = useSharedValue(1);
 
   const index = getIndex();
