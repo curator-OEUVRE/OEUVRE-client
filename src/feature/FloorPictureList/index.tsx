@@ -10,6 +10,8 @@ import {
   useSharedValue,
 } from 'react-native-reanimated';
 import FloorPicture from './FloorPicture';
+import { COLOR } from '@/constants/styles';
+import useDimensions from '@/hooks/useDimensions';
 import { FloorAlignment } from '@/types/floor';
 import type { Picture } from '@/types/picture';
 
@@ -140,16 +142,12 @@ const FloorPictureList = ({
           onDragEnd(newData);
         }}
         onAnimValInit={(animVals) => {
-          absoluteX.current = animVals.absoluteX;
-          absoluteY.current = animVals.absoluteY;
-          translateY.current = animVals.translateY;
           activeIndexAnim.current = animVals.activeIndexAnim;
         }}
         /* eslint-disable-next-line react-native/no-inline-styles */
         contentContainerStyle={{
           paddingHorizontal: editable ? 36 : 44,
         }}
-        allowAnotherDirection
         maxToRenderPerBatch={7}
         initialNumToRender={7}
         windowSize={7}
