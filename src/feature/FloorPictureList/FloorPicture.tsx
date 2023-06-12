@@ -149,7 +149,7 @@ const FloorPicture = ({
 
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
-      if (editable && e.scale * imageWidth <= BASE_SIZE) {
+      if (editable && e.scale * imageHeight <= BASE_SIZE) {
         scale.value = e.scale;
       }
     })
