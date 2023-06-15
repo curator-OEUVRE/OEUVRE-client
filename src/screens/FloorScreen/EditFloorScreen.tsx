@@ -12,7 +12,7 @@ import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import PencilIcon from '@/assets/icons/Pencil';
+import SettingIcon from '@/assets/icons/Setting';
 import { Header } from '@/components/Header';
 import { Spinner } from '@/components/Spinner';
 import { Screen } from '@/constants/screens';
@@ -165,7 +165,7 @@ const EditFloorScreen = () => {
       >
         {name}
       </Text>
-      <PencilIcon color={iconColorByBackground} />
+      <SettingIcon color={iconColorByBackground} />
     </Pressable>
   );
   const addPictures = useCallback(
