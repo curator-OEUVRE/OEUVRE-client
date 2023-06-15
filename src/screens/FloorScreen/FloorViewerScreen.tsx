@@ -283,7 +283,10 @@ const FloorViewerScreen = () => {
       style={styles.wrapComment}
       onPress={async () => {
         // await lockAsync(OrientationLock.PORTRAIT_UP);
-        navigation.navigate(Screen.GuestBookScreen, { floorNo });
+        navigation.navigate(Screen.GuestBookScreen, {
+          floorNo,
+          floorName: name,
+        });
       }}
     >
       {/* {hasNewComment && newIcon} */}
