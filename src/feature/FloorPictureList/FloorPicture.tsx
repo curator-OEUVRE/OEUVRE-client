@@ -16,7 +16,6 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Shadow } from 'react-native-shadow-2';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import CloseUnfilledIcon from '@/assets/icons/CloseUnfilled';
 import PencilIcon from '@/assets/icons/Pencil';
@@ -48,6 +47,7 @@ const styles = StyleSheet.create({
   item: {
     marginHorizontal: 36,
   },
+
   line: {
     alignItems: 'center',
     backgroundColor: COLOR.mono.gray3,
@@ -57,6 +57,17 @@ const styles = StyleSheet.create({
   lineContainer: {
     alignSelf: 'center',
     flex: 1,
+  },
+  shadow: {
+    elevation: 20,
+    overflow: 'visible',
+    shadowColor: COLOR.mono.black,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
   },
   text: {
     marginTop: 5,
@@ -215,20 +226,13 @@ const FloorPicture = ({
             onPress={() => {
               onPressPicture?.(item);
             }}
+            style={styles.shadow}
           >
-            <Shadow
-              distance={5}
-              offset={[2, 2]}
-              startColor="#00000030"
-              endColor="#00000000"
-              paintInside
-            >
-              <AnimatedFastImage
-                source={{ uri: item.imageUrl }}
-                style={imageAnimStyle}
-              />
-              {onPressPicture && editable && renderEditLayer()}
-            </Shadow>
+            <AnimatedFastImage
+              source={{ uri: item.imageUrl }}
+              style={imageAnimStyle}
+            />
+            {onPressPicture && editable && renderEditLayer()}
           </Pressable>
           {renderDescription ? (
             renderDescription(item)
