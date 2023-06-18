@@ -1,14 +1,13 @@
 /* eslint-disable react-native/no-color-literals */
 import { useState } from 'react';
 import {
-  Image,
   Modal,
   Pressable,
   StyleSheet,
   useWindowDimensions,
   View,
 } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
+import Palette from '../Palette';
 import AlbumIcon from '@/assets/icons/Album';
 import NoAlbumIcon from '@/assets/icons/NoAlbum';
 import PaletteIcon from '@/assets/icons/Palette';
@@ -19,9 +18,7 @@ import BottomGradientIcon from '@/assets/icons/gradient/Bottom';
 import FullGradientIcon from '@/assets/icons/gradient/Full';
 import TopGradientIcon from '@/assets/icons/gradient/Top';
 import { IconButton } from '@/components';
-import { IMAGE } from '@/constants/images';
 import { COLOR } from '@/constants/styles';
-import { FLOOR_BACKGROUND_COLORS } from '@/constants/styles/colors';
 import { FloorAlignment, FloorGradient, FloorSetting } from '@/types/floor';
 
 interface FloorSettingButtonListProps extends FloorSetting {
@@ -58,16 +55,6 @@ const styles = StyleSheet.create({
     height: 40,
     width: 184,
   },
-  inner: {
-    backgroundColor: COLOR.mono.white,
-    borderRadius: 20,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    minHeight: 40,
-    paddingHorizontal: 18,
-    paddingVertical: 5,
-    width: '100%',
-  },
   marginRight: {
     marginRight: 8,
   },
@@ -79,22 +66,11 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
-  paint: {
-    marginRight: 5,
-  },
   selectorBase: {
+    bottom: 69,
     left: '50%',
+    marginLeft: -171.5,
     position: 'absolute',
-  },
-  selectorLandScape: {
-    marginLeft: -239,
-    top: 55,
-    width: 478,
-  },
-  selectorPortrait: {
-    marginLeft: -126,
-    top: 159,
-    width: 252,
   },
 });
 
@@ -102,36 +78,25 @@ const FloorSettingButtonList = ({
   isFramed,
   alignment,
   gradient,
+  color,
   onChange,
 }: FloorSettingButtonListProps) => {
   const [visible, setVisible] = useState<boolean>(false);
-  const renderPaint = () =>
-    FLOOR_BACKGROUND_COLORS.map((backgroundColor) => (
-      <Pressable
-        onPress={() => onChange?.({ color: backgroundColor })}
-        key={`Paint_${backgroundColor}`}
-      >
-        <Image source={IMAGE.paint[backgroundColor]} style={styles.paint} />
-      </Pressable>
-    ));
   const { width, height } = useWindowDimensions();
   const SelectModal = (
-    <Modal visible={visible} transparent>
+    <Modal
+      visible={visible}
+      transparent
+      supportedOrientations={['portrait', 'landscape']}
+    >
       <Pressable onPress={() => setVisible(false)} style={styles.overay} />
-      <View
-        style={[
-          styles.selectorBase,
-          width > height ? styles.selectorLandScape : styles.selectorPortrait,
-        ]}
-      >
-        <Shadow
-          distance={1}
-          offset={[1, 1]}
-          startColor="#00000020"
-          endColor="#00000000"
-        >
-          <View style={styles.inner}>{renderPaint()}</View>
-        </Shadow>
+      <View style={styles.selectorBase}>
+        <Palette
+          onSelected={(backgroundColor) =>
+            onChange?.({ color: backgroundColor })
+          }
+          selectedColor={color}
+        />
       </View>
     </Modal>
   );

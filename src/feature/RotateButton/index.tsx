@@ -11,9 +11,9 @@ import { IconButton } from '@/components/Button';
 
 const styles = StyleSheet.create({
   container: {
-    bottom: 55,
     position: 'absolute',
     right: 20,
+    top: 8,
   },
 });
 

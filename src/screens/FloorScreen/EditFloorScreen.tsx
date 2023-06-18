@@ -46,9 +46,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: 'center',
-    height: 40,
-    justifyContent: 'center',
+    height: 100,
     marginBottom: 21,
+    paddingTop: 8,
     width: '100%',
   },
   title: {
@@ -236,7 +236,10 @@ const EditFloorScreen = () => {
   return (
     <LinearGradient
       style={styles.container}
-      colors={getBackgroundColorsByGradient({ color, gradient })}
+      colors={getBackgroundColorsByGradient({
+        backgroundColor: color,
+        gradient,
+      })}
     >
       <SafeAreaView style={styles.container} edges={['top']}>
         <Header
@@ -269,8 +272,8 @@ const EditFloorScreen = () => {
               setFloor({ ...floor, ...setting });
             }}
           />
+          <RotateButton />
         </View>
-        <RotateButton />
         {loading && <Spinner />}
         {selectedPicture && (
           <PictureInfoModal
