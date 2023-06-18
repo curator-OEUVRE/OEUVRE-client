@@ -317,7 +317,7 @@ const FloorViewerScreen = () => {
         style={styles.container}
         colors={getBackgroundColorsByGradient({ color, gradient })}
       >
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top']}>
           <View style={{ opacity: headerOpacity }}>
             <Header
               headerTitle={name}

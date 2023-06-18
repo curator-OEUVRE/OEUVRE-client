@@ -238,7 +238,7 @@ const EditFloorScreen = () => {
       style={styles.container}
       colors={getBackgroundColorsByGradient({ color, gradient })}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top']}>
         <Header
           headerTitle={headerTitle}
           headerRight={ConfirmButton}
