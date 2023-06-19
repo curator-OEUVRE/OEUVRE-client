@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   wrapList: {
     flex: 1,
     justifyContent: 'center',
+    marginTop: -45,
   },
 });
 
@@ -317,7 +318,7 @@ const FloorViewerScreen = () => {
         style={styles.container}
         colors={getBackgroundColorsByGradient({ color, gradient })}
       >
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top']}>
           <View style={{ opacity: headerOpacity }}>
             <Header
               headerTitle={name}

@@ -26,6 +26,7 @@
     "@react-navigation/material-top-tabs": "^6.3.0",
     "@react-navigation/native": "6.0.13",
     "@react-navigation/stack": "6.3.1",
+    "@shopify/react-native-skia": "0.1.192",
     "axios": "0.27.2",
     "expo": "~46.0.21",
     "expo-apple-authentication": "4.3.0",

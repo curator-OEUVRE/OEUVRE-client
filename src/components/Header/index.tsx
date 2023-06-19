@@ -8,6 +8,7 @@ import {
   Platform,
   useWindowDimensions,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
 import { TEXT_STYLE } from '@/constants/styles';
 import { COLOR } from '@/constants/styles/colors';
@@ -69,9 +70,10 @@ const Header = ({
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const marginTop = isLandscape && Platform.OS === 'ios' ? 18 : 0;
+  const { left, right } = useSafeAreaInsets();
   return (
     <View style={[styles.container, { backgroundColor, marginTop }]}>
-      <View style={styles.left}>
+      <View style={[styles.left, { paddingLeft: left }]}>
         {headerLeft
           ? headerLeft()
           : !hideBackButton && (
@@ -99,7 +101,7 @@ const Header = ({
       ) : (
         headerTitle && headerTitle()
       )}
-      <View style={styles.right}>
+      <View style={[styles.right, { paddingRight: right }]}>
         {headerRight && headerRight({ iconColor })}
       </View>
     </View>

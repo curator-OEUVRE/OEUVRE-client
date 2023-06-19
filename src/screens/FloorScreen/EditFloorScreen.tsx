@@ -10,7 +10,14 @@ import { MediaTypeOptions } from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useState } from 'react';
-import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
@@ -29,6 +36,7 @@ import useUploadImage from '@/hooks/useUploadImage';
 import {
   getBackgroundColorsByGradient,
   getColorByBackgroundColor,
+  getFooterColorsByBackgroundColor,
 } from '@/services/common/color';
 import {
   createDefaultPictureInfo,
@@ -46,9 +54,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: 'center',
-    height: 40,
-    justifyContent: 'center',
-    marginBottom: 21,
+    paddingTop: 8,
     width: '100%',
   },
   title: {
@@ -84,6 +90,9 @@ const EditFloorScreen = () => {
   const { uploadImages } = useUploadImage();
   const { floor, setPictures, editFloor, setFloor } = useFloorStore();
   const { pictures, color, name, floorNo, alignment, gradient } = floor;
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const footerHeight = isLandscape ? 69 : 100;
 
   useEffect(() => {
     const backAction = () => {
@@ -232,13 +241,15 @@ const EditFloorScreen = () => {
     },
     [setPictures],
   );
-
   return (
-    <LinearGradient
-      style={styles.container}
-      colors={getBackgroundColorsByGradient({ color, gradient })}
-    >
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <LinearGradient
+        style={styles.container}
+        colors={getBackgroundColorsByGradient({
+          color,
+          gradient,
+        })}
+      >
         <Header
           headerTitle={headerTitle}
           headerRight={ConfirmButton}
@@ -259,32 +270,35 @@ const EditFloorScreen = () => {
             alignment={alignment}
           />
         </View>
-        <View style={styles.footer}>
-          <FloorSettingButtonList
-            color={color}
-            isFramed={false}
-            gradient={gradient}
-            alignment={alignment}
-            onChange={(setting) => {
-              setFloor({ ...floor, ...setting });
-            }}
-          />
-        </View>
+      </LinearGradient>
+      <LinearGradient
+        style={[styles.footer, { height: footerHeight }]}
+        colors={getFooterColorsByBackgroundColor({ color })}
+      >
+        <FloorSettingButtonList
+          color={color}
+          isFramed={false}
+          gradient={gradient}
+          alignment={alignment}
+          onChange={(setting) => {
+            setFloor({ ...floor, ...setting });
+          }}
+        />
         <RotateButton />
-        {loading && <Spinner />}
-        {selectedPicture && (
-          <PictureInfoModal
-            visible={pictureInfoModalVisible}
-            headerTitle="작품 설명 추가"
-            headerRightText="완료"
-            setVisible={setPictureInfoModalVisible}
-            onComplete={onPictureInfoComplete}
-            onGoBack={onGoBack}
-            {...selectedPicture}
-          />
-        )}
-      </SafeAreaView>
-    </LinearGradient>
+      </LinearGradient>
+      {loading && <Spinner />}
+      {selectedPicture && (
+        <PictureInfoModal
+          visible={pictureInfoModalVisible}
+          headerTitle="작품 설명 추가"
+          headerRightText="완료"
+          setVisible={setPictureInfoModalVisible}
+          onComplete={onPictureInfoComplete}
+          onGoBack={onGoBack}
+          {...selectedPicture}
+        />
+      )}
+    </SafeAreaView>
   );
 };
 

@@ -1,4 +1,8 @@
-import { COLOR, GRADIENT_COLOR_MAP } from '@/constants/styles';
+import {
+  COLOR,
+  BACKGROUND_GRADIENT_COLOR_MAP,
+  FOOTER_GRADIENT_COLOR_MAP,
+} from '@/constants/styles';
 import { FloorGradient, FloorBackgroundColor } from '@/types/floor';
 /* eslint-disable no-bitwise */
 
@@ -24,14 +28,28 @@ export const getColorByBackgroundColor = (
 };
 
 export const getBackgroundColorsByGradient = ({
-  color,
+  color = COLOR.floor.white,
   gradient,
 }: {
   color: FloorBackgroundColor;
   gradient: FloorGradient;
 }) => {
-  if (gradient === FloorGradient.FULL) return [color, color];
-  if (gradient === FloorGradient.BOTTOM)
-    return [GRADIENT_COLOR_MAP[color], color];
-  return [color, GRADIENT_COLOR_MAP[color]];
+  const backgroundColor =
+    color in BACKGROUND_GRADIENT_COLOR_MAP ? color : COLOR.floor.white;
+  const [start, end] = BACKGROUND_GRADIENT_COLOR_MAP[backgroundColor];
+  if (gradient === FloorGradient.FULL) return [start, start];
+  if (gradient === FloorGradient.BOTTOM) return [end, start];
+  return [start, end];
+};
+
+export const getFooterColorsByBackgroundColor = ({
+  color = COLOR.floor.white,
+}: {
+  color: FloorBackgroundColor;
+}) => {
+  const backgroundColor =
+    color in BACKGROUND_GRADIENT_COLOR_MAP ? color : COLOR.floor.white;
+  const [start, end] = FOOTER_GRADIENT_COLOR_MAP[backgroundColor];
+  console.log(start, end);
+  return [start, end];
 };

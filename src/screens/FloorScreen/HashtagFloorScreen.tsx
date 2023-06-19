@@ -297,7 +297,10 @@ const HashtagFloorScreen = () => {
 
   return (
     <>
-      <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: color }]}
+        edges={['top']}
+      >
         <Header
           headerTitle={headerTitle}
           backgroundColor="transparent"
