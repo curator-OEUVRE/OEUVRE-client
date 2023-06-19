@@ -10,7 +10,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Asset } from 'expo-media-library';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@/components/Header';
 import { Screen } from '@/constants/screens';
@@ -27,6 +34,7 @@ import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
 import {
   getBackgroundColorsByGradient,
   getColorByBackgroundColor,
+  getFooterColorsByBackgroundColor,
 } from '@/services/common/color';
 import { createDefaultPictureInfo } from '@/services/common/image';
 import { useCreateFloorStore } from '@/states/createFloorStore';
@@ -42,9 +50,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: 'center',
-    height: 40,
-    justifyContent: 'center',
-    marginBottom: 21,
+    paddingTop: 8,
     width: '100%',
   },
   wrapList: {
@@ -74,6 +80,9 @@ const EditFloorScreen = () => {
     useState<boolean>(false);
   const addPoint = useRef<number>(-1);
   const [selectedPicture, selectPicture] = useState<Picture>();
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const footerHeight = isLandscape ? 69 : 100;
 
   useEffect(() => {
     const backAction = () => {
@@ -177,11 +186,11 @@ const EditFloorScreen = () => {
   );
 
   return (
-    <LinearGradient
-      style={styles.container}
-      colors={getBackgroundColorsByGradient({ color, gradient })}
-    >
-      <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <LinearGradient
+        style={styles.container}
+        colors={getBackgroundColorsByGradient({ color, gradient })}
+      >
         <Header
           headerTitle="플로어 추가"
           headerRight={ConfirmButton}
@@ -201,38 +210,41 @@ const EditFloorScreen = () => {
             alignment={alignment}
           />
         </View>
-        <ImagePickerModal
-          visible={imagePickerModalVisible}
-          setVisible={setImagePickerModalVisible}
-          headerRightText="다음"
-          headerTitle="플로어 추가"
-          onComplete={onPickImagesComplete}
+      </LinearGradient>
+      <LinearGradient
+        style={[styles.footer, { height: footerHeight }]}
+        colors={getFooterColorsByBackgroundColor({ color })}
+      >
+        <FloorSettingButtonList
+          color={color}
+          isFramed={false}
+          gradient={gradient}
+          alignment={alignment}
+          onChange={(setting) => {
+            setFloorInfo({ ...setting });
+          }}
         />
-        <View style={styles.footer}>
-          <FloorSettingButtonList
-            color={color}
-            isFramed={false}
-            gradient={gradient}
-            alignment={alignment}
-            onChange={(setting) => {
-              setFloorInfo({ ...setting });
-            }}
-          />
-        </View>
-        {selectedPicture && (
-          <PictureInfoModal
-            visible={pictureInfoModalVisible}
-            headerTitle="작품 설명 추가"
-            headerRightText="완료"
-            setVisible={setPictureInfoModalVisible}
-            onComplete={onPictureInfoComplete}
-            onGoBack={onGoBack}
-            {...selectedPicture}
-          />
-        )}
         <RotateButton />
-      </SafeAreaView>
-    </LinearGradient>
+      </LinearGradient>
+      <ImagePickerModal
+        visible={imagePickerModalVisible}
+        setVisible={setImagePickerModalVisible}
+        headerRightText="다음"
+        headerTitle="플로어 추가"
+        onComplete={onPickImagesComplete}
+      />
+      {selectedPicture && (
+        <PictureInfoModal
+          visible={pictureInfoModalVisible}
+          headerTitle="작품 설명 추가"
+          headerRightText="완료"
+          setVisible={setPictureInfoModalVisible}
+          onComplete={onPictureInfoComplete}
+          onGoBack={onGoBack}
+          {...selectedPicture}
+        />
+      )}
+    </SafeAreaView>
   );
 };
 
