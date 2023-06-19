@@ -10,7 +10,14 @@ import { MediaTypeOptions } from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useState } from 'react';
-import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PencilIcon from '@/assets/icons/Pencil';
 import { Header } from '@/components/Header';
@@ -46,8 +53,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: 'center',
-    height: 100,
-    marginBottom: 21,
     paddingTop: 8,
     width: '100%',
   },
@@ -84,6 +89,9 @@ const EditFloorScreen = () => {
   const { uploadImages } = useUploadImage();
   const { floor, setPictures, editFloor, setFloor } = useFloorStore();
   const { pictures, color, name, floorNo, alignment, gradient } = floor;
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const footerHeight = isLandscape ? 69 : 100;
 
   useEffect(() => {
     const backAction = () => {
@@ -232,12 +240,11 @@ const EditFloorScreen = () => {
     },
     [setPictures],
   );
-
   return (
     <LinearGradient
       style={styles.container}
       colors={getBackgroundColorsByGradient({
-        backgroundColor: color,
+        color,
         gradient,
       })}
     >
@@ -262,7 +269,7 @@ const EditFloorScreen = () => {
             alignment={alignment}
           />
         </View>
-        <View style={styles.footer}>
+        <View style={[styles.footer, { height: footerHeight }]}>
           <FloorSettingButtonList
             color={color}
             isFramed={false}

@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     top: 0,
   },
   selectorBase: {
-    bottom: 69,
     left: '50%',
     marginLeft: -171.5,
     position: 'absolute',
@@ -83,6 +82,8 @@ const FloorSettingButtonList = ({
 }: FloorSettingButtonListProps) => {
   const [visible, setVisible] = useState<boolean>(false);
   const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const bottom = isLandscape ? 69 : 100;
   const SelectModal = (
     <Modal
       visible={visible}
@@ -90,7 +91,7 @@ const FloorSettingButtonList = ({
       supportedOrientations={['portrait', 'landscape']}
     >
       <Pressable onPress={() => setVisible(false)} style={styles.overay} />
-      <View style={styles.selectorBase}>
+      <View style={[styles.selectorBase, { bottom }]}>
         <Palette
           onSelected={(backgroundColor) =>
             onChange?.({ color: backgroundColor })
