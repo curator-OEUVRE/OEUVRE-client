@@ -53,8 +53,10 @@ import { useUserStore } from '@/states/userStore';
 import { Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
+  // eslint-disable-next-line react-native/no-color-literals
   comment: {
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.72)',
     borderRadius: 12,
     flexDirection: 'row',
     height: 25,
@@ -284,7 +286,10 @@ const FloorViewerScreen = () => {
       style={styles.wrapComment}
       onPress={async () => {
         // await lockAsync(OrientationLock.PORTRAIT_UP);
-        navigation.navigate(Screen.GuestBookScreen, { floorNo });
+        navigation.navigate(Screen.GuestBookScreen, {
+          floorNo,
+          floorName: name,
+        });
       }}
     >
       {/* {hasNewComment && newIcon} */}
@@ -338,7 +343,7 @@ const FloorViewerScreen = () => {
             />
           </View>
           {!viewingMode && guestBookButton}
-          <RotateButton />
+          {!viewingMode && <RotateButton />}
           {renderBottomSheet()}
         </SafeAreaView>
       </LinearGradient>

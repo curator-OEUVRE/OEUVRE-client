@@ -9,26 +9,21 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  getComments,
-  getOtherFloors,
-  createComment,
-  deleteComment,
-} from '@/apis/guestbook';
-import { Header, Spinner } from '@/components';
+import { createComment, deleteComment, getComments } from '@/apis/guestbook';
+import { Header } from '@/components';
 import { WithKeyboardAvoidingView } from '@/components/WithKeyboardAvoidingView';
-import { Screen, Navigator } from '@/constants/screens';
+import { Navigator, Screen } from '@/constants/screens';
 import { COLOR } from '@/constants/styles';
-import FloorDropDown from '@/feature/FloorDropdown';
 import GuestBookInput from '@/feature/GuestBookInput';
 import GuestBookList from '@/feature/GuestBookList';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import { useUserStore } from '@/states/userStore';
-import { GuestBookInfo, OtherFloor } from '@/types/guestbook';
+import { GuestBookInfo } from '@/types/guestbook';
 
 export type GuestBookScreenParams = {
   floorNo: number;
+  floorName: string;
 };
 
 export type GuestBookScreenRP = RouteProp<
@@ -60,9 +55,7 @@ const GuestBookScreen = () => {
   const [page, setPage] = useState<number>(0);
   const [comments, setcomments] = useState<GuestBookInfo[]>([]);
   const [commentsLoading, setCommentsLoading] = useState<boolean>(false);
-  const [otherFloors, setOtherFloors] = useState<OtherFloor[]>([]);
-  const [otherFloorsLoading, setOtherFloorsLoading] = useState<boolean>(false);
-  const { floorNo } = params;
+  const { floorNo, floorName } = params;
   const { userNo: myUserNo } = useUserStore();
   const { profileImageUrl } = useUserStore();
   useEffect(() => {
@@ -80,38 +73,8 @@ const GuestBookScreen = () => {
       }
       setCommentsLoading(false);
     };
-    const fetchOtherFloors = async () => {
-      setOtherFloorsLoading(true);
-      const response = await getOtherFloors({ floorNo });
-      if (response.isSuccess) {
-        const { result } = response.result;
-        setOtherFloors(result);
-      } else {
-        // eslint-disable-next-line no-console
-        console.log(response.result.errorMessage);
-      }
-      setOtherFloorsLoading(false);
-    };
     fetchCommentsData();
-    fetchOtherFloors();
   }, [floorNo]);
-
-  const onChangeFloor = (nextFloor: number) => {
-    navigation.navigate(Screen.GuestBookScreen, { floorNo: nextFloor });
-  };
-
-  const headerTitle = () => {
-    const currentIdx = otherFloors.findIndex(
-      (floor) => floor.floorNo === floorNo,
-    );
-    return (
-      <FloorDropDown
-        currentIdx={currentIdx}
-        onPress={onChangeFloor}
-        floors={otherFloors}
-      />
-    );
-  };
 
   const onSubmit = useCallback(
     async (comment: string) => {
@@ -177,13 +140,9 @@ const GuestBookScreen = () => {
     [navigation, myUserNo],
   );
 
-  if (otherFloorsLoading) {
-    return <Spinner />;
-  }
-
   return (
     <SafeAreaView style={styles.container}>
-      <Header headerTitle={headerTitle} />
+      <Header headerTitle={floorName} />
       <WithKeyboardAvoidingView>
         <View style={styles.content}>
           <GuestBookList

@@ -10,9 +10,10 @@ interface IconButtonProps extends PressableProps {
 }
 
 const styles = StyleSheet.create({
+  // eslint-disable-next-line react-native/no-color-literals
   container: {
     alignItems: 'center',
-    backgroundColor: COLOR.mono.white,
+    backgroundColor: 'rgba(255, 255, 255, 0.72)',
     borderRadius: 20,
     height: 40,
     justifyContent: 'center',
