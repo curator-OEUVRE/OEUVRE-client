@@ -24,17 +24,15 @@ export const getColorByBackgroundColor = (
 };
 
 export const getBackgroundColorsByGradient = ({
-  backgroundColor = COLOR.floor.white,
+  color = COLOR.floor.white,
   gradient,
 }: {
-  backgroundColor: FloorBackgroundColor;
+  color: FloorBackgroundColor;
   gradient: FloorGradient;
 }) => {
-  const color =
-    backgroundColor in BACKGROUND_GRADIENT_COLOR_MAP
-      ? backgroundColor
-      : COLOR.floor.white;
-  const [start, end] = BACKGROUND_GRADIENT_COLOR_MAP[color];
+  const backgroundColor =
+    color in BACKGROUND_GRADIENT_COLOR_MAP ? color : COLOR.floor.white;
+  const [start, end] = BACKGROUND_GRADIENT_COLOR_MAP[backgroundColor];
   if (gradient === FloorGradient.FULL) return [start, start];
   if (gradient === FloorGradient.BOTTOM) return [end, start];
   return [start, end];
