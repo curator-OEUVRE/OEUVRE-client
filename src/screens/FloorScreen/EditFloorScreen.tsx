@@ -36,6 +36,7 @@ import useUploadImage from '@/hooks/useUploadImage';
 import {
   getBackgroundColorsByGradient,
   getColorByBackgroundColor,
+  getFooterColorsByBackgroundColor,
 } from '@/services/common/color';
 import {
   createDefaultPictureInfo,
@@ -241,14 +242,14 @@ const EditFloorScreen = () => {
     [setPictures],
   );
   return (
-    <LinearGradient
-      style={styles.container}
-      colors={getBackgroundColorsByGradient({
-        color,
-        gradient,
-      })}
-    >
-      <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <LinearGradient
+        style={styles.container}
+        colors={getBackgroundColorsByGradient({
+          color,
+          gradient,
+        })}
+      >
         <Header
           headerTitle={headerTitle}
           headerRight={ConfirmButton}
@@ -269,32 +270,35 @@ const EditFloorScreen = () => {
             alignment={alignment}
           />
         </View>
-        <View style={[styles.footer, { height: footerHeight }]}>
-          <FloorSettingButtonList
-            color={color}
-            isFramed={false}
-            gradient={gradient}
-            alignment={alignment}
-            onChange={(setting) => {
-              setFloor({ ...floor, ...setting });
-            }}
-          />
-          <RotateButton />
-        </View>
-        {loading && <Spinner />}
-        {selectedPicture && (
-          <PictureInfoModal
-            visible={pictureInfoModalVisible}
-            headerTitle="작품 설명 추가"
-            headerRightText="완료"
-            setVisible={setPictureInfoModalVisible}
-            onComplete={onPictureInfoComplete}
-            onGoBack={onGoBack}
-            {...selectedPicture}
-          />
-        )}
-      </SafeAreaView>
-    </LinearGradient>
+      </LinearGradient>
+      <LinearGradient
+        style={[styles.footer, { height: footerHeight }]}
+        colors={getFooterColorsByBackgroundColor({ color })}
+      >
+        <FloorSettingButtonList
+          color={color}
+          isFramed={false}
+          gradient={gradient}
+          alignment={alignment}
+          onChange={(setting) => {
+            setFloor({ ...floor, ...setting });
+          }}
+        />
+        <RotateButton />
+      </LinearGradient>
+      {loading && <Spinner />}
+      {selectedPicture && (
+        <PictureInfoModal
+          visible={pictureInfoModalVisible}
+          headerTitle="작품 설명 추가"
+          headerRightText="완료"
+          setVisible={setPictureInfoModalVisible}
+          onComplete={onPictureInfoComplete}
+          onGoBack={onGoBack}
+          {...selectedPicture}
+        />
+      )}
+    </SafeAreaView>
   );
 };
 

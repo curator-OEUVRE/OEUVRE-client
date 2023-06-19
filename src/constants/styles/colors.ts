@@ -64,14 +64,14 @@ export const BACKGROUND_GRADIENT_COLOR_MAP = {
 };
 
 export const FOOTER_GRADIENT_COLOR_MAP = {
-  [COLOR.floor.sky]: ['#C5CCCE', '#E3ECEE'],
-  [COLOR.floor.yellow]: ['#DBD8CE', '#ECE7D6'],
-  [COLOR.floor.orange]: ['#D2CBC1', '#EBE5DC'],
-  [COLOR.floor.green]: ['#BDC2BB', '#DDE3DB'],
-  [COLOR.floor.purple]: ['#C5C5CE', '#DEDEE9'],
-  [COLOR.floor.blue]: ['#C4CAD4', '#E3E6EB'],
-  [COLOR.floor.white]: ['#EAEAEA', '#F2F2F2'],
-  [COLOR.floor.gray1]: ['#D2D2D2', '#EBEBEB'],
-  [COLOR.floor.gray2]: ['#AAAAAA', '#D9D9D9'],
-  [COLOR.floor.black]: ['#434343', '#959A9B'],
+  [COLOR.floor.sky]: ['#E3ECEE', '#C5CCCE'],
+  [COLOR.floor.yellow]: ['#ECE7D6', '#DBD8CE'],
+  [COLOR.floor.orange]: ['#EBE5DC', '#D2CBC1'],
+  [COLOR.floor.green]: ['#DDE3DB', '#BDC2BB'],
+  [COLOR.floor.purple]: ['#DEDEE9', '#C5C5CE'],
+  [COLOR.floor.blue]: ['#E3E6EB', '#C4CAD4'],
+  [COLOR.floor.white]: ['#F2F2F2', '#EAEAEA'],
+  [COLOR.floor.gray1]: ['#EBEBEB', '#D2D2D2'],
+  [COLOR.floor.gray2]: ['#D9D9D9', '#AAAAAA'],
+  [COLOR.floor.black]: ['#959A9B', '#434343'],
 };
