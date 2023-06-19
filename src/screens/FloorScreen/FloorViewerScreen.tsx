@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   wrapList: {
     flex: 1,
     justifyContent: 'center',
+    marginTop: -45,
   },
 });
 
