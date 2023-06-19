@@ -1,5 +1,3 @@
-import { FloorBackgroundColor } from '@/types/floor';
-
 export const COLOR = {
   mono: {
     white: '#FFFFFF',
