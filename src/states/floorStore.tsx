@@ -29,7 +29,7 @@ interface FloorStore {
 }
 
 const defaultFloor = {
-  color: COLOR.mono.white,
+  color: COLOR.floor.white,
   isCommentAvailable: true,
   isPublic: true,
   name: '',
@@ -133,7 +133,7 @@ export const useFloorStore = create<FloorStore>()((set, get) => ({
     const response = await PictureAPI.getPictureDetail({ pictureNo });
     if (response.isSuccess) {
       const { result } = response.result;
-      setFloorInfo({ color: COLOR.mono.white, gradient: FloorGradient.FULL });
+      setFloorInfo({ color: COLOR.floor.white, gradient: FloorGradient.FULL });
       setPictures([result]);
       setSwiperIndex(0);
     } else {
