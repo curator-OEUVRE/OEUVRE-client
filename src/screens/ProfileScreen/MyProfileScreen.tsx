@@ -121,8 +121,8 @@ const MyCollection = () => {
   }, [fetchWithToken, setCollection]);
 
   const goToPicture = useCallback(
-    (pictureNo: number) => {
-      fetchPicture(pictureNo);
+    async (pictureNo: number) => {
+      await fetchPicture(pictureNo);
       navigation.navigate(Navigator.FloorStack, {
         screen: Screen.ImageDetailScreen,
       });
