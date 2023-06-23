@@ -19,6 +19,7 @@ import {
   BackHandler,
   Share,
   Text,
+  useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Shadow } from 'react-native-shadow-2';
@@ -46,6 +47,7 @@ import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
 import {
   getBackgroundColorsByGradient,
   getColorByBackgroundColor,
+  getFooterColorsByBackgroundColor,
 } from '@/services/common/color';
 import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
@@ -70,6 +72,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  footer: {
+    alignItems: 'center',
+    paddingTop: 8,
+    width: '100%',
+  },
   new: {
     backgroundColor: COLOR.system.red,
     borderRadius: 6,
@@ -82,10 +89,10 @@ const styles = StyleSheet.create({
   },
   wrapComment: {
     alignItems: 'center',
-    bottom: 58,
     left: 0,
     position: 'absolute',
     right: 0,
+    top: 16,
   },
   wrapList: {
     flex: 1,
@@ -134,6 +141,9 @@ const FloorViewerScreen = () => {
   const textColorByBackground = getColorByBackgroundColor(color, {
     dark: COLOR.mono.gray5,
   });
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const footerHeight = isLandscape ? 69 : 100;
 
   useEffect(() => {
     const backAction = () => {
@@ -315,15 +325,25 @@ const FloorViewerScreen = () => {
     setViewingMode(false);
   }, []);
 
+  const footer = (
+    <LinearGradient
+      style={[styles.footer, { height: footerHeight }]}
+      colors={getFooterColorsByBackgroundColor({ color })}
+    >
+      {guestBookButton}
+      <RotateButton />
+    </LinearGradient>
+  );
+
   if (loading) return <Spinner />;
   const headerOpacity = viewingMode ? 0 : 1;
   return (
     <Pressable onPress={onPressBackground} style={styles.container}>
-      <LinearGradient
-        style={styles.container}
-        colors={getBackgroundColorsByGradient({ color, gradient })}
-      >
-        <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <LinearGradient
+          style={styles.container}
+          colors={getBackgroundColorsByGradient({ color, gradient })}
+        >
           <View style={{ opacity: headerOpacity }}>
             <Header
               headerTitle={name}
@@ -342,11 +362,10 @@ const FloorViewerScreen = () => {
               onScrollBeginDrag={onScrollBeginDrag}
             />
           </View>
-          {!viewingMode && guestBookButton}
-          {!viewingMode && <RotateButton />}
-          {renderBottomSheet()}
-        </SafeAreaView>
-      </LinearGradient>
+        </LinearGradient>
+        {!viewingMode && footer}
+        {renderBottomSheet()}
+      </SafeAreaView>
     </Pressable>
   );
 };
