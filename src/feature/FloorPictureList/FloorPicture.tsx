@@ -17,7 +17,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import AddCircleIcon from '@/assets/icons/AddCircle';
-import CloseUnfilledIcon from '@/assets/icons/CloseUnfilled';
+import CloseFilledIcon from '@/assets/icons/CloseFilled';
 import PencilIcon from '@/assets/icons/Pencil';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import useDimensions from '@/hooks/useDimensions';
@@ -32,20 +32,23 @@ const LINE_BUTTON_SIZE = 40;
 const styles = StyleSheet.create({
   delete: {
     position: 'absolute',
-    right: 0,
-    top: 0,
+    right: -13,
+    top: -13,
+    zIndex: 100,
   },
   editLayer: {
     alignItems: 'center',
     bottom: 0,
     justifyContent: 'center',
     left: 0,
+    overflow: 'visible',
     position: 'absolute',
     right: 0,
     top: 0,
   },
   item: {
     marginHorizontal: 36,
+    paddingTop: 13,
   },
 
   line: {
@@ -197,7 +200,7 @@ const FloorPicture = ({
     >
       {onPressDelete && (
         <Pressable style={styles.delete} onPress={() => onPressDelete?.(item)}>
-          <CloseUnfilledIcon width={26} height={26} color={COLOR.mono.white} />
+          <CloseFilledIcon width={26} height={26} color={COLOR.mono.white} />
         </Pressable>
       )}
       <PencilIcon color={COLOR.mono.white} width={40} height={40} />
