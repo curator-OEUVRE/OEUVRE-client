@@ -6,7 +6,7 @@ import { COLOR } from '@/constants/styles';
 import { FloorBackgroundColor } from '@/types/floor';
 
 const Component = () => {
-  const [color, setColor] = useState<FloorBackgroundColor>(COLOR.mono.gray1);
+  const [color, setColor] = useState<FloorBackgroundColor>(COLOR.floor.gray1);
 
   return <Palette selectedColor={color} onSelected={setColor} />;
 };
