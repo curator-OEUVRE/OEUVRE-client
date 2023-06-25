@@ -339,11 +339,11 @@ const FloorViewerScreen = () => {
   const headerOpacity = viewingMode ? 0 : 1;
   return (
     <Pressable onPress={onPressBackground} style={styles.container}>
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <LinearGradient
-          style={styles.container}
-          colors={getBackgroundColorsByGradient({ color, gradient })}
-        >
+      <LinearGradient
+        style={styles.container}
+        colors={getBackgroundColorsByGradient({ color, gradient })}
+      >
+        <SafeAreaView style={styles.container} edges={['top']}>
           <View style={{ opacity: headerOpacity }}>
             <Header
               headerTitle={name}
@@ -362,10 +362,10 @@ const FloorViewerScreen = () => {
               onScrollBeginDrag={onScrollBeginDrag}
             />
           </View>
-        </LinearGradient>
-        {!viewingMode && footer}
-        {renderBottomSheet()}
-      </SafeAreaView>
+        </SafeAreaView>
+      </LinearGradient>
+      {!viewingMode && footer}
+      {renderBottomSheet()}
     </Pressable>
   );
 };
