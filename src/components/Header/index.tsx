@@ -69,7 +69,7 @@ const Header = ({
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
-  const marginTop = isLandscape && Platform.OS === 'ios' ? 18 : 0;
+  const marginTop = isLandscape && Platform.OS === 'ios' ? 10 : 0;
   const { left, right } = useSafeAreaInsets();
   return (
     <View style={[styles.container, { backgroundColor, marginTop }]}>
