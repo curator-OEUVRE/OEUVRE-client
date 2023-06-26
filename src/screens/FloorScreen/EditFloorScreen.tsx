@@ -242,7 +242,7 @@ const EditFloorScreen = () => {
     [setPictures],
   );
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <LinearGradient
         style={styles.container}
         colors={getBackgroundColorsByGradient({
@@ -250,26 +250,28 @@ const EditFloorScreen = () => {
           gradient,
         })}
       >
-        <Header
-          headerTitle={headerTitle}
-          headerRight={ConfirmButton}
-          backgroundColor="transparent"
-          iconColor={iconColorByBackground}
-        />
-        <View style={styles.wrapList}>
-          <FloorPictureList
-            pictures={pictures}
-            editable
-            setPictures={setPictures}
-            addPictures={addPictures}
-            onPressPicture={onPressPicture}
-            color={textColorByBackground}
-            onPressDelete={onPressDelete}
-            pictureAddable
-            onPinchEnd={onPinchEnd}
-            alignment={alignment}
+        <SafeAreaView style={styles.container} edges={['top']}>
+          <Header
+            headerTitle={headerTitle}
+            headerRight={ConfirmButton}
+            backgroundColor="transparent"
+            iconColor={iconColorByBackground}
           />
-        </View>
+          <View style={styles.wrapList}>
+            <FloorPictureList
+              pictures={pictures}
+              editable
+              setPictures={setPictures}
+              addPictures={addPictures}
+              onPressPicture={onPressPicture}
+              color={textColorByBackground}
+              onPressDelete={onPressDelete}
+              pictureAddable
+              onPinchEnd={onPinchEnd}
+              alignment={alignment}
+            />
+          </View>
+        </SafeAreaView>
       </LinearGradient>
       <LinearGradient
         style={[styles.footer, { height: footerHeight }]}
@@ -298,7 +300,7 @@ const EditFloorScreen = () => {
           {...selectedPicture}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

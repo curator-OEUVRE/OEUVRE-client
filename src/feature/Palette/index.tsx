@@ -62,6 +62,7 @@ const Palette = ({ selectedColor, onSelected }: PaletteProps) => {
     >
       <View style={styles.inner}>
         <FlatList
+          showsHorizontalScrollIndicator={false}
           renderItem={renderItem}
           data={FLOOR_BACKGROUND_COLORS}
           maxToRenderPerBatch={10}

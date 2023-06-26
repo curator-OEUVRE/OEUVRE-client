@@ -37,7 +37,7 @@ export const getBackgroundColorsByGradient = ({
   const backgroundColor =
     color in BACKGROUND_GRADIENT_COLOR_MAP ? color : COLOR.floor.white;
   const [start, end] = BACKGROUND_GRADIENT_COLOR_MAP[backgroundColor];
-  if (gradient === FloorGradient.FULL) return [start, start];
+  if (gradient === FloorGradient.FULL) return [start, end, start];
   if (gradient === FloorGradient.BOTTOM) return [end, start];
   return [start, end];
 };
@@ -50,6 +50,5 @@ export const getFooterColorsByBackgroundColor = ({
   const backgroundColor =
     color in BACKGROUND_GRADIENT_COLOR_MAP ? color : COLOR.floor.white;
   const [start, end] = FOOTER_GRADIENT_COLOR_MAP[backgroundColor];
-  console.log(start, end);
   return [start, end];
 };
