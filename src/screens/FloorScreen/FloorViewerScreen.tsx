@@ -344,7 +344,6 @@ const FloorViewerScreen = () => {
     </LinearGradient>
   );
 
-  if (loading) return <Spinner />;
   return (
     <>
       <Pressable onPress={onPressBackground} style={styles.container}>
