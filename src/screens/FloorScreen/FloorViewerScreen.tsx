@@ -317,34 +317,30 @@ const FloorViewerScreen = () => {
     </Pressable>
   );
 
-  const onScrollBeginDrag = () => {
+  const onScrollBeginDrag = useCallback(() => {
     setViewingMode(true);
-  };
+  }, []);
 
   const onPressBackground = useCallback(() => {
     setViewingMode(false);
   }, []);
-
-  const header = (
-    <Header
-      headerTitle={name}
-      headerRight={ConfirmButton}
-      backgroundColor="transparent"
-      iconColor={iconColorByBackground}
-    />
-  );
 
   const footer = (
     <LinearGradient
       style={[styles.footer, { height: footerHeight }]}
       colors={getFooterColorsByBackgroundColor({ color })}
     >
-      {guestBookButton}
-      <RotateButton />
+      {!viewingMode && (
+        <>
+          {guestBookButton}
+          <RotateButton />
+        </>
+      )}
     </LinearGradient>
   );
 
   if (loading) return <Spinner />;
+  const headerOpacity = viewingMode ? 0 : 1;
   return (
     <Pressable onPress={onPressBackground} style={styles.container}>
       <LinearGradient
@@ -352,7 +348,14 @@ const FloorViewerScreen = () => {
         colors={getBackgroundColorsByGradient({ color, gradient })}
       >
         <SafeAreaView style={styles.container} edges={['top']}>
-          {!viewingMode && header}
+          <View style={{ opacity: headerOpacity }}>
+            <Header
+              headerTitle={name}
+              headerRight={ConfirmButton}
+              backgroundColor="transparent"
+              iconColor={iconColorByBackground}
+            />
+          </View>
           <View style={styles.wrapList}>
             <FloorPictureList
               pictures={pictures}
@@ -365,7 +368,7 @@ const FloorViewerScreen = () => {
           </View>
         </SafeAreaView>
       </LinearGradient>
-      {!viewingMode && footer}
+      {footer}
       {renderBottomSheet()}
     </Pressable>
   );

@@ -121,7 +121,7 @@ const NotificationScreen = () => {
   );
 
   const onPressNotification = useCallback(
-    (notification: Notification) => {
+    async (notification: Notification) => {
       const { type, floorNo, sendUserNo, pictureNo } = notification;
       switch (type) {
         case 'COMMENT':
@@ -136,7 +136,7 @@ const NotificationScreen = () => {
           break;
         case 'LIKES':
           if (!pictureNo) return;
-          fetchPicture(pictureNo);
+          await fetchPicture(pictureNo);
           navigation.navigate(Navigator.FloorStack, {
             screen: Screen.ImageDetailScreen,
           });

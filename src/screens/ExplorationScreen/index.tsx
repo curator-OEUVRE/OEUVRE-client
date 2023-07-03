@@ -96,8 +96,8 @@ const ExplorationScreen = () => {
         {...props.item}
         index={props.index}
         // TODO: `onPress` (해시태그 플로어 뷰) 구현
-        onPicturePress={(pictureNo) => {
-          fetchPicture(pictureNo);
+        onPicturePress={async (pictureNo) => {
+          await fetchPicture(pictureNo);
           navigation.navigate(Navigator.FloorStack, {
             screen: Screen.ImageDetailScreen,
           });
