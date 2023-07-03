@@ -317,59 +317,60 @@ const FloorViewerScreen = () => {
     </Pressable>
   );
 
-  const onScrollBeginDrag = () => {
+  const onScrollBeginDrag = useCallback(() => {
     setViewingMode(true);
-  };
+  }, []);
 
   const onPressBackground = useCallback(() => {
     setViewingMode(false);
   }, []);
-
-  const header = (
-    <Header
-      headerTitle={name}
-      headerRight={ConfirmButton}
-      backgroundColor="transparent"
-      iconColor={iconColorByBackground}
-    />
-  );
 
   const footer = (
     <LinearGradient
       style={[styles.footer, { height: footerHeight }]}
       colors={getFooterColorsByBackgroundColor({ color })}
     >
-      {guestBookButton}
-      <RotateButton />
+      {!viewingMode && (
+        <>
+          {guestBookButton}
+          <RotateButton />
+        </>
+      )}
     </LinearGradient>
   );
 
+  if (loading) return <Spinner />;
+  const headerOpacity = viewingMode ? 0 : 1;
   return (
-    <>
-      <Pressable onPress={onPressBackground} style={styles.container}>
-        <LinearGradient
-          style={styles.container}
-          colors={getBackgroundColorsByGradient({ color, gradient })}
-        >
-          <SafeAreaView style={styles.container} edges={['top']}>
-            {!viewingMode && header}
-            <View style={styles.wrapList}>
-              <FloorPictureList
-                pictures={pictures}
-                editable={false}
-                onPressPicture={onPressPicture}
-                color={textColorByBackground}
-                alignment={floor.alignment}
-                onScrollBeginDrag={onScrollBeginDrag}
-              />
-            </View>
-          </SafeAreaView>
-        </LinearGradient>
-        {!viewingMode && footer}
-        {renderBottomSheet()}
-      </Pressable>
-      {loading && <Spinner />}
-    </>
+    <Pressable onPress={onPressBackground} style={styles.container}>
+      <LinearGradient
+        style={styles.container}
+        colors={getBackgroundColorsByGradient({ color, gradient })}
+      >
+        <SafeAreaView style={styles.container} edges={['top']}>
+          <View style={{ opacity: headerOpacity }}>
+            <Header
+              headerTitle={name}
+              headerRight={ConfirmButton}
+              backgroundColor="transparent"
+              iconColor={iconColorByBackground}
+            />
+          </View>
+          <View style={styles.wrapList}>
+            <FloorPictureList
+              pictures={pictures}
+              editable={false}
+              onPressPicture={onPressPicture}
+              color={textColorByBackground}
+              alignment={floor.alignment}
+              onScrollBeginDrag={onScrollBeginDrag}
+            />
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
+      {footer}
+      {renderBottomSheet()}
+    </Pressable>
   );
 };
 

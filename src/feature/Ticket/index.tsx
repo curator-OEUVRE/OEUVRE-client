@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   back: {
     backfaceVisibility: 'hidden',
     flex: 1,
+    paddingVertical: 5,
   },
   badge: {
     borderRadius: 5,
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   container: {
-    height: 420,
+    height: 430,
     width: 210,
   },
   exhibition_name: {
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
     backfaceVisibility: 'hidden',
     bottom: 0,
     left: 0,
+    paddingVertical: 5,
     position: 'absolute',
     right: 0,
     top: 0,

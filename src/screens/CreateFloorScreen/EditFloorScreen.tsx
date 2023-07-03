@@ -186,30 +186,32 @@ const EditFloorScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <LinearGradient
         style={styles.container}
         colors={getBackgroundColorsByGradient({ color, gradient })}
       >
-        <Header
-          headerTitle="플로어 추가"
-          headerRight={ConfirmButton}
-          backgroundColor="transparent"
-          iconColor={iconColorByBackground}
-        />
-        <View style={styles.wrapList}>
-          <FloorPictureList
-            pictures={pictures}
-            editable
-            setPictures={setPictures}
-            addPictures={addPictures}
-            color={textColorByBackground}
-            onPressPicture={onPressPicture}
-            onPressDelete={onPressDelete}
-            onPinchEnd={onPinchEnd}
-            alignment={alignment}
+        <SafeAreaView style={styles.container} edges={['top']}>
+          <Header
+            headerTitle="플로어 추가"
+            headerRight={ConfirmButton}
+            backgroundColor="transparent"
+            iconColor={iconColorByBackground}
           />
-        </View>
+          <View style={styles.wrapList}>
+            <FloorPictureList
+              pictures={pictures}
+              editable
+              setPictures={setPictures}
+              addPictures={addPictures}
+              color={textColorByBackground}
+              onPressPicture={onPressPicture}
+              onPressDelete={onPressDelete}
+              onPinchEnd={onPinchEnd}
+              alignment={alignment}
+            />
+          </View>
+        </SafeAreaView>
       </LinearGradient>
       <LinearGradient
         style={[styles.footer, { height: footerHeight }]}
@@ -244,7 +246,7 @@ const EditFloorScreen = () => {
           {...selectedPicture}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -25,7 +25,7 @@ export const COLOR = {
     blue: '#C6D1E3',
     white: '#EAEAEA',
     gray1: '#D2D2D2',
-    gray2: '#AAAAAA',
+    gray2: '#939393',
     black: '#434343',
   },
   system: {
@@ -59,8 +59,8 @@ export const BACKGROUND_GRADIENT_COLOR_MAP = {
   [COLOR.floor.blue]: ['#C4CAD4', '#FFFFFF'],
   [COLOR.floor.white]: ['#EAEAEA', '#FFFFFF'],
   [COLOR.floor.gray1]: ['#D2D2D2', '#FFFFFF'],
-  [COLOR.floor.gray2]: ['#AAAAAA', '#FFFFFF'],
-  [COLOR.floor.black]: ['#434343', '#C6CACB'],
+  [COLOR.floor.gray2]: ['#939393', '#DFDFDF'],
+  [COLOR.floor.black]: ['#434343', '#939393'],
 };
 
 export const FOOTER_GRADIENT_COLOR_MAP = {
