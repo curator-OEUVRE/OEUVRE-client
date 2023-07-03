@@ -317,9 +317,9 @@ const FloorViewerScreen = () => {
     </Pressable>
   );
 
-  const onScrollBeginDrag = () => {
+  const onScrollBeginDrag = useCallback(() => {
     setViewingMode(true);
-  };
+  }, []);
 
   const onPressBackground = useCallback(() => {
     setViewingMode(false);

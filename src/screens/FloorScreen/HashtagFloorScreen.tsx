@@ -6,9 +6,16 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { LinearGradient } from 'expo-linear-gradient';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getPicturesByHashtag } from '@/apis/picture';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
@@ -19,8 +26,13 @@ import FloorPictureList from '@/feature/FloorPictureList';
 import RotateButton from '@/feature/RotateButton';
 import { RootStackParamsList } from '@/feature/Routes';
 import { FloorStackParamsList } from '@/feature/Routes/FloorStack';
+import {
+  getBackgroundColorsByGradient,
+  getFooterColorsByBackgroundColor,
+} from '@/services/common/color';
 import { useFloorStore } from '@/states/floorStore';
 import { useUserStore } from '@/states/userStore';
+import { FloorGradient } from '@/types/floor';
 import { HashtagPicture, Picture } from '@/types/picture';
 
 const styles = StyleSheet.create({
@@ -31,8 +43,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    backgroundColor: COLOR.mono.white,
     flex: 1,
+  },
+  footer: {
+    alignItems: 'center',
+    paddingTop: 8,
+    width: '100%',
   },
   left: {
     marginRight: 33,
@@ -103,7 +119,11 @@ const HashtagFloorScreen = () => {
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.POPULAR);
   const [page, setPage] = useState<number>(0);
+  const [viewingMode, setViewingMode] = useState<boolean>(false);
   const { userNo: myUserNo } = useUserStore();
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+  const footerHeight = isLandscape ? 69 : 100;
   const {
     fetchFloor,
     setSwiperIndex,
@@ -295,35 +315,57 @@ const HashtagFloorScreen = () => {
     setPage((prev) => prev + 1);
   };
 
+  const onScrollBeginDrag = useCallback(() => {
+    setViewingMode(true);
+  }, []);
+
+  const onPressBackground = useCallback(() => {
+    setViewingMode(false);
+  }, []);
+
+  const footer = (
+    <LinearGradient
+      style={[styles.footer, { height: footerHeight }]}
+      colors={getFooterColorsByBackgroundColor({ color: COLOR.floor.white })}
+    >
+      {!viewingMode && <RotateButton />}
+    </LinearGradient>
+  );
   return (
-    <>
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: color }]}
-        edges={['top']}
+    <Pressable onPress={onPressBackground} style={styles.container}>
+      <LinearGradient
+        style={styles.container}
+        colors={getBackgroundColorsByGradient({
+          color: COLOR.floor.white,
+          gradient: FloorGradient.FULL,
+        })}
       >
-        <Header
-          headerTitle={headerTitle}
-          backgroundColor="transparent"
-          headerLeft={headerLeft}
-        />
-        <ButtonArea />
-        <View style={styles.wrapList}>
-          <FloorPictureList
-            pictures={data}
-            editable={false}
-            onPressPicture={onPressPicture}
-            renderDescription={renderDescription}
-            onEndReached={fetchMore}
+        <SafeAreaView style={styles.container} edges={['top']}>
+          <Header
+            headerTitle={headerTitle}
+            backgroundColor="transparent"
+            headerLeft={headerLeft}
           />
-        </View>
-      </SafeAreaView>
+          <ButtonArea />
+          <View style={styles.wrapList}>
+            <FloorPictureList
+              pictures={data}
+              editable={false}
+              onPressPicture={onPressPicture}
+              renderDescription={renderDescription}
+              onEndReached={fetchMore}
+              onScrollBeginDrag={onScrollBeginDrag}
+            />
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
       {loading && (
         <View style={styles.loadingContainer}>
           <Spinner />
         </View>
       )}
-      <RotateButton />
-    </>
+      {footer}
+    </Pressable>
   );
 };
 
