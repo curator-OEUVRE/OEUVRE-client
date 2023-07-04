@@ -11,11 +11,13 @@ import Animated, {
   FadeIn,
   FadeOut,
   runOnJS,
-  SharedValue,
+  type SharedValue,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { Shadow } from 'react-native-shadow-2';
+import { SharedElement } from 'react-navigation-shared-element';
 import AddCircleIcon from '@/assets/icons/AddCircle';
 import CloseFilledIcon from '@/assets/icons/CloseFilled';
 import PencilIcon from '@/assets/icons/Pencil';
@@ -92,6 +94,7 @@ interface FloorPictureProps extends RenderItemParams<Picture> {
   pictureAddable?: boolean;
   onPinchEnd?: (index: number, scale: number) => void;
   alignment?: FloorAlignment;
+  isPinching?: SharedValue<boolean>;
 }
 
 const ALIGNMENT = {
@@ -117,9 +120,10 @@ const FloorPicture = ({
   pictureAddable = true,
   onPinchEnd,
   alignment,
+  isPinching,
 }: FloorPictureProps) => {
-  const { heightOfSafeArea } = useDimensions();
-  const BASE_SIZE = heightOfSafeArea - 45;
+  const { width, height } = useDimensions();
+  const BASE_SIZE = width < height ? width : height - 160;
   const imageWidth = useMemo(
     () => BASE_SIZE * item.width,
     [item.width, BASE_SIZE],
@@ -147,12 +151,22 @@ const FloorPicture = ({
 
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
-      if (editable && e.scale * imageWidth <= BASE_SIZE) {
-        scale.value = e.scale;
+      if (editable) {
+        if (isPinching !== undefined) {
+          // eslint-disable-next-line no-param-reassign
+          isPinching.value = true;
+        }
+        if (e.scale * imageHeight <= BASE_SIZE) {
+          scale.value = e.scale;
+        }
       }
     })
     .onEnd(() => {
       if (editable) {
+        if (isPinching !== undefined) {
+          // eslint-disable-next-line no-param-reassign
+          isPinching.value = false;
+        }
         if (onPinchEnd && index !== undefined) {
           runOnJS(onPinchEnd)(index, scale.value);
           scale.value = 1;
@@ -231,10 +245,12 @@ const FloorPicture = ({
             }}
             style={styles.shadow}
           >
-            <AnimatedFastImage
-              source={{ uri: item.imageUrl }}
-              style={imageAnimStyle}
-            />
+            <SharedElement id={`picture.${index}`}>
+              <AnimatedFastImage
+                source={{ uri: item.imageUrl }}
+                style={imageAnimStyle}
+              />
+            </SharedElement>
             {onPressPicture && editable && renderEditLayer()}
           </Pressable>
           {renderDescription ? (

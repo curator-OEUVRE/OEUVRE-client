@@ -339,7 +339,6 @@ const FloorViewerScreen = () => {
     </LinearGradient>
   );
 
-  if (loading) return <Spinner />;
   const headerOpacity = viewingMode ? 0 : 1;
   return (
     <Pressable onPress={onPressBackground} style={styles.container}>
@@ -370,6 +369,7 @@ const FloorViewerScreen = () => {
       </LinearGradient>
       {footer}
       {renderBottomSheet()}
+      {loading && <Spinner />}
     </Pressable>
   );
 };

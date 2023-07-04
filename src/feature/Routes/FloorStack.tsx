@@ -1,7 +1,5 @@
-import type { NavigatorScreenParams } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import ProfileStack, { type ProfileStackParamsList } from './ProfileStack';
-import { Navigator, Screen } from '@/constants/screens';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import { Screen } from '@/constants/screens';
 import {
   EditFloorScreen,
   EditFloorScreenParams,
@@ -26,6 +24,7 @@ import ImageDetailScreen, {
 import ProfileScreen, {
   type ProfileScreenParams,
 } from '@/screens/ProfileScreen';
+import { useFloorStore } from '@/states/floorStore';
 
 export type FloorStackParamsList = {
   [Screen.AddHashtagScreen]: AddHashtagScreenParams;
@@ -40,42 +39,52 @@ export type FloorStackParamsList = {
   [Screen.HashtagFloorScreen]: HashtagFloorScreenParams;
 };
 
-const Stack = createStackNavigator<FloorStackParamsList>();
+const Stack = createSharedElementStackNavigator<FloorStackParamsList>();
 
-const FloorStack = () => (
-  <Stack.Navigator
-    screenOptions={{
-      headerShown: false,
-    }}
-  >
-    <Stack.Screen name={Screen.AddHashtagScreen} component={AddHashtagScreen} />
-    <Stack.Screen
-      name={Screen.FloorInfoFormScreen}
-      component={FloorInfoFormScreen}
-    />
-    <Stack.Screen
-      name={Screen.FloorViewerScreen}
-      component={FloorViewerScreen}
-      getId={({ params }) => `${params.floorNo}`}
-    />
-    <Stack.Screen
-      name={Screen.ImageDetailScreen}
-      component={ImageDetailScreen}
-    />
-    <Stack.Screen name={Screen.EditFloorScreen} component={EditFloorScreen} />
-    <Stack.Screen
-      name={Screen.GuestBookScreen}
-      component={GuestBookScreen}
-      getId={({ params }) => `${params.floorNo}`}
-    />
-    {/* <Stack.Screen name={Navigator.ProfileStack} component={ProfileStack} /> */}
-    <Stack.Screen name={Screen.ProfileScreen} component={ProfileScreen} />
-    <Stack.Screen name={Screen.FollowListScreen} component={FollowListScreen} />
-    <Stack.Screen
-      name={Screen.HashtagFloorScreen}
-      component={HashtagFloorScreen}
-    />
-  </Stack.Navigator>
-);
+const FloorStack = () => {
+  const { swiperIndex } = useFloorStore();
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen
+        name={Screen.AddHashtagScreen}
+        component={AddHashtagScreen}
+      />
+      <Stack.Screen
+        name={Screen.FloorInfoFormScreen}
+        component={FloorInfoFormScreen}
+      />
+      <Stack.Screen
+        name={Screen.FloorViewerScreen}
+        component={FloorViewerScreen}
+        getId={({ params }) => `${params.floorNo}`}
+      />
+      <Stack.Screen
+        name={Screen.ImageDetailScreen}
+        component={ImageDetailScreen}
+        sharedElements={(route) => [`picture.${swiperIndex}`]}
+      />
+      <Stack.Screen name={Screen.EditFloorScreen} component={EditFloorScreen} />
+      <Stack.Screen
+        name={Screen.GuestBookScreen}
+        component={GuestBookScreen}
+        getId={({ params }) => `${params.floorNo}`}
+      />
+      <Stack.Screen name={Screen.ProfileScreen} component={ProfileScreen} />
+      <Stack.Screen
+        name={Screen.FollowListScreen}
+        component={FollowListScreen}
+      />
+      <Stack.Screen
+        name={Screen.HashtagFloorScreen}
+        component={HashtagFloorScreen}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default FloorStack;
