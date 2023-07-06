@@ -21,6 +21,7 @@ export interface OtherFloor {
 
 export interface GetCommentsResponse {
   contents: GuestBookInfo[];
+  floorName: string;
   isLastPage: boolean;
 }
 

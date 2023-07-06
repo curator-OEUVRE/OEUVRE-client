@@ -23,7 +23,6 @@ import { GuestBookInfo } from '@/types/guestbook';
 
 export type GuestBookScreenParams = {
   floorNo: number;
-  floorName: string;
 };
 
 export type GuestBookScreenRP = RouteProp<
@@ -53,9 +52,10 @@ const GuestBookScreen = () => {
   const isLastPage = useRef<boolean>(true);
   const { params } = useRoute<GuestBookScreenRP>();
   const [page, setPage] = useState<number>(0);
+  const [floorName, setFloorName] = useState<string>('');
   const [comments, setcomments] = useState<GuestBookInfo[]>([]);
   const [commentsLoading, setCommentsLoading] = useState<boolean>(false);
-  const { floorNo, floorName } = params;
+  const { floorNo } = params;
   const { userNo: myUserNo } = useUserStore();
   const { profileImageUrl } = useUserStore();
   useEffect(() => {
@@ -65,6 +65,7 @@ const GuestBookScreen = () => {
       if (response.isSuccess) {
         const { result } = response.result;
         setcomments(result.contents);
+        setFloorName(result.floorName);
         isLastPage.current = result.isLastPage;
         setPage((prev) => prev + 1);
       } else {
