@@ -27,7 +27,7 @@ export const getSingleImageFromLibrary = async <
   options?: T,
 ) => {
   const result = await ImagePicker.launchImageLibraryAsync({
-    quality: 0.2,
+    quality: 1,
     ...options,
     allowsMultipleSelection: false,
   });
@@ -44,7 +44,7 @@ export const getImagesFromLibrary = async <
   options?: T,
 ) => {
   const result = await ImagePicker.launchImageLibraryAsync({
-    quality: 0.2,
+    quality: 1,
     ...options,
     allowsMultipleSelection: true,
   });

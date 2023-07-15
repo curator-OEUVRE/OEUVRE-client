@@ -19,7 +19,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getPicturesByHashtag } from '@/apis/picture';
 import ArrowBackIcon from '@/assets/icons/ArrowBack';
-import { Header, Profile, Spinner } from '@/components';
+import { Header, Profile, Radio, Spinner } from '@/components';
 import { Navigator, Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
@@ -50,9 +50,9 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     width: '100%',
   },
-  left: {
-    marginRight: 33,
-  },
+  // left: {
+  //   marginRight: 33,
+  // },
   /* eslint-disable-next-line react-native/no-color-literals */
   loadingContainer: {
     alignItems: 'center',
@@ -73,11 +73,11 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     textAlign: 'center',
   },
-  wrapButtons: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    flexDirection: 'row',
-  },
+  // wrapButtons: {
+  //   alignItems: 'center',
+  //   alignSelf: 'center',
+  //   flexDirection: 'row',
+  // },
   wrapList: {
     flex: 1,
     justifyContent: 'center',
@@ -86,6 +86,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     marginTop: 5,
+  },
+  wrapRadio: {
+    marginBottom: 60,
+    marginTop: 40,
   },
 });
 
@@ -108,6 +112,15 @@ enum SortBy {
   POPULAR = 'popular',
   RECENT = 'recent',
 }
+
+const FilterOptions = [
+  {
+    label: '인기순',
+    value: SortBy.POPULAR,
+  },
+  { label: '최신순', value: SortBy.RECENT },
+];
+
 const color = COLOR.mono.gray1;
 
 const HashtagFloorScreen = () => {
@@ -188,54 +201,54 @@ const HashtagFloorScreen = () => {
     [hashtag],
   );
 
-  const ButtonArea = useCallback(
-    () => (
-      <View style={styles.wrapButtons}>
-        <Pressable
-          style={styles.left}
-          onPress={() => {
-            setSortBy(SortBy.POPULAR);
-            setPage(0);
-          }}
-        >
-          <Text
-            style={[
-              TEXT_STYLE.body16M,
-              {
-                color:
-                  sortBy === SortBy.POPULAR
-                    ? COLOR.mono.black
-                    : COLOR.mono.gray3,
-              },
-            ]}
-          >
-            인기순
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            setSortBy(SortBy.RECENT);
-            setPage(0);
-          }}
-        >
-          <Text
-            style={[
-              TEXT_STYLE.body16M,
-              {
-                color:
-                  sortBy === SortBy.RECENT
-                    ? COLOR.mono.black
-                    : COLOR.mono.gray3,
-              },
-            ]}
-          >
-            최신순
-          </Text>
-        </Pressable>
-      </View>
-    ),
-    [sortBy],
-  );
+  // const ButtonArea = useCallback(
+  //   () => (
+  //     <View style={styles.wrapButtons}>
+  //       <Pressable
+  //         style={styles.left}
+  //         onPress={() => {
+  //           setSortBy(SortBy.POPULAR);
+  //           setPage(0);
+  //         }}
+  //       >
+  //         <Text
+  //           style={[
+  //             TEXT_STYLE.body16M,
+  //             {
+  //               color:
+  //                 sortBy === SortBy.POPULAR
+  //                   ? COLOR.mono.black
+  //                   : COLOR.mono.gray3,
+  //             },
+  //           ]}
+  //         >
+  //           인기순
+  //         </Text>
+  //       </Pressable>
+  //       <Pressable
+  //         onPress={() => {
+  //           setSortBy(SortBy.RECENT);
+  //           setPage(0);
+  //         }}
+  //       >
+  //         <Text
+  //           style={[
+  //             TEXT_STYLE.body16M,
+  //             {
+  //               color:
+  //                 sortBy === SortBy.RECENT
+  //                   ? COLOR.mono.black
+  //                   : COLOR.mono.gray3,
+  //             },
+  //           ]}
+  //         >
+  //           최신순
+  //         </Text>
+  //       </Pressable>
+  //     </View>
+  //   ),
+  //   [sortBy],
+  // );
 
   const onPressPicture = useCallback(
     (picture: Picture) => {
@@ -331,6 +344,7 @@ const HashtagFloorScreen = () => {
       {!viewingMode && <RotateButton />}
     </LinearGradient>
   );
+
   return (
     <Pressable onPress={onPressBackground} style={styles.container}>
       <LinearGradient
@@ -346,7 +360,17 @@ const HashtagFloorScreen = () => {
             backgroundColor="transparent"
             headerLeft={headerLeft}
           />
-          <ButtonArea />
+          {/* <ButtonArea /> */}
+          <View style={styles.wrapRadio}>
+            <Radio
+              value={sortBy}
+              onChange={(value) => {
+                setSortBy(value);
+                setPage(0);
+              }}
+              data={FilterOptions}
+            />
+          </View>
           <View style={styles.wrapList}>
             <FloorPictureList
               pictures={data}

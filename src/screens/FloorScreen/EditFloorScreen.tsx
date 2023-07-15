@@ -59,8 +59,12 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     width: '100%',
   },
+  settingIcon: {
+    position: 'absolute',
+    right: -34,
+  },
   title: {
-    marginRight: 17,
+    // marginRight: 17,
   },
   wrapList: {
     flex: 1,
@@ -69,6 +73,7 @@ const styles = StyleSheet.create({
   wrapTitle: {
     alignItems: 'center',
     flexDirection: 'row',
+    position: 'relative',
   },
 });
 
@@ -179,7 +184,7 @@ const EditFloorScreen = () => {
       >
         {name}
       </Text>
-      <SettingIcon color={iconColorByBackground} />
+      <SettingIcon color={iconColorByBackground} style={styles.settingIcon} />
     </Pressable>
   );
 

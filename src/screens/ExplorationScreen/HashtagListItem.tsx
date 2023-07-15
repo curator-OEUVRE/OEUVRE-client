@@ -161,8 +161,8 @@ const HashtagListItem = ({
           </Text>
         </View>
         <ArrowBackIcon
-          width={26}
-          height={26}
+          width={20}
+          height={20}
           color={COLOR.mono.gray3}
           style={styles.arrowIcon}
         />

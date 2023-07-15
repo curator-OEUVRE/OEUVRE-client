@@ -147,7 +147,7 @@ const FloorInfoForm = ({
         onGoBack={onGoBack}
       />
       <UserInputLayout
-        infoMessage={`멋진 사진이네요!\n플로어를 소개해 주세요`}
+        infoMessage="새로운 플로어를 소개해 주세요"
         gap={28}
         style={styles.userInputLayout}
       >
