@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-raw-text */
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   CompositeNavigationProp,
   RouteProp,
@@ -24,6 +25,7 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import FloorSettingButtonList from '@/feature/FloorSettingButtonList';
+import FloorTutorial from '@/feature/FloorTutorial';
 import ImagePickerModal from '@/feature/ImagePickerModal';
 import PictureInfoModal, {
   PictureInfoModalValue,
@@ -78,11 +80,39 @@ const EditFloorScreen = () => {
     useState<boolean>(false);
   const [pictureInfoModalVisible, setPictureInfoModalVisible] =
     useState<boolean>(false);
+  const [tutorialVisible, setTutorialVisible] = useState<boolean>(false);
   const addPoint = useRef<number>(-1);
   const [selectedPicture, selectPicture] = useState<Picture>();
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const footerHeight = isLandscape ? 69 : 100;
+
+  const getIsFirstEnter = useCallback(async () => {
+    try {
+      const value = await AsyncStorage.getItem('tutorial');
+      return value === null;
+    } catch (e: any) {
+      console.log(e.message);
+    }
+    return false;
+  }, []);
+
+  const closeTutorial = useCallback(async () => {
+    try {
+      await AsyncStorage.setItem('tutorial', 'false');
+    } catch (e: any) {
+      console.log(e.message);
+    }
+    setTutorialVisible(false);
+  }, []);
+
+  useEffect(() => {
+    const checkFirstEnter = async () => {
+      const isFirstEnter = await getIsFirstEnter();
+      if (isFirstEnter) setTutorialVisible(true);
+    };
+    checkFirstEnter();
+  }, [getIsFirstEnter]);
 
   useEffect(() => {
     const backAction = () => {
@@ -247,6 +277,7 @@ const EditFloorScreen = () => {
           {...selectedPicture}
         />
       )}
+      {tutorialVisible && <FloorTutorial onPressButton={closeTutorial} />}
     </View>
   );
 };

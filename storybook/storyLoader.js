@@ -34,6 +34,7 @@ function loadStories() {
   require('../src/feature/MainImageSelectModal/MainImageSelectModal.stories');
   require('../src/feature/Palette/Paint.stories');
   require('../src/feature/Palette/Palette.stories');
+  require('../src/feature/FloorTutorial/FloorTutorial.stories');
 }
 
 const stories = [
@@ -67,6 +68,7 @@ const stories = [
   '../src/feature/MainImageSelectModal/MainImageSelectModal.stories',
   '../src/feature/Palette/Paint.stories',
   '../src/feature/Palette/Palette.stories',
+  '../src/feature/FloorTutorial/FloorTutorial.stories',
 ];
 
 module.exports = {
