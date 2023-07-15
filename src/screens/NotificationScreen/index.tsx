@@ -150,12 +150,12 @@ const NotificationScreen = () => {
   const empty = (
     <View style={styles.empty}>
       {NotificationIcon({
-        width: 72,
-        height: 72,
+        width: 52,
+        height: 52,
         color: COLOR.mono.gray4,
       })}
       <Text style={[styles.text, TEXT_STYLE.body16M]}>
-        아직 온 알림이 없어요
+        새로운 알림이 없어요
       </Text>
     </View>
   );

@@ -74,7 +74,7 @@ const PictureInfoSheet = React.forwardRef(
     ref: React.ForwardedRef<BottomSheet>,
   ) => {
     const [index, setIndex] = useState<number>(0);
-    const snapPoints = useMemo(() => [121, 164], []);
+    const snapPoints = useMemo(() => [121, 200], []);
     const summary = [manufactureYear, material, scale]
       .filter((value) => value && value.length > 0)
       .join(', ');

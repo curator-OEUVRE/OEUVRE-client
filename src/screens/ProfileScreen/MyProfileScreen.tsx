@@ -44,16 +44,14 @@ const MyFloorList = () => {
   const { fetchWithToken } = useAuth();
   const editFloors = useCallback(
     async (newFloors: FloorMini[]) => {
-      const response = await fetchWithToken(
+      setFloors(newFloors);
+      await fetchWithToken(
         editFloorsOrder,
         newFloors.map((floor) => ({
           floorNo: floor.floorNo,
           queue: floor.queue,
         })),
       );
-      if (response.isSuccess) {
-        setFloors(newFloors);
-      }
     },
     [fetchWithToken, setFloors],
   );

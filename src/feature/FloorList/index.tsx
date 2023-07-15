@@ -43,9 +43,9 @@ const keyExtractor = (item: FloorMini) => `${item.floorNo}`;
 
 const ListEmptyComponent = ({ editable }: { editable: boolean }) => (
   <View style={styles.listEmptyComponent}>
-    <AddFloorIcon color={COLOR.mono.gray3} width={72} height={72} />
+    <AddFloorIcon color={COLOR.mono.gray3} width={52} height={52} />
     <Text style={[TEXT_STYLE.body16M, styles.emptyText]}>
-      {editable ? '새로운 플로어를 추가해 보세요' : '아직 플로어가 없어요'}
+      {editable ? '새로운 플로어를 추가해 보세요' : '플로어가 없어요'}
     </Text>
   </View>
 );

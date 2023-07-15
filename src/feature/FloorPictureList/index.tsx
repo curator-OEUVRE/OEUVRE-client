@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     borderTopColor: COLOR.system.blue,
     borderTopWidth: 1,
     position: 'absolute',
+    transform: [{ translateY: -2.5 }],
     width: '100%',
   },
 });

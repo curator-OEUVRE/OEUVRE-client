@@ -58,9 +58,9 @@ const CollectionItem = ({ item, onPress, width }: CollectionItemProps) => (
 
 const ListEmptyComponent = () => (
   <View style={styles.listEmptyComponent}>
-    <BookmarkFilledIcon color={COLOR.mono.gray3} width={72} height={72} />
+    <BookmarkFilledIcon color={COLOR.mono.gray3} width={52} height={52} />
     <Text style={[TEXT_STYLE.body16M, styles.emptyText]}>
-      아직 컬렉션이 비어있어요
+      컬렉션이 비어있어요
     </Text>
   </View>
 );

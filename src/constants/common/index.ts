@@ -6,7 +6,7 @@ export const SIGNUP_CONFIG = {
     limit: [2, 10],
   },
   exhibitionName: {
-    limit: [2, 10],
+    limit: [2, 15],
   },
   introduceMessage: {
     limit: [0, 20],
