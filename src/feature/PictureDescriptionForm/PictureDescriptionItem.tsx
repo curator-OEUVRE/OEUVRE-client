@@ -77,7 +77,7 @@ const PictureDescriptionItem = ({
         numberOfLines={4}
         onChangeText={onChangeDescription}
         style={[styles.textInput, TEXT_STYLE.body14R]}
-        placeholder={'작품의 설명을 입력해 주세요.\n(총 50자)'}
+        placeholder="작품의 설명을 입력해 주세요."
         maxLength={50}
         value={description}
       />

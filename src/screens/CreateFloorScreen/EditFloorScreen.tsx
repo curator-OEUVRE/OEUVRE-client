@@ -234,6 +234,7 @@ const EditFloorScreen = () => {
         headerRightText="다음"
         headerTitle="플로어 추가"
         onComplete={onPickImagesComplete}
+        count={pictures.length}
       />
       {selectedPicture && (
         <PictureInfoModal

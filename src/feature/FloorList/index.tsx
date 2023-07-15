@@ -21,9 +21,9 @@ interface Props {
 
 const styles = StyleSheet.create({
   divider: {
-    backgroundColor: COLOR.mono.gray2,
-    height: 1,
-    width: '100%',
+    borderTopColor: COLOR.mono.gray1,
+    borderTopWidth: 1,
+    marginHorizontal: 20,
   },
   emptyText: {
     color: COLOR.mono.gray4,
@@ -67,13 +67,13 @@ const FloorList = ({
   const renderItem = useCallback(
     (props: RenderItemParams<FloorMini>) => (
       <>
+        {props.getIndex() !== 0 && <View style={styles.divider} />}
         <FloorListItem
           {...props}
           item={{ ...props.item, color: COLOR.mono.white }}
           onPress={onFloorPress}
           editable={editable}
         />
-        <View style={styles.divider} />
       </>
     ),
     [onFloorPress, editable],

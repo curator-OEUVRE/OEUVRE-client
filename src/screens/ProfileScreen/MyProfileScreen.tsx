@@ -6,6 +6,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { MediaTypeOptions } from 'expo-image-picker';
 import { Asset } from 'expo-media-library';
 import { useCallback, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import shallow from 'zustand/shallow';
 import ProfileTemplate from './ProfileTemplate';
 import WrappedFloorList from './WrappedFloorList';
@@ -149,7 +150,7 @@ const MyProfileScreen = () => {
   const navigation = useNavigation<MyProfileScreenNP>();
   const { createPictures } = useCreateFloorStore();
   const [modalVisible, setModalVisible] = useState(false);
-
+  const { floors } = useUserStore();
   const profile = useUserStore<UserProfile>(
     (state) => ({
       backgroundImageUrl: state.backgroundImageUrl,
@@ -181,8 +182,12 @@ const MyProfileScreen = () => {
   );
 
   const onAddFloorPress = useCallback(async () => {
+    if (floors.length >= 10) {
+      Alert.alert('플로어는 최대 10개까지 생성할 수 있습니다.');
+      return;
+    }
     setModalVisible(true);
-  }, []);
+  }, [floors]);
 
   return (
     <>

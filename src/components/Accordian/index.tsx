@@ -20,7 +20,7 @@ interface AccordianProps {
 const styles = StyleSheet.create({
   label: {
     color: COLOR.mono.black,
-    marginRight: 12,
+    marginRight: 4,
   },
   labelArea: {
     alignItems: 'center',

@@ -116,17 +116,17 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   // eslint-disable-next-line react-native/no-color-literals
-  // shadow: {
-  //   elevation: 20,
-  //   overflow: 'visible',
-  //   shadowColor: '#000',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 3,
-  //   },
-  //   shadowOpacity: 0.27,
-  //   shadowRadius: 4.65,
-  // },
+  shadow: {
+    elevation: 20,
+    overflow: 'visible',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+  },
   wrapButton: {
     marginRight: 9,
   },
@@ -154,7 +154,7 @@ const ImageItem = ({ isEditMode, item, index }: ImageItemProps) => {
   return (
     <AnimatedSharedElement
       id={`picture.${index}`}
-      style={[styles.item, { width }, imageItemAnimStyle]}
+      style={[styles.item, styles.shadow, { width }, imageItemAnimStyle]}
     >
       <FastImage
         source={{ uri: item.imageUrl }}

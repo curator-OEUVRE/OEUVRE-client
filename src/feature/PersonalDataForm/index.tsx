@@ -58,7 +58,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
       <FormInput
         label="사용자 아이디"
         value={userId.value}
-        placeholder="영문자, 숫자 및 밑줄만 사용할 수 있어요. (총 4-15자)"
+        placeholder="영문자, 숫자 및 밑줄만 사용할 수 있어요."
         onChangeText={(value) => {
           if (timer) {
             clearTimeout(timer);
@@ -108,7 +108,7 @@ const PersonalDataForm = ({ onNextPress }: Props) => {
       <FormInput
         label="닉네임"
         value={name.value}
-        placeholder="활동할 닉네임을 입력해 주세요. (총 2-10자)"
+        placeholder="활동할 닉네임을 입력해 주세요."
         onChangeText={(value) => {
           const [isValidated, error] = validateName(value);
           if (isValidated) {

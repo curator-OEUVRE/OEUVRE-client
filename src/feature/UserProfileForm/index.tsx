@@ -234,7 +234,7 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
       <FormInput
         label="전시회 이름"
         value={exhibitionName.value}
-        placeholder="본인 전시회의 이름을 입력해 주세요. (총 2-10자)"
+        placeholder="본인 전시회의 이름을 입력해 주세요."
         onChangeText={(value) => {
           const [isValidated, error] = validateExhibitionName(value);
           if (isValidated) {
@@ -261,7 +261,7 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
       <FormInput
         label="자기 소개"
         value={introduceMessage.value}
-        placeholder="본인을 가볍게 소개해 주세요. (총 20자)"
+        placeholder="본인을 가볍게 소개해 주세요."
         onChangeText={(value) => {
           const [isValidated, error] = validateIntroduceMessage(value);
           if (isValidated) {
