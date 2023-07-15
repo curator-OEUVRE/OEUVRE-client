@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   wrapSelector: {
-    marginTop: 74,
+    flex: 1,
   },
 });
 
@@ -75,7 +75,7 @@ const MainImageSelectModal = ({
   onGoBack,
   initialPicture,
 }: MainImageSelectModalProps) => {
-  const { width: size } = useWindowDimensions();
+  // const { width: size } = useWindowDimensions();
 
   const [selectedPicture, setSelectedPicture] = useState<Picture>(
     initialPicture ?? pictures[0],
@@ -163,11 +163,11 @@ const MainImageSelectModal = ({
             defaultBackAction={false}
           />
           <View style={styles.main}>
-            <View style={[styles.wrapSelector, { width: size, height: size }]}>
+            <View style={styles.wrapSelector}>
               <Image
                 source={{ uri: selectedPicture.imageUrl }}
                 style={styles.thumbImage}
-                resizeMode="cover"
+                resizeMode="contain"
               />
             </View>
           </View>

@@ -251,7 +251,7 @@ const EditProfileScreen = () => {
               <FormInput
                 label="이름"
                 value={tmpName.value}
-                placeholder="본인의 이름을 입력해 주세요. (총 2-10자)"
+                placeholder="본인의 이름을 입력해 주세요."
                 onChangeText={(value) => setTmpName({ ...tmpName, value })}
                 status={tmpName.status}
                 message={tmpName.error}
@@ -272,7 +272,7 @@ const EditProfileScreen = () => {
               <FormInput
                 label="전시회 이름"
                 value={tmpExhibitionName.value}
-                placeholder="본인 전시회의 이름을 입력해 주세요. (총 2-10자)"
+                placeholder="본인 전시회의 이름을 입력해 주세요."
                 onChangeText={(value) =>
                   setTmpExhibitionName({ ...tmpExhibitionName, value })
                 }
@@ -300,7 +300,7 @@ const EditProfileScreen = () => {
               <FormInput
                 label="자기 소개"
                 value={tmpIntroduceMessage.value}
-                placeholder="본인을 가볍게 소개해 주세요. (총 150자)"
+                placeholder="본인을 가볍게 소개해 주세요."
                 onChangeText={(value) =>
                   setTmpIntroduceMessage({ ...tmpIntroduceMessage, value })
                 }

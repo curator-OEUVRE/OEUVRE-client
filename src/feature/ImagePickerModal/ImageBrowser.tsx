@@ -35,12 +35,13 @@ const styles = StyleSheet.create({
   },
   thumbWrapper: {
     alignItems: 'center',
+    backgroundColor: COLOR.mono.gray1,
   },
   wrapSelect: {
     alignItems: 'center',
     flexDirection: 'row',
     height: 26,
-    marginVertical: 15,
+    marginVertical: 12,
     paddingLeft: 20,
   },
 });

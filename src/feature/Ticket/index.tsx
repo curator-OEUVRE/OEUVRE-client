@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
   },
   wrap_front: {
     bottom: 0,
-    height: 100,
+    height: 110,
     left: 0,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     position: 'absolute',
     right: 0,
   },

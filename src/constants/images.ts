@@ -25,4 +25,9 @@ export const IMAGE = {
     [COLOR.floor.orange]: require('@/assets/images/paint/orange.png'),
     [COLOR.floor.purple]: require('@/assets/images/paint/purple.png'),
   },
+  tutorial: {
+    add: require('@/assets/images/tutorial/add.png'),
+    size: require('@/assets/images/tutorial/size.png'),
+    order: require('@/assets/images/tutorial/order.png'),
+  },
 } as const;

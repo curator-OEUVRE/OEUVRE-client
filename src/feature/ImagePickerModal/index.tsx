@@ -1,7 +1,7 @@
 import { Asset } from 'expo-media-library';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Modal, Platform, Pressable, Text } from 'react-native';
+import { Alert, Modal, Platform, Pressable, Text } from 'react-native';
 import RNFS from 'react-native-fs';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import ImageBrowser from './ImageBrowser';
@@ -15,6 +15,7 @@ interface ImagePickerModalProps {
   onComplete?: (selectedImages: Asset[]) => void;
   headerTitle?: string;
   headerRightText?: string;
+  count?: number;
 }
 
 const ImagePickerModal = ({
@@ -23,6 +24,7 @@ const ImagePickerModal = ({
   onComplete,
   headerTitle,
   headerRightText,
+  count = 0,
 }: ImagePickerModalProps) => {
   const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
 
@@ -54,10 +56,14 @@ const ImagePickerModal = ({
           prev.filter((img) => img.uri !== image.uri),
         );
       } else {
+        if (selectedImages.length + count >= 20) {
+          Alert.alert('한 플로어 당 사진은 \n20장까지 가능합니다.');
+          return;
+        }
         setSelectedImages((prev) => [...prev, image]);
       }
     },
-    [selectedImages, phPathToFilePath],
+    [selectedImages, phPathToFilePath, count],
   );
 
   const resetSelectedImages = useCallback(() => {

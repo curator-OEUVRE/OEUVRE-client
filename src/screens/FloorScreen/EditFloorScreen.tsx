@@ -8,8 +8,9 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MediaTypeOptions } from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Asset } from 'expo-media-library';
 import { lockAsync, OrientationLock } from 'expo-screen-orientation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   BackHandler,
   Pressable,
@@ -26,6 +27,7 @@ import { Screen } from '@/constants/screens';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import FloorPictureList from '@/feature/FloorPictureList';
 import FloorSettingButtonList from '@/feature/FloorSettingButtonList';
+import ImagePickerModal from '@/feature/ImagePickerModal';
 import PictureInfoModal, {
   PictureInfoModalValue,
 } from '@/feature/PictureInfoModal';
@@ -85,6 +87,9 @@ const EditFloorScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedPicture, selectPicture] = useState<Picture>();
   const [pictureInfoModalVisible, setPictureInfoModalVisible] =
+    useState<boolean>(false);
+  const addPoint = useRef<number>(-1);
+  const [imagePickerModalVisible, setImagePickerModalVisible] =
     useState<boolean>(false);
   const navigation = useNavigation<EditFloorScreenNP>();
   const { uploadImages } = useUploadImage();
@@ -177,23 +182,21 @@ const EditFloorScreen = () => {
       <SettingIcon color={iconColorByBackground} />
     </Pressable>
   );
-  const addPictures = useCallback(
-    async (index: number) => {
-      const [result, canUpload] = await getImagesFromLibrary({
-        mediaTypes: MediaTypeOptions.Images,
-      });
-      if (result && canUpload) {
-        const imageUrls = result?.map((imageInfo) => ({
-          imageUrl: imageInfo.uri,
-          width: (imageInfo.width * 0.5) / imageInfo.height,
-          height: 0.5,
-        }));
-        setPictures([
-          ...pictures.slice(0, index),
-          ...imageUrls.map((info) => createDefaultPictureInfo(info)),
-          ...pictures.slice(index),
-        ]);
-      }
+
+  const onPickImagesComplete = useCallback(
+    (images: Asset[]) => {
+      if (addPoint.current === -1) return;
+      const imageUrls = images.map((image) => ({
+        imageUrl: image.uri,
+        width: (image.width * 0.5) / image.height,
+        height: 0.5,
+      }));
+      setPictures([
+        ...pictures.slice(0, addPoint.current + 1),
+        ...imageUrls.map((info) => createDefaultPictureInfo(info)),
+        ...pictures.slice(addPoint.current + 1),
+      ]);
+      addPoint.current = -1;
     },
     [pictures, setPictures],
   );
@@ -241,6 +244,12 @@ const EditFloorScreen = () => {
     },
     [setPictures],
   );
+
+  const addPictures = useCallback((index: number) => {
+    setImagePickerModalVisible(true);
+    addPoint.current = index;
+  }, []);
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -300,6 +309,14 @@ const EditFloorScreen = () => {
           {...selectedPicture}
         />
       )}
+      <ImagePickerModal
+        visible={imagePickerModalVisible}
+        setVisible={setImagePickerModalVisible}
+        headerRightText="다음"
+        headerTitle="플로어 추가"
+        onComplete={onPickImagesComplete}
+        count={pictures.length}
+      />
     </View>
   );
 };

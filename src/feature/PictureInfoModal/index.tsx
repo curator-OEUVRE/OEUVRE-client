@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   },
   floorNameLengthText: {
     color: COLOR.mono.gray5,
+    marginTop: 'auto',
   },
   gap: {
     backgroundColor: COLOR.mono.gray1,
@@ -182,20 +183,23 @@ const PictureInfoModal = ({
           onChangeText={setManufactureYear}
           placeholder="제작년도"
           keyboardType="numeric"
+          maxLength={4}
         />
         <InputWithIcon
           icon={<BrushIcon />}
           onChangeText={setMaterial}
           value={material}
-          placeholder="재료 (총 20자)"
+          placeholder="재료"
           rightElement={restLength(20, material.length)}
+          maxLength={20}
         />
         <InputWithIcon
           icon={<RulerIcon />}
           onChangeText={setScale}
           value={scale}
-          placeholder="작품 크기 (총15자)"
-          rightElement={restLength(15, scale.length)}
+          placeholder="작품 크기"
+          rightElement={restLength(20, scale.length)}
+          maxLength={20}
         />
       </View>
     ),
@@ -233,8 +237,9 @@ const PictureInfoModal = ({
                       label="Title"
                       value={title}
                       onChangeText={setTitle}
-                      placeholder="작품의 제목을 입력해주세요. (총 15자)"
-                      rightElement={restLength(15, title.length)}
+                      rightElement={restLength(20, title.length)}
+                      maxLength={20}
+                      multiline
                     />
                   </View>
                   <Accordian label="For Artist">{ArtistContent}</Accordian>
@@ -246,8 +251,9 @@ const PictureInfoModal = ({
                   label="Description"
                   value={description}
                   onChangeText={setDescription}
-                  placeholder="작품의 설명을 입력해주세요. (총 55자)"
                   rightElement={restLength(55, description.length)}
+                  maxLength={55}
+                  multiline
                 />
                 <AddHashtagForm hashtags={hashtags} setHashtag={setHashtag} />
               </View>
