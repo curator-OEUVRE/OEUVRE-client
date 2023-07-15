@@ -3,6 +3,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { BlurView } from 'expo-blur';
 import { useRef, useState } from 'react';
 import {
   View,
@@ -10,6 +11,7 @@ import {
   Pressable,
   Text,
   ImageRequireSource,
+  Image,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import PagerView from 'react-native-pager-view';
@@ -39,10 +41,27 @@ const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+  },
+  backgroundImageBlurView: {
+    height: '100%',
+    position: 'absolute',
+    width: '100%',
+  },
+  backgroundImageWrap: {
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
   button: {
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: COLOR.mono.gray7,
+    backgroundColor: COLOR.system.blue,
     borderRadius: 10,
     bottom: 24,
     height: 48,
@@ -82,12 +101,14 @@ const styles = StyleSheet.create({
   },
   safeAreaView: {
     flex: 1,
+    position: 'relative',
   },
   skipButtonText: {
     color: COLOR.mono.gray3,
     marginRight: 18,
   },
   text: {
+    color: COLOR.mono.white,
     marginTop: 36,
     textAlign: 'center',
   },
@@ -162,81 +183,96 @@ const OnboardingScreen = () => {
   }));
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <View style={styles.topBar}>
-          {page < PAGE_NUM - 1 && (
-            <Pressable
-              onPress={() => {
-                pagerViewRef.current?.setPage(PAGE_NUM - 1);
-              }}
-            >
-              <Text style={[TEXT_STYLE.button16M, styles.skipButtonText]}>
-                건너뛰기
-              </Text>
-            </Pressable>
-          )}
-        </View>
-
-        <View style={styles.indicator}>
-          {[...Array(5)].map((v, index) => (
-            /* eslint-disable-next-line react/no-array-index-key */
-            <PaginationDot key={index} offset={offset} page={index} />
-          ))}
-        </View>
-        <AnimatedPagerView
-          initialPage={0}
-          onPageScroll={(e) => {
-            'worklet';
-
-            offset.value = e.nativeEvent.offset + e.nativeEvent.position;
-          }}
-          onPageSelected={(e) => {
-            setPage(e.nativeEvent.position);
-          }}
-          style={styles.pagerView}
-          ref={pagerViewRef}
-        >
-          <Page
-            key="0"
-            image={IMAGE.onboarding[0]}
-            text={`사진이 작품이 되는 공간\nOEUVRE 입니다`}
-          />
-          <Page
-            key="1"
-            image={IMAGE.onboarding[1]}
-            text={`사진을 자유롭게 디스플레이하고\n나만의 전시회를 열어보세요`}
-          />
-          <Page
-            key="2"
-            image={IMAGE.onboarding[2]}
-            text={`전시회를 거닐듯\n작품들을 가로로 감상할 수 있어요`}
-          />
-          <Page
-            key="3"
-            image={IMAGE.onboarding[3]}
-            text={`비율에 상관없이 꽉 찬 화면으로\n작품을 오롯이 느껴보세요`}
-          />
-          <Page
-            key="4"
-            image={IMAGE.onboarding[4]}
-            text={`작가님의\n멋진 전시회를 오픈해보세요!`}
-          />
-        </AnimatedPagerView>
-        <AnimatedPressable
-          style={[styles.button, buttonStyle]}
-          onPress={() => {
-            if (page === PAGE_NUM - 1) {
-              navigation.navigate(Screen.LoginScreen);
-            }
-          }}
-        >
-          <Text style={[TEXT_STYLE.button16M, styles.buttonText]}>
-            시작하기
-          </Text>
-        </AnimatedPressable>
+    <View style={styles.container}>
+      <View style={styles.backgroundImageWrap}>
+        <Image
+          /* eslint-disable-next-line global-require */
+          source={require('@/assets/images/login.png')}
+          style={styles.backgroundImage}
+          resizeMode="cover"
+        />
+        <BlurView
+          intensity={10}
+          tint="dark"
+          style={styles.backgroundImageBlurView}
+        />
       </View>
-    </SafeAreaView>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
+          <View style={styles.topBar}>
+            {page < PAGE_NUM - 1 && (
+              <Pressable
+                onPress={() => {
+                  pagerViewRef.current?.setPage(PAGE_NUM - 1);
+                }}
+              >
+                <Text style={[TEXT_STYLE.button16M, styles.skipButtonText]}>
+                  건너뛰기
+                </Text>
+              </Pressable>
+            )}
+          </View>
+
+          <View style={styles.indicator}>
+            {[...Array(5)].map((v, index) => (
+              /* eslint-disable-next-line react/no-array-index-key */
+              <PaginationDot key={index} offset={offset} page={index} />
+            ))}
+          </View>
+          <AnimatedPagerView
+            initialPage={0}
+            onPageScroll={(e) => {
+              'worklet';
+
+              offset.value = e.nativeEvent.offset + e.nativeEvent.position;
+            }}
+            onPageSelected={(e) => {
+              setPage(e.nativeEvent.position);
+            }}
+            style={styles.pagerView}
+            ref={pagerViewRef}
+          >
+            <Page
+              key="0"
+              image={IMAGE.onboarding[0]}
+              text={`사진이 작품이 되는 공간\nOEUVRE 입니다`}
+            />
+            <Page
+              key="1"
+              image={IMAGE.onboarding[1]}
+              text={`사진을 자유롭게 디스플레이하고\n나만의 전시회를 열어보세요`}
+            />
+            <Page
+              key="2"
+              image={IMAGE.onboarding[2]}
+              text={`전시회를 거닐듯\n작품들을 가로로 감상할 수 있어요`}
+            />
+            <Page
+              key="3"
+              image={IMAGE.onboarding[3]}
+              text={`비율에 상관없이 꽉 찬 화면으로\n작품을 오롯이 느껴보세요`}
+            />
+            <Page
+              key="4"
+              image={IMAGE.onboarding[4]}
+              text={`작가님의\n멋진 전시회를 오픈해보세요!`}
+            />
+          </AnimatedPagerView>
+          <AnimatedPressable
+            style={[styles.button, buttonStyle]}
+            onPress={() => {
+              if (page === PAGE_NUM - 1) {
+                navigation.navigate(Screen.LoginScreen);
+              }
+            }}
+          >
+            <Text style={[TEXT_STYLE.button16M, styles.buttonText]}>
+              시작하기
+            </Text>
+          </AnimatedPressable>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 
