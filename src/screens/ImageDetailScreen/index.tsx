@@ -546,6 +546,9 @@ const ImageDetailScreen = () => {
     [changeSwiperIndex],
   );
 
+  const keyExtractor = (item: Picture, index: number) =>
+    `detail_${index}_${item.id}`;
+
   return (
     <>
       <GestureDetector gesture={pinchGesture}>
@@ -581,6 +584,7 @@ const ImageDetailScreen = () => {
                   index={swiperIndex}
                   renderItem={renderImageItem}
                   onChangeIndex={onChangeIndex}
+                  keyExtractor={keyExtractor}
                 />
               </Animated.View>
             </TapGestureHandler>
