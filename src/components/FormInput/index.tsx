@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { forwardRef, ReactNode, useState } from 'react';
+import { forwardRef, ReactNode, useCallback, useState } from 'react';
 
 import {
   Platform,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   inputContainer: {
-    alignItems: 'center',
+    alignItems: 'flex-end',
     borderBottomColor: COLOR.mono.gray2,
     borderBottomWidth: 1,
     flexDirection: 'row',
@@ -60,9 +60,15 @@ const styles = StyleSheet.create({
   labelArea: {
     flexDirection: 'row',
   },
+  lengthText: {
+    color: COLOR.mono.gray5,
+  },
   message: {
     color: COLOR.system.red,
     marginTop: 4,
+  },
+  multiLine: {
+    lineHeight: 21,
   },
   requiredText: {
     color: COLOR.system.blue,
@@ -106,36 +112,56 @@ export const FormInput = forwardRef<TextInput, Props>(
       ...textInputProps
     }: Props,
     ref,
-  ) => (
-    <View style={containerStyle}>
-      {label && (
-        <View style={styles.labelArea}>
-          <Text style={[TEXT_STYLE.body14B, styles.label]}>{label}</Text>
-          {isRequired && (
-            <Text style={[TEXT_STYLE.body14B, styles.requiredText]}>*</Text>
-          )}
+  ) => {
+    const renderRestLength = useCallback(
+      () =>
+        textInputProps.maxLength &&
+        textInputProps.value && (
+          <Text style={[TEXT_STYLE.body14R, styles.lengthText]}>
+            {textInputProps.maxLength - textInputProps.value.length}
+          </Text>
+        ),
+      [textInputProps],
+    );
+    return (
+      <View style={containerStyle}>
+        {label && (
+          <View style={styles.labelArea}>
+            <Text style={[TEXT_STYLE.body14B, styles.label]}>{label}</Text>
+            {isRequired && (
+              <Text style={[TEXT_STYLE.body14B, styles.requiredText]}>*</Text>
+            )}
+          </View>
+        )}
+
+        <View style={styles.inputContainer}>
+          {leftElement}
+          <TextInput
+            placeholderTextColor={COLOR.mono.gray4}
+            // spreading이 문제가 될 상황이 아니라고 판단
+            /* eslint-disable-next-line react/jsx-props-no-spreading */
+            {...textInputProps}
+            ref={ref}
+            style={[TEXT_STYLE.body16R, styles.input, style]}
+          />
+          {renderRestLength()}
+          {rightElement}
         </View>
-      )}
 
-      <View style={styles.inputContainer}>
-        {leftElement}
-        <TextInput
-          placeholderTextColor={COLOR.mono.gray4}
-          // spreading이 문제가 될 상황이 아니라고 판단
-          /* eslint-disable-next-line react/jsx-props-no-spreading */
-          {...textInputProps}
-          ref={ref}
-          style={[TEXT_STYLE.body16R, styles.input, style]}
-        />
-        {status !== FormInputStatus.Initial && STATUS_ICON[status]}
-        {rightElement}
+        {status === FormInputStatus.Error && message && (
+          <Text
+            style={[
+              TEXT_STYLE.body14R,
+              styles.message,
+              textInputProps.multiline && styles.multiLine,
+            ]}
+          >
+            {message}
+          </Text>
+        )}
       </View>
-
-      {status === FormInputStatus.Error && message && (
-        <Text style={[TEXT_STYLE.body14R, styles.message]}>{message}</Text>
-      )}
-    </View>
-  ),
+    );
+  },
 );
 
 interface FormInputDateProps extends Omit<Props, 'onChange' | 'value'> {

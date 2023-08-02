@@ -190,7 +190,6 @@ const PictureInfoModal = ({
           onChangeText={setMaterial}
           value={material}
           placeholder="재료"
-          rightElement={restLength(20, material.length)}
           maxLength={20}
         />
         <InputWithIcon
@@ -198,12 +197,11 @@ const PictureInfoModal = ({
           onChangeText={setScale}
           value={scale}
           placeholder="작품 크기"
-          rightElement={restLength(20, scale.length)}
           maxLength={20}
         />
       </View>
     ),
-    [material, manufactureYear, scale, restLength],
+    [material, manufactureYear, scale],
   );
 
   return (
@@ -237,7 +235,6 @@ const PictureInfoModal = ({
                       label="Title"
                       value={title}
                       onChangeText={setTitle}
-                      rightElement={restLength(20, title.length)}
                       maxLength={20}
                       multiline
                     />
@@ -251,8 +248,7 @@ const PictureInfoModal = ({
                   label="Description"
                   value={description}
                   onChangeText={setDescription}
-                  rightElement={restLength(55, description.length)}
-                  maxLength={55}
+                  maxLength={100}
                   multiline
                 />
                 <AddHashtagForm hashtags={hashtags} setHashtag={setHashtag} />

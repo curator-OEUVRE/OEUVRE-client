@@ -161,6 +161,7 @@ const FloorInfoForm = ({
           onChangeText={(text) => {
             setName({ ...name, value: text });
           }}
+          maxLength={15}
           onBlur={() => {
             const [isValidated, error] = validateFloorName(name.value);
             if (isValidated) {
@@ -169,7 +170,6 @@ const FloorInfoForm = ({
               setName({ ...name, status: FormInputStatus.Error, error });
             }
           }}
-          rightElement={<FloorNameLength />}
         />
         <FormInput
           label="플로어 소개"
@@ -179,7 +179,8 @@ const FloorInfoForm = ({
           onChangeText={(text) => {
             setDescription({ ...description, value: text });
           }}
-          rightElement={<FloorDescriptionLength />}
+          maxLength={50}
+          multiline
         />
         <View>
           <Text style={[styles.subtitle, TEXT_STYLE.body14B]}>

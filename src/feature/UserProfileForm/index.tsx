@@ -256,7 +256,7 @@ const UserProfileForm = ({ onNextPress, setLoading }: Props) => {
         message={exhibitionName.error}
         containerStyle={styles.padding}
         isRequired={exhibitionName.isRequired}
-        maxLength={10}
+        maxLength={15}
       />
       <FormInput
         label="자기 소개"

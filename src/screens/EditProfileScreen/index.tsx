@@ -268,6 +268,7 @@ const EditProfileScreen = () => {
                   }
                 }}
                 containerStyle={styles.formInput}
+                maxLength={10}
               />
               <FormInput
                 label="전시회 이름"
@@ -295,6 +296,7 @@ const EditProfileScreen = () => {
                     });
                   }
                 }}
+                maxLength={15}
                 containerStyle={styles.formInput}
               />
               <FormInput
@@ -323,6 +325,7 @@ const EditProfileScreen = () => {
                     });
                   }
                 }}
+                maxLength={20}
                 containerStyle={styles.formInput}
               />
             </ScrollView>
