@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   indicator: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 32,
+    marginTop: '5%',
     width: '100%',
   },
   page: {
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   pagerView: {
     flex: 1,
-    marginTop: 67,
+    marginTop: '10%',
   },
   paginationDot: {
     borderRadius: 4,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: COLOR.mono.white,
-    marginTop: 36,
+    marginTop: '5%',
     textAlign: 'center',
   },
   topBar: {
