@@ -251,9 +251,7 @@ const ImageDetailScreen = () => {
     const API = isLiked ? PictureAPI.unlikePicture : PictureAPI.likePicture;
     if (!isLiked) {
       isLikeAnimation.value = true;
-      scaleImage();
     }
-    await API({ pictureNo });
     const newPictures = pictures.map((picture) => {
       if (picture.pictureNo === pictureNo) {
         return { ...picture, isLiked: !picture.isLiked };
@@ -261,6 +259,11 @@ const ImageDetailScreen = () => {
       return picture;
     });
     setPictures(newPictures);
+    await API({ pictureNo });
+
+    if (!isLiked) {
+      scaleImage();
+    }
   }, [isEditMode, isLikeAnimation, scaleImage, setPictures, pictures]);
 
   const visitFloor = useCallback(() => {
@@ -279,10 +282,8 @@ const ImageDetailScreen = () => {
     const API = isScraped ? PictureAPI.unscrapPicture : PictureAPI.scrapPicture;
     if (!isScraped) {
       isLikeAnimation.value = false;
-      scaleImage();
     }
     bottomSheetRef.current?.close();
-    await API({ pictureNo });
     const newPictures = pictures.map((picture) => {
       if (picture.pictureNo === pictureNo) {
         return { ...picture, isScraped: !picture.isScraped };
@@ -290,6 +291,10 @@ const ImageDetailScreen = () => {
       return picture;
     });
     setPictures(newPictures);
+    await API({ pictureNo });
+    if (!isScraped) {
+      scaleImage();
+    }
   }, [scaleImage, isLikeAnimation, pictures, setPictures]);
 
   const deletePicture = useCallback(async () => {
