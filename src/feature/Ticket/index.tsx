@@ -165,7 +165,7 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
           colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.8)']}
           start={{ x: 0.5, y: 0.65 }}
         />
-        <Image
+        <FastImage
           source={require('@/assets/images/ticket.png')}
           style={styles.img}
         />
@@ -244,7 +244,7 @@ const Ticket = ({ onPress, onProfilePress, ...floor }: TicketProps) => {
             {formatDate(new Date(floor.updatedAt), '.')}
           </Text>
         </BlurView>
-        <Image
+        <FastImage
           source={require('@/assets/images/ticket.png')}
           style={styles.img}
         />

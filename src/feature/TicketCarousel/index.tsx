@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { interpolate } from 'react-native-reanimated';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import { HomeFloorFilter } from '@/apis/floor';
 import Ticket, { TicketProps } from '@/feature/Ticket';
 
 const styles = StyleSheet.create({
@@ -19,11 +20,18 @@ interface TicketCarouselProps {
   onPress?: (floorNo: number) => void;
   onProfilePress?: (userNo: number) => void;
   onEndReached?: () => void;
+  filter: HomeFloorFilter;
 }
 
 const TicketCarousel = React.forwardRef(
   (
-    { data, onPress, onProfilePress, onEndReached }: TicketCarouselProps,
+    {
+      data,
+      onPress,
+      onProfilePress,
+      onEndReached,
+      filter,
+    }: TicketCarouselProps,
     ref: React.ForwardedRef<ICarouselInstance>,
   ) => {
     const { width: PAGE_WIDTH } = useWindowDimensions();
@@ -62,7 +70,7 @@ const TicketCarousel = React.forwardRef(
           renderItem={({ index }) => (
             <Ticket
               {...data[index]}
-              key={`ticket_${index}`}
+              key={`${filter}_ticket_${index}`}
               onPress={onPress}
               onProfilePress={onProfilePress}
             />

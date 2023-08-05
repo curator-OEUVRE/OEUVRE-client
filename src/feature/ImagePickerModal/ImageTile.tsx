@@ -8,6 +8,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { COLOR } from '@/constants/styles';
 
 interface ImageTileProps {
@@ -18,6 +19,9 @@ interface ImageTileProps {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   countBadge: {
     borderColor: COLOR.mono.white,
     borderRadius: 11,
@@ -63,13 +67,12 @@ const ImageTile = ({
       onPress={() => {
         onPress?.(image);
       }}
+      style={{ width: SIZE, height: SIZE }}
     >
-      <ImageBackground
-        source={{ uri: image.uri }}
-        style={{ width: SIZE, height: SIZE }}
-      >
+      <View style={styles.container}>
+        <FastImage source={{ uri: image.uri }} style={styles.container} />
         {renderBadge()}
-      </ImageBackground>
+      </View>
     </Pressable>
   );
 };

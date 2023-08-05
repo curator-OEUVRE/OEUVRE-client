@@ -310,7 +310,7 @@ const FloorViewerScreen = () => {
       >
         <TextBubbleIcon color={iconColorByBackground} />
         <Text style={[TEXT_STYLE.body12M, styles.commentText]}>
-          방명록 작성하기
+          {isMine ? '방명록 확인하기 ' : '방명록 작성하기'}
         </Text>
       </Shadow>
     </Pressable>

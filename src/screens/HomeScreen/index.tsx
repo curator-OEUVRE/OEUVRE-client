@@ -106,7 +106,6 @@ const HomeScreen = () => {
   useDynamicLinks(handleDynamicLink);
 
   const [data, setData] = useState<HomeFloor[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [filter, setFilter] = useState<HomeFloorFilter>(
     HomeFloorFilter.FOLLOWING,
@@ -137,8 +136,6 @@ const HomeScreen = () => {
   );
 
   const refresh = async () => {
-    setRefreshing(true);
-
     const response = await fetchWithToken(getHomeFeed, {
       page: 0,
       size: 10,
@@ -150,8 +147,6 @@ const HomeScreen = () => {
     } else {
       console.error(response.result);
     }
-
-    setRefreshing(false);
   };
 
   const loadMoreFloors = async () => {
@@ -183,6 +178,7 @@ const HomeScreen = () => {
       {data.length > 0 ? (
         <TicketCarousel
           ref={carouselRef}
+          filter={filter}
           data={data}
           onEndReached={loadMoreFloors}
           onPress={onPress}

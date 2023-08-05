@@ -49,13 +49,15 @@ const UserInputLayout = ({
       <View style={{ marginBottom: gap }}>{child}</View>
     ));
   return (
-    <WithKeyboardAvoidingView>
-      <Text style={[styles.text, TEXT_STYLE.title20M]}>{infoMessage}</Text>
-      <ScrollView style={[styles.content, style]}>
-        {renderChildren()}
-      </ScrollView>
+    <>
+      <WithKeyboardAvoidingView>
+        <Text style={[styles.text, TEXT_STYLE.title20M]}>{infoMessage}</Text>
+        <ScrollView style={[styles.content, style]}>
+          {renderChildren()}
+        </ScrollView>
+      </WithKeyboardAvoidingView>
       {button && <View style={styles.wrapButton}>{button}</View>}
-    </WithKeyboardAvoidingView>
+    </>
   );
 };
 

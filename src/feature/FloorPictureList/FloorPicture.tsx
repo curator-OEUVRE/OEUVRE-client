@@ -230,7 +230,7 @@ const FloorPicture = ({
               marginHorizontal: editable ? 24 : 16,
               transform: [
                 {
-                  translateY: item.location * BASE_SIZE,
+                  translateY: item.location ?? 0 * BASE_SIZE,
                 },
               ],
               alignSelf: alignment ? ALIGNMENT[alignment] : 'center',
