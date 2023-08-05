@@ -29,6 +29,9 @@ interface ImageBrowserProps {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   thumbImage: {
     height: 282,
     width: '100%',
@@ -124,19 +127,22 @@ const ImageBrowser = ({
     [],
   );
 
-  const renderImageTile = ({ item }: ListRenderItemInfo<Asset>) => {
-    const selectedItemIdx = selectedImages.findIndex(
-      (image) => image.uri === item.uri,
-    );
-    return (
-      <ImageTile
-        image={item}
-        selectedItemIdx={selectedItemIdx}
-        selected={selectedItemIdx >= 0}
-        onPress={onPressTile}
-      />
-    );
-  };
+  const renderImageTile = useCallback(
+    ({ item }: ListRenderItemInfo<Asset>) => {
+      const selectedItemIdx = selectedImages.findIndex(
+        (image) => image.uri === item.uri,
+      );
+      return (
+        <ImageTile
+          image={item}
+          selectedItemIdx={selectedItemIdx}
+          selected={selectedItemIdx >= 0}
+          onPress={onPressTile}
+        />
+      );
+    },
+    [onPressTile, selectedImages],
+  );
 
   const renderImageThumbnail = useCallback(() => {
     let uri;
@@ -176,9 +182,8 @@ const ImageBrowser = ({
     },
     [resetSelectedImages],
   );
-
   return (
-    <View>
+    <View style={styles.container}>
       {renderImageThumbnail()}
       {renderSelect()}
       <FlatList
