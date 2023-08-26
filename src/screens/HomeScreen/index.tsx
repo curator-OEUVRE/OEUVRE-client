@@ -67,11 +67,11 @@ const ListEmptyComponent = () => (
 );
 
 const FilterOptions = [
+  { label: '최신순', value: HomeFloorFilter.LATEST },
   {
     label: '팔로잉',
     value: HomeFloorFilter.FOLLOWING,
   },
-  { label: '최신순', value: HomeFloorFilter.LATEST },
 ];
 
 const HomeScreen = () => {
@@ -107,9 +107,7 @@ const HomeScreen = () => {
 
   const [data, setData] = useState<HomeFloor[]>([]);
   const [page, setPage] = useState(0);
-  const [filter, setFilter] = useState<HomeFloorFilter>(
-    HomeFloorFilter.FOLLOWING,
-  );
+  const [filter, setFilter] = useState<HomeFloorFilter>(HomeFloorFilter.LATEST);
   const carouselRef = useRef<ICarouselInstance>(null);
 
   const onPress = useCallback(
