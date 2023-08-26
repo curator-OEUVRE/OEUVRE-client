@@ -281,7 +281,7 @@ const HashtagFloorScreen = () => {
   );
 
   const renderDescription = useCallback(
-    ({ id, profileImageUrl, userNo }: Picture) => (
+    ({ userId, profileImageUrl, userNo }: Picture) => (
       <Pressable
         style={styles.wrapProfile}
         onPress={async () => {
@@ -290,7 +290,7 @@ const HashtagFloorScreen = () => {
         }}
       >
         <Profile imageUrl={profileImageUrl || ''} size={20} />
-        <Text style={[styles.userId, TEXT_STYLE.body12R]}>{id}</Text>
+        <Text style={[styles.userId, TEXT_STYLE.body12R]}>{userId}</Text>
       </Pressable>
     ),
     [onPressProfile],
