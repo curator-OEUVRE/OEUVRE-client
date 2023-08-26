@@ -112,7 +112,7 @@ const NotificationList = ({
           return (
             <BasicText
               id={id ?? ''}
-              text="님이 작가님의 사진을 좋아해요"
+              text="님이 작가님의 사진을 좋아합니다"
               onIdPress={onPressProfile}
               userNo={sendUserNo}
             />
