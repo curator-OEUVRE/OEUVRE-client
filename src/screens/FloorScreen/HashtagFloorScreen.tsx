@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   wrapRadio: {
-    marginBottom: 60,
     marginTop: 40,
   },
 });
