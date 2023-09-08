@@ -57,9 +57,9 @@ export const useHomeStore = create<HomeStore>()((set, get) => ({
       ...state,
       isLastPage,
     })),
-  initHomeStore: () => {
+  initHomeStore: async () => {
     const { fetchFloors, filter } = get();
     set((state) => ({ ...state, ...initialState, filter }));
-    fetchFloors();
+    await fetchFloors();
   },
 }));
