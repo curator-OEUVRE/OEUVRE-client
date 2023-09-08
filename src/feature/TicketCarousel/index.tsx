@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { interpolate } from 'react-native-reanimated';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
-import { HomeFloorFilter } from '@/apis/floor';
 import Ticket, { TicketProps } from '@/feature/Ticket';
+import { HomeFloorFilter } from '@/types/home';
 
 const styles = StyleSheet.create({
   carousel: {

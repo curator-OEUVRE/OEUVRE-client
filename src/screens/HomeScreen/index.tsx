@@ -7,7 +7,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getHomeFeed, HomeFloorFilter, type HomeFloor } from '@/apis/floor';
 import PhotoIcon from '@/assets/icons/Photo';
 import { Header, Radio } from '@/components';
 import { DynamicLinkType } from '@/constants/dynamicLinks';
@@ -19,8 +18,11 @@ import type { MainTabParamsList } from '@/feature/Routes/MainTabNavigator';
 import TicketCarousel from '@/feature/TicketCarousel';
 import useAuth from '@/hooks/useAuth';
 import useDynamicLinks, { OnDynamicLink } from '@/hooks/useDynamicLinks';
+
 import { useFloorStore } from '@/states/floorStore';
+import { useHomeStore } from '@/states/homeStore';
 import { useUserStore } from '@/states/userStore';
+import { HomeFloorFilter } from '@/types/home';
 
 export type HomeScreenParams = undefined;
 
@@ -105,9 +107,8 @@ const HomeScreen = () => {
   );
   useDynamicLinks(handleDynamicLink);
 
-  const [data, setData] = useState<HomeFloor[]>([]);
-  const [page, setPage] = useState(0);
-  const [filter, setFilter] = useState<HomeFloorFilter>(HomeFloorFilter.LATEST);
+  const { floors, fetchFloors, initHomeStore, filter, setFilter } =
+    useHomeStore();
   const carouselRef = useRef<ICarouselInstance>(null);
 
   const onPress = useCallback(
@@ -133,32 +134,12 @@ const HomeScreen = () => {
     [navigation, myUserNo],
   );
 
-  const refresh = async () => {
-    const response = await fetchWithToken(getHomeFeed, {
-      page: 0,
-      size: 10,
-      view: filter,
-    });
-    if (response.isSuccess) {
-      setPage(0);
-      setData(response.result.result.contents);
-    } else {
-      console.error(response.result);
-    }
+  const refresh = () => {
+    initHomeStore();
   };
 
   const loadMoreFloors = async () => {
-    const response = await fetchWithToken(getHomeFeed, {
-      page: page + 1,
-      size: 10,
-      view: filter,
-    });
-    if (response.isSuccess) {
-      setData((prev) => [...prev, ...response.result.result.contents]);
-      setPage((prev) => prev + 1);
-    } else {
-      console.error(response.result);
-    }
+    fetchFloors();
   };
 
   useEffect(() => {
@@ -173,11 +154,11 @@ const HomeScreen = () => {
       <View style={styles.wrapRadio}>
         <Radio value={filter} onChange={setFilter} data={FilterOptions} />
       </View>
-      {data.length > 0 ? (
+      {floors.length > 0 ? (
         <TicketCarousel
           ref={carouselRef}
           filter={filter}
-          data={data}
+          data={floors}
           onEndReached={loadMoreFloors}
           onPress={onPress}
           onProfilePress={onProfilePress}
