@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Shadow } from 'react-native-shadow-2';
-import type { HomeFloor } from '@/apis/floor';
 import DashLine from '@/assets/icons/DashLine';
 import { Profile } from '@/components/Profile';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
+import type { HomeFloor } from '@/types/home';
 
 const styles = StyleSheet.create({
   androidMargin: {

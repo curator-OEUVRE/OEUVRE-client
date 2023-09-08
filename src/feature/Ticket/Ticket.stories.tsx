@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions';
 import { boolean, number, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react-native';
 import Ticket from '.';
-import { HomeFloor } from '@/apis/floor';
+import { HomeFloor } from '@/types/home';
 
 const FLOOR_INFO: Omit<
   HomeFloor,
