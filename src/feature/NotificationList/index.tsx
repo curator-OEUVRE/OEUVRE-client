@@ -86,7 +86,7 @@ const NotificationList = ({
           );
         case 'COMMENT':
           return (
-            <Text style={[styles.text, TEXT_STYLE.body14M]}>{comment}</Text>
+            <Text style={[styles.text, TEXT_STYLE.body12M]}>{comment}</Text>
           );
         default:
           return undefined;
