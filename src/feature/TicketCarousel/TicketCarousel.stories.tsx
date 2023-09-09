@@ -2,6 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react-native';
 import { TicketProps } from '../Ticket';
 import TicketCarousel from '.';
+import { HomeFloorFilter } from '@/types/home';
 
 const data: TicketProps[] = [
   {
@@ -108,4 +109,6 @@ const data: TicketProps[] = [
 
 storiesOf('TicketCarousel', module)
   .addDecorator(withKnobs)
-  .add('default', () => <TicketCarousel data={data} />);
+  .add('default', () => (
+    <TicketCarousel data={data} filter={HomeFloorFilter.LATEST} />
+  ));

@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { interpolate } from 'react-native-reanimated';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
-import { HomeFloorFilter } from '@/apis/floor';
 import Ticket, { TicketProps } from '@/feature/Ticket';
+import throttle from '@/services/common/throttle';
+import { HomeFloorFilter } from '@/types/home';
 
 const styles = StyleSheet.create({
   carousel: {
@@ -34,6 +35,7 @@ const TicketCarousel = React.forwardRef(
     }: TicketCarouselProps,
     ref: React.ForwardedRef<ICarouselInstance>,
   ) => {
+    const curIndex = useRef<number>(0);
     const { width: PAGE_WIDTH } = useWindowDimensions();
     const ITEM_SIZE = 210;
     const centerOffset = PAGE_WIDTH / 2 - ITEM_SIZE / 2;
@@ -58,6 +60,19 @@ const TicketCarousel = React.forwardRef(
       },
       [centerOffset],
     );
+    const onProgressChange = useCallback(
+      (_: number, absoluteProgress: number) => {
+        const index = Math.round(absoluteProgress);
+        if (curIndex.current === index) {
+          return;
+        }
+        curIndex.current = index;
+        if (index === data.length - 3) {
+          onEndReached?.();
+        }
+      },
+      [onEndReached, data],
+    );
 
     return (
       <View style={styles.container}>
@@ -77,11 +92,7 @@ const TicketCarousel = React.forwardRef(
           )}
           loop={false}
           customAnimation={animationStyle}
-          onScrollEnd={(index) => {
-            if (index === data.length - 1) {
-              onEndReached?.();
-            }
-          }}
+          onProgressChange={throttle(onProgressChange)}
         />
       </View>
     );

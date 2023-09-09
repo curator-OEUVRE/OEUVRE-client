@@ -16,6 +16,7 @@ interface UserStore extends MyProfile {
   setCollection: (collection: PictureMini[]) => void;
   deleteFloor: (floorNo: number) => ApiResult<DeleteFloorResponseDto>;
   clearUserStore: () => void;
+  updateFloors: () => void;
 }
 
 const initialState = {
@@ -49,4 +50,6 @@ export const useUserStore = create<UserStore>()((set, get) => ({
     return response;
   },
   clearUserStore: () => set((state) => ({ ...state, ...initialState })),
+  // refresh를 강제로 하기 위해 floor length를 0으로 만들기 위한 hack
+  updateFloors: () => set((state) => ({ ...state, floors: [] })),
 }));

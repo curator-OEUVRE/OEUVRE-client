@@ -74,14 +74,13 @@ const PictureListItem = ({
   width,
   height,
   profileImageUrl,
-  id,
+  userId,
   pictureNo,
   userNo,
   onPress,
   onProfilePress,
 }: PictureListItemProps) => {
   const deviceSize = useWindowDimensions();
-
   return (
     <Pressable
       onPress={() => {
@@ -103,7 +102,7 @@ const PictureListItem = ({
         style={styles.profileArea}
       >
         <Profile imageUrl={profileImageUrl} size={18} />
-        <Text style={[TEXT_STYLE.body12R, styles.profileText]}>{id}</Text>
+        <Text style={[TEXT_STYLE.body12R, styles.profileText]}>{userId}</Text>
       </Pressable>
     </Pressable>
   );

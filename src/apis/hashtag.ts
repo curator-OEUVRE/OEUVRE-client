@@ -7,7 +7,7 @@ export interface PictureByHashtag {
   height: number;
   width: number;
   userNo: number;
-  id: string;
+  userId: string;
   profileImageUrl: string;
 }
 

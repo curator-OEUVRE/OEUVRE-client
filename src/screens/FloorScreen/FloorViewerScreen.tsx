@@ -51,6 +51,7 @@ import {
 } from '@/services/common/color';
 import { buildDynamicLink } from '@/services/firebase/dynamicLinks';
 import { useFloorStore } from '@/states/floorStore';
+import { useHomeStore } from '@/states/homeStore';
 import { useUserStore } from '@/states/userStore';
 import { Picture } from '@/types/picture';
 
@@ -132,6 +133,7 @@ const FloorViewerScreen = () => {
   } = floor;
 
   const { deleteFloor } = useUserStore();
+  const { initHomeStore } = useHomeStore();
   const { floorNo } = params;
   const [bottomSheetIndex, setBottomSheetIndex] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
@@ -209,9 +211,10 @@ const FloorViewerScreen = () => {
   const onDeleteFloor = useCallback(async () => {
     bottomSheetRef.current?.close();
     await deleteFloor(floorNo);
+    await initHomeStore();
     // await lockAsync(OrientationLock.PORTRAIT_UP);
     navigation.goBack();
-  }, [floorNo, navigation, deleteFloor]);
+  }, [floorNo, navigation, deleteFloor, initHomeStore]);
   const visitProfile = useCallback(() => {
     bottomSheetRef.current?.close();
     if (!userNo) return;

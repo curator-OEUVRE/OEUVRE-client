@@ -14,6 +14,8 @@ import { CreateFloorStackParamsList } from '@/feature/Routes/CreateFloorStack';
 import SuccessModal from '@/feature/SuccessModal';
 import useUploadImage from '@/hooks/useUploadImage';
 import { useCreateFloorStore } from '@/states/createFloorStore';
+import { useHomeStore } from '@/states/homeStore';
+import { useUserStore } from '@/states/userStore';
 import { FloorInfo } from '@/types/floor';
 import { Picture } from '@/types/picture';
 
@@ -40,6 +42,8 @@ const FloorInfoFormScreen = () => {
     alignment,
     setThumbnailIndex,
   } = useCreateFloorStore();
+  const { updateFloors } = useUserStore();
+  const { initHomeStore } = useHomeStore();
   const navigation = useNavigation<FloorInfoFormScreenNP>();
   // for edit mode
 
@@ -133,9 +137,11 @@ const FloorInfoFormScreen = () => {
         />
         {successModalVisible && (
           <SuccessModal
-            onPress={() => {
+            onPress={async () => {
               setSuccessModalVisible(false);
               if (!newFloorNo) return;
+              await initHomeStore();
+              updateFloors();
               navigation.replace(Navigator.FloorStack, {
                 screen: Screen.FloorViewerScreen,
                 params: {

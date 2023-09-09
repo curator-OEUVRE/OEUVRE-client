@@ -17,12 +17,12 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { HomeFloor } from '@/apis/floor';
 import FlipIcon from '@/assets/icons/Flip';
 import FlipBackIcon from '@/assets/icons/FlipBack';
 import { Profile } from '@/components';
 import { COLOR, TEXT_STYLE } from '@/constants/styles';
 import { formatDate } from '@/services/date/format';
+import { HomeFloor } from '@/types/home';
 
 const styles = StyleSheet.create({
   back: {

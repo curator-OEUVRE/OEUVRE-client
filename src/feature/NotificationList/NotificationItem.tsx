@@ -64,7 +64,7 @@ const NotificationItem = ({
       <Pressable style={styles.right} onPress={() => onPress?.(notification)}>
         <View style={styles.content}>
           {typeof text === 'string' ? (
-            <Text style={[TEXT_STYLE.body14M, styles.text]}>{text}</Text>
+            <Text style={[TEXT_STYLE.body12M, styles.text]}>{text}</Text>
           ) : (
             text
           )}

@@ -86,7 +86,7 @@ const NotificationList = ({
           );
         case 'COMMENT':
           return (
-            <Text style={[styles.text, TEXT_STYLE.body14M]}>{comment}</Text>
+            <Text style={[styles.text, TEXT_STYLE.body12M]}>{comment}</Text>
           );
         default:
           return undefined;
@@ -112,7 +112,7 @@ const NotificationList = ({
           return (
             <BasicText
               id={id ?? ''}
-              text="님이 작가님의 사진을 좋아해요"
+              text="님이 작가님의 사진을 좋아합니다"
               onIdPress={onPressProfile}
               userNo={sendUserNo}
             />

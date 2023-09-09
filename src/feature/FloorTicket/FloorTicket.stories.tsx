@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions';
 import { boolean, number, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react-native';
 import FloorTicket from '.';
-import type { HomeFloor } from '@/apis/floor';
+import type { HomeFloor } from '@/types/home';
 
 const FLOOR_INFO: Omit<
   HomeFloor,
